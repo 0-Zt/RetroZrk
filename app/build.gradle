@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.application'
+}
+
+// número de compilación de GitHub Actions → versión de la app (cada APK nuevo se instala encima del anterior)
+def buildNumber = (System.getenv('GITHUB_RUN_NUMBER') ?: '1') as int
+
+android {
+    namespace 'cl.pixelarcade.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'cl.pixelarcade.app'
+        minSdk 24
+        targetSdk 35
+        versionCode buildNumber
+        versionName "1.0.${buildNumber}"
+    }
+
+    // Firma fija: todas las versiones usan la misma llave y se actualizan sin desinstalar.
+    // Para Google Play conviene usar secretos del repositorio (ver LEEME.md).
+    signingConfigs {
+        arcade {
+            storeFile file('arcade.keystore')
+            storePassword System.getenv('KEYSTORE_PASSWORD') ?: 'pixelarcade'
+            keyAlias System.getenv('KEY_ALIAS') ?: 'arcade'
+            keyPassword System.getenv('KEY_PASSWORD') ?: 'pixelarcade'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.arcade
+        }
+        debug {
+            signingConfig signingConfigs.arcade
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.11.0'
+}
