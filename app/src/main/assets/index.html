@@ -106,6 +106,7 @@ button{font:inherit;color:inherit}
 .tally{display:grid;grid-template-columns:auto auto;gap:calc(var(--px)*3) calc(var(--px)*10);font-size:calc(var(--px)*6);text-align:left;font-variant-numeric:tabular-nums}
 .tally span:nth-child(odd){color:var(--muted)}
 #toast{pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:calc(var(--px)*10)}
+#screen:has(.hud-ui) #toast{align-items:flex-start;padding:calc(var(--px)*24) 0 0}
 #toast span{background:rgba(18,13,38,.94);padding:calc(var(--px)*4) calc(var(--px)*7);font-size:calc(var(--px)*6);box-shadow:0 0 0 var(--px) var(--cyan)}
 #rotate{position:absolute;left:0;right:0;bottom:calc(var(--px)*4);text-align:center;font-size:calc(var(--px)*5);color:var(--sun);pointer-events:none}
 /* ---------- Controles táctiles ---------- */
@@ -161,12 +162,50 @@ body.touch.landscape .pr>*{transform-origin:right bottom}
 body.touch.landscape .pm{left:50%;bottom:calc(6px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) scale(.85);opacity:.5}
 body.touch.landscape #dpad::before{background:radial-gradient(circle,rgba(14,11,30,.5) 55%,transparent 72%)}
 body.touch.landscape .rb small{display:none}
-body.ovl.inmenu .pm{display:none}
+body.ovl.inmenu #pad{display:none}
 body.touch.landscape .pl:has(.u,.d,.l,.r),body.touch.landscape .pr:has(.on){opacity:.85}
 /* el HUD inferior sube para no quedar bajo los controles */
 body.ovl .hbl{bottom:auto;top:calc(var(--px)*26)}
 body.ovl #radar{bottom:auto;top:calc(var(--px)*26)}
 body.ovl #toast{align-items:flex-start;padding:calc(var(--px)*44) 0 0}
+
+/* ---------- Garaje y mapa (Gas Rally) ---------- */
+.hud-ui{pointer-events:auto}
+.gtitle{position:absolute;left:calc(var(--px)*8);top:calc(var(--px)*6);font-family:var(--display);font-weight:700;font-size:calc(var(--px)*12);color:var(--cyan);letter-spacing:.06em;text-shadow:0 calc(var(--px)*2) 0 #000,0 0 calc(var(--px)*8) rgba(79,227,255,.7)}
+.gpanel{position:absolute;display:flex;flex-direction:column;gap:calc(var(--px)*3);background:rgba(14,10,30,.88);padding:calc(var(--px)*5) calc(var(--px)*6);box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) #463c7c;font-size:calc(var(--px)*5.5);text-shadow:none}
+.gar.wide .gpanel{right:calc(var(--px)*8);top:calc(var(--px)*24);width:48%}
+.gar.narrow .gpanel{left:calc(var(--px)*5);right:calc(var(--px)*5);bottom:calc(var(--px)*5)}
+.gar.narrow .gtitle{font-size:calc(var(--px)*9)}
+.grow{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--px)*4);padding:calc(var(--px)*2) calc(var(--px)*3);cursor:pointer}
+.grow.sel{box-shadow:inset 0 0 0 var(--px) var(--pink);background:rgba(255,79,154,.08)}
+.arr{flex:0 0 auto;border:0;cursor:pointer;background:#241d47;color:var(--ink);font-size:calc(var(--px)*6);width:calc(var(--px)*13);height:calc(var(--px)*13);box-shadow:inset 0 0 0 var(--px) #463c7c;font-family:var(--ui)}
+.arr:focus-visible,.sw button:focus-visible,.gbtn:focus-visible{outline:var(--px) solid var(--cyan)}
+.gname{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column;gap:var(--px)}
+.gname b{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*10);color:var(--pink);line-height:1;text-shadow:0 0 calc(var(--px)*6) rgba(255,79,154,.5)}
+.gname small{font-size:calc(var(--px)*5);color:var(--muted);line-height:1.35;text-wrap:balance}
+.gstats{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:calc(var(--px)*2) calc(var(--px)*4);align-items:center;font-size:calc(var(--px)*5);color:var(--muted);padding:0 calc(var(--px)*3)}
+.bar5{display:flex;gap:var(--px)}
+.bar5 i{width:calc(var(--px)*4);height:calc(var(--px)*3);background:#2e2654}
+.bar5 i.on{background:var(--cyan);box-shadow:0 0 calc(var(--px)*2) rgba(79,227,255,.6)}
+.glab{color:var(--muted);font-size:calc(var(--px)*5);display:flex;flex-direction:column;gap:var(--px)}
+.glab em{font-style:normal;color:var(--ink);font-size:calc(var(--px)*5.5)}
+.sw{display:flex;gap:calc(var(--px)*3)}
+.sw button{width:calc(var(--px)*11);height:calc(var(--px)*11);border:0;cursor:pointer;box-shadow:inset 0 0 0 var(--px) #000}
+.sw button.on{outline:var(--px) solid #fff;outline-offset:var(--px)}
+.gbtn{border:0;cursor:pointer;background:var(--pink);color:#1a0b1e;font-family:var(--ui);font-weight:700;font-size:calc(var(--px)*6);padding:calc(var(--px)*4) calc(var(--px)*6)}
+.gbtn.sel{box-shadow:0 0 0 var(--px) #fff,0 0 calc(var(--px)*8) rgba(255,79,154,.6)}
+.gbtn:disabled{background:#3a3260;color:#8a84a8;cursor:not-allowed}
+.wscore{position:absolute;right:calc(var(--px)*8);top:calc(var(--px)*8);display:flex;align-items:baseline;gap:calc(var(--px)*3);font-size:calc(var(--px)*6);text-shadow:0 var(--px) 0 #000}
+.wpanel{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--px)*5);width:min(calc(var(--px)*210),calc(100% - var(--px)*10));display:flex;flex-direction:column;gap:calc(var(--px)*3);background:rgba(14,10,30,.88);padding:calc(var(--px)*4) calc(var(--px)*5);box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) #463c7c;text-align:center}
+.wnav{display:flex;align-items:center;gap:calc(var(--px)*4)}
+.wname{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--px)}
+.wname b{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*11);line-height:1;color:var(--ink);text-shadow:0 0 calc(var(--px)*6) rgba(255,79,154,.6)}
+.wname small{font-size:calc(var(--px)*5);color:var(--cyan);line-height:1.3}
+.wst{font-size:calc(var(--px)*5);color:var(--sun)}
+.wst.lock{color:#8a84a8}
+.wbtns{display:flex;gap:calc(var(--px)*4);justify-content:center}
+.wbtns .chip{font-size:calc(var(--px)*5.5)}
+.wmap.flying .wpanel{opacity:0;pointer-events:none;transform:translate(-50%,calc(var(--px)*10));transition:opacity .25s,transform .25s}
 @media (prefers-reduced-motion:reduce){.cart,.rb,.pill{transition:none}.fuel.low i{animation:none}}
 </style>
 
@@ -493,19 +532,24 @@ class Spr {
     this.m.frustumCulled = false;
     this.parent = parent;
     parent.add(this.m);
-    this.flip = false; this.w = 1; this.h = 1;
+    this.flip = false; this.w = 1; this.h = 1; this.k = 1;
     this.set(t);
   }
   set(t) {
     if (this.mat.map !== t) this.mat.map = t;
-    if (t.w !== this.w || t.h !== this.h) { this.w = t.w; this.h = t.h; this.m.scale.set(this.flip ? -t.w : t.w, t.h, 1); }
+    if (t.w !== this.w || t.h !== this.h) { this.w = t.w; this.h = t.h; this.rescale(); }
     return this;
   }
-  setFlip(f) { if (f !== this.flip) { this.flip = f; this.m.scale.x = f ? -this.w : this.w; } return this; }
+  rescale() { this.m.scale.set((this.flip ? -1 : 1) * this.w * this.k, this.h * this.k, 1); }
+  // escala entera (2x, 3x, 4x) para mantener el pixel nítido
+  scaleBy(k) { if (k !== this.k) { this.k = k; this.rescale(); } return this; }
+  setFlip(f) { if (f !== this.flip) { this.flip = f; this.rescale(); } return this; }
+  tint(hex) { this.mat.color.set(hex); return this; }
   // posiciona por centro, alineado a la grilla de pixeles
   at(x, y) {
-    this.m.position.x = Math.round(x - this.w / 2) + this.w / 2;
-    this.m.position.y = -(Math.round(y - this.h / 2) + this.h / 2);
+    const w = this.w * this.k, h = this.h * this.k;
+    this.m.position.x = Math.round(x - w / 2) + w / 2;
+    this.m.position.y = -(Math.round(y - h / 2) + h / 2);
     return this;
   }
   // posiciona por un punto ancla (pixel del canvas), respetando espejo horizontal
@@ -735,6 +779,7 @@ const Snd = (() => {
     die: () => { [76, 72, 67, 64, 60, 55].forEach((m, i) => tone('p25', N(m), N(m) * 0.97, 0.1, 0.22, i * 0.08)); },
     alarm: () => { for (let i = 0; i < 3; i++) { tone('square', 880, 880, 0.14, 0.14, i * 0.3); tone('square', 660, 660, 0.14, 0.14, i * 0.3 + 0.15); } },
     missile: () => { noise(0.35, 0.18, 800, 3000, 'bandpass'); },
+    fly: () => { noise(1.4, 0.16, 300, 1600, 'bandpass'); tone('triangle', 160, 240, 1.2, 0.1); },
     clear: () => { [67, 72, 76, 79, 76, 79, 84].forEach((m, i) => tone('p25', N(m), N(m), i === 6 ? 0.5 : 0.12, 0.24, i * 0.12)); },
     gameover: () => { [67, 66, 65, 64, 60].forEach((m, i) => tone('triangle', N(m), N(m), i === 4 ? 0.7 : 0.22, 0.3, i * 0.24)); },
   };
@@ -1277,25 +1322,276 @@ function buildBossArt() {
 }
 
 // =====================================================================
-//  JUEGO 1 · GAS RALLY — laberinto urbano visto desde arriba
-//  Mecánicas: 10 bidones por ronda (puntaje creciente), bidón S duplica,
+//  RALLY · autos seleccionables (diseños propios inspirados en estilos de época)
+// =====================================================================
+function carWheels(g, f, list) {
+  for (const [x, y, w, h] of list) {
+    R(g, '#1b1a26', x, y, w, h);
+    for (let k = f ? 1 : 0; k < h; k += 2) R(g, '#5a596f', x, y + k, w, 1);
+  }
+}
+const CAR_DRAW = {
+  // rally clásico: franja central y alerón
+  bolido(g, P, f) {
+    carWheels(g, f, [[2, 2, 2, 4], [12, 2, 2, 4], [1, 9, 3, 4], [12, 9, 3, 4]]);
+    R(g, P.b, 5, 0, 6, 1); R(g, P.b, 4, 1, 8, 8); R(g, P.b, 3, 9, 10, 5); R(g, P.d, 4, 14, 8, 1);
+    R(g, P.l, 5, 0, 1, 1); R(g, P.l, 4, 1, 1, 8); R(g, P.l, 3, 9, 1, 5); R(g, P.d, 11, 1, 1, 8); R(g, P.d, 12, 9, 1, 5);
+    R(g, P.s, 7, 0, 2, 15); R(g, P.d, 3, 12, 10, 1); R(g, P.s, 7, 12, 2, 1);
+    R(g, '#1b2240', 5, 3, 6, 3); R(g, '#3d5294', 5, 3, 6, 1); R(g, '#9be8ff', 6, 4, 2, 1);
+    R(g, '#1b2240', 5, 9, 6, 2); R(g, '#3d5294', 5, 9, 6, 1);
+    R(g, '#fff1a0', 4, 1); R(g, '#fff1a0', 11, 1); R(g, '#ff3d4f', 3, 13); R(g, '#ff3d4f', 12, 13);
+  },
+  // coupé turbo de los 90: carrocería cuadrada, capó con rejillas, alerón ancho y barra de luz trasera
+  rayo(g, P, f) {
+    carWheels(g, f, [[2, 2, 2, 4], [12, 2, 2, 4], [2, 10, 2, 4], [12, 10, 2, 4]]);
+    R(g, P.b, 4, 0, 8, 1); R(g, P.b, 3, 1, 10, 14); R(g, P.d, 3, 15, 10, 1);
+    R(g, P.l, 3, 1, 1, 14); R(g, P.d, 12, 1, 1, 14);
+    R(g, P.d, 5, 2, 1, 2); R(g, P.d, 10, 2, 1, 2); R(g, P.l, 7, 1, 2, 3);
+    R(g, '#1b2240', 4, 5, 8, 2); R(g, '#3d5294', 4, 5, 8, 1); R(g, '#9be8ff', 5, 5, 2, 1);
+    R(g, P.l, 4, 7, 1, 3);
+    R(g, '#1b2240', 5, 10, 6, 1);
+    R(g, P.d, 2, 13, 12, 1); R(g, P.d, 2, 12, 1, 2); R(g, P.d, 13, 12, 1, 2); R(g, P.s, 6, 13, 4, 1);
+    R(g, '#fff1a0', 4, 1, 2, 1); R(g, '#fff1a0', 10, 1, 2, 1);
+    R(g, '#ff3355', 4, 15, 8, 1);
+  },
+  // roadster de los 60: descapotable, guardabarros curvos, dos franjas finas, asientos a la vista
+  roadster(g, P, f) {
+    carWheels(g, f, [[2, 2, 2, 4], [12, 2, 2, 4], [1, 10, 2, 4], [13, 10, 2, 4]]);
+    R(g, P.b, 6, 0, 4, 1); R(g, P.b, 5, 1, 6, 1); R(g, P.b, 4, 2, 8, 4); R(g, P.b, 3, 2, 1, 3); R(g, P.b, 12, 2, 1, 3);
+    R(g, P.b, 4, 6, 8, 3);
+    R(g, P.b, 3, 9, 10, 4); R(g, P.b, 2, 10, 1, 3); R(g, P.b, 13, 10, 1, 3);
+    R(g, P.b, 4, 13, 8, 2); R(g, P.b, 5, 15, 6, 1);
+    R(g, P.l, 4, 2, 1, 4); R(g, P.l, 3, 9, 1, 4); R(g, P.d, 11, 2, 1, 4); R(g, P.d, 12, 9, 1, 4);
+    R(g, P.s, 6, 0, 1, 6); R(g, P.s, 9, 0, 1, 6); R(g, P.s, 6, 12, 1, 4); R(g, P.s, 9, 12, 1, 4);
+    R(g, '#9be8ff', 5, 6, 6, 1);
+    R(g, '#2a1a1a', 5, 7, 6, 3); R(g, '#7a4a3a', 5, 8, 2, 2); R(g, '#7a4a3a', 9, 8, 2, 2);
+    R(g, P.b, 5, 10, 2, 2); R(g, P.b, 9, 10, 2, 2); R(g, P.l, 5, 10); R(g, P.l, 9, 10);
+    R(g, '#1b1a26', 7, 0, 2, 1);
+    R(g, '#fff1a0', 5, 1); R(g, '#fff1a0', 10, 1); R(g, '#ff3d4f', 5, 15); R(g, '#ff3d4f', 10, 15);
+  },
+  // muscle de los 70: ancho, toma de aire en el capó, techo de vinilo negro, cromados
+  muscle(g, P, f) {
+    carWheels(g, f, [[1, 2, 2, 4], [13, 2, 2, 4], [1, 10, 3, 4], [12, 10, 3, 4]]);
+    R(g, '#c8cfdc', 3, 0, 10, 1);
+    R(g, P.b, 3, 1, 10, 14); R(g, P.l, 3, 1, 1, 14); R(g, P.d, 12, 1, 1, 14);
+    R(g, P.s, 4, 2, 1, 11); R(g, P.s, 11, 2, 1, 11);
+    R(g, P.d, 6, 2, 4, 3); R(g, '#1b1a26', 7, 2, 2, 1);
+    R(g, '#1b2240', 4, 7, 8, 1); R(g, '#9be8ff', 5, 7, 2, 1);
+    R(g, '#1b1a26', 4, 8, 8, 3); R(g, '#3a3a4c', 4, 8, 1, 3);
+    R(g, '#1b2240', 5, 11, 6, 1);
+    R(g, '#c8cfdc', 3, 15, 10, 1); R(g, '#ff3d4f', 4, 15, 2, 1); R(g, '#ff3d4f', 10, 15, 2, 1);
+    R(g, '#fff1a0', 4, 1); R(g, '#fff1a0', 11, 1);
+  },
+  // citycar redondito con techo bicolor
+  pulga(g, P, f) {
+    carWheels(g, f, [[3, 3, 2, 3], [11, 3, 2, 3], [3, 10, 2, 3], [11, 10, 2, 3]]);
+    R(g, P.b, 5, 2, 6, 1); R(g, P.b, 4, 3, 8, 10); R(g, P.b, 5, 13, 6, 1);
+    R(g, P.l, 4, 3, 1, 10); R(g, P.d, 11, 3, 1, 10);
+    R(g, P.b, 3, 5); R(g, P.b, 12, 5);
+    R(g, '#1b2240', 5, 5, 6, 1); R(g, '#9be8ff', 6, 5, 2, 1);
+    R(g, P.s, 5, 6, 6, 5); R(g, 'rgba(0,0,0,0.18)', 5, 10, 6, 1);
+    R(g, '#1b2240', 5, 11, 6, 1);
+    R(g, '#fff1a0', 5, 3); R(g, '#fff1a0', 10, 3); R(g, '#ff3d4f', 5, 13); R(g, '#ff3d4f', 10, 13);
+  },
+};
+function playerCarCanvas(id, P, f) {
+  const { c, g } = mk(18, 18);
+  g.translate(1, 1);
+  CAR_DRAW[id](g, P, f);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  return outline(c);
+}
+// luz de neón bajo el auto (blanca; se tiñe con el color elegido)
+function underglowCanvas() {
+  const { c, g } = mk(26, 30);
+  const x0 = 9, x1 = 16, y0 = 8, y1 = 21;
+  for (let y = 0; y < 30; y++) for (let x = 0; x < 26; x++) {
+    const dx = Math.max(x0 - x, 0, x - x1), dy = Math.max(y0 - y, 0, y - y1), d = Math.hypot(dx, dy);
+    let a = Math.max(0, 1 - d / 7);
+    a = Math.round(a * a * 3) / 3;
+    if (a <= 0) continue;
+    g.fillStyle = `rgba(255,255,255,${(a * 0.5).toFixed(3)})`;
+    g.fillRect(x, y, 1, 1);
+  }
+  return c;
+}
+function planeCanvas() {
+  const { c, g } = mk(20, 20);
+  g.translate(2, 2);
+  R(g, '#c8d0dc', 1, 6, 14, 2); R(g, '#c8d0dc', 3, 8, 10, 1);
+  R(g, '#c8d0dc', 5, 13, 6, 1); R(g, '#c8d0dc', 6, 14, 4, 1);
+  R(g, '#e8ecf4', 7, 1, 2, 14); R(g, '#ffffff', 7, 1, 1, 13);
+  R(g, '#4fe3ff', 7, 2, 2, 1); R(g, '#ff4f9a', 7, 7, 2, 2); R(g, '#ff4f9a', 1, 6, 1, 1); R(g, '#ff4f9a', 14, 6, 1, 1);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  return outline(c);
+}
+function markerCanvas(col) {
+  const { c, g } = mk(12, 12);
+  disc(g, 6, 6, 4.6, col); disc(g, 6, 6, 3, '#120d20'); disc(g, 6, 6, 1.7, col);
+  return outline(c);
+}
+function ringCanvas(col, r) {
+  const { c, g } = mk(r * 2 + 4, r * 2 + 4);
+  const m = r + 2;
+  disc(g, m, m, r, col); disc(g, m, m, r - 1.2, 'rgba(0,0,0,0)');
+  g.globalCompositeOperation = 'destination-out'; disc(g, m, m, r - 1.2, '#000'); g.globalCompositeOperation = 'source-over';
+  return c;
+}
+function turntableCanvas(r, phase) {
+  const { c, g } = mk(r * 2 + 4, r * 2 + 4);
+  const m = r + 2;
+  disc(g, m + 2, m + 3, r, 'rgba(0,0,0,0.45)');
+  disc(g, m, m, r, '#3a3168'); disc(g, m, m, r - 2, '#241e46'); disc(g, m, m, r - 5, '#2c2552');
+  for (let k = r - 9; k > 6; k -= 6) { disc(g, m, m, k, '#262049'); disc(g, m, m, k - 1, '#2c2552'); }
+  const n = 20;
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2, x = m + Math.cos(a) * (r - 1), y = m + Math.sin(a) * (r - 1);
+    const on = (i + phase) % 2 === 0;
+    R(g, on ? (i % 4 < 2 ? '#ff4f9a' : '#4fe3ff') : '#4a3f7a', x - 1, y - 1, 2, 2);
+  }
+  return c;
+}
+function garageBgCanvas() {
+  const { c, g } = mk(512, 216);
+  const r = rng32(44);
+  R(g, '#1c1636', 0, 0, 512, 64);
+  for (let y = 0; y < 64; y += 6) {
+    R(g, '#241d44', 0, y, 512, 1);
+    for (let x = (y / 6) % 2 ? 0 : 8; x < 512; x += 16) R(g, '#241d44', x, y, 1, 6);
+  }
+  // portón metálico
+  R(g, '#2a2450', 180, 6, 152, 58); for (let y = 8; y < 64; y += 4) R(g, '#1e1940', 180, y, 152, 1);
+  R(g, '#3a3168', 180, 6, 152, 2);
+  // tubos de neón
+  const tube = (x, y, w, col, dim) => { R(g, dim, x - 1, y - 1, w + 2, 4); R(g, col, x, y, w, 2); R(g, '#ffffff', x + 2, y, w - 4, 1); };
+  tube(24, 18, 132, '#ff4f9a', '#5a1f4a'); tube(356, 18, 132, '#4fe3ff', '#1f4a5a');
+  tube(24, 36, 70, '#4fe3ff', '#1f4a5a'); tube(418, 36, 70, '#ff4f9a', '#5a1f4a');
+  // herramientas colgadas
+  for (let i = 0; i < 6; i++) { const x = 110 + i * 10; R(g, '#5a5478', x, 34, 2, 14); R(g, '#5a5478', x - 1, 32, 4, 3); }
+  for (let i = 0; i < 5; i++) { const x = 360 + i * 12; R(g, '#5a5478', x, 40, 3, 10); disc(g, x + 1, 39, 2.5, '#5a5478'); }
+  // zócalo y piso
+  R(g, '#3a3168', 0, 64, 512, 3); R(g, '#120e26', 0, 67, 512, 2);
+  for (let y = 69; y < 216; y += 16) for (let x = 0; x < 512; x += 16) R(g, ((x + y) >> 4) % 2 ? '#1a1530' : '#201a3a', x, y, 16, 16);
+  for (let k = 0; k < 7; k++) ellipse(g, 20 + r() * 470, 90 + r() * 110, 6 + r() * 10, 3 + r() * 4, 'rgba(0,0,0,0.25)');
+  for (let k = 0; k < 3; k++) { const y = 120 + r() * 80; for (let x = 0; x < 512; x += 3) if (r() < 0.6) R(g, 'rgba(0,0,0,0.18)', x, y + Math.round(Math.sin(x * 0.05) * 3), 2, 1); }
+  return c;
+}
+
+// Mapa mundial 1-bit (Natural Earth 1:50m vía world-atlas, proyección equirectangular)
+const WORLD = { w: 480, h: 190, latTop: 82.0, latBot: -60.5, bits: 'AAAAAAAAAAAAAAAAAADA/////8P////////v/gEAAAAAAAAAAAAAcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB///////7/////////PwAAAAAAAAAAAMANv3cAAAQA+AMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIj/////w///////////AwAAAABA/w8AAIDN/AAAAAAA/B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAD///8/AP////////9/AAAAAMD//wcAAAAAAAAAAAAA8J8DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA88Of5//+f//////////8fAAAAAMD/HwAAAAAAAAAAAAAAAOAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA+gM/P+P8H//////////9/AAAAAAD88QAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AGICH/f8A/v//////////AAAAAAB4QAAAAAAAAAAEAAAAAID/AAAAAAAAAAAAAAAAAAAAAAAAAAAA8P/jYD///38A+P////////8fAAAAAAAAAAAAAAAAAP4HAAAAgPn/fwAAAAAAAAAAAAAAAAAAAAAAAAAAAP7/x//n/z8AAAD+//////8/AAAAAAAAAAAAAAAA4D8AAACA/////wAAALD/CQAAAAAAAAAAAAAAAAAAAOD/E7zv/z8AAAD4//////+/AQAAAAAAAAAAAAAA/AEAAAD4////fwAAAIB/8AEAAAAAAAAAAAAAAAAA/A8AADB+AAAAAADw//////8/AAAAAAAAAAAAAAAAPgAAAED8////fwAAAAAIAAAAAAAAAAAAAAAAAAAA/P8AH35//v8DAADg//////8PAAAAAAAAAAAAAACADwBgAPj//////3/wDwB4AAAAAAAAAAAAAAAAAAAA/v9/j/8e3/8PAADg//////8HAAAAAAAAAAAAAADABwDwkfP/////////HwD8BwAAAAAAAAAAAAAAAAAA//7/H3wG//8/AADA//////8HAAAAAAAAAAAAAADwAwD4/f//////////HwH8/wAAAAAABwAAwAMAAAAAGPz/H4AP////AwCA//////8HAAAAAAAAACQAAADABwD+/f//////////v////8cHAADAAAAA//8HAAAgAPD//4A//P//PwCA/////38HAAAAAAAA5P8BAAAAwAD++f////////////////8fAAAAAADA////f/D/fvD//+N/wPf+fwCA//////8BAAAAAACA//8fAAACgD/+/f////////////////////s/AwD8/////////3////39x0/8PwAA+P///z8AAAAAAAD4////AwDHYP/7+///////////////////////DwD8//////////+Af/D+9wf+/wMA/v///wEAAAAAAAD6////Pzj8////+///////////////////////fwDg/////////////////w+O/w8A////DwAAAAAAAAD4////fxz/////+f///////////////////////w8Q/////////////////wPA/z8A////BwAABAAAAAD+////f/n//////v///////////////////////x///////////////////wHgPx8A/v//AAD/HwAAAAD///8/wP//////////////////////////////4Af+////////////////7wH/fw4A/P8HAAD/PwAAAID/H/5/4v//////////////////////////////AANI/v//////////////5wfP/wEA+P8DAAD8HwAAAMD/H////v////////////////////////////8/ADgA////////////////8BwD/wMA+P8DAADwAQAAAPj/x/////////////////////////////////9/AADw//////////////9/AAYA/gMA8P8BAAAAAAAAAP7/8f////////////////////////////////9/AAD4//////////////8fACF/8AIA4P8AAAAAAEAAgP//8P//////////////////////////////+/8DAAD8//////////////8HAAD/AQIAwP8AAAAAAAAAwP9/8P/////////////////////////////h/H8AAADw//////////////8DAAD/BwAAAH8AAAAAAABAwP//8P////////////////////////////8A/x8AAADm/8+P+f////////8DAAD/BwYAADAAAAAAAAAAgP//wcP//////////////////////////z+ADwAAAAAA/0cAgP////////8DAAD/Dw8AAAAAAAAAAAAYgP//gf////////////////////////8/QHzgAwAAAAAA4BcAAP7///////8PAAD//x8AAAAAAAAAAIAOAI9/4P////////////////////////8PAADwAAAAAAAA4B0AAPz///////8fAAD+/z8AAAAAAAAAAMA/ACB/I/////////////////////////8HAAD+AwAAAAAAcAQAAPj/////////AwD8/z8AAAAAAAAAAIAfADh/8P////////////////////////8BAAD/AwAAAAAAHgAAAOD/////////D2D+/38AAAAAAAAAAIAfAPgf8P////////////////////////8AAID/AwAAAACABwAAAMD//////////wH///8BAAAAAAAAAOA/APgH8P///////////////////////z8AAID/AAAAAABwAAAAAID+/////////8P///8HAAAAAAAAAPB/APjD/f////////////////////////8AAID/AAAAAAAGAAAAAMD8/////////8f///8fAAAAAAAAAPzwAPz///////////////////////////9HAAAfAAAAAIAAAAAAAID5/////////4////8/AAAAAAAAAPj8wf////////////////////////////9/AAAfAEAAgAAAAAAAAADx/////////4////8/AAAAAAAAAPz8x/////////////////////////////9/AAAPAAAAGAAAAAAAAADg/////////9////8/AAAAAAAAABz+8/////////////////////////////9vAAAHAAAAAAAAAAAAAADg//////////////8zAAAAAAAAAAD8/f/////////////////////////////vAAABAAAAAAAAAAAAAADA//////////////44AAAAAAAAAAAC/P/////////////////////////////vAIAAAAAAAAAAAAAAAACA////////////Pzv8AQAAAAAAAADg///////////////////////////////nAQAAAAAAAAAAAAAAAAAA/v///////////wf+AQAAAAAAAAD8//////////////////////////////9nAAAAAAAAAAAAAAAAAAAA/P///////////wP+AwAAAAAAAAD8//////////////////////////////8jAAAAAAAAAAAAAAAAAAAA/P///////////wNgAwAAAAAAAADg//////////////////////////////9hAAAAAAAAAAAAAAAAAAAA/P///////////98AAAAAAAAAAADA//////99/P+D//////////////////+gAAAAAAAAAAAAAAAAAAAA/P////////////8AAAAAAAAAAADA//////9w/P/A/////////////////38gAAAAAAAAAAAAAAAAAAAA/P//////////fx8AAAAAAAAAAADA///9///w/n/w/////////////////z9gEAAAAAAAAAAAAAAAAAAA/P//////////nwMAAAAAAAAAAADA//fx/z8A8H/w/////////////////x/gDwAAAAAAAAAAAAAAAAAA/P//////////AwEAAAAAAAAAAPD//8Hn/z8A4H/g/////////////////w/4BwAAAAAAAAAAAAAAAAAA/P//////////AwAAAAAAAAAAAPD/D9CH/x8AgP/A////////////////fwL8AAAAAAAAAAAAAAAAAAAA/P//////////BwAAAAAAAAAAAPD/Dxg//j94gP8B////////////////PwAMAAAAAAAAAAAAAAAAAAAA/P//////////AAAAAAAAAAAAAPD/BxB+/P//9/8D/v//////////////HwAYAAAAAAAAAAAAAAAAAAAA/P////////8/AAAAAAAAAAAAAPD/ARjw/f3////D///////////////5DwAcAAAAAAAAAAAAAAAAAAAA+P////////8fAAAAAAAAAAAAAPD/GBhgfPj///+D/////////////3/cAwA8AAAAAAAAAAAAAAAAAAAA+P////////8PAAAAAAAAAAAAAPj/AAhg+Pz///8B/////////////x+EBwAcAAAAAAAAAAAAAAAAAAAA8P////////8PAAAAAAAAAAAAAPB/AAA++Pn///8B/////////////3/ADwAPAAAAAAAAAAAAAAAAAAAA4P////////8HAAAAAAAAAAAAAPA/ABAeYPP///8H/////////////38PH0APAAAAAAAAAAAAAAAAAAAA4P////////8HAAAAAAAAAAAAAIAf/n8IYOL9///f//////////////8DH8APAAAAAAAAAAAAAAAAAAAAwP////////8HAAAAAAAAAAAAAACB/z8AAAAA//////////////////8BHuAPAAAAAAAAAAAAAAAAAAAAgP////////8HAAAAAAAAAAAAAAD//38AAAc4/////////////////38AD/8HAAAAAAAAAAAAAAAAAAAAgP////////8BAAAAAAAAAAAAAID//z8AAACA//////////////////8Ak38AAAAAAAAAAAAAAAAAAAAAAPz//////38AAAAAAAAAAAAAAOD//38AAACA//////////////////8B4RcAAAAAAAAAAAAAAAAAAAAAAPj//////z8AAAAAAAAAAAAAAPD///8HcACA//////////////////8B8AIAAAAAAAAAAAAAAAAAAAAAAPD//////x8AAAAAAAAAAAAAAPj///8f+AHA//////////////////8D4AAAAAAAAAAAAAAAAAAAAAAAAHD//////w8AAAAAAAAAAAAAAPj///8/+B/n//////////////////8HYAAAAAAAAAAAAAAAAAAAAAAAAGD+/////w8AAAAAAAAAAAAAAPj//////f////////////////////8DQAAAAAAAAAAAAAAAAAAAAAAAAMD8////ww8AAAAAAAAAAAAAAPj////////////9//////////////8HAAAAAAAAAAAAAAAAAAAAAAAAAID9//+DAQ4AAAAAAAAAAAAAAPz////////////4//////////////8HAAAAAAAAAAAAAAAAAAAAAAAAAAD7//8AABwAAAAAAAAAAAAAIv/////////////x//////////////8DEAAAAAAAAAAAAAAAAAAAAAAAAIDz/38AAB4AAAAAAAAAAAAAwP////////+f///j//////////////8BAAAAAAAAAAAAAAAAAAAAAAAAAADn/z8AAJwBAAAAAAAAAAAAwP////////8f//+H9/////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAADM/38AABgAAAAAAAAAAAAA4P////////8///8X8P////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAACM/z8AABAAAAAAAAAAAAAA8P////////8//v8fxP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAc/z8AAIABAAAAAAAAAAAA8P////////9//P8fDwD+/////////z8GAAAAAAAAAAAAAAAAAAAAAAAAAAAw/j8AAAABAAAAAAAAAAAA+P//////////+P//HwD8/////////x8DAAAAAAAAAAAAAAAAAAAAAAAAAAAg/D8AAB4AAAAAAAAAAAAA/P//////////+P//fwDw/////////w8DAAAAAAAAAAAAAAAAAAAAAAAAAAAA+D8AgP8gAAAAAAAAAAAA/P//////////8f///wDw/////////wEBAAAAAAAAAAAAAAAAIAAAAAAAAAAA+D8ADOIDAAAAAAAAAAAA/v//////////8f///wDg//9//P//fwAAAAAAAAAAAAAAAAAAwAAAAAAAAAAA+H+AD4APAAAAAAAAAAAA/v//////////8///fwDA/v8P+P9/DAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA+H+ADwAeAAAAAAAAAAAA/P//////////4///HwAA/v8P+P8/DAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAA8P+ADwDADwAAAAAAAAAA/P//////////w///HwAA/v8D4P8fDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwP/zBwDhnwAAAAAAAAAA/P//////////h///DwAA/v8B4P8fBgAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAgP//BwADgQAAAAAAAAAA/P//////////D///BwAA/n8AwP8/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP7/BwAAAAAAAAAAAEAA/P//////////D///AwAA/j8AwP9/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD/AwAAAAAAAAAAAAAA/P//////////D/4/AAAA/D8A4P3/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID4/wAAAEAAAAAAAAAA/P//////////P/4/AAAA/AcAAPz/AQADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADw/wEAAEAAAAAAAAAA/v//////////f/4HAAAA+AcAAPz/AwAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADA/wEAAAAAAAAAAAAA/v////////////4BAAAA+AcAAPj/AwAfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wEAAAAAAAAAAAAA/v///////////38AAAAA+AcAAPj/AwA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AEAAAAAAAAAAAAA/v///////////w+AAAAA8AcACLj/AwB2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8AGABQAAAAAAAAAA/P///////////wMIAAAA8AcACBj/AwDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AHwHwQAAAAAAAAA/P///////////4MPAAAA4AcAABj+AYD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AH4/3wAAAAAAAAA4P////////////8PAAAA4AMAABh8AID4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwEP4/n8AAAAAAAAAwP////////////8PAAAAwAcAABgwAAC4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/9/38AAAAAAAAAwP////////////8PAAAAwA0AADgQADDQAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ7///8BAAAAAAAAwP////////////8HAAAAgBwAEDgAAAD4AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABD///8DAAAAAAAAgP////////////8DAAAAABwAADAAAADoAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8HAAAAAAAAAP7///////////8DAAAAABwAAOAAABjkAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////AAAAAAAAAPz/w/////////8BAAAAAAgAAMABADzCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////AwAAAAAAAPh/gP////////8BAAAAAAAAgMMDAH4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////BwAAAAAAAGAAAP////////8AAAAAAAAAAMcDAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////DwAAAAAAAAAAAOj//////38AAAAAAAAAAM4DgB8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////DwAAAAAAAAAAAOD//////z8AAAAAAAAAALwD4B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID/////HwAAAAAAAAAAAOD//////x8AAAAAAAAAAPwH8B8ADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD/////PwAAAAAAAAAAAPD//////wcAAAAAAAAAAPAH/j9CDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOD/////PwAAAAAAAAAAAPD//////wMAAAAAAAAAAPQD/h8/DAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAOD/////fwAAAAAAAAAAAPD//////wEAAAAAAAAAAOAP/p8ARAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAPD//////wMAAAAAAAAAAPD//////wAAAAAAAAAAAOgH/J8dxCcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD//////x8AAAAAAAAAAPD//////wAAAAAAAAAAAMA//I9XpOcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD//////38AAAAAAAAAAOD/////fwAAAAAAAAAAAMA/+IcHAMcPAAEAAAAAAAAAAAAAAAAAAAAAAAAAAOD///////8PAAAAAAAAAMD/////PwAAAAAAAAAAAIC/+McHP+8/AAQAAAAAAAAAAAAAAAAAAAAAAAAAAPD///////8fAAAAAAAAAID/////HwAAAAAAAAAAAAAfAIYPAP7/AQgAAAAAAAAAAAAAAAAAAAAAAAAAAPj///////8/AAAAAAAAAID/////HwAAAAAAAAAAAAAeAIANAPD/AwwAAAAAAAAAAAAAAAAAAAAAAAAAAPD/////////AQAAAAAAAAD/////DwAAAAAAAAAAAAAYAIAJAID/R0cAAAAAAAAAAAAAAAAAAAAAAAAAAPD/////////AQAAAAAAAAD/////HwAAAAAAAAAAAADgAAAAAAj/n8EAAAAAAAAAAAAAAAAAAAAAAAAAAOD/////////AwAAAAAAAAD+////HwAAAAAAAAAAAADg/wAAAAD+H4AAAAAAAAAAAAAAAAAAAAAAAAAAAMD/////////AwAAAAAAAAD+////HwAAAAAAAAAAAACA/wAAgQD/HwAKAAAAAAAAAAAAAAAAAAAAAAAAAMD/////////AwAAAAAAAAD8////HwAAAAAAAAAAAAAA8P//AwD7OAAWAAAAAAAAAAAAAAAAAAAAAAAAAID/////////AQAAAAAAAAD+////HwAAAAAAAAAAAAAAAJDAAQBwcABgAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////AAAAAAAAAAD8////HwAAAAAAAAAAAAAAAIBhAAAA8AMgAAAAAAAAAAAAAAAAAAAAAAAAAAD///////9/AAAAAAAAAAD8////PwAAAAAAAAAAAAAAAAAQAAAgAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////9/AAAAAAAAAAD8////PwAAAAAAAAAAAAAAAAAA4AFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+//////8/AAAAAAAAAAD8////PwACAAAAAAAAAAAAAAAAwH9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8//////8fAAAAAAAAAAD+////PwAGAAAAAAAAAAAAAAAAwD/gAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAD8//////8PAAAAAAAAAAD/////PwAHAAAAAAAAAAAAAAAA4D/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8//////8PAAAAAAAAAAD/////f4AHAAAAAAAAAAAAAACA5x/wAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4//////8PAAAAAAAAAAD/////P8AHAAAAAAAAAAAAAADA/x/gAwAAQAAAAAAAAAAAAAAAAAAAAAAAAADg//////8PAAAAAAAAAID/////P/AHAAAAAAAAAAAAAADA/3/wAwAAAAAAAAAAAAAAAAAAAAAAAAAAAACA//////8PAAAAAAAAAAD/////H/gHAAAAAAAAAAAAAADo///zAwAAgAHAAAAAAAABAAAAAAAAAAAAAAAA//////8PAAAAAAAAAID/////B/gDAAAAAAAAAAAAAAD4////BwAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA/P////8PAAAAAAAAAAD/////AfwDAAAAAAAAAAAAAAD4////BwAAAAAwAAAAAAAAAAAAAAAAAAAAAAAA/P////8HAAAAAAAAAAD/////APgDAAAAAAAAAAAAAAD8////DwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8HAAAAAAAAAAD+//9/APgBAAAAAAAAAAAAAAD+////HwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD+//9/APgBEAAAAAAAAAAAAOD/////fwAACAAAQAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD8//9/APwBBAAAAAAAAAAAAPz/////fwAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD4//9/APwAAAAAAAAAAAAAAP7//////wAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8AAAAAAAAAAAD4////APwAAAAAAAAAAAAAgP///////wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///x8AAAAAAAAAAAD4//9/APwAAAAAAAAAAAAAgP///////wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wMAAAAAAAAAAAD4//9/AHwAAAAAAAAAAAAAgP///////wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wEAAAAAAAAAAADw//8/AHwAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wAAAAAAAAAAAADw//8PABAAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P//fwAAAAAAAAAAAADw//8PAAAAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADw//8PAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADg//8PAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADA//8HAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//PwAAAAAAAAAAAADA//8DAAAAAAAAAAAAAAAAAP7//////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//HwAAAAAAAAAAAACA//8BAAAAAAAAAAAAAAAAAP7//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////HwAAAAAAAAAAAACA//8BAAAAAAAAAAAAAAAAAP7//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////BwAAAAAAAAAAAAAA//8AAAAAAAAAAAAAAAAAAPz//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AwAAAAAAAAAAAAAA/38AAAAAAAAAAAAAAAAAAPz/A/z//wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AwAAAAAAAAAAAAAA/x8AAAAAAAAAAAAAAAAAAPw/APj//wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AQAAAAAAAAAAAAAA/wcAAAAAAAAAAAAAAAAAAP4fAPD//wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAHwAALD//wEAAEAAAAAAAAAAAAAAAAAAAAAAAACA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD//wEAAIABAAAAAAAAAAAAAAAAAAAAAACA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAED8/wAAAAABAAAAAAAAAAAAAAAAAAAAAADA//8fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8/wAAAAAHAAAAAAAAAAAAAAAAAAAAAADA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4/wAAAAAmAAAAAAAAAAAAAAAAAAAAAADA//8HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwHwAAAAA+AAAAAAAAAAAAAAAAAAAAAADA/38AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAADA/x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAOAAAAAAAAAAAAAAAAAAAAAADg/x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAEAOAAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAOAHAAAAAAAAAAAAAAAAAAAAAADg/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAPAAAAAAAAAAAAAAAAAAAAAAAACg/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAHgAEAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAHwAAAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAAAAAAAAAADg/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwA8AAAAAAAAAAAAAAAAAAAAAAADwPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwA8AAAAAAAAAAAAAAAAAAAAAAAD4PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAADw/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4HwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDwACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwH4AHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAfwAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
+
+// =====================================================================
+//  JUEGO 1 · GAS RALLY — gira mundial
+//  Garaje (5 autos × 4 colores, color de gas/neón) → mapa mundial con avión →
+//  ciudades temáticas de 3 rondas que se desbloquean en orden.
+//  Mecánicas de cada ronda: 10 bidones (puntaje creciente), bidón S duplica,
 //  bidón L da bono por combustible, gas aturdidor que cuesta combustible,
-//  autos rojos con IA de persecución (BFS), radar, barreras mortales,
-//  ronda de bono cada 4 rondas (empezando en la 3).
+//  patrullas con IA de persecución (BFS), radar, barreras mortales, ronda de bono.
 // =====================================================================
 const Rally = (() => {
   const TS = 16, MW = 41, MH = 35;
   const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];
   const ROT = [0, -Math.PI / 2, Math.PI, Math.PI / 2];
-  const PSPEED = 82;
-  let A = null, scene = null, world = null, parts = null, mapSpr = null, mapTex = null;
-  let grid = null, rockAt = null, cans = [], enemies = [], smokes = [], clouds = [], popups = [], player = null;
+  const ROUNDS = 3, BASE_SPEED = 82, MAPTOP = 13;
+
+  // ---------------- autos (diseños propios inspirados en estilos de época)
+  const CARS = [
+    { id: 'bolido', name: 'BÓLIDO GT', desc: 'EL CLÁSICO DEL RALLY. PAREJO EN TODO.', vel: 3, giro: 3, tanque: 3, gas: 3, neon: 0.55,
+      colors: [
+        { n: 'AZUL', b: '#2f6ff2', l: '#7fb0ff', d: '#1c44a6', s: '#f2f5ff' },
+        { n: 'NARANJO', b: '#ff8a1e', l: '#ffc070', d: '#b85a10', s: '#1b1424' },
+        { n: 'VERDE', b: '#2fbf5a', l: '#8ff0a0', d: '#1a7a3a', s: '#f2f5ff' },
+        { n: 'BLANCO', b: '#e4e6f0', l: '#ffffff', d: '#9a9ab0', s: '#2f6ff2' }] },
+    { id: 'rayo', name: 'RAYO 90', desc: 'COUPÉ TURBO NOVENTERO CON NEÓN. EL MÁS RÁPIDO.', vel: 5, giro: 3, tanque: 2, gas: 3, neon: 1,
+      colors: [
+        { n: 'MORADO', b: '#5a3fa8', l: '#9b82e8', d: '#33246a', s: '#ff6ec7' },
+        { n: 'PERLA', b: '#e8eaf2', l: '#ffffff', d: '#a0a6b8', s: '#ff3355' },
+        { n: 'PLATA', b: '#9aa3b4', l: '#d6dce6', d: '#5f6778', s: '#5ff2ff' },
+        { n: 'AZUL', b: '#2d5fd0', l: '#7fa6ff', d: '#1b3a8a', s: '#ffd23f' }] },
+    { id: 'roadster', name: 'ROADSTER 65', desc: 'DESCAPOTABLE CLÁSICO. DOBLA COMO NINGUNO.', vel: 4, giro: 5, tanque: 2, gas: 2, neon: 0.5,
+      colors: [
+        { n: 'AZUL', b: '#2f5fd6', l: '#7fa0ff', d: '#1b3a8a', s: '#f4f4fa' },
+        { n: 'VINO', b: '#b5283a', l: '#e8667a', d: '#7a1424', s: '#f4f4fa' },
+        { n: 'VERDE', b: '#1f6a44', l: '#4fae78', d: '#0f3f28', s: '#f2e2a0' },
+        { n: 'PLATA', b: '#b8c0cc', l: '#e8eef6', d: '#7a8290', s: '#2f5fd6' }] },
+    { id: 'muscle', name: 'MUSCLE 70', desc: 'V8 PESADO. TANQUE GRANDE, DOBLA LENTO.', vel: 4, giro: 2, tanque: 4, gas: 4, neon: 0.6,
+      colors: [
+        { n: 'AMARILLO', b: '#ffd23f', l: '#fff09a', d: '#c49a10', s: '#1b1424' },
+        { n: 'NARANJO', b: '#ff6a1e', l: '#ffaa6a', d: '#b8400a', s: '#f4f4fa' },
+        { n: 'NEGRO', b: '#2e2e3c', l: '#5a5a70', d: '#141420', s: '#ff3355' },
+        { n: 'LIMA', b: '#8ae03a', l: '#c8ff8a', d: '#4a8a14', s: '#1b1424' }] },
+    { id: 'pulga', name: 'PULGA', desc: 'CHIQUITO Y AHORRADOR. EL GAS LE DURA HARTO.', vel: 2, giro: 4, tanque: 5, gas: 4, neon: 0.45,
+      colors: [
+        { n: 'CELESTE', b: '#6ad0f0', l: '#b8f0ff', d: '#2a8ab0', s: '#ffffff' },
+        { n: 'MENTA', b: '#7fe0b0', l: '#c8ffe0', d: '#3a9a70', s: '#ffffff' },
+        { n: 'ROSADO', b: '#ff8ac0', l: '#ffc8e0', d: '#c04a80', s: '#ffffff' },
+        { n: 'AMARILLO', b: '#ffd84a', l: '#fff2a0', d: '#c09a10', s: '#1b1424' }] },
+  ];
+  const GASES = [
+    { n: 'BLANCO', c: '#ffffff', neon: '#b8c8ff' },
+    { n: 'ROSA', c: '#ff6ec7', neon: '#ff6ec7' },
+    { n: 'CIAN', c: '#5ff2ff', neon: '#5ff2ff' },
+    { n: 'VERDE', c: '#9dff6a', neon: '#9dff6a' },
+  ];
+
+  // ---------------- ciudades
+  const ROOF = {
+    teja: { b: '#c45a3c', l: '#e0805e', d: '#8a3a28', t: '#b04e34' }, crema: { b: '#d8c8a0', l: '#f0e4c4', d: '#a08c64', t: '#c8b890' },
+    hormigon: { b: '#8a96a8', l: '#b4c0d0', d: '#5a6478', t: '#7c889a' }, ocre: { b: '#e0a050', l: '#f8c880', d: '#a06a28', t: '#d09040' },
+    blanco: { b: '#e6e2da', l: '#ffffff', d: '#a8a49c', t: '#d6d2ca' }, pizarra: { b: '#5a6070', l: '#7c8496', d: '#3a3e4a', t: '#50566a' },
+    ladrillo: { b: '#8a4a3a', l: '#b06a56', d: '#5a2e24', t: '#7c4234' }, cobre: { b: '#5a9a8a', l: '#86c4b4', d: '#3a6a5e', t: '#50907e' },
+    rosa: { b: '#e86a9a', l: '#ff9ac0', d: '#a83a66', t: '#d85e8c' }, amarillo: { b: '#f2c440', l: '#ffe080', d: '#b08a18', t: '#e2b434' },
+    turquesa: { b: '#3ab8b0', l: '#7ae0d8', d: '#1e7a74', t: '#32a8a0' }, naranjo: { b: '#e8743a', l: '#ff9e6a', d: '#a8481c', t: '#d86a32' },
+    azul: { b: '#5a7ab8', l: '#8aa6e0', d: '#36508a', t: '#506eaa' }, gris: { b: '#7a7e8c', l: '#a2a6b4', d: '#4e5260', t: '#70748a' },
+  };
+  const MIX_SMALL = [['park', 0.35], ['roof', 0.45], ['plaza', 0.2]];
+  const MIX_BIG = [['roof', 0.45], ['park', 0.25], ['plaza', 0.12], ['pool', 0.06], ['parking', 0.12]];
+  const CITIES = [
+    { id: 'scl', name: 'SANTIAGO', country: 'CHILE', lat: -33.45, lon: -70.67, side: -1, tag: 'CORDILLERA, JACARANDAS Y PALMERAS',
+      border: 'andes', grass: ['#7fa84a', '#94bc5a', '#64903a'], trees: ['jacaranda', 'jacaranda', 'green', 'palm'], plazaTree: 'palm',
+      roofs: ['teja', 'teja', 'crema', 'hormigon', 'ocre'], specials: ['torre', 'cerro'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
+      parked: ['#1b1a26', '#f2c440', '#f2f2f2', '#5ad1e0', '#e05a5a'] },
+    { id: 'bue', name: 'BUENOS AIRES', country: 'ARGENTINA', lat: -34.6, lon: -58.38, side: 1, tag: 'AVENIDAS ANCHAS FRENTE AL RÍO',
+      border: 'river', water: ['#7a6a4a', '#9a8a68', '#5e5038'], grass: ['#5aa04a', '#72b85a', '#448238'], trees: ['green', 'jacaranda', 'green'], plazaTree: 'green',
+      roofs: ['crema', 'blanco', 'gris', 'teja'], specials: ['obelisco'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
+      parked: ['#1b1a26', '#f2c440', '#f2f2f2', '#2f6ff2'], tint: [0xffb070, 0.08] },
+    { id: 'mex', name: 'CIUDAD DE MÉXICO', country: 'MÉXICO', lat: 19.43, lon: -99.13, side: -1, tag: 'VOLCANES Y TECHOS DE COLORES',
+      border: 'volcano', grass: ['#6aa448', '#82bc5a', '#528836'], trees: ['jacaranda', 'green', 'palm'], plazaTree: 'jacaranda',
+      roofs: ['rosa', 'amarillo', 'turquesa', 'naranjo', 'teja'], specials: ['zocalo'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
+      parked: ['#e84a8a', '#f2c440', '#f2f2f2', '#3ab8b0'] },
+    { id: 'lax', name: 'LOS ÁNGELES', country: 'EE. UU.', lat: 34.05, lon: -118.24, side: -1, tag: 'PISCINAS, PALMERAS Y ATARDECER',
+      border: 'hills', grass: ['#7ab84e', '#92cc62', '#5e9a3c'], trees: ['palm', 'palm', 'green'], plazaTree: 'palm',
+      roofs: ['blanco', 'crema', 'teja', 'azul'], specials: [], mixSmall: MIX_SMALL,
+      mixBig: [['roof', 0.35], ['pool', 0.3], ['park', 0.15], ['parking', 0.2]],
+      parked: ['#f2f2f2', '#1b1a26', '#e05a5a', '#ffd23f', '#5ad1e0'], tint: [0xff7a40, 0.12] },
+    { id: 'lon', name: 'LONDRES', country: 'REINO UNIDO', lat: 51.5, lon: -0.13, side: 1, tag: 'LLUVIA, LADRILLO Y BUSES ROJOS',
+      border: 'river', water: ['#3a5a7a', '#5a7a9a', '#2a4460'], grass: ['#4a8a4a', '#5ea05a', '#3a7038'], trees: ['darkgreen', 'green'], plazaTree: 'darkgreen',
+      roofs: ['pizarra', 'ladrillo', 'gris', 'cobre'], specials: [], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
+      parked: 'bus', rain: true, tint: [0x5a6a8a, 0.18] },
+    { id: 'tyo', name: 'TOKIO', country: 'JAPÓN', lat: 35.68, lon: 139.69, side: -1, tag: 'NOCHE DE NEÓN Y CEREZOS',
+      border: 'sea', water: ['#1a3a6a', '#2f5a9a', '#10284a'], grass: ['#4f9a5a', '#66b070', '#3a7a44'], trees: ['sakura', 'sakura', 'green'], plazaTree: 'sakura',
+      roofs: ['gris', 'azul', 'blanco', 'pizarra'], specials: [], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
+      parked: ['#f2f2f2', '#1b1a26', '#ffd23f', '#5ad1e0'], night: true, neon: true },
+  ];
+
+  let A = null, scene = null, world = null, parts = null, mapSpr = null, mapTex = null, nightOv = null, tintOv = null;
+  let grid = null, rockAt = null, cans = [], enemies = [], smokes = [], clouds = [], popups = [], glows = [], player = null;
   let distA = new Int16Array(MW * MH), distB = new Int16Array(MW * MH), lastPT = -1;
   let startTile = [0, 0], enemyStarts = [];
+  let gScene = null, G = {}, mScene = null, M = {};
   const S = {};
   let radarCanvas = null, rctx = null, hud = {}, hudCache = {};
+  const sel = Object.assign({ m: 0, c: 0, g: 0 }, Store.get('rally_car', {}));
+  const carCache = {};
+  function carTex(m, c) {
+    const k = m + ':' + c;
+    if (!carCache[k]) carCache[k] = [0, 1].map((f) => T(playerCarCanvas(CARS[m].id, CARS[m].colors[c], f)));
+    return carCache[k];
+  }
+  const unlocked = () => clamp(Store.get('rally_unlocked', 1), 1, CITIES.length);
+  const clearedMask = () => Store.get('rally_cleared', 0);
 
-  // ---------------- generación del mapa (red de calles con ciclos)
+  // ---------------- red de calles con ciclos
   function genGrid(r) {
     const g = new Uint8Array(MW * MH).fill(1);
     const nx = 10, ny = 11, NX = (i) => 2 + i * 4, NY = (j) => 2 + j * 3;
@@ -1312,11 +1608,9 @@ const Rally = (() => {
     for (const e of edges) {
       const [a, b] = ends(e);
       const ra = find(a), rb = find(b);
-      if (ra !== rb) { par[ra] = rb; e.keep = true; }
-      else e.keep = r() < 0.42;
+      if (ra !== rb) { par[ra] = rb; e.keep = true; } else e.keep = r() < 0.42;
       if (e.keep) { deg[a]++; deg[b]++; }
     }
-    // sin callejones sin salida: cada cruce queda con 2+ calles
     for (const e of edges) {
       if (e.keep) continue;
       const [a, b] = ends(e);
@@ -1349,11 +1643,13 @@ const Rally = (() => {
     }
   }
 
-  // ---------------- dibujo del mapa en una sola textura (1 draw call)
-  function drawMap(r) {
+  // ---------------- dibujo de la ciudad (una sola textura)
+  const wpick = (list, r) => { let p = r(); for (const [k, w] of list) if ((p -= w) <= 0) return k; return list[list.length - 1][0]; };
+  function drawCity(city, r) {
     const { c, g } = mk(MW * TS, MH * TS);
+    const spots = [];
     const wallAt = (x, y) => !isRoad(x, y);
-    // regiones de manzana
+    const nearRoad = (x, y, d = 1) => { for (let j = -d; j <= d; j++) for (let i = -d; i <= d; i++) if (isRoad(x + i, y + j)) return true; return false; };
     const reg = new Int32Array(MW * MH).fill(-1), regions = [];
     for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
       if (!wallAt(x, y) || reg[y * MW + x] >= 0) continue;
@@ -1370,18 +1666,13 @@ const Rally = (() => {
           reg[ny * MW + nx] = id; st.push([nx, ny]);
         }
       }
-      const n = tiles.length, p = r();
-      let theme;
-      if (border) theme = 'forest';
-      else if (n <= 6) theme = p < 0.45 ? 'park' : p < 0.9 ? 'roof' : 'plaza';
-      else theme = p < 0.42 ? 'roof' : p < 0.67 ? 'park' : p < 0.82 ? 'pool' : 'parking';
-      regions.push({ tiles, border, theme, pal: pick([
-        { b: '#c9694f', l: '#e89a7c', d: '#8f4636', t: '#b95d45' }, { b: '#6f7fb8', l: '#9fb0e2', d: '#4a5788', t: '#6574ab' },
-        { b: '#c7b07a', l: '#e8d6a6', d: '#8f7d50', t: '#b9a26e' }, { b: '#5aa3a0', l: '#8ad0cb', d: '#3b706d', t: '#4f9693' },
-        { b: '#a77fc0', l: '#cfaee2', d: '#72548a', t: '#9a73b3' }, { b: '#d98a4a', l: '#f5b47a', d: '#9a5a2a', t: '#c97c3e' },
-      ]) });
+      const n = tiles.length;
+      const cx = tiles.reduce((s, t) => s + t[0], 0) / n * TS + 8, cy = tiles.reduce((s, t) => s + t[1], 0) / n * TS + 8;
+      regions.push({ tiles, border, n, cx, cy, theme: border ? 'border' : wpick(n <= 6 ? city.mixSmall : city.mixBig, r), pal: ROOF[city.roofs[(r() * city.roofs.length) | 0]] });
     }
-    // calles
+    const big = regions.filter((q) => !q.border).sort((a, b) => b.n - a.n);
+    city.specials.forEach((sp, i) => { const q = big[i]; if (q && q.n >= 6) q.theme = sp; });
+    // --- calles
     const SW = '#bdb8cc', CU = '#7d7893', SE = '#a39eb6';
     for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
       if (!isRoad(x, y)) continue;
@@ -1389,9 +1680,8 @@ const Rally = (() => {
       R(g, '#3b3d50', px, py, TS, TS);
       for (let k = 0; k < 7; k++) R(g, r() < 0.5 ? '#45485e' : '#33354a', px + ((r() * 16) | 0), py + ((r() * 16) | 0));
       const L = isRoad(x - 1, y), Rr = isRoad(x + 1, y), U = isRoad(x, y - 1), D = isRoad(x, y + 1);
-      const n = L + Rr + U + D;
       const nb = (a, b) => isRoad(a, b) && (isRoad(a - 1, b) + isRoad(a + 1, b) + isRoad(a, b - 1) + isRoad(a, b + 1) >= 3);
-      if (n >= 3) {
+      if (L + Rr + U + D >= 3) {
         if (r() < 0.18) { disc(g, px + 8, py + 8, 3, '#2c2e3e'); disc(g, px + 8, py + 8, 2, '#4f5268'); R(g, '#2c2e3e', px + 6, py + 8, 5, 1); }
       } else if (L && Rr && !U && !D) {
         for (let i = 0; i < 16; i++) if (!(((px + i) >> 2) & 1)) R(g, '#e8dfb8', px + i, py + 7, 1, 2);
@@ -1403,31 +1693,56 @@ const Rally = (() => {
         if (nb(x, y + 1)) for (let k = 1; k < 16; k += 4) R(g, '#d9d6e4', px + k, py + 11, 2, 4);
       }
     }
-    // manzanas: base, parapetos y veredas
+    // --- bases por tema
+    const borderBase = { andes: '#8a6e52', volcano: '#6a7048', hills: '#c8a868', river: city.water && city.water[0], sea: city.water && city.water[0], forest: '#2f7a3a' }[city.border];
+    const cerroCols = ['#5e7a34', '#6f8c3e', '#86a24a', '#9cb85a', '#b8cc7a'];
     for (const rg of regions) {
-      const base = { forest: '#2f7a3a', park: '#4ea94b', roof: rg.pal.b, pool: '#d9cdb5', plaza: '#d9cdb5', parking: '#565a6f' }[rg.theme];
+      const th = rg.theme;
+      const maxD = rg.tiles.reduce((m, [x, y]) => Math.max(m, Math.hypot(x * TS + 8 - rg.cx, y * TS + 8 - rg.cy)), 0) + 10;
       for (const [x, y] of rg.tiles) {
         const px = x * TS, py = y * TS;
-        R(g, base, px, py, TS, TS);
-        if (rg.theme === 'park' || rg.theme === 'forest') {
-          for (let k = 0; k < 7; k++) R(g, r() < 0.5 ? (rg.theme === 'park' ? '#68c45c' : '#3f9147') : (rg.theme === 'park' ? '#3f9143' : '#256b31'), px + ((r() * 16) | 0), py + ((r() * 16) | 0));
-        } else if (rg.theme === 'roof') {
+        if (th === 'cerro') {
+          for (let j = 0; j < 16; j++) for (let i = 0; i < 16; i++) {
+            const d = Math.hypot(px + i + 0.5 - rg.cx, py + j + 0.5 - rg.cy) / maxD;
+            R(g, cerroCols[clamp(Math.floor((1 - d) * 5 + bayer(px + i, py + j) * 0.9 - 0.45), 0, 4)], px + i, py + j);
+          }
+        } else {
+          const base = { border: borderBase, park: city.grass[0], roof: rg.pal.b, torre: '#3e5f86', pool: '#d9cdb5', plaza: '#d9cdb5', obelisco: '#d9cdb5', zocalo: '#b8b0a8', parking: '#565a6f' }[th];
+          R(g, base, px, py, TS, TS);
+        }
+        if (th === 'park') {
+          for (let k = 0; k < 7; k++) R(g, r() < 0.5 ? city.grass[1] : city.grass[2], px + ((r() * 16) | 0), py + ((r() * 16) | 0));
+        } else if (th === 'border') {
+          if (city.border === 'river' || city.border === 'sea') {
+            for (let k = 0; k < 6; k++) { const a = (r() * 13) | 0, b = (r() * 16) | 0; R(g, city.water[1], px + a, py + b, 3, 1); }
+            if (city.border === 'sea' && !nearRoad(x, y, 2)) { g.fillStyle = city.water[2]; g.globalAlpha = 0.6; g.fillRect(px, py, 16, 16); g.globalAlpha = 1; }
+          } else {
+            const sp = { andes: ['#a08060', '#6e563e'], volcano: ['#7a8456', '#565e3a'], hills: ['#d8bc80', '#a88a50'], forest: ['#3f9147', '#256b31'] }[city.border];
+            for (let k = 0; k < 7; k++) R(g, r() < 0.5 ? sp[0] : sp[1], px + ((r() * 16) | 0), py + ((r() * 16) | 0));
+          }
+        } else if (th === 'roof') {
           for (let i = 0; i < 16; i += 4) for (let j = (y & 1) * 2; j < 16; j += 4) R(g, rg.pal.t, px + i + ((j >> 2) & 1) * 2, py + j);
-        } else if (rg.theme === 'pool' || rg.theme === 'plaza') {
-          for (let i = 0; i < 16; i += 4) { R(g, '#c4b79c', px + i, py, 1, 16); R(g, '#c4b79c', px, py + i, 16, 1); }
-        } else if (rg.theme === 'parking') {
+        } else if (th === 'torre') {
+          for (let j = 0; j < 16; j += 4) for (let i = 0; i < 16; i += 4) { R(g, '#2c4a70', px + i, py + j, 4, 1); R(g, '#2c4a70', px + i, py + j, 1, 4); R(g, '#5a82b0', px + i + 1, py + j + 1, 1, 1); }
+        } else if (th === 'pool' || th === 'plaza' || th === 'obelisco') {
+          for (let j = 0; j < 16; j += 4) for (let i = 0; i < 16; i += 4) if ((((px + i) >> 2) + ((py + j) >> 2)) & 1) R(g, '#cbbf9e', px + i, py + j, 4, 4);
+        } else if (th === 'zocalo') {
+          for (let i = 0; i < 16; i += 8) { R(g, '#a39a90', px + i, py, 1, 16); R(g, '#a39a90', px, py + i, 16, 1); }
+        } else if (th === 'parking') {
           R(g, '#d8d4e4', px + 2, py + 3, 1, 10); R(g, '#d8d4e4', px + 9, py + 3, 1, 10);
           if (r() < 0.55) {
-            const col = pick(['#e8c547', '#e05a5a', '#5ad1e0', '#f2f2f2', '#9a7be0', '#3fbf6a']), ox = r() < 0.5 ? 3 : 10;
-            R(g, col, px + ox, py + 4, 5, 8); R(g, '#1b2240', px + ox, py + 6, 5, 2); R(g, '#1b2240', px + ox, py + 10, 5, 1);
+            const ox = r() < 0.5 ? 3 : 10;
+            if (city.parked === 'bus') { R(g, '#c8202e', px + ox, py + 1, 5, 14); R(g, '#e84a4a', px + ox + 1, py + 2, 3, 12); R(g, '#1b2240', px + ox, py + 2, 5, 1); R(g, '#f2f2f2', px + ox + 2, py + 4, 1, 9); }
+            else { const col = city.parked[(r() * city.parked.length) | 0]; R(g, col, px + ox, py + 4, 5, 8); R(g, '#1b2240', px + ox, py + 6, 5, 2); R(g, '#1b2240', px + ox, py + 10, 5, 1); }
           }
         }
         const U = isRoad(x, y - 1), D = isRoad(x, y + 1), L = isRoad(x - 1, y), Rr = isRoad(x + 1, y);
-        if (rg.theme === 'roof') {
-          if (U) R(g, rg.pal.l, px, py + 4, 16, 2);
-          if (L) R(g, rg.pal.l, px + 4, py, 2, 16);
-          if (D) R(g, rg.pal.d, px, py + 10, 16, 2);
-          if (Rr) R(g, rg.pal.d, px + 10, py, 2, 16);
+        if (th === 'roof' || th === 'torre') {
+          const lc = th === 'torre' ? '#a8c8ee' : rg.pal.l, dc = th === 'torre' ? '#2a4466' : rg.pal.d;
+          if (U) R(g, lc, px, py + 4, 16, 2);
+          if (L) R(g, lc, px + 4, py, 2, 16);
+          if (D) R(g, dc, px, py + 10, 16, 2);
+          if (Rr) R(g, dc, px + 10, py, 2, 16);
         }
         if (U) { R(g, SW, px, py, 16, 4); for (let i = 0; i < 16; i += 4) R(g, SE, px + i, py + 1, 1, 3); R(g, CU, px, py, 16, 1); }
         if (D) { R(g, SW, px, py + 12, 16, 4); for (let i = 0; i < 16; i += 4) R(g, SE, px + i, py + 12, 1, 3); R(g, CU, px, py + 15, 16, 1); }
@@ -1437,56 +1752,101 @@ const Rally = (() => {
         if (isRoad(x + 1, y - 1) && !U && !Rr) { R(g, SW, px + 12, py, 4, 4); R(g, CU, px + 15, py, 1, 1); }
         if (isRoad(x - 1, y + 1) && !D && !L) { R(g, SW, px, py + 12, 4, 4); R(g, CU, px, py + 15, 1, 1); }
         if (isRoad(x + 1, y + 1) && !D && !Rr) { R(g, SW, px + 12, py + 12, 4, 4); R(g, CU, px + 15, py + 15, 1, 1); }
-        // sombra proyectada de edificios sobre la calle (luz desde arriba-izquierda)
-        if (rg.theme === 'roof') {
+        if (th === 'roof' || th === 'torre') {
+          const sh = th === 'torre' ? 6 : 3;
           g.fillStyle = 'rgba(12,8,30,0.30)';
-          if (Rr) g.fillRect(px + 16, py + 3, 3, 13);
-          if (D) g.fillRect(px + 3, py + 16, 13, 3);
+          if (Rr) g.fillRect(px + 16, py + 3, sh, 13);
+          if (D) g.fillRect(px + 3, py + 16, 13, sh);
         }
       }
     }
-    // decoración por tema
-    const tree = (x, y, rad, dark) => {
-      disc(g, x + 2, y + 2, rad, 'rgba(8,30,12,0.35)');
-      disc(g, x, y, rad, dark ? '#1f5a2b' : '#2f7d3b');
-      disc(g, x - 1, y - 1, rad - 1.2, dark ? '#2c7a37' : '#45a24a');
-      disc(g, x - 2, y - 2, rad * 0.45, dark ? '#4c9446' : '#7fd06a');
-      R(g, dark ? '#86c86e' : '#c8f0a0', x - 3, y - 3);
+    // --- árboles y elementos
+    const TREE = {
+      green: (x, y, rd) => { disc(g, x + 2, y + 2, rd, 'rgba(8,30,12,0.35)'); disc(g, x, y, rd, '#2f7d3b'); disc(g, x - 1, y - 1, rd - 1.2, '#45a24a'); disc(g, x - 2, y - 2, rd * 0.45, '#7fd06a'); R(g, '#c8f0a0', x - 3, y - 3); },
+      darkgreen: (x, y, rd) => { disc(g, x + 2, y + 2, rd, 'rgba(8,30,12,0.35)'); disc(g, x, y, rd, '#1f5a2b'); disc(g, x - 1, y - 1, rd - 1.2, '#2c7a37'); disc(g, x - 2, y - 2, rd * 0.45, '#4c9446'); R(g, '#86c86e', x - 3, y - 3); },
+      jacaranda: (x, y, rd) => { disc(g, x + 2, y + 2, rd, 'rgba(30,10,40,0.35)'); disc(g, x, y, rd, '#6a46b0'); disc(g, x - 1, y - 1, rd - 1.2, '#8b62d0'); disc(g, x - 2, y - 2, rd * 0.45, '#b48af0'); R(g, '#e2ccff', x - 3, y - 3); R(g, '#4a8a3a', x + rd - 2, y); R(g, '#4a8a3a', x - 1, y + rd - 2); },
+      sakura: (x, y, rd) => { disc(g, x + 2, y + 2, rd, 'rgba(40,10,30,0.35)'); disc(g, x, y, rd, '#d87aa8'); disc(g, x - 1, y - 1, rd - 1.2, '#f2a0c8'); disc(g, x - 2, y - 2, rd * 0.45, '#ffd0e6'); R(g, '#ffffff', x - 3, y - 3); },
+      palm: (x, y, rd) => {
+        ellipse(g, x + 3, y + 3, rd, rd * 0.7, 'rgba(8,30,12,0.3)');
+        for (let k = 0; k < 7; k++) {
+          const a = (k / 7) * Math.PI * 2 + 0.3, ex = x + Math.cos(a) * rd * 1.2, ey = y + Math.sin(a) * rd * 1.2;
+          line(g, x, y, ex, ey, '#2f8a3a', 1); R(g, '#6fc05a', ex, ey); line(g, x, y, (x + ex) / 2 + 1, (y + ey) / 2, '#47a24a', 1);
+        }
+        disc(g, x, y, 1.6, '#8a6a3a');
+      },
+    };
+    const treeOf = (list) => TREE[list[(r() * list.length) | 0]];
+    const peak = (x, y, rd, snow) => {
+      disc(g, x + 2, y + 2, rd, 'rgba(30,20,10,0.35)'); disc(g, x, y, rd, '#7a5c42'); disc(g, x - 1, y - 1, rd * 0.78, '#9a7656');
+      disc(g, x - 1.6, y - 1.6, rd * 0.5, snow ? '#dfe6f2' : '#b08c66'); if (snow) disc(g, x - 2, y - 2, rd * 0.3, '#ffffff');
     };
     for (const rg of regions) {
       const set = new Set(rg.tiles.map(([x, y]) => y * MW + x));
       const interior = rg.tiles.filter(([x, y]) => set.has(y * MW + x - 1) && set.has(y * MW + x + 1) && set.has((y - 1) * MW + x) && set.has((y + 1) * MW + x));
-      if (rg.theme === 'pool') {
+      const th = rg.theme;
+      if (th === 'border') {
+        const deep = rg.tiles.filter(([x, y]) => !nearRoad(x, y, 1));
+        if (city.border === 'andes') {
+          for (const [x, y] of rg.tiles) {
+            const cx = x * TS + 8, cy = y * TS + 8, e = x / MW;
+            if (!nearRoad(x, y, 1)) for (let k = 0; k < (e > 0.6 ? 2 : 1); k++) peak(cx + ((r() * 6) | 0) - 3, cy + ((r() * 6) | 0) - 3, 6 + e * 5 + r() * 2, x >= MW - 3 || (y <= 1 && e > 0.5) || (e > 0.8));
+            else for (let k = 0; k < 2; k++) disc(g, cx + ((r() * 10) | 0) - 5, cy + ((r() * 10) | 0) - 5, 2 + r() * 1.5, r() < 0.5 ? '#9a7a58' : '#6a7a3a');
+          }
+        } else if (city.border === 'volcano') {
+          const right = deep.filter(([x]) => x >= MW - 2).sort((a, b) => a[1] - b[1]);
+          for (const [x, y] of rg.tiles) if (!nearRoad(x, y, 1) && r() < 0.6) disc(g, x * TS + 8, y * TS + 8, 4 + r() * 3, r() < 0.5 ? '#7a7a50' : '#5e6a3e');
+          [right[(right.length * 0.25) | 0], right[(right.length * 0.7) | 0]].forEach((tl, i) => {
+            if (!tl) return;
+            const x = tl[0] * TS + 8, y = tl[1] * TS + 8, R0 = 14;
+            const cols = ['#4e543a', '#6e7048', '#86805a', '#a09478', '#c8c4bc', '#eef2f8'];
+            for (let k = 0; k < 6; k++) disc(g, x - k * 0.7, y - k * 0.7, R0 * (1 - k / 7), cols[k]);
+            disc(g, x - 4, y - 4, 1.8, i ? '#3a3030' : '#5a4a4a');
+          });
+        } else if (city.border === 'hills') {
+          for (const [x, y] of rg.tiles) {
+            const cx = x * TS + 8, cy = y * TS + 8;
+            if (!nearRoad(x, y, 1) && r() < 0.7) { disc(g, cx + 1, cy + 1, 6, 'rgba(60,40,10,0.25)'); disc(g, cx, cy, 6, '#b8945a'); disc(g, cx - 1, cy - 1, 4, '#d2b072'); }
+            for (let k = 0; k < 3; k++) disc(g, cx + ((r() * 12) | 0) - 6, cy + ((r() * 12) | 0) - 6, 1.5, r() < 0.5 ? '#7a8a4a' : '#5e6e3a');
+            if (r() < 0.12) TREE.palm(cx, cy, 4);
+          }
+        } else if (city.border === 'river' || city.border === 'sea') {
+          for (const [x, y] of deep) if (r() < 0.08) {
+            const cx = x * TS + 8, cy = y * TS + 8, v = r() < 0.5;
+            ellipse(g, cx + 1, cy + 1, v ? 2.5 : 5.5, v ? 5.5 : 2.5, 'rgba(0,0,0,0.25)');
+            ellipse(g, cx, cy, v ? 2.5 : 5.5, v ? 5.5 : 2.5, '#f2f2f2'); R(g, '#8a5a3a', cx - 1, cy - 1, 2, 2);
+          }
+        } else for (const [x, y] of rg.tiles) for (let k = 0; k < (r() < 0.55 ? 2 : 1); k++) TREE.darkgreen(x * TS + 8 + ((r() * 6) | 0) - 3, y * TS + 8 + ((r() * 6) | 0) - 3, 4.5 + r() * 2);
+      } else if (th === 'pool') {
         if (interior.length) {
           for (const [x, y] of interior) {
             const px = x * TS, py = y * TS;
             R(g, '#3fb6e8', px, py, 16, 16);
-            for (let k = 0; k < 10; k++) { const a = (r() * 14) | 0, b = (r() * 15) | 0; R(g, '#8fdcff', px + a, py + b, 2, 1); }
-            if (!set.has(y * MW + x - 1) || !interior.some(([a, b]) => a === x - 1 && b === y)) R(g, '#ffffff', px, py, 1, 16);
+            for (let k = 0; k < 10; k++) R(g, '#8fdcff', px + ((r() * 14) | 0), py + ((r() * 15) | 0), 2, 1);
+            if (!interior.some(([a, b]) => a === x - 1 && b === y)) R(g, '#ffffff', px, py, 1, 16);
             if (!interior.some(([a, b]) => a === x + 1 && b === y)) R(g, '#ffffff', px + 15, py, 1, 16);
             if (!interior.some(([a, b]) => a === x && b === y - 1)) R(g, '#ffffff', px, py, 16, 1);
             if (!interior.some(([a, b]) => a === x && b === y + 1)) R(g, '#2b8cc0', px, py + 15, 16, 1);
           }
-        } else rg.theme = 'plaza';
-      }
-      if (rg.theme === 'plaza') {
+          for (const [x, y] of rg.tiles) if (!interior.some(([a, b]) => a === x && b === y) && r() < 0.35) TREE[city.plazaTree](x * TS + 8, y * TS + 8, 3.5);
+        } else {
+          const [x, y] = rg.tiles[(r() * rg.tiles.length) | 0];
+          disc(g, x * TS + 8, y * TS + 8, 5, '#3fb6e8'); disc(g, x * TS + 7, y * TS + 7, 1.5, '#e8fbff');
+        }
+      } else if (th === 'plaza') {
         const [x, y] = rg.tiles[(r() * rg.tiles.length) | 0];
         const cx = x * TS + 8, cy = y * TS + 8;
         disc(g, cx + 1, cy + 1, 6, 'rgba(0,0,0,0.2)'); disc(g, cx, cy, 6, '#a89c84'); disc(g, cx, cy, 4.6, '#3fb6e8'); disc(g, cx - 1, cy - 1, 1.6, '#e8fbff');
-        for (const [a, b] of rg.tiles) if (r() < 0.4) tree(a * TS + 8 + ((r() * 4) | 0) - 2, b * TS + 8, 3.5, false);
-      }
-      if (rg.theme === 'park' || rg.theme === 'forest') {
+        for (const [a, b] of rg.tiles) if (r() < 0.45 && (a !== x || b !== y)) TREE[city.plazaTree](a * TS + 8 + ((r() * 4) | 0) - 2, b * TS + 8, 3.6);
+      } else if (th === 'park') {
         for (const [x, y] of rg.tiles) {
-          const n = rg.theme === 'forest' ? (r() < 0.55 ? 2 : 1) : r() < 0.62 ? 1 : 0;
-          for (let k = 0; k < n; k++) tree(x * TS + 8 + ((r() * 6) | 0) - 3, y * TS + 8 + ((r() * 6) | 0) - 3, 4.5 + r() * 2, rg.theme === 'forest');
-          if (rg.theme === 'park' && r() < 0.2) {
+          if (r() < 0.62) treeOf(city.trees)(x * TS + 8 + ((r() * 6) | 0) - 3, y * TS + 8 + ((r() * 6) | 0) - 3, 4.5 + r() * 2);
+          if (r() < 0.2) {
             const fx = x * TS + 4 + ((r() * 8) | 0), fy = y * TS + 4 + ((r() * 8) | 0);
             for (let k = 0; k < 5; k++) R(g, pick(['#ff6b8a', '#ffd84a', '#ffffff', '#b48cff']), fx + ((r() * 4) | 0), fy + ((r() * 4) | 0));
           }
         }
-      }
-      if (rg.theme === 'roof') {
-        let helipad = interior.length && rg.tiles.length >= 9 && r() < 0.6 ? interior[(r() * interior.length) | 0] : null;
+      } else if (th === 'roof') {
+        const helipad = interior.length && rg.n >= 9 && r() < 0.6 ? interior[(r() * interior.length) | 0] : null;
         for (const [x, y] of rg.tiles) {
           const cx = x * TS + 8 + ((r() * 3) | 0) - 1, cy = y * TS + 8 + ((r() * 3) | 0) - 1;
           if (helipad && helipad[0] === x && helipad[1] === y) {
@@ -1494,31 +1854,77 @@ const Rally = (() => {
             continue;
           }
           const p = r();
-          if (p < 0.18) { R(g, 'rgba(0,0,0,0.25)', cx - 2, cy - 1, 6, 5); R(g, '#9aa0b4', cx - 3, cy - 2, 6, 5); R(g, '#d0d3de', cx - 3, cy - 2, 6, 1); R(g, '#5a6078', cx - 1, cy, 3, 2); }
+          if (city.neon && p < 0.22) {
+            const col = r() < 0.5 ? '#ff4f9a' : '#4fe3ff', w = 6 + ((r() * 3) | 0);
+            R(g, '#120e24', cx - w / 2 - 1, cy - 3, w + 2, 6); R(g, col, cx - w / 2, cy - 2, w, 1); R(g, col, cx - w / 2, cy + 1, w, 1);
+            for (let i = 0; i < w; i += 2) R(g, '#ffffff', cx - w / 2 + i, cy - 1, 1, 2);
+            spots.push([cx, cy, col]);
+          } else if (p < 0.18) { R(g, 'rgba(0,0,0,0.25)', cx - 2, cy - 1, 6, 5); R(g, '#9aa0b4', cx - 3, cy - 2, 6, 5); R(g, '#d0d3de', cx - 3, cy - 2, 6, 1); R(g, '#5a6078', cx - 1, cy, 3, 2); }
           else if (p < 0.3) { disc(g, cx, cy, 1.7, '#3a3448'); R(g, '#7a7488', cx - 1, cy - 1); }
           else if (p < 0.42) { R(g, '#3a6a9a', cx - 3, cy - 2, 6, 4); R(g, '#7fd1ff', cx - 3, cy - 2, 6, 3); R(g, '#d6f4ff', cx - 3, cy - 2, 3, 1); }
           else if (p < 0.5) { disc(g, cx + 1, cy + 1, 3.5, 'rgba(0,0,0,0.25)'); disc(g, cx, cy, 3.5, '#7c5e40'); disc(g, cx - 0.5, cy - 0.5, 2.6, '#a8845e'); R(g, '#5d452f', cx - 1, cy, 3, 1); }
           else if (p < 0.6) { R(g, '#1d2a5e', cx - 4, cy - 3, 8, 6); for (let i = 0; i < 8; i += 2) R(g, '#4a6ad0', cx - 4 + i, cy - 3, 1, 6); R(g, '#4a6ad0', cx - 4, cy, 8, 1); }
         }
+      } else if (th === 'torre') {
+        // gran torre de vidrio con reflejos y helipuerto
+        for (const [x, y] of rg.tiles) if (r() < 0.6) { const px = x * TS, py = y * TS; line(g, px + 3, py + 12, px + 9, py + 6, '#9cc4ee', 1); R(g, '#d6ecff', px + 9, py + 6); }
+        const hp = interior.length ? interior.reduce((b, t) => (Math.hypot(t[0] * TS + 8 - rg.cx, t[1] * TS + 8 - rg.cy) < Math.hypot(b[0] * TS + 8 - rg.cx, b[1] * TS + 8 - rg.cy) ? t : b)) : rg.tiles[0];
+        const hx = hp[0] * TS + 8, hy = hp[1] * TS + 8;
+        disc(g, hx, hy, 7, '#2e3a50'); disc(g, hx, hy, 6.4, '#ffd23f'); disc(g, hx, hy, 5.4, '#2e3a50'); glyph(g, 'H', hx - 3, hy - 3, '#ffffff', true);
+        R(g, '#ff3b5c', hx - 7, hy - 7); R(g, '#ff3b5c', hx + 6, hy - 7); R(g, '#ff3b5c', hx - 7, hy + 6); R(g, '#ff3b5c', hx + 6, hy + 6);
+        spots.push([hx - 7, hy - 7, '#ff3b5c']);
+      } else if (th === 'cerro') {
+        // cerro con bosque en las faldas y mirador con estatua blanca en la cumbre
+        const maxD = rg.tiles.reduce((m, [x, y]) => Math.max(m, Math.hypot(x * TS + 8 - rg.cx, y * TS + 8 - rg.cy)), 0) + 10;
+        for (const [x, y] of rg.tiles) {
+          const cx = x * TS + 8, cy = y * TS + 8, d = Math.hypot(cx - rg.cx, cy - rg.cy) / maxD;
+          if (d > 0.42 && r() < 0.75) treeOf(['green', 'darkgreen', 'green'])(cx + ((r() * 6) | 0) - 3, cy + ((r() * 6) | 0) - 3, 3.5 + r() * 1.5);
+          else if (d > 0.25 && r() < 0.4) R(g, '#d8c89a', cx + ((r() * 8) | 0) - 4, cy + ((r() * 8) | 0) - 4, 2, 1);
+        }
+        const sx = Math.round(rg.cx), sy = Math.round(rg.cy);
+        disc(g, sx, sy, 4.5, '#c8c0b0'); disc(g, sx, sy, 3.5, '#ddd6c6');
+        R(g, 'rgba(0,0,0,0.3)', sx + 1, sy - 1, 3, 5); R(g, '#ffffff', sx - 1, sy - 3, 3, 5); R(g, '#e8e8f4', sx, sy - 4); R(g, '#c8c8d8', sx + 1, sy - 2, 1, 4);
+        line(g, sx + 6, sy - 8, sx + 6, sy - 2, '#5a5a6a', 1); R(g, '#ff3b5c', sx + 6, sy - 9);
+        spots.push([sx, sy - 2, '#ffffff']);
+      } else if (th === 'obelisco') {
+        const cx = Math.round(rg.cx), cy = Math.round(rg.cy);
+        disc(g, cx, cy, 9, city.grass[0]); disc(g, cx, cy, 7.5, city.grass[1]);
+        line(g, cx + 2, cy + 2, cx + 13, cy + 13, 'rgba(0,0,0,0.35)', 2);
+        R(g, '#d6d2c8', cx - 2, cy - 2, 4, 4); R(g, '#ffffff', cx - 2, cy - 2, 2, 2); R(g, '#b8b4aa', cx, cy, 2, 2);
+        for (const [a, b] of rg.tiles) if (r() < 0.3) TREE[city.plazaTree](a * TS + 8, b * TS + 8, 3.4);
+        spots.push([cx, cy, '#ffffff']);
+      } else if (th === 'zocalo') {
+        const cx = Math.round(rg.cx), cy = Math.round(rg.cy);
+        disc(g, cx, cy, 3, '#8a8278'); line(g, cx + 1, cy + 1, cx + 10, cy + 6, 'rgba(0,0,0,0.3)', 2);
+        R(g, '#006847', cx + 1, cy - 8, 2, 5); R(g, '#ffffff', cx + 3, cy - 8, 2, 5); R(g, '#ce1126', cx + 5, cy - 8, 2, 5); R(g, '#8a6a3a', cx + 3, cy - 6);
+        R(g, '#3a3a48', cx, cy - 9, 1, 10);
+      } else if (th === 'parking') {
+        for (const [x, y] of rg.tiles) if (r() < 0.12) TREE[city.plazaTree](x * TS + 8, y * TS + 8, 3);
       }
     }
-    return c;
+    return { c, spots };
   }
 
   // ---------------- construcción de ronda
+  function cityRng() {
+    const city = CITIES[S.city];
+    let h = 7;
+    for (const ch of city.id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    return rng32(h + S.round * 7919 + S.loop * 104729);
+  }
   function buildRound() {
-    const r = rng32((Date.now() & 0xffff) + S.level * 7919);
+    const city = CITIES[S.city], r = cityRng();
     const { g, NX, NY } = genGrid(r);
     grid = g;
     rockAt = new Uint8Array(MW * MH);
     startTile = [NX(4), NY(7)];
     enemyStarts = [0, 2, 4, 6, 8, 9, 1, 7].map((i) => [NX(i), NY(10)]);
-    // barreras (rocas) sin cortar la conectividad
     const roadTiles = [];
     for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (isRoad(x, y)) roadTiles.push([x, y]);
     const total = () => { let n = 0; for (const [x, y] of roadTiles) if (!rockAt[y * MW + x]) n++; return n; };
-    const nRocks = Math.min(2 + S.level, 9);
-    let tries = 0, placed = [];
+    const nRocks = Math.min(2 + S.city + S.round + S.loop, 9);
+    let tries = 0;
+    const placed = [];
     while (placed.length < nRocks && tries++ < 400) {
       const [x, y] = roadTiles[(r() * roadTiles.length) | 0];
       const h = isRoad(x - 1, y) && isRoad(x + 1, y) && !isRoad(x, y - 1) && !isRoad(x, y + 1);
@@ -1534,7 +1940,6 @@ const Rally = (() => {
       if (reach !== total()) { rockAt[y * MW + x] = 0; continue; }
       placed.push({ x, y, h });
     }
-    // bidones
     bfs(distA, startTile[0], startTile[1]);
     const cand = roadTiles.filter(([x, y]) => !rockAt[y * MW + x] && distA[y * MW + x] > 6 && distA[y * MW + x] < 9999);
     const chosen = [];
@@ -1547,43 +1952,50 @@ const Rally = (() => {
     const iS = (r() * chosen.length) | 0;
     let iL = (r() * chosen.length) | 0;
     if (iL === iS) iL = (iS + 3) % chosen.length;
-    // texturas y sprites
     if (mapTex) mapTex.dispose();
-    mapTex = T(drawMap(r));
-    mapSpr.set(mapTex).at(MW * TS / 2, MH * TS / 2);
+    const drawn = drawCity(city, r);
+    mapTex = T(drawn.c);
+    mapSpr.set(mapTex).at((MW * TS) / 2, (MH * TS) / 2);
     for (const c of cans) { c.spr.remove(); c.glow.remove(); }
     cans = chosen.map(([x, y], i) => {
       const kind = i === iS ? 'S' : i === iL ? 'L' : 'N';
       const frames = kind === 'S' ? A.canS : kind === 'L' ? A.canL : A.canN;
-      return {
-        x: x * TS + 8, y: y * TS + 8, kind, frames, got: false, ph: r() * 6,
-        spr: new Spr(world, frames[0], 5),
-        glow: new Spr(world, kind === 'S' ? A.glowY : kind === 'L' ? A.glowG : A.glowR, 4, { transparent: true, add: true }),
-      };
+      return { x: x * TS + 8, y: y * TS + 8, kind, frames, got: false, ph: r() * 6,
+        spr: new Spr(world, frames[0], 5), glow: new Spr(world, kind === 'S' ? A.glowY : kind === 'L' ? A.glowG : A.glowR, 4, { transparent: true, add: true }) };
     });
     for (const rk of S.rockList || []) rk.spr.remove();
     S.rockList = placed.map((p) => ({ ...p, cx: p.x * TS + 8, cy: p.y * TS + 8, spr: new Spr(world, (p.h ? A.barrierV : A.barrier)[0], 6).at(p.x * TS + 8, p.y * TS + 8) }));
+    // ambiente de la ciudad
+    nightOv.visible = !!city.night;
+    tintOv.visible = !!city.tint;
+    if (city.tint) { tintOv.material.color.setHex(city.tint[0]); tintOv.material.opacity = city.tint[1]; }
+    glows.forEach((s, i) => {
+      const sp = drawn.spots[i];
+      s.show(!!sp && !!city.night);
+      if (sp) s.tint(sp[2]).at(sp[0], sp[1]);
+    });
+    clouds.forEach((c) => c.spr.show(!city.night));
+    scene.background.setHex(city.night ? 0x05071a : 0x1d4a26);
     S.collected = 0; S.special = false;
-    S.bonus = S.level % 4 === 3;
+    S.bonus = S.round === 1;
     lastPT = -1;
   }
   function resetActors(full) {
+    const city = CITIES[S.city];
     player.x = startTile[0] * TS + 8; player.y = startTile[1] * TS + 8; player.dir = 0; player.vis = true; player.ang = 0;
     S.want = -1; S.wantT = 0;
-    const nE = Math.min(2 + S.level, 8);
+    const nE = Math.min(2 + S.city + S.round + S.loop, 8);
     while (enemies.length < nE) {
-      const spr = new Spr(world, A.carE[0], 10);
-      const stars = [new Spr(world, A.star, 30), new Spr(world, A.star, 30)];
-      enemies.push({ spr, stars });
+      enemies.push({ spr: new Spr(world, A.carE[0], 10), stars: [new Spr(world, A.star, 30), new Spr(world, A.star, 30)], hl: new Spr(world, A.headlight, 13, { transparent: true, add: true }) });
     }
     enemies.forEach((e, i) => {
-      const active = i < nE;
-      e.active = active; e.spr.show(active);
+      e.active = i < nE; e.spr.show(e.active); e.hl.show(e.active && !!city.night);
       const [tx, ty] = enemyStarts[i % enemyStarts.length];
       e.x = tx * TS + 8; e.y = ty * TS + 8; e.dir = 0; e.ang = 0; e.stun = 0; e.hold = 0.6 + i * 1.3; e.persona = i % 3;
       e.noise = 0.12 + (i % 3) * 0.06; e.spin = 0;
       e.stars.forEach((s) => s.show(false));
     });
+    player.hl.show(!!city.night);
     for (const s of smokes) { s.life = 0; s.spr.show(false); }
     if (full) S.fuel = 100;
   }
@@ -1603,9 +2015,7 @@ const Rally = (() => {
       const m = Math.min(dist, toC);
       c.x += DX[c.dir] * m; c.y += DY[c.dir] * m;
       dist -= m;
-      if (m >= toC - 1e-4) {
-        if (DX[c.dir]) c.x = Math.floor(c.x / TS) * TS + 8; else c.y = Math.floor(c.y / TS) * TS + 8;
-      }
+      if (m >= toC - 1e-4) { if (DX[c.dir]) c.x = Math.floor(c.x / TS) * TS + 8; else c.y = Math.floor(c.y / TS) * TS + 8; }
     }
   }
   function decidePlayer(c, tx, ty) {
@@ -1629,25 +2039,103 @@ const Rally = (() => {
     e.dir = best;
   }
 
-  // ---------------- ciclo de vida
+  // ---------------- construcción de escenas
   function init() {
     if (scene) return;
     A = buildRallyArt();
+    A.underglow = T(underglowCanvas());
+    A.glowPink = T(glowCanvas('255,255,255', 9));
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1d4a26);
     world = new THREE.Group(); scene.add(world);
     mapSpr = new Spr(world, A.carP[0], 0);
+    const ov = (color, opacity, z) => {
+      const m = new THREE.Mesh(QUAD, new THREE.MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false }));
+      m.scale.set(MW * TS + 400, MH * TS + 400, 1); m.position.set((MW * TS) / 2, -(MH * TS) / 2, z); m.frustumCulled = false; m.visible = false;
+      world.add(m); return m;
+    };
+    nightOv = ov(0x070726, 0.58, 3);
+    tintOv = ov(0xff8040, 0.1, 55);
     parts = new Particles(world, 900, 24);
-    player = { spr: new Spr(world, A.carP[0], 12), x: 0, y: 0, dir: 0, ang: 0, vis: true };
+    player = { spr: new Spr(world, A.carP[0], 12), glow: new Spr(world, A.underglow, 9, { transparent: true, add: true }), hl: new Spr(world, A.headlight, 13, { transparent: true, add: true }), x: 0, y: 0, dir: 0, ang: 0, vis: true };
     for (let i = 0; i < 36; i++) smokes.push({ spr: new Spr(world, A.smoke[0], 20).show(false), life: 0, x: 0, y: 0, hit: new Set() });
     for (let i = 0; i < 2; i++) clouds.push({ spr: new Spr(world, A.cloud, 50, { transparent: true }), x: rand(0, MW * TS), y: rand(0, MH * TS) });
     for (let i = 0; i < 8; i++) popups.push({ spr: new Spr(world, textTex('100'), 60).show(false), t: 0 });
+    for (let i = 0; i < 28; i++) glows.push(new Spr(world, A.glowPink, 4, { transparent: true, add: true }).show(false));
   }
+  function initGarage() {
+    if (gScene) return;
+    gScene = new THREE.Scene();
+    gScene.background = new THREE.Color(0x0e0a1e);
+    G.bg = new Spr(gScene, T(garageBgCanvas()), -10);
+    G.table = { 4: [0, 1].map((p) => T(turntableCanvas(46, p))), 3: [0, 1].map((p) => T(turntableCanvas(36, p))) };
+    G.tableSpr = new Spr(gScene, G.table[4][0], -5);
+    G.spot = new Spr(gScene, T(glowCanvas('255,240,220', 40)), -4, { transparent: true, add: true });
+    G.glow = new Spr(gScene, A.underglow, 1, { transparent: true, add: true });
+    G.car = new Spr(gScene, carTex(sel.m, sel.c)[0], 2);
+    G.puffs = [];
+    for (let i = 0; i < 8; i++) G.puffs.push({ spr: new Spr(gScene, A.smoke[0], 3).show(false), t: 0, life: 0 });
+    G.puffT = 0;
+  }
+  function worldCanvas() {
+    const { w, h, latTop, latBot } = WORLD;
+    const raw = atob(WORLD.bits);
+    const land = new Uint8Array(w * h);
+    for (let i = 0; i < w * h; i++) land[i] = (raw.charCodeAt(i >> 3) >> (i & 7)) & 1;
+    const L = (x, y) => x >= 0 && y >= 0 && x < w && y < h && land[y * w + x] === 1;
+    const { c, g } = mk(w, h);
+    const im = g.createImageData(c.width, c.height), d = im.data;
+    // zonas áridas como manchas elípticas (lon, lat, radio lon, radio lat)
+    const DESERT = [[10, 23, 24, 7], [47, 23, 10, 6], [133, -25, 13, 6], [102, 43, 13, 4], [20, -24, 6, 4], [-70, -23, 1.6, 7], [-112, 33, 7, 4], [62, 30, 9, 5], [-66, -40, 3, 6]];
+    const arid = (lon, lat) => DESERT.reduce((m, [a, b, ra, rb]) => Math.max(m, Math.exp(-(((lon - a) / ra) ** 2 + ((lat - b) / rb) ** 2))), 0);
+    const PAL = {
+      snow: ['#dfe8f2', '#ffffff', '#a8b8cc'], desert: ['#d6b26a', '#f0d090', '#a8843e'],
+      jungle: ['#2f9a54', '#5ac078', '#1c6a38'], temp: ['#4fae64', '#7fd88a', '#2f7a46'],
+    };
+    const latLines = [60, 30, 0, -30].map((lt) => Math.round(((latTop - lt) / (latTop - latBot)) * h));
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const lat = latTop - ((y + 0.5) / h) * (latTop - latBot), lon = ((x + 0.5) / w) * 360 - 180;
+      let col;
+      if (L(x, y)) {
+        const dz = (bayer(x, y) - 0.5);
+        const p = Math.abs(lat) + dz * 6 > 63 || (lat + dz * 4 > 60 && lon > -75 && lon < -12) ? PAL.snow
+          : arid(lon, lat) > 0.45 + dz * 0.35 ? PAL.desert
+          : Math.abs(lat) + dz * 5 < 16 ? PAL.jungle : PAL.temp;
+        col = !L(x, y - 1) || !L(x - 1, y) ? p[1] : !L(x, y + 1) || !L(x + 1, y) ? p[2] : bayer(x, y) < 0.1 ? p[2] : p[0];
+      } else if (L(x + 1, y) || L(x - 1, y) || L(x, y + 1) || L(x, y - 1)) col = '#2c4a8c';
+      else if (x % 40 === 0 || latLines.includes(y)) col = (x + y) % 2 ? '#22306a' : '#1a2452';
+      else col = bayer(x, y) < 0.07 ? '#1a2452' : '#141c44';
+      const [rr, gg, bb] = rgb(col), i = (y * c.width + x) * 4;
+      d[i] = rr; d[i + 1] = gg; d[i + 2] = bb; d[i + 3] = 255;
+    }
+    g.putImageData(im, 0, 0);
+    return c;
+  }
+  const cityPx = (i) => ({ x: ((CITIES[i].lon + 180) / 360) * WORLD.w, y: MAPTOP + ((WORLD.latTop - CITIES[i].lat) / (WORLD.latTop - WORLD.latBot)) * WORLD.h });
+  function initMap() {
+    if (mScene) return;
+    mScene = new THREE.Scene();
+    mScene.background = new THREE.Color(0x141c44);
+    M.world = new Spr(mScene, T(worldCanvas()), 0).at(WORLD.w / 2, MAPTOP + WORLD.h / 2);
+    M.mk = { locked: T(markerCanvas('#6a6488')), open: T(markerCanvas('#ff4f9a')), done: T(markerCanvas('#ffd23f')) };
+    M.ring = T(ringCanvas('#ffffff', 9));
+    M.marks = CITIES.map((c, i) => {
+      const p = cityPx(i);
+      return { p, dot: new Spr(mScene, M.mk.locked, 5).at(p.x, p.y), ring: new Spr(mScene, M.ring, 4, { transparent: true }).at(p.x, p.y), label: new Spr(mScene, textTex(c.name, '#ffffff'), 6) };
+    });
+    const pc = planeCanvas();
+    M.plane = new Spr(mScene, T(pc), 10);
+    M.shadow = new Spr(mScene, T(whiten(pc, '#000000')), 9, { transparent: true, opacity: 0.35 });
+    M.parts = new Particles(mScene, 600, 7);
+    M.cam = 0;
+  }
+
+  // ---------------- HUD de juego
   function buildHud() {
     UI.setHud(`
       <div class="hrow">
         <div class="hcol"><span class="hlab">PUNTOS</span><span class="hval" id="rs">000000</span></div>
-        <div class="hcol" style="align-items:center"><span class="hlab" id="rlbl">RONDA</span><span class="hval sun" id="rl">1</span></div>
+        <div class="hcol" style="align-items:center"><span class="hlab" id="rlbl">SANTIAGO</span><span class="hval sun" id="rl">1/3</span></div>
         <div class="hcol" style="align-items:flex-end"><span class="hlab">REC</span><span class="hval cyan" id="rh">000000</span></div>
       </div>
       <div class="hbl" style="flex-direction:column">
@@ -1660,29 +2148,252 @@ const Rally = (() => {
     radarCanvas = UI.$('#radar'); rctx = radarCanvas.getContext('2d');
     hudCache = {};
   }
-  function start() {
+  function banner(t, sub) {
+    if (!hud.b) return;
+    if (!t) { hud.b.hidden = true; return; }
+    hud.b.hidden = false;
+    hud.b.innerHTML = `${t}${sub ? `<small>${sub}</small>` : ''}`;
+  }
+
+  // ---------------- garaje
+  const STATS = [['VEL', 'vel'], ['GIRO', 'giro'], ['TANQUE', 'tanque'], ['GAS', 'gas']];
+  function openGarage() {
+    init(); initGarage();
+    S.state = 'garage'; S.gRow = S.gRow || 0;
+    document.body.classList.add('inmenu');
+    UI.setButtons('ELEGIR', 'VOLVER');
+    Snd.play(SONGS.menu);
+    UI.setHud(`
+      <div class="hud-ui gar" id="gar">
+        <div class="gtitle">GARAJE</div>
+        <div class="gpanel">
+          <div class="grow" data-row="0"><button class="arr" data-row="0" data-d="-1" aria-label="Auto anterior">◀</button><div class="gname"><b id="gcn"></b><small id="gcd"></small></div><button class="arr" data-row="0" data-d="1" aria-label="Auto siguiente">▶</button></div>
+          <div class="gstats" id="gst"></div>
+          <div class="grow" data-row="1"><span class="glab">COLOR <em id="gcc"></em></span><div class="sw" id="gcol"></div></div>
+          <div class="grow" data-row="2"><span class="glab">GAS / NEÓN <em id="ggc"></em></span><div class="sw" id="ggas"></div></div>
+          <button class="gbtn" id="ggo" data-row="3">ELEGIR CIUDAD ▶</button>
+        </div>
+      </div>`);
+    const root = UI.$('#gar');
+    root.querySelectorAll('.arr').forEach((b) => b.addEventListener('click', () => { S.gRow = +b.dataset.row; changeSel(S.gRow, +b.dataset.d); }));
+    UI.$('#ggo').addEventListener('click', () => { Snd.unlock(); goMap(); });
+    root.querySelectorAll('.grow').forEach((rw) => rw.addEventListener('pointerdown', () => { S.gRow = +rw.dataset.row; refreshGarage(); }));
+    refreshGarage();
+  }
+  function refreshGarage() {
+    const car = CARS[sel.m], col = car.colors[sel.c], gas = GASES[sel.g];
+    const root = UI.$('#gar');
+    if (!root) return;
+    UI.$('#gcn').textContent = car.name;
+    UI.$('#gcd').textContent = car.desc;
+    UI.$('#gcc').textContent = col.n;
+    UI.$('#ggc').textContent = gas.n;
+    UI.$('#gst').innerHTML = STATS.map(([lab, k]) => `<span>${lab}</span><span class="bar5">${'<i class="on"></i>'.repeat(car[k])}${'<i></i>'.repeat(5 - car[k])}</span>`).join('');
+    UI.$('#gcol').innerHTML = car.colors.map((c, i) => `<button class="${i === sel.c ? 'on' : ''}" data-i="${i}" style="background:linear-gradient(135deg,${c.l},${c.b} 55%,${c.d})" aria-label="Color ${c.n}"></button>`).join('');
+    UI.$('#ggas').innerHTML = GASES.map((c, i) => `<button class="${i === sel.g ? 'on' : ''}" data-i="${i}" style="background:${c.c};box-shadow:0 0 calc(var(--px)*4) ${c.neon},inset 0 0 0 var(--px) #000" aria-label="Gas ${c.n}"></button>`).join('');
+    UI.$('#gcol').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { sel.c = +b.dataset.i; S.gRow = 1; saveSel(); }));
+    UI.$('#ggas').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { sel.g = +b.dataset.i; S.gRow = 2; saveSel(); burstGas(); }));
+    root.querySelectorAll('[data-row]').forEach((el) => { if (el.classList.contains('grow') || el.id === 'ggo') el.classList.toggle('sel', +el.dataset.row === S.gRow); });
+  }
+  function saveSel() { Store.set('rally_car', sel); Snd.sfx('move'); refreshGarage(); }
+  function changeSel(row, d) {
+    if (row === 0) { sel.m = (sel.m + d + CARS.length) % CARS.length; Snd.sfx('select'); }
+    else if (row === 1) sel.c = (sel.c + d + 4) % 4;
+    else if (row === 2) { sel.g = (sel.g + d + 4) % 4; burstGas(); }
+    else return;
+    saveSel();
+  }
+  function burstGas() { G.puffT = 0; for (let i = 0; i < 3; i++) spawnGaragePuff(i * 0.12); }
+  function spawnGaragePuff(delay = 0) {
+    const p = G.puffs.find((q) => q.life <= 0) || G.puffs[0];
+    p.life = 1.6 + delay; p.max = 1.6; p.delay = delay; p.ang = S.gAng || 0;
+  }
+  function updateGarage(dt) {
+    if (Input.pressed.up) { S.gRow = (S.gRow + 3) % 4; Snd.sfx('move'); refreshGarage(); }
+    if (Input.pressed.down) { S.gRow = (S.gRow + 1) % 4; Snd.sfx('move'); refreshGarage(); }
+    if (Input.pressed.left) changeSel(S.gRow, -1);
+    if (Input.pressed.right) changeSel(S.gRow, 1);
+    if (Input.pressed.a || Input.pressed.start) goMap();
+    else if (Input.pressed.b || Input.pressed.select) { toMenu(); return; }
+    if ((G.puffT += dt) > 0.55) { G.puffT = 0; spawnGaragePuff(); }
+    for (const p of G.puffs) if (p.life > 0) p.life -= dt;
+  }
+  function renderGarage() {
+    const W = Engine.W, t = performance.now() / 1000;
+    const wide = W >= 360, k = wide ? 4 : 3;
+    const cx = wide ? Math.round(W * 0.28) : Math.round(W / 2), cy = wide ? 120 : 60;
+    const el = UI.$('#gar');
+    if (el) { el.classList.toggle('wide', wide); el.classList.toggle('narrow', !wide); }
+    G.bg.at(W / 2, 108);
+    G.tableSpr.set(G.table[k][Math.floor(t * 4) & 1]).at(cx, cy + 2);
+    G.spot.show(false);
+    const ang = (S.gAng = t * 0.7);
+    const neon = GASES[sel.g].neon;
+    G.car.set(carTex(sel.m, sel.c)[Math.floor(t * 10) & 1]).scaleBy(k).at(cx, cy).rot(ang);
+    G.glow.scaleBy(k).tint(neon).at(cx, cy).rot(ang);
+    G.glow.mat.opacity = (0.35 + CARS[sel.m].neon * 0.65) * (0.85 + 0.15 * Math.sin(t * 6));
+    for (const p of G.puffs) {
+      if (p.life <= 0 || p.life > p.max) { p.spr.show(false); continue; }
+      const u = 1 - p.life / p.max, d = (9 + u * 14) * k;
+      const f = Math.min(4, Math.floor(u * 5.5));
+      p.spr.set(A.smoke[f]).scaleBy(2).tint(GASES[sel.g].c).show(true).at(cx + Math.sin(p.ang) * d, cy + Math.cos(p.ang) * d);
+    }
+    setCam(0, 0);
+    renderScene(gScene);
+  }
+
+  // ---------------- mapa mundial
+  function goMap() { Snd.sfx('start'); openMap({ sel: S.city != null ? S.city : clamp(Store.get('rally_last', 0), 0, unlocked() - 1) }); }
+  function openMap(o = {}) {
+    init(); initMap();
+    S.state = 'map';
+    S.mapSel = o.sel != null ? o.sel : S.mapSel || 0;
+    document.body.classList.add('inmenu');
+    UI.setButtons('VIAJAR', 'GARAJE');
+    Snd.play(SONGS.menu);
+    UI.setHud(`
+      <div class="hud-ui wmap" id="wmap">
+        <div class="gtitle">RUTA MUNDIAL</div>
+        <div class="wscore"><span class="hlab">PUNTOS</span> <span class="hval" id="wps"></span> <span class="hlab">VIDAS</span> <span class="hval pink" id="wpv"></span></div>
+        <div class="wpanel">
+          <div class="wnav"><button class="arr" id="wprev" aria-label="Ciudad anterior">◀</button><div class="wname"><b id="wcn"></b><small id="wcc"></small></div><button class="arr" id="wnext" aria-label="Ciudad siguiente">▶</button></div>
+          <div class="wst" id="wst"></div>
+          <div class="wbtns"><button class="chip" id="wgar">GARAJE</button><button class="gbtn" id="wgo">VIAJAR ▶</button></div>
+        </div>
+      </div>`);
+    UI.$('#wprev').addEventListener('click', () => moveMapSel(-1));
+    UI.$('#wnext').addEventListener('click', () => moveMapSel(1));
+    UI.$('#wgo').addEventListener('click', () => { Snd.unlock(); travel(); });
+    UI.$('#wgar').addEventListener('click', () => openGarage());
+    M.parts.clear();
+    M.cam = clamp(cityPx(S.mapSel).x - Engine.W / 2, Math.min(0, (WORLD.w - Engine.W) / 2), Math.max(0, WORLD.w - Engine.W));
+    M.camY = clamp(cityPx(S.mapSel).y - 78, -6, 70);
+    if (o.toast) UI.toast(o.toast);
+    refreshMap();
+  }
+  function moveMapSel(d) { S.mapSel = (S.mapSel + d + CITIES.length) % CITIES.length; Snd.sfx('move'); refreshMap(); }
+  function refreshMap() {
+    const c = CITIES[S.mapSel], i = S.mapSel, open = i < unlocked(), done = (clearedMask() >> i) & 1;
+    if (!UI.$('#wcn')) return;
+    UI.$('#wcn').textContent = c.name;
+    UI.$('#wcc').textContent = `${c.country} · ${c.tag}`;
+    UI.$('#wst').textContent = !open ? `BLOQUEADA · COMPLETA ${CITIES[i - 1].name} PARA ABRIRLA` : done ? 'COMPLETADA · 3 RONDAS · JUGAR OTRA VEZ' : '3 RONDAS · LISTA PARA VIAJAR';
+    UI.$('#wst').classList.toggle('lock', !open);
+    UI.$('#wgo').disabled = !open;
+    UI.$('#wps').textContent = pad6(S.score);
+    UI.$('#wpv').textContent = String(S.lives);
+  }
+  function travel() {
+    if (S.state !== 'map') return;
+    const ci = S.mapSel;
+    if (ci >= unlocked()) { Snd.sfx('back'); UI.toast('CIUDAD BLOQUEADA'); return; }
+    const p1 = cityPx(ci);
+    let p0 = S.from != null ? cityPx(S.from) : { x: p1.x - 80, y: p1.y + 26 };
+    if (S.from === ci) p0 = { x: p1.x - 46, y: p1.y - 24 };
+    const dist = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    const mx = (p0.x + p1.x) / 2, my = (p0.y + p1.y) / 2 - dist * 0.22;
+    S.trip = { p0, p1, c: { x: mx, y: my }, t: 0, dur: 1.1 + dist / 150, ci, dot: 0 };
+    S.state = 'travel';
+    M.parts.clear();
+    Snd.sfx('fly');
+  }
+  function updateMap(dt) {
+    if (S.state === 'map') {
+      if (Input.pressed.left) moveMapSel(-1);
+      if (Input.pressed.right) moveMapSel(1);
+      if (Input.pressed.a || Input.pressed.start) travel();
+      else if (Input.pressed.b || Input.pressed.select) openGarage();
+    } else if (S.state === 'travel') {
+      const tr = S.trip;
+      tr.t = Math.min(tr.dur, tr.t + dt);
+      const u = tr.t / tr.dur, e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+      const q = (a, b, c) => (1 - e) * (1 - e) * a + 2 * (1 - e) * e * b + e * e * c;
+      const x = q(tr.p0.x, tr.c.x, tr.p1.x), y = q(tr.p0.y, tr.c.y, tr.p1.y);
+      const dx = 2 * (1 - e) * (tr.c.x - tr.p0.x) + 2 * e * (tr.p1.x - tr.c.x), dy = 2 * (1 - e) * (tr.c.y - tr.p0.y) + 2 * e * (tr.p1.y - tr.c.y);
+      if (Math.hypot(dx, dy) > 0.01) S.planeAng = Math.atan2(dy, dx);
+      if (S.planeX != null && Math.hypot(x - S.planeX, y - S.planeY) > 0) {
+        tr.dot += Math.hypot(x - S.planeX, y - S.planeY);
+        while (tr.dot >= 4) { tr.dot -= 4; M.parts.emit(x, y, 0, 0, 999, 0xff4f9a, 0xff4f9a, 1, 1); }
+      }
+      S.planeX = x; S.planeY = y; S.planeAlt = Math.sin(Math.PI * u) * 9;
+      if (tr.t >= tr.dur) { S.state = 'arrive'; S.t = 0; Snd.sfx('fuelS'); }
+    } else if (S.state === 'arrive') {
+      S.t += dt;
+      if (S.t > 1.1) { S.from = S.trip.ci; startCity(S.trip.ci); }
+    }
+  }
+  function renderMap() {
+    const W = Engine.W, t = performance.now() / 1000;
+    const flying = S.state === 'travel' || S.state === 'arrive';
+    const focus = flying ? S.planeX : cityPx(S.mapSel).x;
+    const target = W >= WORLD.w ? (WORLD.w - W) / 2 : clamp(focus - W / 2, 0, WORLD.w - W);
+    M.cam += (target - M.cam) * 0.12;
+    const fy = flying ? S.planeY : cityPx(S.mapSel).y;
+    const ty = clamp(fy - 78, -6, 70);
+    M.camY = M.camY == null ? ty : M.camY + (ty - M.camY) * 0.12;
+    const wm = UI.$('#wmap');
+    if (wm) wm.classList.toggle('flying', flying);
+    const un = unlocked(), cm = clearedMask();
+    M.marks.forEach((m, i) => {
+      const st = (cm >> i) & 1 ? 'done' : i < un ? 'open' : 'locked';
+      m.dot.set(M.mk[st]).at(m.p.x, m.p.y);
+      const isSel = i === S.mapSel && !flying;
+      m.ring.show((isSel && Math.floor(t * 3) % 2 === 0) || (S.state === 'arrive' && i === S.trip.ci && Math.floor(t * 8) % 2 === 0)).at(m.p.x, m.p.y);
+      const col = i === S.mapSel ? '#ffffff' : st === 'locked' ? '#8a84a8' : st === 'done' ? '#ffd23f' : '#ff9ac8';
+      const tex = textTex(CITIES[i].name, col);
+      m.label.set(tex);
+      const lx = CITIES[i].side < 0 ? m.p.x - 7 - tex.w / 2 : m.p.x + 7 + tex.w / 2;
+      m.label.at(lx, m.p.y);
+    });
+    if (flying) {
+      const a = S.planeAlt;
+      M.plane.show(true).at(S.planeX, S.planeY - a).rot(-(S.planeAng + Math.PI / 2));
+      M.shadow.show(true).at(S.planeX + a * 0.4, S.planeY + 2).rot(-(S.planeAng + Math.PI / 2));
+    } else if (S.from != null) {
+      const p = cityPx(S.from);
+      M.plane.show(true).at(p.x + 1, p.y - 9).rot(0);
+      M.shadow.show(false);
+    } else { M.plane.show(false); M.shadow.show(false); }
+    M.parts.sync();
+    setCam(Math.round(M.cam), Math.round(M.camY));
+    renderScene(mScene);
+  }
+
+  // ---------------- ciudad y rondas
+  function applyCar() {
+    const car = CARS[sel.m];
+    S.spd = 70 + car.vel * 4;
+    S.turnWin = 1 + car.giro;
+    S.drain = 1.3 - car.tanque * 0.1;
+    S.smokeCost = 6 - car.gas;
+    S.neon = car.neon;
+    S.gasHex = hexNum(GASES[sel.g].c);
+    player.glow.tint(GASES[sel.g].neon);
+  }
+  function resetRun() { Object.assign(S, { score: 0, lives: 3, nextLife: 20000, loop: 0 }); }
+  function startCity(ci) {
     init();
-    Object.assign(S, { score: 0, lives: 3, level: 1, fuel: 100, state: 'intro', t: 0, nextLife: 20000, smokeCd: 0, hi: Store.get('hi_rally', 0), rockList: S.rockList || [], tally: 0 });
-    buildHud();
+    S.city = ci; S.round = 0;
+    Store.set('rally_last', ci);
+    document.body.classList.remove('inmenu');
     UI.setButtons('GAS', 'GAS');
-    beginRound();
+    buildHud();
+    applyCar();
     Snd.play(SONGS.rally);
+    beginRound();
   }
   function beginRound() {
     buildRound();
     resetActors(true);
     parts.clear();
-    S.state = 'intro'; S.t = 0;
-    banner(`RONDA ${S.level}`, S.bonus ? 'RONDA DE BONO · LOS AUTOS ESPERAN' : 'JUNTA LOS 10 BIDONES');
-  }
-  function banner(t, sub) {
-    if (!t) { hud.b.hidden = true; return; }
-    hud.b.hidden = false;
-    hud.b.innerHTML = `${t}${sub ? `<small>${sub}</small>` : ''}`;
+    S.state = 'intro'; S.t = 0; S.lastStep = -1;
+    const c = CITIES[S.city];
+    if (S.round === 0) banner(c.name, `${c.country} · ${c.tag}`);
+    else banner(`RONDA ${S.round + 1}/${ROUNDS}`, S.bonus ? 'RONDA DE BONO · LAS PATRULLAS ESPERAN' : 'JUNTA LOS 10 BIDONES');
   }
   function addScore(n, x, y) {
     S.score += n;
-    if (S.score >= S.nextLife) { S.nextLife += 20000; S.lives = Math.min(S.lives + 1, 6); Snd.sfx('oneup'); popup('1UP', x, y - 10, '#7dff7a'); }
+    if (S.score >= S.nextLife) { S.nextLife += 20000; S.lives = Math.min(S.lives + 1, 6); Snd.sfx('oneup'); popup('1UP', x != null ? x : player.x, (y != null ? y : player.y) - 10, '#7dff7a'); }
     if (x !== undefined) popup(String(n), x, y, '#ffffff');
   }
   function popup(str, x, y, col) {
@@ -1705,24 +2416,41 @@ const Rally = (() => {
   function dropSmoke() {
     if (S.smokeCd > 0 || S.fuel <= 0) return;
     S.smokeCd = 0.42;
-    S.fuel = Math.max(0, S.fuel - 3);
+    S.fuel = Math.max(0, S.fuel - S.smokeCost);
     Snd.sfx('smoke');
     S.puffQ = [0, 0.07, 0.14];
   }
   function spawnPuff() {
     const s = smokes.find((q) => q.life <= 0) || smokes[0];
-    const bx = player.x - DX[player.dir] * 9, by = player.y - DY[player.dir] * 9;
-    s.x = bx + rand(-1, 1); s.y = by + rand(-1, 1); s.life = 3.2; s.max = 3.2; s.hit.clear();
-    s.spr.show(true).set(A.smoke[0]).at(s.x, s.y);
-    for (let k = 0; k < 4; k++) parts.emit(s.x, s.y, rand(-20, 20), rand(-20, 20), 0.5, 0xffffff, 0x9d97b8, 2, 1, 0, 3);
+    s.x = player.x - DX[player.dir] * 9 + rand(-1, 1); s.y = player.y - DY[player.dir] * 9 + rand(-1, 1);
+    s.life = 3.2; s.max = 3.2; s.hit.clear();
+    s.spr.show(true).set(A.smoke[0]).tint(GASES[sel.g].c).at(s.x, s.y);
+    for (let k = 0; k < 4; k++) parts.emit(s.x, s.y, rand(-20, 20), rand(-20, 20), 0.5, 0xffffff, S.gasHex, 2, 1, 0, 3);
+  }
+  function cityComplete() {
+    const c = CITIES[S.city];
+    S.state = 'cityclear'; S.t = 0;
+    const bonus = 5000 * (S.city + 1);
+    addScore(bonus);
+    Store.set('rally_cleared', clearedMask() | (1 << S.city));
+    const next = S.city + 1;
+    if (next < CITIES.length) Store.set('rally_unlocked', Math.max(unlocked(), next + 1));
+    banner(`¡${c.name} COMPLETADA!`, `BONO DE CIUDAD +${bonus}`);
+    Snd.sfx('clear');
+    if (S.score > S.hi) { S.hi = S.score; Store.set('hi_rally', S.score); }
   }
 
   function update(dt) {
+    if (S.state === 'garage') { updateGarage(dt); return; }
+    if (S.state === 'map' || S.state === 'travel' || S.state === 'arrive') { updateMap(dt); return; }
     S.t += dt;
     if (S.state === 'intro') {
-      const step = Math.floor(S.t / 0.7);
-      if (step !== S.lastStep) { S.lastStep = step; if (step >= 1 && step <= 3) { banner(String(4 - step), S.bonus ? 'RONDA DE BONO' : `RONDA ${S.level}`); Snd.sfx('count'); } }
-      if (S.t >= 2.8) { S.state = 'play'; S.t = 0; banner('¡YA!', ''); Snd.sfx('go'); S.goT = 0.8; }
+      const step = Math.floor(S.t / 0.7) - (S.round === 0 ? 1 : 0);
+      if (step !== S.lastStep) {
+        S.lastStep = step;
+        if (step >= 1 && step <= 3) { banner(String(4 - step), S.bonus ? 'RONDA DE BONO' : `${CITIES[S.city].name} · RONDA ${S.round + 1}/${ROUNDS}`); Snd.sfx('count'); }
+      }
+      if (S.t >= (S.round === 0 ? 3.5 : 2.8)) { S.state = 'play'; S.t = 0; banner('¡YA!', ''); Snd.sfx('go'); S.goT = 0.8; }
     } else if (S.state === 'play') {
       if (S.goT > 0 && (S.goT -= dt) <= 0) banner(null);
       updatePlay(dt);
@@ -1735,7 +2463,7 @@ const Rally = (() => {
         if (S.lives <= 0) { gameOver(); return; }
         resetActors(false);
         S.fuel = Math.max(S.fuel, 40);
-        S.state = 'intro'; S.t = 0; S.lastStep = -1;
+        S.state = 'intro'; S.t = S.round === 0 ? 0.7 : 0; S.lastStep = -1;
         banner('¡OTRA VEZ!', `QUEDAN ${S.lives} AUTOS`);
       }
     } else if (S.state === 'clear') {
@@ -1748,13 +2476,25 @@ const Rally = (() => {
         banner('¡RONDA COMPLETA!', `BONO DE GAS +${Math.round(S.tallyTotal - S.fuel * 10)}`);
       } else if (S.fuel <= 0 && S.tallyT > 0.6) {
         S.fuel = 0;
-        if ((S.doneT = (S.doneT || 0) + dt) > 1.4) { S.level++; S.doneT = 0; S.tallyT = 0; beginRound(); return; }
+        if ((S.doneT = (S.doneT || 0) + dt) > 1.4) {
+          S.doneT = 0; S.tallyT = 0;
+          if (S.round < ROUNDS - 1) { S.round++; beginRound(); return; }
+          cityComplete();
+        }
+      }
+    } else if (S.state === 'cityclear') {
+      if (S.t > 3.4) {
+        const next = S.city + 1;
+        if (next >= CITIES.length) {
+          S.loop++;
+          openMap({ sel: 0, toast: '¡GIRA MUNDIAL COMPLETA! LA SEGUNDA VUELTA ES MÁS DIFÍCIL' });
+        } else openMap({ sel: next, toast: `NUEVA CIUDAD: ${CITIES[next].name}` });
+        return;
       }
     }
     updateFx(dt);
   }
   function updatePlay(dt) {
-    // entrada con buffer
     const I = Input.held;
     let w = -1;
     if (I.up) w = 0; else if (I.down) w = 2;
@@ -1764,26 +2504,20 @@ const Rally = (() => {
     if (Input.pressed.a || Input.pressed.b) dropSmoke();
     S.smokeCd -= dt;
     if (S.puffQ && S.puffQ.length) { S.puffQ = S.puffQ.map((t) => t - dt); while (S.puffQ.length && S.puffQ[0] <= 0) { S.puffQ.shift(); spawnPuff(); } }
-    // combustible
     const prevFuel = S.fuel;
-    S.fuel = Math.max(0, S.fuel - dt * (S.bonus ? 100 / 42 : 100 / 82));
+    S.fuel = Math.max(0, S.fuel - dt * S.drain * (S.bonus ? 100 / 42 : 100 / 82));
     if (prevFuel > 0 && S.fuel <= 0) { Snd.sfx('alarm'); UI.toast('¡SIN GAS!'); }
     if (S.fuel <= 0 && Math.random() < dt * 3) parts.emit(player.x - DX[player.dir] * 8, player.y - DY[player.dir] * 8, rand(-10, 10), rand(-10, 10), 0.5, 0x2a2638, 0x5a5468, 2, 3, 0, 1);
-    // jugador
-    const p = player;
-    const want = S.want;
+    const p = player, want = S.want;
     if (want >= 0 && want === (p.dir + 2) % 4) p.dir = want;
     else if (want >= 0 && want !== p.dir) {
-      // giro anticipado (el auto del jugador dobla más rápido que los rojos)
+      // giro anticipado: depende del auto (el roadster dobla antes que nadie)
       const tx = Math.floor(p.x / TS), ty = Math.floor(p.y / TS), cx = tx * TS + 8, cy = ty * TS + 8;
       const off = DX[p.dir] ? Math.abs(p.x - cx) : Math.abs(p.y - cy);
-      if (off <= 4 && openP(tx + DX[want], ty + DY[want])) { p.x = cx; p.y = cy; p.dir = want; parts.burst(p.x, p.y, 3, 30, 0.35, 0x9a95ad, 0x5a5468, 1, 1, 0, 3); }
+      if (off <= S.turnWin && openP(tx + DX[want], ty + DY[want])) { p.x = cx; p.y = cy; p.dir = want; parts.burst(p.x, p.y, 3, 30, 0.35, 0x9a95ad, 0x5a5468, 1, 1, 0, 3); }
     }
-    const spd = S.fuel > 0 ? PSPEED : PSPEED * 0.48;
-    advance(p, spd * dt, decidePlayer, openP);
-    // escape
+    advance(p, (S.fuel > 0 ? S.spd : S.spd * 0.48) * dt, decidePlayer, openP);
     if (Math.random() < dt * 14) parts.emit(p.x - DX[p.dir] * 8 + rand(-1, 1), p.y - DY[p.dir] * 8 + rand(-1, 1), -DX[p.dir] * 18 + rand(-6, 6), -DY[p.dir] * 18 + rand(-6, 6), 0.35, 0xc8c3d8, 0x5a5468, 2, 1, 0, 2);
-    // campo de distancias para la IA
     const pt = Math.floor(p.y / TS) * MW + Math.floor(p.x / TS);
     if (pt !== lastPT) {
       lastPT = pt;
@@ -1792,9 +2526,7 @@ const Rally = (() => {
       for (let k = 0; k < 5 && openE(ax + DX[p.dir], ay + DY[p.dir]); k++) { ax += DX[p.dir]; ay += DY[p.dir]; }
       bfs(distB, ax, ay);
     }
-    // rocas
     for (const rk of S.rockList) if (Math.abs(rk.cx - p.x) < 11 && Math.abs(rk.cy - p.y) < 11) { crash(); return; }
-    // bidones
     for (const c of cans) {
       if (c.got || Math.abs(c.x - p.x) > 12 || Math.abs(c.y - p.y) > 12) continue;
       c.got = true; c.spr.show(false); c.glow.show(false);
@@ -1821,7 +2553,7 @@ const Rally = (() => {
     }
   }
   function updateEnemies(dt) {
-    const base = PSPEED * Math.min(1.06, 0.93 + 0.025 * S.level);
+    const base = BASE_SPEED * Math.min(1.1, 0.93 + 0.02 * (S.city * 3 + S.round) + 0.03 * S.loop);
     const idle = S.bonus && S.fuel > 0 && S.state === 'play';
     for (const e of enemies) {
       if (!e.active) continue;
@@ -1834,26 +2566,24 @@ const Rally = (() => {
       }
       if (idle) continue;
       advance(e, base * dt, decideEnemy, openE);
-      // humo
       for (const s of smokes) {
         if (s.life <= 0 || s.hit.has(e)) continue;
         if (Math.abs(s.x - e.x) < 11 && Math.abs(s.y - e.y) < 11) { s.hit.add(e); e.stun = 2.8; Snd.sfx('stun'); addScore(50, e.x, e.y - 12); }
       }
     }
-    // choques entre autos rojos de frente → ambos aturdidos
     for (let i = 0; i < enemies.length; i++) for (let j = i + 1; j < enemies.length; j++) {
       const a = enemies[i], b = enemies[j];
       if (!a.active || !b.active || a.stun > 0 || b.stun > 0 || a.hold > 0 || b.hold > 0) continue;
       if (a.dir === (b.dir + 2) % 4 && Math.abs(a.x - b.x) < 9 && Math.abs(a.y - b.y) < 9) { a.stun = b.stun = 1.6; Snd.sfx('stun'); }
     }
   }
+  let camX = 0, camY = 0;
   function updateFx(dt) {
     for (const s of smokes) {
       if (s.life <= 0) continue;
       s.life -= dt;
       const u = 1 - s.life / s.max;
-      const f = Math.min(4, Math.floor(u < 0.08 ? 0 : u < 0.18 ? 1 : u < 0.72 ? 2 : u < 0.88 ? 3 : 4));
-      s.spr.set(A.smoke[f]).at(s.x, s.y);
+      s.spr.set(A.smoke[Math.min(4, u < 0.08 ? 0 : u < 0.18 ? 1 : u < 0.72 ? 2 : u < 0.88 ? 3 : 4)]).at(s.x, s.y);
       if (s.life <= 0) s.spr.show(false);
     }
     for (const c of clouds) {
@@ -1867,20 +2597,29 @@ const Rally = (() => {
       p.t -= dt; p.y -= dt * 18;
       p.spr.at(p.x, p.y).show(p.t > 0 && (p.t > 0.3 || Math.floor(p.t * 20) % 2 === 0));
     }
+    if (CITIES[S.city].rain) {
+      for (let k = 0; k < 5; k++) parts.emit(camX + rand(-20, Engine.W + 20), camY + rand(-10, H), -40, 280, 0.22, 0xa8bcdc, 0x4a5a7a, 1, 1);
+      if (Math.random() < dt * 20) parts.emit(camX + rand(0, Engine.W), camY + rand(0, H), 0, 0, 0.15, 0xd8e4f8, 0x8a9ab8, 2, 1);
+    }
     parts.update(dt);
   }
 
   function render() {
-    const p = player, T0 = performance.now() / 1000;
-    // giro suave del sprite hacia la dirección
+    if (S.state === 'garage') { renderGarage(); return; }
+    if (S.state === 'map' || S.state === 'travel' || S.state === 'arrive') { renderMap(); return; }
+    const p = player, T0 = performance.now() / 1000, city = CITIES[S.city];
     const target = ROT[p.dir];
     let da = target - p.ang;
     while (da > Math.PI) da -= Math.PI * 2;
     while (da < -Math.PI) da += Math.PI * 2;
-    p.ang += da * Math.min(1, 0.45);
+    p.ang += da * 0.45;
     if (Math.abs(da) < 0.05) p.ang = target;
     const wf = Math.floor(T0 * 14) & 1;
-    p.spr.set(A.carP[wf]).show(p.vis).at(p.x, p.y).rot(p.ang);
+    p.spr.set(carTex(sel.m, sel.c)[wf]).show(p.vis).at(p.x, p.y).rot(p.ang);
+    p.glow.show(p.vis).at(p.x, p.y).rot(p.ang);
+    p.glow.mat.opacity = (0.3 + S.neon * 0.7) * (city.night ? 1 : 0.75) * (0.88 + 0.12 * Math.sin(T0 * 7));
+    const hl = (s, x, y, ang, dir) => s.at(x + DX[dir] * 17, y + DY[dir] * 17).rot(ang);
+    if (city.night) hl(p.hl.show(p.vis), p.x, p.y, p.ang, p.dir);
     for (const e of enemies) {
       if (!e.active) continue;
       const tgt = ROT[e.dir];
@@ -1890,6 +2629,7 @@ const Rally = (() => {
       e.ang += d * 0.35;
       if (Math.abs(d) < 0.05) e.ang = tgt;
       e.spr.set(A.carE[Math.floor(T0 * 6) & 1]).at(e.x, e.y).rot(e.ang + e.spin);
+      if (city.night) hl(e.hl, e.x, e.y, e.ang, e.dir);
     }
     for (const c of cans) {
       if (c.got) continue;
@@ -1897,16 +2637,17 @@ const Rally = (() => {
       c.spr.set(c.frames[Math.floor(T0 * 3 + c.ph) & 1]).at(c.x, c.y - 1 + bob);
       c.glow.at(c.x, c.y + 1).mat.opacity = 0.6 + Math.sin(T0 * 5 + c.ph) * 0.4;
     }
+    glows.forEach((g, i) => { if (g.visible) g.mat.opacity = 0.55 + 0.35 * Math.sin(T0 * (3 + (i % 3)) + i); });
     for (const rk of S.rockList) rk.spr.set((rk.h ? A.barrierV : A.barrier)[Math.floor(T0 * 3) & 1]);
     parts.sync();
     const W = Engine.W;
-    const camX = clamp(p.x - W / 2, 0, MW * TS - W), camY = clamp(p.y - H / 2, 0, MH * TS - H);
+    camX = clamp(p.x - W / 2, 0, MW * TS - W); camY = clamp(p.y - H / 2, 0, MH * TS - H);
     setCam(camX, camY);
     renderScene(scene);
     drawRadar(T0, camX, camY);
     drawHud();
   }
-  function drawRadar(t, camX, camY) {
+  function drawRadar(t, cx, cy) {
     if (!rctx) return;
     const g = rctx;
     g.clearRect(0, 0, 82, 70);
@@ -1914,11 +2655,10 @@ const Rally = (() => {
     for (let x = 0; x < 82; x += 8) g.fillRect(x, 0, 1, 70);
     for (let y = 0; y < 70; y += 8) g.fillRect(0, y, 82, 1);
     g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 1;
-    g.strokeRect(Math.round(camX / 8) + 0.5, Math.round(camY / 8) + 0.5, Math.round(Engine.W / 8), Math.round(H / 8));
+    g.strokeRect(Math.round(cx / 8) + 0.5, Math.round(cy / 8) + 0.5, Math.round(Engine.W / 8), Math.round(H / 8));
     const blink = Math.floor(t * 4) & 1;
     for (const c of cans) {
-      if (c.got) continue;
-      if (c.kind === 'S' && blink) continue;
+      if (c.got || (c.kind === 'S' && blink)) continue;
       g.fillStyle = c.kind === 'S' ? '#fff09a' : c.kind === 'L' ? '#7dff7a' : '#ffd23f';
       g.fillRect(Math.floor(c.x / 8) - 1, Math.floor(c.y / 8) - 1, 2, 2);
     }
@@ -1928,11 +2668,12 @@ const Rally = (() => {
     g.fillRect(Math.floor(player.x / 8) - 1, Math.floor(player.y / 8) - 1, 3, 3);
   }
   function drawHud() {
+    if (!hud.s) return;
     const set = (k, v, fn) => { if (hudCache[k] !== v) { hudCache[k] = v; fn(v); } };
     set('s', S.score, (v) => (hud.s.textContent = pad6(v)));
     set('h', Math.max(S.hi, S.score), (v) => (hud.h.textContent = pad6(v)));
-    set('l', S.level, (v) => (hud.l.textContent = String(v)));
-    set('lbl', S.bonus, (v) => (hud.lbl.textContent = v ? 'BONO' : 'RONDA'));
+    set('l', S.round + (S.bonus ? 10 : 0), () => (hud.l.textContent = S.bonus ? 'BONO' : `${S.round + 1}/${ROUNDS}`));
+    set('lbl', S.city, (v) => (hud.lbl.textContent = CITIES[v].name));
     set('f', Math.round(S.fuel), (v) => { hud.f.style.width = v + '%'; hud.fw.classList.toggle('low', v < 22); });
     set('v', S.lives, (v) => (hud.v.innerHTML = '<b></b>'.repeat(Math.max(0, v - 1))));
     set('c', 10 - S.collected + (S.special ? 100 : 0), () => (hud.c.textContent = `×${10 - S.collected}${S.special ? ' ·2X' : ''}`));
@@ -1943,12 +2684,28 @@ const Rally = (() => {
     if (rec) Store.set('hi_rally', S.score);
     banner(null);
     Snd.stop(); Snd.sfx('gameover');
-    UI.gameOver('GAS RALLY', S.score, rec, [['Ronda', S.level], ['Bidones', S.collected + '/10']]);
+    UI.gameOver('GAS RALLY', S.score, rec, [['Ciudad', CITIES[S.city].name], ['Ronda', `${S.round + 1}/${ROUNDS}`], ['Auto', CARS[sel.m].name]],
+      [['retry', 'REINTENTAR CIUDAD'], ['map', 'MAPA'], ['menu', 'MENÚ']]);
   }
-  function exit() {
-    if (S.state !== 'over' && S.score > (S.hi || 0)) Store.set('hi_rally', S.score);
+
+  // ---------------- interfaz con la consola
+  function start() {
+    init();
+    resetRun();
+    S.hi = Store.get('hi_rally', 0);
+    S.city = null; S.from = null;
+    openGarage();
   }
-  return { start, update, render, exit, peek: () => ({ S, player, enemies, cans, smokes }), get art() { init(); return A; } };
+  function retry() { resetRun(); startCity(S.city != null ? S.city : 0); }
+  function action(act) { if (act === 'map') { resetRun(); openMap({ sel: S.city || 0 }); } }
+  function exit() { if (S.score > (S.hi || 0)) Store.set('hi_rally', S.score); document.body.classList.remove('inmenu'); }
+  const capturesStart = () => ['garage', 'map', 'travel', 'arrive', 'cityclear'].includes(S.state);
+  return {
+    start, update, render, exit, retry, action, capturesStart,
+    peek: () => ({ S, player, enemies, cans, smokes, sel, CITIES, CARS }),
+    dbgCity: (ci) => { init(); resetRun(); S.hi = Store.get('hi_rally', 0); startCity(ci); },
+    get art() { init(); return A; },
+  };
 })();
 
 // =====================================================================
@@ -2885,7 +3642,7 @@ const UI = {
     t.hidden = false; toastT = 1.8;
   },
   vibrate(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* sin vibración */ } },
-  gameOver(name, score, rec, rows) {
+  gameOver(name, score, rec, rows, buttons = [['retry', 'REINTENTAR'], ['menu', 'MENÚ']]) {
     openOverlay('over', `
       <div class="panel" role="dialog" aria-label="Fin del juego">
         <h2>FIN DEL JUEGO</h2>
@@ -2893,8 +3650,7 @@ const UI = {
         <div class="big">${pad6(score)}</div>
         ${rec ? '<p style="color:var(--sun)">¡NUEVO RÉCORD!</p>' : ''}
         <div class="tally">${rows.map(([k, v]) => `<span>${k}</span><span>${v}</span>`).join('')}</div>
-        <button class="mbtn" data-act="retry">REINTENTAR</button>
-        <button class="mbtn" data-act="menu">MENÚ</button>
+        ${buttons.map(([act, label]) => `<button class="mbtn" data-act="${act}">${label}</button>`).join('')}
       </div>`);
   },
 };
@@ -2925,8 +3681,9 @@ function openPause() {
 function overlayAct(act) {
   Snd.unlock(); Snd.resume();
   if (act === 'resume') { closeOverlay(); Snd.sfx('select'); }
-  else if (act === 'restart' || act === 'retry') { closeOverlay(); Snd.sfx('start'); game.exit(); game.start(); }
+  else if (act === 'restart' || act === 'retry') { closeOverlay(); Snd.sfx('start'); if (game.retry) game.retry(); else { game.exit(); game.start(); } }
   else if (act === 'menu') { closeOverlay(); toMenu(); }
+  else { closeOverlay(); Snd.sfx('select'); if (game.action) game.action(act); }
 }
 function overlayStep() {
   const btns = $('#overlay').querySelectorAll('.mbtn');
@@ -3197,7 +3954,7 @@ function step(dt) {
   if (toastT > 0 && (toastT -= dt) <= 0) $('#toast').hidden = true;
   if (mode === 'menu') menuStep();
   else if (overlay) overlayStep();
-  else if (Input.pressed.start) openPause();
+  else if (Input.pressed.start && !(game.capturesStart && game.capturesStart())) openPause();
   else game.update(dt);
 }
 function draw() {
