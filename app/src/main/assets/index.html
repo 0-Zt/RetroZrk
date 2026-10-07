@@ -201,6 +201,7 @@ body.ovl #toast{align-items:flex-start;padding:calc(var(--px)*44) 0 0}
 .wname{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--px)}
 .wname b{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*11);line-height:1;color:var(--ink);text-shadow:0 0 calc(var(--px)*6) rgba(255,79,154,.6)}
 .wname small{font-size:calc(var(--px)*5);color:var(--cyan);line-height:1.3}
+.flagimg{display:inline-block;height:0.8em;width:auto;image-rendering:pixelated;vertical-align:baseline;box-shadow:0 0 0 var(--px) #000;margin-right:0.15em}
 .wst{font-size:calc(var(--px)*5);color:var(--sun)}
 .wst.lock{color:#8a84a8}
 .wbtns{display:flex;gap:calc(var(--px)*4);justify-content:center}
@@ -807,8 +808,46 @@ const Snd = (() => {
     }
     return out;
   };
+  api.bars = (len, list) => {
+    list.forEach((b, i) => { const n = b.trim().split(/\s+/).length; if (n !== len) console.warn(`compás ${i + 1} tiene ${n} pasos (esperados ${len}): ${b}`); });
+    return api.seq(list.join(' '));
+  };
   let song = null, step = 0, nextT = 0, timer = 0;
   function drum(ch, t) {
+    if (ch === 't') {
+      // taiko: tambor grave con cuerpo
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'triangle'; o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.32);
+      g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+      o.connect(g); g.connect(mus); o.start(t); o.stop(t + 0.4);
+      ch = 'x';
+    }
+    if (ch === 'c' || ch === 'g' || ch === 'x' || ch === 'b') {
+      // palmas (c), güiro raspado (g), golpe de parche (x), cencerro (b)
+      if (ch === 'b') {
+        for (const f of [540, 800]) { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'square'; o.frequency.value = f; g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.12); o.connect(g); g.connect(mus); o.start(t); o.stop(t + 0.14); }
+        return;
+      }
+      const s = ctx.createBufferSource(); s.buffer = noiseBuf;
+      const f = ctx.createBiquadFilter(), g = ctx.createGain();
+      f.type = 'bandpass';
+      if (ch === 'c') {
+        f.frequency.value = 1500; f.Q.value = 1.2;
+        for (let k = 0; k < 3; k++) { g.gain.setValueAtTime(0.5, t + k * 0.012); g.gain.exponentialRampToValueAtTime(0.05, t + k * 0.012 + 0.01); }
+        g.gain.setValueAtTime(0.45, t + 0.036); g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+        s.connect(f); f.connect(g); g.connect(mus); s.start(t, Math.random() * 0.5); s.stop(t + 0.17);
+      } else if (ch === 'g') {
+        f.frequency.setValueAtTime(2600, t); f.frequency.linearRampToValueAtTime(4200, t + 0.16); f.Q.value = 3;
+        for (let k = 0; k < 8; k++) { g.gain.setValueAtTime(0.32, t + k * 0.02); g.gain.linearRampToValueAtTime(0.05, t + k * 0.02 + 0.015); }
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        s.connect(f); f.connect(g); g.connect(mus); s.start(t, Math.random() * 0.5); s.stop(t + 0.2);
+      } else {
+        f.frequency.value = 400; f.Q.value = 0.7;
+        g.gain.setValueAtTime(0.35, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+        s.connect(f); f.connect(g); g.connect(mus); s.start(t, Math.random() * 0.5); s.stop(t + 0.22);
+      }
+      return;
+    }
     if (ch === 'k') {
       const o = ctx.createOscillator(), g = ctx.createGain();
       o.frequency.setValueAtTime(160, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
@@ -831,14 +870,14 @@ const Snd = (() => {
         if (!n) continue;
         const o = osc(ch.type), g = ctx.createGain();
         o.frequency.setValueAtTime(N(n.m + (song.tr || 0)), nextT);
-        const dur = n.len * dt * (ch.gate || 0.9);
+        const dur = ch.decay ? Math.min(ch.decay, n.len * dt * 1.5) : n.len * dt * (ch.gate || 0.9);
         g.gain.setValueAtTime(0, nextT);
-        g.gain.linearRampToValueAtTime(ch.vol, nextT + 0.006);
-        g.gain.setValueAtTime(ch.vol, nextT + dur * 0.55);
+        g.gain.linearRampToValueAtTime(ch.vol, nextT + 0.005);
+        if (!ch.decay) g.gain.setValueAtTime(ch.vol, nextT + dur * 0.55);
         g.gain.exponentialRampToValueAtTime(0.001, nextT + dur);
         o.connect(g); g.connect(mus); o.start(nextT); o.stop(nextT + dur + 0.02);
       }
-      if (song.drums) { const d = song.drums[step % song.drums.length]; if (d !== '.') drum(d, nextT); }
+      if (song.drums) for (const lay of Array.isArray(song.drums) ? song.drums : [song.drums]) { const d = lay[step % lay.length]; if (d !== '.') drum(d, nextT); }
       nextT += dt; step++;
     }
   }
@@ -891,6 +930,78 @@ const SONGS = {
     ],
     drums: 'k.hks.h.k.hks.hhk.hks.h.kkhks.hs',
   },
+};
+// ---------- música por ciudad (composiciones originales en estilos de cada lugar)
+const B = Snd.bars;
+// SANTIAGO · cueca chiptune en 6/8 con hemiola de palmas (Re mayor)
+SONGS.scl = {
+  bpm: 140,
+  ch: [
+    { type: 'triangle', vol: 0.55, gate: 0.85, notes: B(12, ['D2 - - - - - A2 - - - - -', 'G2 - - - - - D2 - - - - -', 'A2 - - - - - E2 - - - - -', 'D2 - - - - - A2 - - - - -', 'D2 - - - - - F#2 - - - - -', 'G2 - - - - - B2 - - - - -', 'A2 - - - - - C#3 - - - - -', 'D3 - - - - - A2 - - - - -']) },
+    { type: 'p12', vol: 0.07, decay: 0.16, notes: B(12, ['D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . G4 . B4 . D4 . G4 . B4 .', 'C#4 . E4 . A4 . C#4 . E4 . G4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . G4 . B4 . D4 . G4 . B4 .', 'C#4 . E4 . A4 . C#4 . E4 . G4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .']) },
+    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(12, ['A4 - D5 - F#5 - E5 - D5 - C#5 -', 'B4 - D5 - G5 - - - F#5 - E5 -', 'C#5 - E5 - A5 - G5 - F#5 - E5 -', 'F#5 - E5 - D5 - - - - - . .', 'D5 - F#5 - A5 - - - B5 - A5 -', 'G5 - B5 - D6 - - - B5 - G5 -', 'A5 - G5 - F#5 - E5 - C#5 - E5 -', 'D5 - - - - - . . F#4 - A4 -']) },
+    { type: 'p12', vol: 0.06, gate: 0.85, notes: B(12, ['F#4 - A4 - D5 - C#5 - B4 - A4 -', 'G4 - B4 - D5 - - - D5 - C#5 -', 'A4 - C#5 - E5 - E5 - D5 - C#5 -', 'D5 - C#5 - A4 - - - - - . .', 'A4 - D5 - F#5 - - - G5 - F#5 -', 'D5 - G5 - B5 - - - G5 - D5 -', 'E5 - E5 - D5 - C#5 - A4 - C#5 -', 'A4 - - - - - . . D4 - F#4 -']) },
+  ],
+  drums: ['k.....k.....k...........', '....c...c.......c.....c.', '..h...h...h...h...h...h.'],
+};
+// BUENOS AIRES · cumbia con güiro y teclado (La menor, cadencia andaluza)
+SONGS.bue = {
+  bpm: 98,
+  ch: [
+    { type: 'triangle', vol: 0.6, gate: 0.7, notes: B(16, ['A2 - . . E3 - . . A2 - . . E3 - . .', 'G2 - . . D3 - . . G2 - . . D3 - . .', 'F2 - . . C3 - . . F2 - . . C3 - . .', 'E2 - . . B2 - . . E2 - . . G#2 - . .']) },
+    { type: 'p12', vol: 0.06, decay: 0.12, notes: B(16, ['. . C5 . . . E5 . . . C5 . . . E5 .', '. . B4 . . . D5 . . . B4 . . . D5 .', '. . A4 . . . C5 . . . A4 . . . C5 .', '. . G#4 . . . B4 . . . G#4 . . . B4 .']) },
+    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(16, [
+      'E5 - - . E5 . D5 . C5 - - . B4 . C5 .', 'D5 - - . D5 . C5 . B4 - - . A4 . B4 .', 'C5 - - . C5 . B4 . A4 - - . G#4 . A4 .', 'B4 - - - - - - - G#4 - - - E4 - - -',
+      'A5 - . A5 G5 . E5 . G5 - . G5 E5 . C5 .', 'D5 - . D5 E5 . D5 . B4 - . B4 G4 . B4 .', 'C5 - . C5 D5 . C5 . A4 - . A4 B4 . C5 .', 'B4 - - . G#4 . B4 . E5 - - - D5 . B4 .']) },
+  ],
+  drums: ['k.......k.......', 'g.hhg.hhg.hhg.hh', '....s.......s..s', '......b.......b.'],
+};
+// CIUDAD DE MÉXICO · ranchera 2/4 con trompetas en terceras (Sol mayor)
+SONGS.mex = {
+  bpm: 150,
+  ch: [
+    { type: 'triangle', vol: 0.6, gate: 0.6, notes: B(8, ['G2 - - - D2 - - -', 'G2 - - - B2 - - -', 'D2 - - - A2 - - -', 'D2 - - - F#2 - - -', 'D2 - - - A2 - - -', 'D2 - - - C3 - - -', 'G2 - - - D2 - - -', 'G2 - - - D2 - - -']) },
+    { type: 'p12', vol: 0.07, decay: 0.09, notes: B(8, ['. . B4 . . . D5 .', '. . B4 . . . D5 .', '. . C5 . . . F#4 .', '. . C5 . . . F#4 .', '. . C5 . . . F#4 .', '. . C5 . . . A4 .', '. . B4 . . . D5 .', '. . B4 . . . D5 .']) },
+    { type: 'p25', vol: 0.12, gate: 0.8, notes: B(8, ['D5 - B4 - G4 - B4 -', 'D5 - - - E5 - D5 -', 'C5 - A4 - F#4 - A4 -', 'C5 - - - D5 - C5 -', 'A4 - C5 - E5 - D5 -', 'C5 - A4 - F#4 - A4 -', 'G4 - B4 - D5 - G5 -', 'G5 - - - . . D5 -']) },
+    { type: 'p25', vol: 0.08, gate: 0.8, notes: B(8, ['B4 - G4 - D4 - G4 -', 'B4 - - - C5 - B4 -', 'A4 - F#4 - D4 - F#4 -', 'A4 - - - B4 - A4 -', 'F#4 - A4 - C5 - B4 -', 'A4 - F#4 - D4 - F#4 -', 'D4 - G4 - B4 - D5 -', 'D5 - - - . . B4 -']) },
+  ],
+  drums: ['k...k...', '..h...h.', '........c.......'],
+};
+// LOS ÁNGELES · surf rock con trémolo (Mi menor)
+SONGS.lax = {
+  bpm: 168,
+  ch: [
+    { type: 'triangle', vol: 0.55, gate: 0.6, notes: B(16, ['E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'C3 . C3 . C3 . C3 . E3 . E3 . G2 . G2 .', 'D3 . D3 . D3 . D3 . F#2 . F#2 . A2 . A2 .', 'E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'C3 . C3 . C3 . C3 . E3 . E3 . G2 . G2 .', 'B2 . B2 . B2 . B2 . D#3 . D#3 . F#2 . F#2 .']) },
+    { type: 'p25', vol: 0.1, gate: 0.55, notes: B(16, [
+      'E5 E5 E5 E5 E5 E5 E5 E5 G5 G5 G5 G5 F#5 F#5 F#5 F#5', 'E5 E5 E5 E5 D5 D5 D5 D5 B4 B4 B4 B4 D5 D5 D5 D5', 'C5 C5 C5 C5 E5 E5 E5 E5 G5 G5 G5 G5 E5 E5 E5 E5', 'D5 D5 D5 D5 F#5 F#5 F#5 F#5 A5 A5 A5 A5 F#5 F#5 D5 D5',
+      'B5 B5 B5 B5 A5 A5 G5 G5 E5 E5 E5 E5 G5 G5 A5 A5', 'B5 B5 B5 B5 B5 B5 B5 B5 . . . . . . . .', 'C6 C6 C6 C6 B5 B5 A5 A5 G5 G5 G5 G5 E5 E5 E5 E5', 'D#5 D#5 D#5 D#5 F#5 F#5 F#5 F#5 B5 B5 B5 B5 A5 A5 F#5 F#5']) },
+    { type: 'p12', vol: 0.04, decay: 0.3, notes: B(16, ['E4 . . . . . . . B3 . . . . . . .', 'E4 . . . . . . . B3 . . . . . . .', 'C4 . . . . . . . G3 . . . . . . .', 'D4 . . . . . . . A3 . . . . . . .']) },
+  ],
+  drums: ['k.......k.k.....', '....s.......s...', 'h.h.h.h.h.h.h.hh'],
+};
+// LONDRES · punk británico rápido (Mi mixolidio: I - bVII - IV - I)
+SONGS.lon = {
+  bpm: 172,
+  ch: [
+    { type: 'triangle', vol: 0.55, gate: 0.55, notes: B(16, ['E2 . E2 . E2 . E2 . E2 . E2 . E2 . E2 .', 'D2 . D2 . D2 . D2 . D2 . D2 . D2 . D2 .', 'A2 . A2 . A2 . A2 . A2 . A2 . A2 . A2 .', 'E2 . E2 . E2 . E2 . B2 . B2 . E2 . E2 .']) },
+    { type: 'square', vol: 0.045, gate: 0.5, notes: B(16, ['B3 . B3 . B3 . B3 . B3 . B3 . B3 . B3 .', 'A3 . A3 . A3 . A3 . A3 . A3 . A3 . A3 .', 'E4 . E4 . E4 . E4 . E4 . E4 . E4 . E4 .', 'B3 . B3 . B3 . B3 . F#4 . F#4 . B3 . B3 .']) },
+    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(16, [
+      'G#4 - B4 - E5 - - - D5 - B4 - G#4 - . .', 'F#4 - A4 - D5 - - - C#5 - A4 - F#4 - . .', 'A4 - C#5 - E5 - F#5 - E5 - C#5 - A4 - B4 -', 'B4 - - - G#4 - - - E4 - - - . . . .',
+      'E5 - E5 - E5 - D5 - E5 - - - B4 - - -', 'D5 - D5 - D5 - C#5 - D5 - - - A4 - - -', 'C#5 - E5 - A5 - G#5 - F#5 - E5 - C#5 - E5 -', 'E5 - - - - - - - . . . . B4 - D5 -']) },
+  ],
+  drums: ['k...k...k...k.k.', '....s.......s...', '..h...h...h...h.'],
+};
+// TOKIO · escala japonesa (miyako-bushi en Mi) con koto, bajo sintetizado y taiko
+SONGS.tyo = {
+  bpm: 116,
+  ch: [
+    { type: 'triangle', vol: 0.55, gate: 0.7, notes: B(16, ['E2 - - . . . E3 . E2 - - . . . B1 .', 'C2 - - . . . C3 . A1 - - . . . B1 .', 'E2 - - . . . E3 . E2 - - . . . B1 .', 'A1 - - . . . A2 . F1 - - . . . B1 .']) },
+    { type: 'p12', vol: 0.07, decay: 0.22, notes: B(16, ['E4 . B4 . E5 . F5 . E5 . B4 . A4 . B4 .', 'C5 . A4 . F4 . A4 . C5 . E5 . F5 . E5 .', 'E4 . B4 . E5 . F5 . E5 . B4 . A4 . B4 .', 'A4 . C5 . F5 . E5 . C5 . B4 . A4 . F4 .']) },
+    { type: 'p25', vol: 0.11, gate: 0.92, notes: B(16, [
+      'E5 - - - F5 - - - E5 - - - B4 - - -', 'C5 - - - B4 - A4 - B4 - - - - - - -', 'A5 - - - B5 - - - C6 - - - B5 - A5 -', 'F5 - - - E5 - - - - - - - . . . .',
+      'B5 - - - C6 - B5 - A5 - - - F5 - - -', 'E5 - F5 - E5 - C5 - B4 - - - A4 - - -', 'B4 - - - C5 - - - E5 - - - F5 - - -', 'E5 - - - - - - - - - - - . . . .']) },
+  ],
+  drums: ['t.......t...t...', '....s.......s...', 'h.h.h.h.h.h.h.h.', '..............x.'],
 };
 SONGS.boss = { ...SONGS.contra, bpm: 168, tr: 1, drums: 'k.hsk.hsk.hsk.hskkhsk.hsk.hskhss' };
 
@@ -1477,6 +1588,69 @@ function garageBgCanvas() {
   return c;
 }
 
+// =====================================================================
+//  BANDERAS (24×16) con ondeo de 3 cuadros
+// =====================================================================
+const FLAG_DRAW = {
+  CL(g) {
+    R(g, '#ffffff', 0, 0, 24, 8); R(g, '#d52b1e', 0, 8, 24, 8); R(g, '#0039a6', 0, 0, 8, 8);
+    for (const [x, y] of [[3, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [2, 3], [3, 3], [4, 3], [2, 4], [4, 4], [1, 5], [5, 5]]) R(g, '#ffffff', x + 1, y, 1, 1);
+  },
+  AR(g) {
+    R(g, '#74acdf', 0, 0, 24, 5); R(g, '#ffffff', 0, 5, 24, 6); R(g, '#74acdf', 0, 11, 24, 5);
+    for (const [x, y] of [[12, 5], [12, 10], [9, 8], [14, 8], [10, 6], [14, 6], [10, 9], [14, 9]]) R(g, '#e8a40e', x, y, 1, 1);
+    disc(g, 12, 8, 1.8, '#f6b40e');
+  },
+  MX(g) {
+    R(g, '#006847', 0, 0, 8, 16); R(g, '#ffffff', 8, 0, 8, 16); R(g, '#ce1126', 16, 0, 8, 16);
+    R(g, '#8a5a2a', 11, 6, 3, 3); R(g, '#5a3a1a', 12, 5, 1, 1); R(g, '#3a8a3a', 10, 9, 1, 1); R(g, '#3a8a3a', 14, 9, 1, 1); R(g, '#3a8a3a', 11, 10, 3, 1);
+  },
+  US(g) {
+    for (let y = 0; y < 16; y += 2) R(g, (y / 2) % 2 ? '#ffffff' : '#b22234', 0, y, 24, 2);
+    R(g, '#3c3b6e', 0, 0, 11, 8);
+    for (let y = 1; y < 8; y += 2) for (let x = 1 + ((y >> 1) & 1); x < 11; x += 2) R(g, '#ffffff', x, y, 1, 1);
+  },
+  UK(g) {
+    R(g, '#012169', 0, 0, 24, 16);
+    for (let x = 0; x < 24; x++) {
+      const y1 = Math.round((x * 15) / 23), y2 = 15 - y1;
+      R(g, '#ffffff', x, y1 - 1, 1, 3); R(g, '#ffffff', x, y2 - 1, 1, 3);
+      R(g, '#c8102e', x, x < 12 ? y1 : y1 + 1, 1, 1); R(g, '#c8102e', x, x < 12 ? y2 - 1 : y2, 1, 1);
+    }
+    R(g, '#ffffff', 9, 0, 6, 16); R(g, '#ffffff', 0, 5, 24, 6);
+    R(g, '#c8102e', 10, 0, 4, 16); R(g, '#c8102e', 0, 6, 24, 4);
+  },
+  JP(g) {
+    R(g, '#ffffff', 0, 0, 24, 16); disc(g, 12, 8, 4.6, '#bc002d');
+  },
+};
+function flagField(code) {
+  const { c, g } = mk(24, 16);
+  FLAG_DRAW[code](g);
+  return c;
+}
+// asta con bandera ondeando (ancla en la base del asta: 4,37)
+function flagPoleCanvas(code, phase) {
+  const field = flagField(code);
+  const fd = field.getContext('2d').getImageData(0, 0, 24, 16).data;
+  const { c, g } = mk(32, 40);
+  ellipse(g, 6, 37, 5, 2, 'rgba(0,0,0,0.35)');
+  R(g, '#4a4458', 1, 35, 6, 3); R(g, '#6e6888', 1, 35, 6, 1);
+  R(g, '#8a8aa0', 3, 3, 2, 33); R(g, '#d6d6e4', 3, 3, 1, 33);
+  disc(g, 4, 2, 1.8, '#ffd23f');
+  for (let x = 0; x < 24; x++) {
+    const w = Math.sin(x * 0.42 - phase * 2.1);
+    const dy = Math.round(w * 1.2 * Math.min(1, x / 5));
+    const k = 1 - 0.16 * Math.max(0, -Math.cos(x * 0.42 - phase * 2.1)) * Math.min(1, x / 4);
+    for (let y = 0; y < 16; y++) {
+      const i = (y * 24 + x) * 4;
+      g.fillStyle = `rgb(${Math.round(fd[i] * k)},${Math.round(fd[i + 1] * k)},${Math.round(fd[i + 2] * k)})`;
+      g.fillRect(5 + x, 4 + y + dy, 1, 1);
+    }
+  }
+  return outline(c);
+}
+
 // Mapa mundial 1-bit (Natural Earth 1:50m vía world-atlas, proyección equirectangular)
 const WORLD = { w: 480, h: 190, latTop: 82.0, latBot: -60.5, bits: 'AAAAAAAAAAAAAAAAAADA/////8P////////v/gEAAAAAAAAAAAAAcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB///////7/////////PwAAAAAAAAAAAMANv3cAAAQA+AMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIj/////w///////////AwAAAABA/w8AAIDN/AAAAAAA/B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAD///8/AP////////9/AAAAAMD//wcAAAAAAAAAAAAA8J8DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA88Of5//+f//////////8fAAAAAMD/HwAAAAAAAAAAAAAAAOAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA+gM/P+P8H//////////9/AAAAAAD88QAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AGICH/f8A/v//////////AAAAAAB4QAAAAAAAAAAEAAAAAID/AAAAAAAAAAAAAAAAAAAAAAAAAAAA8P/jYD///38A+P////////8fAAAAAAAAAAAAAAAAAP4HAAAAgPn/fwAAAAAAAAAAAAAAAAAAAAAAAAAAAP7/x//n/z8AAAD+//////8/AAAAAAAAAAAAAAAA4D8AAACA/////wAAALD/CQAAAAAAAAAAAAAAAAAAAOD/E7zv/z8AAAD4//////+/AQAAAAAAAAAAAAAA/AEAAAD4////fwAAAIB/8AEAAAAAAAAAAAAAAAAA/A8AADB+AAAAAADw//////8/AAAAAAAAAAAAAAAAPgAAAED8////fwAAAAAIAAAAAAAAAAAAAAAAAAAA/P8AH35//v8DAADg//////8PAAAAAAAAAAAAAACADwBgAPj//////3/wDwB4AAAAAAAAAAAAAAAAAAAA/v9/j/8e3/8PAADg//////8HAAAAAAAAAAAAAADABwDwkfP/////////HwD8BwAAAAAAAAAAAAAAAAAA//7/H3wG//8/AADA//////8HAAAAAAAAAAAAAADwAwD4/f//////////HwH8/wAAAAAABwAAwAMAAAAAGPz/H4AP////AwCA//////8HAAAAAAAAACQAAADABwD+/f//////////v////8cHAADAAAAA//8HAAAgAPD//4A//P//PwCA/////38HAAAAAAAA5P8BAAAAwAD++f////////////////8fAAAAAADA////f/D/fvD//+N/wPf+fwCA//////8BAAAAAACA//8fAAACgD/+/f////////////////////s/AwD8/////////3////39x0/8PwAA+P///z8AAAAAAAD4////AwDHYP/7+///////////////////////DwD8//////////+Af/D+9wf+/wMA/v///wEAAAAAAAD6////Pzj8////+///////////////////////fwDg/////////////////w+O/w8A////DwAAAAAAAAD4////fxz/////+f///////////////////////w8Q/////////////////wPA/z8A////BwAABAAAAAD+////f/n//////v///////////////////////x///////////////////wHgPx8A/v//AAD/HwAAAAD///8/wP//////////////////////////////4Af+////////////////7wH/fw4A/P8HAAD/PwAAAID/H/5/4v//////////////////////////////AANI/v//////////////5wfP/wEA+P8DAAD8HwAAAMD/H////v////////////////////////////8/ADgA////////////////8BwD/wMA+P8DAADwAQAAAPj/x/////////////////////////////////9/AADw//////////////9/AAYA/gMA8P8BAAAAAAAAAP7/8f////////////////////////////////9/AAD4//////////////8fACF/8AIA4P8AAAAAAEAAgP//8P//////////////////////////////+/8DAAD8//////////////8HAAD/AQIAwP8AAAAAAAAAwP9/8P/////////////////////////////h/H8AAADw//////////////8DAAD/BwAAAH8AAAAAAABAwP//8P////////////////////////////8A/x8AAADm/8+P+f////////8DAAD/BwYAADAAAAAAAAAAgP//wcP//////////////////////////z+ADwAAAAAA/0cAgP////////8DAAD/Dw8AAAAAAAAAAAAYgP//gf////////////////////////8/QHzgAwAAAAAA4BcAAP7///////8PAAD//x8AAAAAAAAAAIAOAI9/4P////////////////////////8PAADwAAAAAAAA4B0AAPz///////8fAAD+/z8AAAAAAAAAAMA/ACB/I/////////////////////////8HAAD+AwAAAAAAcAQAAPj/////////AwD8/z8AAAAAAAAAAIAfADh/8P////////////////////////8BAAD/AwAAAAAAHgAAAOD/////////D2D+/38AAAAAAAAAAIAfAPgf8P////////////////////////8AAID/AwAAAACABwAAAMD//////////wH///8BAAAAAAAAAOA/APgH8P///////////////////////z8AAID/AAAAAABwAAAAAID+/////////8P///8HAAAAAAAAAPB/APjD/f////////////////////////8AAID/AAAAAAAGAAAAAMD8/////////8f///8fAAAAAAAAAPzwAPz///////////////////////////9HAAAfAAAAAIAAAAAAAID5/////////4////8/AAAAAAAAAPj8wf////////////////////////////9/AAAfAEAAgAAAAAAAAADx/////////4////8/AAAAAAAAAPz8x/////////////////////////////9/AAAPAAAAGAAAAAAAAADg/////////9////8/AAAAAAAAABz+8/////////////////////////////9vAAAHAAAAAAAAAAAAAADg//////////////8zAAAAAAAAAAD8/f/////////////////////////////vAAABAAAAAAAAAAAAAADA//////////////44AAAAAAAAAAAC/P/////////////////////////////vAIAAAAAAAAAAAAAAAACA////////////Pzv8AQAAAAAAAADg///////////////////////////////nAQAAAAAAAAAAAAAAAAAA/v///////////wf+AQAAAAAAAAD8//////////////////////////////9nAAAAAAAAAAAAAAAAAAAA/P///////////wP+AwAAAAAAAAD8//////////////////////////////8jAAAAAAAAAAAAAAAAAAAA/P///////////wNgAwAAAAAAAADg//////////////////////////////9hAAAAAAAAAAAAAAAAAAAA/P///////////98AAAAAAAAAAADA//////99/P+D//////////////////+gAAAAAAAAAAAAAAAAAAAA/P////////////8AAAAAAAAAAADA//////9w/P/A/////////////////38gAAAAAAAAAAAAAAAAAAAA/P//////////fx8AAAAAAAAAAADA///9///w/n/w/////////////////z9gEAAAAAAAAAAAAAAAAAAA/P//////////nwMAAAAAAAAAAADA//fx/z8A8H/w/////////////////x/gDwAAAAAAAAAAAAAAAAAA/P//////////AwEAAAAAAAAAAPD//8Hn/z8A4H/g/////////////////w/4BwAAAAAAAAAAAAAAAAAA/P//////////AwAAAAAAAAAAAPD/D9CH/x8AgP/A////////////////fwL8AAAAAAAAAAAAAAAAAAAA/P//////////BwAAAAAAAAAAAPD/Dxg//j94gP8B////////////////PwAMAAAAAAAAAAAAAAAAAAAA/P//////////AAAAAAAAAAAAAPD/BxB+/P//9/8D/v//////////////HwAYAAAAAAAAAAAAAAAAAAAA/P////////8/AAAAAAAAAAAAAPD/ARjw/f3////D///////////////5DwAcAAAAAAAAAAAAAAAAAAAA+P////////8fAAAAAAAAAAAAAPD/GBhgfPj///+D/////////////3/cAwA8AAAAAAAAAAAAAAAAAAAA+P////////8PAAAAAAAAAAAAAPj/AAhg+Pz///8B/////////////x+EBwAcAAAAAAAAAAAAAAAAAAAA8P////////8PAAAAAAAAAAAAAPB/AAA++Pn///8B/////////////3/ADwAPAAAAAAAAAAAAAAAAAAAA4P////////8HAAAAAAAAAAAAAPA/ABAeYPP///8H/////////////38PH0APAAAAAAAAAAAAAAAAAAAA4P////////8HAAAAAAAAAAAAAIAf/n8IYOL9///f//////////////8DH8APAAAAAAAAAAAAAAAAAAAAwP////////8HAAAAAAAAAAAAAACB/z8AAAAA//////////////////8BHuAPAAAAAAAAAAAAAAAAAAAAgP////////8HAAAAAAAAAAAAAAD//38AAAc4/////////////////38AD/8HAAAAAAAAAAAAAAAAAAAAgP////////8BAAAAAAAAAAAAAID//z8AAACA//////////////////8Ak38AAAAAAAAAAAAAAAAAAAAAAPz//////38AAAAAAAAAAAAAAOD//38AAACA//////////////////8B4RcAAAAAAAAAAAAAAAAAAAAAAPj//////z8AAAAAAAAAAAAAAPD///8HcACA//////////////////8B8AIAAAAAAAAAAAAAAAAAAAAAAPD//////x8AAAAAAAAAAAAAAPj///8f+AHA//////////////////8D4AAAAAAAAAAAAAAAAAAAAAAAAHD//////w8AAAAAAAAAAAAAAPj///8/+B/n//////////////////8HYAAAAAAAAAAAAAAAAAAAAAAAAGD+/////w8AAAAAAAAAAAAAAPj//////f////////////////////8DQAAAAAAAAAAAAAAAAAAAAAAAAMD8////ww8AAAAAAAAAAAAAAPj////////////9//////////////8HAAAAAAAAAAAAAAAAAAAAAAAAAID9//+DAQ4AAAAAAAAAAAAAAPz////////////4//////////////8HAAAAAAAAAAAAAAAAAAAAAAAAAAD7//8AABwAAAAAAAAAAAAAIv/////////////x//////////////8DEAAAAAAAAAAAAAAAAAAAAAAAAIDz/38AAB4AAAAAAAAAAAAAwP////////+f///j//////////////8BAAAAAAAAAAAAAAAAAAAAAAAAAADn/z8AAJwBAAAAAAAAAAAAwP////////8f//+H9/////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAADM/38AABgAAAAAAAAAAAAA4P////////8///8X8P////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAACM/z8AABAAAAAAAAAAAAAA8P////////8//v8fxP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAc/z8AAIABAAAAAAAAAAAA8P////////9//P8fDwD+/////////z8GAAAAAAAAAAAAAAAAAAAAAAAAAAAw/j8AAAABAAAAAAAAAAAA+P//////////+P//HwD8/////////x8DAAAAAAAAAAAAAAAAAAAAAAAAAAAg/D8AAB4AAAAAAAAAAAAA/P//////////+P//fwDw/////////w8DAAAAAAAAAAAAAAAAAAAAAAAAAAAA+D8AgP8gAAAAAAAAAAAA/P//////////8f///wDw/////////wEBAAAAAAAAAAAAAAAAIAAAAAAAAAAA+D8ADOIDAAAAAAAAAAAA/v//////////8f///wDg//9//P//fwAAAAAAAAAAAAAAAAAAwAAAAAAAAAAA+H+AD4APAAAAAAAAAAAA/v//////////8///fwDA/v8P+P9/DAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA+H+ADwAeAAAAAAAAAAAA/P//////////4///HwAA/v8P+P8/DAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAA8P+ADwDADwAAAAAAAAAA/P//////////w///HwAA/v8D4P8fDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwP/zBwDhnwAAAAAAAAAA/P//////////h///DwAA/v8B4P8fBgAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAgP//BwADgQAAAAAAAAAA/P//////////D///BwAA/n8AwP8/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP7/BwAAAAAAAAAAAEAA/P//////////D///AwAA/j8AwP9/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD/AwAAAAAAAAAAAAAA/P//////////D/4/AAAA/D8A4P3/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID4/wAAAEAAAAAAAAAA/P//////////P/4/AAAA/AcAAPz/AQADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADw/wEAAEAAAAAAAAAA/v//////////f/4HAAAA+AcAAPz/AwAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADA/wEAAAAAAAAAAAAA/v////////////4BAAAA+AcAAPj/AwAfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wEAAAAAAAAAAAAA/v///////////38AAAAA+AcAAPj/AwA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AEAAAAAAAAAAAAA/v///////////w+AAAAA8AcACLj/AwB2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8AGABQAAAAAAAAAA/P///////////wMIAAAA8AcACBj/AwDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AHwHwQAAAAAAAAA/P///////////4MPAAAA4AcAABj+AYD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AH4/3wAAAAAAAAA4P////////////8PAAAA4AMAABh8AID4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwEP4/n8AAAAAAAAAwP////////////8PAAAAwAcAABgwAAC4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/9/38AAAAAAAAAwP////////////8PAAAAwA0AADgQADDQAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ7///8BAAAAAAAAwP////////////8HAAAAgBwAEDgAAAD4AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABD///8DAAAAAAAAgP////////////8DAAAAABwAADAAAADoAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8HAAAAAAAAAP7///////////8DAAAAABwAAOAAABjkAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////AAAAAAAAAPz/w/////////8BAAAAAAgAAMABADzCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////AwAAAAAAAPh/gP////////8BAAAAAAAAgMMDAH4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////BwAAAAAAAGAAAP////////8AAAAAAAAAAMcDAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////DwAAAAAAAAAAAOj//////38AAAAAAAAAAM4DgB8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////DwAAAAAAAAAAAOD//////z8AAAAAAAAAALwD4B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID/////HwAAAAAAAAAAAOD//////x8AAAAAAAAAAPwH8B8ADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD/////PwAAAAAAAAAAAPD//////wcAAAAAAAAAAPAH/j9CDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOD/////PwAAAAAAAAAAAPD//////wMAAAAAAAAAAPQD/h8/DAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAOD/////fwAAAAAAAAAAAPD//////wEAAAAAAAAAAOAP/p8ARAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAPD//////wMAAAAAAAAAAPD//////wAAAAAAAAAAAOgH/J8dxCcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD//////x8AAAAAAAAAAPD//////wAAAAAAAAAAAMA//I9XpOcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD//////38AAAAAAAAAAOD/////fwAAAAAAAAAAAMA/+IcHAMcPAAEAAAAAAAAAAAAAAAAAAAAAAAAAAOD///////8PAAAAAAAAAMD/////PwAAAAAAAAAAAIC/+McHP+8/AAQAAAAAAAAAAAAAAAAAAAAAAAAAAPD///////8fAAAAAAAAAID/////HwAAAAAAAAAAAAAfAIYPAP7/AQgAAAAAAAAAAAAAAAAAAAAAAAAAAPj///////8/AAAAAAAAAID/////HwAAAAAAAAAAAAAeAIANAPD/AwwAAAAAAAAAAAAAAAAAAAAAAAAAAPD/////////AQAAAAAAAAD/////DwAAAAAAAAAAAAAYAIAJAID/R0cAAAAAAAAAAAAAAAAAAAAAAAAAAPD/////////AQAAAAAAAAD/////HwAAAAAAAAAAAADgAAAAAAj/n8EAAAAAAAAAAAAAAAAAAAAAAAAAAOD/////////AwAAAAAAAAD+////HwAAAAAAAAAAAADg/wAAAAD+H4AAAAAAAAAAAAAAAAAAAAAAAAAAAMD/////////AwAAAAAAAAD+////HwAAAAAAAAAAAACA/wAAgQD/HwAKAAAAAAAAAAAAAAAAAAAAAAAAAMD/////////AwAAAAAAAAD8////HwAAAAAAAAAAAAAA8P//AwD7OAAWAAAAAAAAAAAAAAAAAAAAAAAAAID/////////AQAAAAAAAAD+////HwAAAAAAAAAAAAAAAJDAAQBwcABgAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////AAAAAAAAAAD8////HwAAAAAAAAAAAAAAAIBhAAAA8AMgAAAAAAAAAAAAAAAAAAAAAAAAAAD///////9/AAAAAAAAAAD8////PwAAAAAAAAAAAAAAAAAQAAAgAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////9/AAAAAAAAAAD8////PwAAAAAAAAAAAAAAAAAA4AFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+//////8/AAAAAAAAAAD8////PwACAAAAAAAAAAAAAAAAwH9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8//////8fAAAAAAAAAAD+////PwAGAAAAAAAAAAAAAAAAwD/gAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAD8//////8PAAAAAAAAAAD/////PwAHAAAAAAAAAAAAAAAA4D/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8//////8PAAAAAAAAAAD/////f4AHAAAAAAAAAAAAAACA5x/wAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4//////8PAAAAAAAAAAD/////P8AHAAAAAAAAAAAAAADA/x/gAwAAQAAAAAAAAAAAAAAAAAAAAAAAAADg//////8PAAAAAAAAAID/////P/AHAAAAAAAAAAAAAADA/3/wAwAAAAAAAAAAAAAAAAAAAAAAAAAAAACA//////8PAAAAAAAAAAD/////H/gHAAAAAAAAAAAAAADo///zAwAAgAHAAAAAAAABAAAAAAAAAAAAAAAA//////8PAAAAAAAAAID/////B/gDAAAAAAAAAAAAAAD4////BwAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA/P////8PAAAAAAAAAAD/////AfwDAAAAAAAAAAAAAAD4////BwAAAAAwAAAAAAAAAAAAAAAAAAAAAAAA/P////8HAAAAAAAAAAD/////APgDAAAAAAAAAAAAAAD8////DwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8HAAAAAAAAAAD+//9/APgBAAAAAAAAAAAAAAD+////HwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD+//9/APgBEAAAAAAAAAAAAOD/////fwAACAAAQAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD8//9/APwBBAAAAAAAAAAAAPz/////fwAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD4//9/APwAAAAAAAAAAAAAAP7//////wAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8AAAAAAAAAAAD4////APwAAAAAAAAAAAAAgP///////wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///x8AAAAAAAAAAAD4//9/APwAAAAAAAAAAAAAgP///////wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wMAAAAAAAAAAAD4//9/AHwAAAAAAAAAAAAAgP///////wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wEAAAAAAAAAAADw//8/AHwAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wAAAAAAAAAAAADw//8PABAAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P//fwAAAAAAAAAAAADw//8PAAAAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADw//8PAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADg//8PAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADA//8HAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//PwAAAAAAAAAAAADA//8DAAAAAAAAAAAAAAAAAP7//////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//HwAAAAAAAAAAAACA//8BAAAAAAAAAAAAAAAAAP7//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////HwAAAAAAAAAAAACA//8BAAAAAAAAAAAAAAAAAP7//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////BwAAAAAAAAAAAAAA//8AAAAAAAAAAAAAAAAAAPz//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AwAAAAAAAAAAAAAA/38AAAAAAAAAAAAAAAAAAPz/A/z//wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AwAAAAAAAAAAAAAA/x8AAAAAAAAAAAAAAAAAAPw/APj//wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AQAAAAAAAAAAAAAA/wcAAAAAAAAAAAAAAAAAAP4fAPD//wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAHwAALD//wEAAEAAAAAAAAAAAAAAAAAAAAAAAACA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD//wEAAIABAAAAAAAAAAAAAAAAAAAAAACA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAED8/wAAAAABAAAAAAAAAAAAAAAAAAAAAADA//8fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8/wAAAAAHAAAAAAAAAAAAAAAAAAAAAADA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4/wAAAAAmAAAAAAAAAAAAAAAAAAAAAADA//8HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwHwAAAAA+AAAAAAAAAAAAAAAAAAAAAADA/38AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAADA/x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAOAAAAAAAAAAAAAAAAAAAAAADg/x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAEAOAAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAOAHAAAAAAAAAAAAAAAAAAAAAADg/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAPAAAAAAAAAAAAAAAAAAAAAAAACg/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAHgAEAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAHwAAAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAAAAAAAAAADg/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwA8AAAAAAAAAAAAAAAAAAAAAAADwPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwA8AAAAAAAAAAAAAAAAAAAAAAAD4PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAADw/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4HwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDwACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwH4AHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAfwAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
 
@@ -1547,34 +1721,37 @@ const Rally = (() => {
   const MIX_SMALL = [['park', 0.35], ['roof', 0.45], ['plaza', 0.2]];
   const MIX_BIG = [['roof', 0.45], ['park', 0.25], ['plaza', 0.12], ['pool', 0.06], ['parking', 0.12]];
   const CITIES = [
-    { id: 'scl', name: 'SANTIAGO', country: 'CHILE', lat: -33.45, lon: -70.67, side: -1, tag: 'CORDILLERA, JACARANDAS Y PALMERAS',
+    { id: 'scl', flag: 'CL', name: 'SANTIAGO', country: 'CHILE', lat: -33.45, lon: -70.67, side: -1, tag: 'CORDILLERA, JACARANDAS Y PALMERAS',
       border: 'andes', grass: ['#7fa84a', '#94bc5a', '#64903a'], trees: ['jacaranda', 'jacaranda', 'green', 'palm'], plazaTree: 'palm',
       roofs: ['teja', 'teja', 'crema', 'hormigon', 'ocre'], specials: ['torre', 'cerro'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#1b1a26', '#f2c440', '#f2f2f2', '#5ad1e0', '#e05a5a'] },
-    { id: 'bue', name: 'BUENOS AIRES', country: 'ARGENTINA', lat: -34.6, lon: -58.38, side: 1, tag: 'AVENIDAS ANCHAS FRENTE AL RÍO',
+    { id: 'bue', flag: 'AR', name: 'BUENOS AIRES', country: 'ARGENTINA', lat: -34.6, lon: -58.38, side: 1, tag: 'AVENIDAS ANCHAS FRENTE AL RÍO',
       border: 'river', water: ['#7a6a4a', '#9a8a68', '#5e5038'], grass: ['#5aa04a', '#72b85a', '#448238'], trees: ['green', 'jacaranda', 'green'], plazaTree: 'green',
       roofs: ['crema', 'blanco', 'gris', 'teja'], specials: ['obelisco'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#1b1a26', '#f2c440', '#f2f2f2', '#2f6ff2'], tint: [0xffb070, 0.08] },
-    { id: 'mex', name: 'CIUDAD DE MÉXICO', country: 'MÉXICO', lat: 19.43, lon: -99.13, side: -1, tag: 'VOLCANES Y TECHOS DE COLORES',
+    { id: 'mex', flag: 'MX', name: 'CIUDAD DE MÉXICO', country: 'MÉXICO', lat: 19.43, lon: -99.13, side: -1, tag: 'VOLCANES Y TECHOS DE COLORES',
       border: 'volcano', grass: ['#6aa448', '#82bc5a', '#528836'], trees: ['jacaranda', 'green', 'palm'], plazaTree: 'jacaranda',
       roofs: ['rosa', 'amarillo', 'turquesa', 'naranjo', 'teja'], specials: ['zocalo'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#e84a8a', '#f2c440', '#f2f2f2', '#3ab8b0'] },
-    { id: 'lax', name: 'LOS ÁNGELES', country: 'EE. UU.', lat: 34.05, lon: -118.24, side: -1, tag: 'PISCINAS, PALMERAS Y ATARDECER',
+    { id: 'lax', flag: 'US', name: 'LOS ÁNGELES', country: 'EE. UU.', lat: 34.05, lon: -118.24, side: -1, tag: 'PISCINAS, PALMERAS Y ATARDECER',
       border: 'hills', grass: ['#7ab84e', '#92cc62', '#5e9a3c'], trees: ['palm', 'palm', 'green'], plazaTree: 'palm',
       roofs: ['blanco', 'crema', 'teja', 'azul'], specials: [], mixSmall: MIX_SMALL,
       mixBig: [['roof', 0.35], ['pool', 0.3], ['park', 0.15], ['parking', 0.2]],
       parked: ['#f2f2f2', '#1b1a26', '#e05a5a', '#ffd23f', '#5ad1e0'], tint: [0xff7a40, 0.12] },
-    { id: 'lon', name: 'LONDRES', country: 'REINO UNIDO', lat: 51.5, lon: -0.13, side: 1, tag: 'LLUVIA, LADRILLO Y BUSES ROJOS',
+    { id: 'lon', flag: 'UK', name: 'LONDRES', country: 'REINO UNIDO', lat: 51.5, lon: -0.13, side: 1, tag: 'LLUVIA, LADRILLO Y BUSES ROJOS',
       border: 'river', water: ['#3a5a7a', '#5a7a9a', '#2a4460'], grass: ['#4a8a4a', '#5ea05a', '#3a7038'], trees: ['darkgreen', 'green'], plazaTree: 'darkgreen',
       roofs: ['pizarra', 'ladrillo', 'gris', 'cobre'], specials: [], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: 'bus', rain: true, tint: [0x5a6a8a, 0.18] },
-    { id: 'tyo', name: 'TOKIO', country: 'JAPÓN', lat: 35.68, lon: 139.69, side: -1, tag: 'NOCHE DE NEÓN Y CEREZOS',
+    { id: 'tyo', flag: 'JP', name: 'TOKIO', country: 'JAPÓN', lat: 35.68, lon: 139.69, side: -1, tag: 'NOCHE DE NEÓN Y CEREZOS',
       border: 'sea', water: ['#1a3a6a', '#2f5a9a', '#10284a'], grass: ['#4f9a5a', '#66b070', '#3a7a44'], trees: ['sakura', 'sakura', 'green'], plazaTree: 'sakura',
       roofs: ['gris', 'azul', 'blanco', 'pizarra'], specials: [], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#f2f2f2', '#1b1a26', '#ffd23f', '#5ad1e0'], night: true, neon: true },
   ];
 
   let A = null, scene = null, world = null, parts = null, mapSpr = null, mapTex = null, nightOv = null, tintOv = null;
+  let flagSpr = null;
+  const flagImg = {};
+  const flagURL = (code) => flagImg[code] || (flagImg[code] = flagField(code).toDataURL());
   let grid = null, rockAt = null, cans = [], enemies = [], smokes = [], clouds = [], popups = [], glows = [], player = null;
   let distA = new Int16Array(MW * MH), distB = new Int16Array(MW * MH), lastPT = -1;
   let startTile = [0, 0], enemyStarts = [];
@@ -1902,7 +2079,19 @@ const Rally = (() => {
         for (const [x, y] of rg.tiles) if (r() < 0.12) TREE[city.plazaTree](x * TS + 8, y * TS + 8, 3);
       }
     }
-    return { c, spots };
+    // asta con la bandera del país: plaza/parque/hito más cercano a la partida
+    const sx = startTile[0] * TS + 8, sy = startTile[1] * TS + 8;
+    const flagRegs = regions.filter((q) => ['zocalo', 'obelisco', 'plaza', 'park', 'cerro', 'pool'].includes(q.theme));
+    let flagAt = null, best = 1e9;
+    for (const q of flagRegs.length ? flagRegs : regions.filter((q) => !q.border)) {
+      const pri = 1;
+      for (const [x, y] of q.tiles) {
+        if (q.theme === 'pool' && !nearRoad(x, y, 1)) continue;
+        const d = Math.hypot(x * TS + 8 - sx, y * TS + 8 - sy) * pri;
+        if (d < best) { best = d; flagAt = [x * TS + 8, y * TS + 10]; }
+      }
+    }
+    return { c, spots, flagAt };
   }
 
   // ---------------- construcción de ronda
@@ -1975,6 +2164,9 @@ const Rally = (() => {
       if (sp) s.tint(sp[2]).at(sp[0], sp[1]);
     });
     clouds.forEach((c) => c.spr.show(!city.night));
+    S.flagFrames = A.flags[city.flag];
+    S.flagAt = drawn.flagAt;
+    flagSpr.show(!!drawn.flagAt);
     scene.background.setHex(city.night ? 0x05071a : 0x1d4a26);
     S.collected = 0; S.special = false;
     S.bonus = S.round === 1;
@@ -2062,6 +2254,9 @@ const Rally = (() => {
     for (let i = 0; i < 2; i++) clouds.push({ spr: new Spr(world, A.cloud, 50, { transparent: true }), x: rand(0, MW * TS), y: rand(0, MH * TS) });
     for (let i = 0; i < 8; i++) popups.push({ spr: new Spr(world, textTex('100'), 60).show(false), t: 0 });
     for (let i = 0; i < 28; i++) glows.push(new Spr(world, A.glowPink, 4, { transparent: true, add: true }).show(false));
+    A.flags = {};
+    for (const code of Object.keys(FLAG_DRAW)) A.flags[code] = [0, 1, 2, 3].map((ph) => T(flagPoleCanvas(code, ph)));
+    flagSpr = new Spr(world, A.flags.CL[0], 8, { transparent: true });
   }
   function initGarage() {
     if (gScene) return;
@@ -2256,7 +2451,7 @@ const Rally = (() => {
         <div class="gtitle">RUTA MUNDIAL</div>
         <div class="wscore"><span class="hlab">PUNTOS</span> <span class="hval" id="wps"></span> <span class="hlab">VIDAS</span> <span class="hval pink" id="wpv"></span></div>
         <div class="wpanel">
-          <div class="wnav"><button class="arr" id="wprev" aria-label="Ciudad anterior">◀</button><div class="wname"><b id="wcn"></b><small id="wcc"></small></div><button class="arr" id="wnext" aria-label="Ciudad siguiente">▶</button></div>
+          <div class="wnav"><button class="arr" id="wprev" aria-label="Ciudad anterior">◀</button><div class="wname"><b><img class="flagimg" id="wfl" alt=""> <span id="wcn"></span></b><small id="wcc"></small></div><button class="arr" id="wnext" aria-label="Ciudad siguiente">▶</button></div>
           <div class="wst" id="wst"></div>
           <div class="wbtns"><button class="chip" id="wgar">GARAJE</button><button class="gbtn" id="wgo">VIAJAR ▶</button></div>
         </div>
@@ -2276,6 +2471,7 @@ const Rally = (() => {
     const c = CITIES[S.mapSel], i = S.mapSel, open = i < unlocked(), done = (clearedMask() >> i) & 1;
     if (!UI.$('#wcn')) return;
     UI.$('#wcn').textContent = c.name;
+    UI.$('#wfl').src = flagURL(c.flag); UI.$('#wfl').alt = `Bandera de ${c.country}`;
     UI.$('#wcc').textContent = `${c.country} · ${c.tag}`;
     UI.$('#wst').textContent = !open ? `BLOQUEADA · COMPLETA ${CITIES[i - 1].name} PARA ABRIRLA` : done ? 'COMPLETADA · 3 RONDAS · JUGAR OTRA VEZ' : '3 RONDAS · LISTA PARA VIAJAR';
     UI.$('#wst').classList.toggle('lock', !open);
@@ -2379,7 +2575,7 @@ const Rally = (() => {
     UI.setButtons('GAS', 'GAS');
     buildHud();
     applyCar();
-    Snd.play(SONGS.rally);
+    Snd.play(SONGS[CITIES[ci].id] || SONGS.rally);
     beginRound();
   }
   function beginRound() {
@@ -2388,7 +2584,7 @@ const Rally = (() => {
     parts.clear();
     S.state = 'intro'; S.t = 0; S.lastStep = -1;
     const c = CITIES[S.city];
-    if (S.round === 0) banner(c.name, `${c.country} · ${c.tag}`);
+    if (S.round === 0) banner(`<img class="flagimg" src="${flagURL(c.flag)}" alt="Bandera de ${c.country}"> ${c.name}`, `${c.country} · ${c.tag}`);
     else banner(`RONDA ${S.round + 1}/${ROUNDS}`, S.bonus ? 'RONDA DE BONO · LAS PATRULLAS ESPERAN' : 'JUNTA LOS 10 BIDONES');
   }
   function addScore(n, x, y) {
@@ -2638,6 +2834,7 @@ const Rally = (() => {
       c.glow.at(c.x, c.y + 1).mat.opacity = 0.6 + Math.sin(T0 * 5 + c.ph) * 0.4;
     }
     glows.forEach((g, i) => { if (g.visible) g.mat.opacity = 0.55 + 0.35 * Math.sin(T0 * (3 + (i % 3)) + i); });
+    if (S.flagAt) flagSpr.set(S.flagFrames[Math.floor(T0 * 7) % 4]).anchor(S.flagAt[0], S.flagAt[1], 4, 37);
     for (const rk of S.rockList) rk.spr.set((rk.h ? A.barrierV : A.barrier)[Math.floor(T0 * 3) & 1]);
     parts.sync();
     const W = Engine.W;
