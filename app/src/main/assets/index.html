@@ -241,6 +241,53 @@ body.ovl #toast{align-items:flex-start;padding:calc(var(--px)*44) 0 0}
 .wmode .chip{padding:calc(var(--px)*2) calc(var(--px)*6)}
 #wmD.on{color:var(--sun);box-shadow:inset 0 0 0 var(--px) var(--sun)}
 .wscore .hcoin{margin-left:calc(var(--px)*3)}
+/* ---------- Ajustes ---------- */
+.panel.set{min-width:calc(var(--px)*170);gap:calc(var(--px)*4)}
+.mbtn.srow{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--px)*8);text-align:left}
+.mbtn.srow b{font-weight:400;color:var(--cyan)}
+.mbtn.srow.sel b{color:#1a0b1e}
+.vbar{display:flex;gap:var(--px)}
+.vbar i{width:calc(var(--px)*5);height:calc(var(--px)*5);background:#3a3260}
+.vbar i.on{background:var(--cyan)}
+.mbtn.sel .vbar i{background:rgba(26,11,30,.35)}
+.mbtn.sel .vbar i.on{background:#1a0b1e}
+.pinfo{width:100%;display:flex;flex-direction:column;gap:calc(var(--px)*2);font-size:calc(var(--px)*5);text-align:left;color:var(--muted)}
+.pinfo b{color:var(--sun);font-weight:400}
+.pinfo .ok{color:#7dff7a}
+/* ---------- Rally: pantalla de carga y guía ---------- */
+.gcoins{display:flex;align-items:center;gap:calc(var(--px)*5)}
+.gcoins .chip{font-size:calc(var(--px)*5);padding:calc(var(--px)*2) calc(var(--px)*4)}
+.load{display:grid;place-items:center;background:rgba(8,6,20,.45)}
+.lcard{width:min(calc(var(--px)*300),calc(100% - var(--px)*12));max-height:calc(100% - var(--px)*10);overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--px)*4);padding:calc(var(--px)*6) calc(var(--px)*8);background:rgba(14,10,30,.94);box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) var(--pink),0 0 calc(var(--px)*14) rgba(255,79,154,.35);font-size:calc(var(--px)*5);text-shadow:none}
+.lhead{display:flex;flex-direction:column;gap:var(--px)}
+.lhead b{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*12);line-height:1;color:var(--ink);text-shadow:0 0 calc(var(--px)*6) rgba(255,79,154,.6)}
+.lhead small{color:var(--cyan);font-size:calc(var(--px)*5)}
+.lbar{height:calc(var(--px)*3);background:#241d47;box-shadow:0 0 0 var(--px) #000}
+.lbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--sun),#7dff7a);animation:lfill 1.2s steps(12) forwards}
+.load.ready .lbar i{animation:none;width:100%}
+@keyframes lfill{to{width:100%}}
+.lcols{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--px)*8)}
+.lsec h3{margin:0 0 calc(var(--px)*2);font-family:var(--ui);font-weight:700;font-size:calc(var(--px)*5.5);color:var(--sun);letter-spacing:.08em}
+.lsec ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:calc(var(--px)*2.5);color:var(--ink);line-height:1.35}
+.lsec li{padding-left:calc(var(--px)*5);position:relative}
+.lsec li::before{content:"";position:absolute;left:0;top:.45em;width:calc(var(--px)*2);height:calc(var(--px)*2);background:var(--pink)}
+.lsec li b{color:var(--cyan);font-weight:400}
+.lsec li em{font-style:normal;color:#ffd23f}
+.ltip{margin:0;color:var(--muted);line-height:1.4}
+.ltip b{color:var(--sun);font-weight:400;margin-right:calc(var(--px)*2)}
+.lbtns{display:flex;gap:calc(var(--px)*4);justify-content:flex-end;align-items:center}
+.guide{background:rgba(8,6,20,.62)}
+.guide .gtitle{top:calc(var(--px)*5)}
+.gtabs{position:absolute;left:calc(var(--px)*48);right:calc(var(--px)*6);top:calc(var(--px)*6);display:flex;flex-wrap:wrap;gap:calc(var(--px)*2);justify-content:flex-end}
+.gtabs .chip{font-size:calc(var(--px)*4.5);padding:calc(var(--px)*1.5) calc(var(--px)*3)}
+.gpage{position:absolute;left:calc(var(--px)*8);right:calc(var(--px)*8);top:calc(var(--px)*30);bottom:calc(var(--px)*22);overflow:hidden;background:rgba(14,10,30,.92);box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) #463c7c;padding:calc(var(--px)*5) calc(var(--px)*7)}
+.gpage ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:calc(var(--px)*4)}
+.gpage li{display:flex;align-items:center;gap:calc(var(--px)*6)}
+.gpage li img,.gpage .gkey{flex:0 0 auto;width:calc(var(--px)*18);height:calc(var(--px)*18);object-fit:contain;image-rendering:pixelated}
+.gpage li div{display:flex;flex-direction:column;gap:var(--px);font-size:calc(var(--px)*5);line-height:1.35;color:var(--ink);text-shadow:none}
+.gpage li b{color:var(--pink);font-weight:700;font-size:calc(var(--px)*5.5)}
+.gfoot{position:absolute;left:0;right:0;bottom:calc(var(--px)*5);display:flex;gap:calc(var(--px)*5);justify-content:center;align-items:center;font-size:calc(var(--px)*6)}
+@media (max-aspect-ratio:13/10){.lcols{grid-template-columns:1fr;gap:calc(var(--px)*4)}}
 @media (prefers-reduced-motion:reduce){.cart,.rb,.pill{transition:none}.fuel.low i{animation:none}}
 </style>
 
@@ -257,7 +304,7 @@ body.ovl #toast{align-items:flex-start;padding:calc(var(--px)*44) 0 0}
           <button class="cart locked" id="cart-soon" data-game="soon"><canvas width="96" height="64"></canvas><span class="cn">CARTUCHO 3</span><span class="cr">PRÓXIMAMENTE</span></button>
         </div>
         <div class="mhint"><b>◀ ▶</b> ELEGIR &nbsp;·&nbsp; <b>A</b> JUGAR</div>
-        <div class="opts"><button class="chip" id="optSound">SONIDO</button><button class="chip" id="optCrt">CRT</button><button class="chip" id="optFull" hidden>PANTALLA COMPLETA</button></div>
+        <div class="opts"><button class="chip" id="optSound">SONIDO</button><button class="chip" id="optSet">AJUSTES</button><button class="chip" id="optFull" hidden>PANTALLA COMPLETA</button></div>
       </div>
       <div id="overlay" class="layer" hidden></div>
       <div id="toast" class="layer" hidden><span></span></div>
@@ -727,6 +774,8 @@ const Input = (() => {
 const Snd = (() => {
   let ctx = null, master, sfx, mus, noiseBuf, pulse = {};
   let muted = Store.get('muted', false), pending = null;
+  // volumen de música y efectos por separado (0..5)
+  let volM = Store.get('vol_mus', 5) / 5, volS = Store.get('vol_sfx', 5) / 5;
   const last = {};
   const api = {};
   api.isMuted = () => muted;
@@ -737,8 +786,8 @@ const Snd = (() => {
       try { ctx = new AC(); } catch (e) { return; }
       master = ctx.createGain(); master.gain.value = muted ? 0 : 0.6; master.connect(ctx.destination);
       const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4;
-      sfx = ctx.createGain(); sfx.gain.value = 0.55; sfx.connect(comp);
-      mus = ctx.createGain(); mus.gain.value = 0.3; mus.connect(comp);
+      sfx = ctx.createGain(); sfx.gain.value = 0.55 * volS; sfx.connect(comp);
+      mus = ctx.createGain(); mus.gain.value = 0.3 * volM; mus.connect(comp);
       comp.connect(master);
       noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
       const d = noiseBuf.getChannelData(0);
@@ -757,6 +806,10 @@ const Snd = (() => {
     muted = !muted; Store.set('muted', muted);
     if (master) master.gain.setTargetAtTime(muted ? 0 : 0.6, ctx.currentTime, 0.02);
     return muted;
+  };
+  api.setVol = (m, x) => {
+    volM = m / 5; volS = x / 5;
+    if (ctx) { mus.gain.setTargetAtTime(0.3 * volM, ctx.currentTime, 0.02); sfx.gain.setTargetAtTime(0.55 * volS, ctx.currentTime, 0.02); }
   };
   api.suspend = () => { if (ctx && ctx.state === 'running') ctx.suspend(); };
   api.resume = () => { if (ctx && ctx.state === 'suspended') ctx.resume(); };
@@ -832,6 +885,49 @@ const Snd = (() => {
     buy: () => { [76, 81, 84, 88, 93].forEach((m, i) => tone('p25', N(m), N(m), 0.07, 0.2, i * 0.05)); noise(0.08, 0.1, 8000, 4000, 'highpass', 0.25); },
     deny: () => { tone('square', 220, 200, 0.12, 0.14); tone('square', 180, 160, 0.16, 0.14, 0.12); },
     whistle: () => { tone('sine', 2400, 2600, 0.12, 0.1); tone('sine', 2400, 2600, 0.25, 0.1, 0.18); },
+    chop: () => { noise(0.07, 0.22, 420, 120, 'lowpass'); },
+    whoosh: () => { noise(0.28, 0.22, 600, 3200, 'bandpass', 0, sfx, 1.5); },
+    spot: () => { tone('square', 1320, 1320, 0.06, 0.12); tone('square', 1320, 1320, 0.06, 0.12, 0.1); },
+  };
+  // sonidos continuos: motor (tono según velocidad) y sirena (según cercanía)
+  let eng = null, sir = null;
+  const live = () => ctx && ctx.state === 'running';
+  api.engine = (level, pitch) => {
+    if (!live()) return;
+    if (!eng) {
+      if (level <= 0.01) return;
+      const o1 = osc('p25'), o2 = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      o2.type = 'sawtooth'; f.type = 'lowpass'; f.Q.value = 2; g.gain.value = 0;
+      o1.connect(f); o2.connect(f); f.connect(g); g.connect(sfx);
+      o1.start(); o2.start();
+      eng = { o1, o2, f, g };
+    }
+    const t = ctx.currentTime, fr = 46 + pitch * 74;
+    eng.o1.frequency.setTargetAtTime(fr, t, 0.05);
+    eng.o2.frequency.setTargetAtTime(fr * 0.5 + 1.5, t, 0.05);
+    eng.f.frequency.setTargetAtTime(260 + pitch * 900, t, 0.08);
+    eng.g.gain.setTargetAtTime(Math.max(0, level) * 0.045, t, 0.06);
+  };
+  api.siren = (level) => {
+    if (!live()) return;
+    if (!sir) {
+      if (level <= 0.01) return;
+      const o = osc('p25'), lfo = ctx.createOscillator(), lg = ctx.createGain(), g = ctx.createGain();
+      o.frequency.value = 840; lfo.type = 'triangle'; lfo.frequency.value = 1.7; lg.gain.value = 170; g.gain.value = 0;
+      lfo.connect(lg); lg.connect(o.frequency); o.connect(g); g.connect(sfx);
+      o.start(); lfo.start();
+      sir = { o, lfo, g };
+    }
+    sir.g.gain.setTargetAtTime(Math.max(0, level) * 0.035, ctx.currentTime, 0.12);
+  };
+  api.loopsOff = () => {
+    for (const k of ['eng', 'sir']) {
+      const L = k === 'eng' ? eng : sir;
+      if (!L) continue;
+      if (ctx) L.g.gain.setTargetAtTime(0, ctx.currentTime, 0.04);
+      setTimeout(() => { try { for (const n of Object.values(L)) if (n.stop) n.stop(); } catch (e) { /* ya detenido */ } }, 300);
+    }
+    eng = null; sir = null;
   };
   api.sfx = (name) => {
     if (!ctx || muted) return;
@@ -1818,6 +1914,63 @@ function shieldCanvas() {
   }
   return c;
 }
+// helicóptero policial visto desde arriba (sin aspas; las aspas van aparte y giran)
+function heliCanvas() {
+  const { c, g } = mk(22, 34);
+  g.translate(1, 1);
+  R(g, '#1b1a26', 9, 18, 2, 12); R(g, '#3a3a4c', 9, 18, 1, 12);
+  R(g, '#1b1a26', 5, 28, 10, 2); R(g, '#e8383d', 5, 28, 2, 2); R(g, '#e8383d', 13, 28, 2, 2);
+  ellipse(g, 10, 11, 6, 9, '#2a2a3c'); ellipse(g, 9.5, 10.5, 5, 8, '#e8e6f0'); R(g, '#2a2a3c', 4, 12, 13, 2);
+  ellipse(g, 10, 5, 3.6, 3, '#4fa8e8'); R(g, '#b8e8ff', 8, 3, 2, 1);
+  R(g, '#5a596f', 2, 6, 1, 12); R(g, '#5a596f', 17, 6, 1, 12);
+  R(g, '#ff3b5c', 7, 15, 2, 1); R(g, '#3b8cff', 11, 15, 2, 1);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  return outline(c);
+}
+function rotorCanvas() {
+  const { c, g } = mk(40, 40);
+  g.globalAlpha = 0.85;
+  line(g, 3, 20, 37, 20, '#c8c4d8', 2); line(g, 20, 3, 20, 37, '#c8c4d8', 2);
+  g.globalAlpha = 1;
+  disc(g, 20, 20, 2.2, '#3a3a4c');
+  return c;
+}
+// foco del helicóptero sobre el suelo (blanco, se dibuja con mezcla aditiva)
+function spotCanvas(r) {
+  const { c, g } = mk(r * 2 + 2, r * 2 + 2);
+  for (let y = 0; y < c.height; y++) for (let x = 0; x < c.width; x++) {
+    const d = Math.hypot(x + 0.5 - r - 1, y + 0.5 - r - 1) / r;
+    if (d > 1) continue;
+    const a = d > 0.9 ? 0.5 : d > 0.7 ? (bayer(x, y) < 0.6 ? 0.32 : 0.2) : 0.26;
+    g.fillStyle = `rgba(255,250,215,${a})`; g.fillRect(x, y, 1, 1);
+  }
+  return c;
+}
+// meta de la persecución: bandera a cuadros sobre la calle
+function goalCanvas(f) {
+  const { c, g } = mk(16, 26);
+  ellipse(g, 6, 24, 5, 1.6, 'rgba(0,0,0,0.35)');
+  R(g, '#d6d6e4', 2, 2, 1, 22);
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 11; x++) {
+    const w = Math.round(Math.sin(x * 0.7 + f * 1.6) * 0.8);
+    R(g, ((x >> 1) + (y >> 1)) & 1 ? '#1b1a26' : '#ffffff', 3 + x, 2 + y + w);
+  }
+  disc(g, 2.5, 1.5, 1.4, '#ffd23f');
+  return outline(c);
+}
+// flecha de borde de pantalla (blanca, se tiñe); apunta hacia arriba
+function arrowCanvas() {
+  const { c, g } = mk(13, 13);
+  poly(g, [[6.5, 0.5], [12.5, 9.5], [8.5, 9.5], [8.5, 12.5], [4.5, 12.5], [4.5, 9.5], [0.5, 9.5]], '#ffffff');
+  return outline(c, '#000000');
+}
+// librea de cada tipo de patrulla
+const POLICE_LIVERY = [
+  { b: '#e8383d', l: '#ff8a7a', d: '#9e1d2b', s: '#1b1424' },   // perseguidor
+  { b: '#ff7a1e', l: '#ffb070', d: '#b0480c', s: '#1b1424' },   // cortador
+  { b: '#28a08c', l: '#6ae0c8', d: '#14685a', s: '#1b1424' },   // vigilante
+  { b: '#8a4ae8', l: '#b88aff', d: '#55289a', s: '#1b1424' },   // errático
+];
 
 // Mapa mundial 1-bit (Natural Earth 1:50m vía world-atlas, proyección equirectangular)
 const WORLD = { w: 480, h: 190, latTop: 82.0, latBot: -60.5, bits: 'AAAAAAAAAAAAAAAAAADA/////8P////////v/gEAAAAAAAAAAAAAcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB///////7/////////PwAAAAAAAAAAAMANv3cAAAQA+AMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIj/////w///////////AwAAAABA/w8AAIDN/AAAAAAA/B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAD///8/AP////////9/AAAAAMD//wcAAAAAAAAAAAAA8J8DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA88Of5//+f//////////8fAAAAAMD/HwAAAAAAAAAAAAAAAOAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA+gM/P+P8H//////////9/AAAAAAD88QAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AGICH/f8A/v//////////AAAAAAB4QAAAAAAAAAAEAAAAAID/AAAAAAAAAAAAAAAAAAAAAAAAAAAA8P/jYD///38A+P////////8fAAAAAAAAAAAAAAAAAP4HAAAAgPn/fwAAAAAAAAAAAAAAAAAAAAAAAAAAAP7/x//n/z8AAAD+//////8/AAAAAAAAAAAAAAAA4D8AAACA/////wAAALD/CQAAAAAAAAAAAAAAAAAAAOD/E7zv/z8AAAD4//////+/AQAAAAAAAAAAAAAA/AEAAAD4////fwAAAIB/8AEAAAAAAAAAAAAAAAAA/A8AADB+AAAAAADw//////8/AAAAAAAAAAAAAAAAPgAAAED8////fwAAAAAIAAAAAAAAAAAAAAAAAAAA/P8AH35//v8DAADg//////8PAAAAAAAAAAAAAACADwBgAPj//////3/wDwB4AAAAAAAAAAAAAAAAAAAA/v9/j/8e3/8PAADg//////8HAAAAAAAAAAAAAADABwDwkfP/////////HwD8BwAAAAAAAAAAAAAAAAAA//7/H3wG//8/AADA//////8HAAAAAAAAAAAAAADwAwD4/f//////////HwH8/wAAAAAABwAAwAMAAAAAGPz/H4AP////AwCA//////8HAAAAAAAAACQAAADABwD+/f//////////v////8cHAADAAAAA//8HAAAgAPD//4A//P//PwCA/////38HAAAAAAAA5P8BAAAAwAD++f////////////////8fAAAAAADA////f/D/fvD//+N/wPf+fwCA//////8BAAAAAACA//8fAAACgD/+/f////////////////////s/AwD8/////////3////39x0/8PwAA+P///z8AAAAAAAD4////AwDHYP/7+///////////////////////DwD8//////////+Af/D+9wf+/wMA/v///wEAAAAAAAD6////Pzj8////+///////////////////////fwDg/////////////////w+O/w8A////DwAAAAAAAAD4////fxz/////+f///////////////////////w8Q/////////////////wPA/z8A////BwAABAAAAAD+////f/n//////v///////////////////////x///////////////////wHgPx8A/v//AAD/HwAAAAD///8/wP//////////////////////////////4Af+////////////////7wH/fw4A/P8HAAD/PwAAAID/H/5/4v//////////////////////////////AANI/v//////////////5wfP/wEA+P8DAAD8HwAAAMD/H////v////////////////////////////8/ADgA////////////////8BwD/wMA+P8DAADwAQAAAPj/x/////////////////////////////////9/AADw//////////////9/AAYA/gMA8P8BAAAAAAAAAP7/8f////////////////////////////////9/AAD4//////////////8fACF/8AIA4P8AAAAAAEAAgP//8P//////////////////////////////+/8DAAD8//////////////8HAAD/AQIAwP8AAAAAAAAAwP9/8P/////////////////////////////h/H8AAADw//////////////8DAAD/BwAAAH8AAAAAAABAwP//8P////////////////////////////8A/x8AAADm/8+P+f////////8DAAD/BwYAADAAAAAAAAAAgP//wcP//////////////////////////z+ADwAAAAAA/0cAgP////////8DAAD/Dw8AAAAAAAAAAAAYgP//gf////////////////////////8/QHzgAwAAAAAA4BcAAP7///////8PAAD//x8AAAAAAAAAAIAOAI9/4P////////////////////////8PAADwAAAAAAAA4B0AAPz///////8fAAD+/z8AAAAAAAAAAMA/ACB/I/////////////////////////8HAAD+AwAAAAAAcAQAAPj/////////AwD8/z8AAAAAAAAAAIAfADh/8P////////////////////////8BAAD/AwAAAAAAHgAAAOD/////////D2D+/38AAAAAAAAAAIAfAPgf8P////////////////////////8AAID/AwAAAACABwAAAMD//////////wH///8BAAAAAAAAAOA/APgH8P///////////////////////z8AAID/AAAAAABwAAAAAID+/////////8P///8HAAAAAAAAAPB/APjD/f////////////////////////8AAID/AAAAAAAGAAAAAMD8/////////8f///8fAAAAAAAAAPzwAPz///////////////////////////9HAAAfAAAAAIAAAAAAAID5/////////4////8/AAAAAAAAAPj8wf////////////////////////////9/AAAfAEAAgAAAAAAAAADx/////////4////8/AAAAAAAAAPz8x/////////////////////////////9/AAAPAAAAGAAAAAAAAADg/////////9////8/AAAAAAAAABz+8/////////////////////////////9vAAAHAAAAAAAAAAAAAADg//////////////8zAAAAAAAAAAD8/f/////////////////////////////vAAABAAAAAAAAAAAAAADA//////////////44AAAAAAAAAAAC/P/////////////////////////////vAIAAAAAAAAAAAAAAAACA////////////Pzv8AQAAAAAAAADg///////////////////////////////nAQAAAAAAAAAAAAAAAAAA/v///////////wf+AQAAAAAAAAD8//////////////////////////////9nAAAAAAAAAAAAAAAAAAAA/P///////////wP+AwAAAAAAAAD8//////////////////////////////8jAAAAAAAAAAAAAAAAAAAA/P///////////wNgAwAAAAAAAADg//////////////////////////////9hAAAAAAAAAAAAAAAAAAAA/P///////////98AAAAAAAAAAADA//////99/P+D//////////////////+gAAAAAAAAAAAAAAAAAAAA/P////////////8AAAAAAAAAAADA//////9w/P/A/////////////////38gAAAAAAAAAAAAAAAAAAAA/P//////////fx8AAAAAAAAAAADA///9///w/n/w/////////////////z9gEAAAAAAAAAAAAAAAAAAA/P//////////nwMAAAAAAAAAAADA//fx/z8A8H/w/////////////////x/gDwAAAAAAAAAAAAAAAAAA/P//////////AwEAAAAAAAAAAPD//8Hn/z8A4H/g/////////////////w/4BwAAAAAAAAAAAAAAAAAA/P//////////AwAAAAAAAAAAAPD/D9CH/x8AgP/A////////////////fwL8AAAAAAAAAAAAAAAAAAAA/P//////////BwAAAAAAAAAAAPD/Dxg//j94gP8B////////////////PwAMAAAAAAAAAAAAAAAAAAAA/P//////////AAAAAAAAAAAAAPD/BxB+/P//9/8D/v//////////////HwAYAAAAAAAAAAAAAAAAAAAA/P////////8/AAAAAAAAAAAAAPD/ARjw/f3////D///////////////5DwAcAAAAAAAAAAAAAAAAAAAA+P////////8fAAAAAAAAAAAAAPD/GBhgfPj///+D/////////////3/cAwA8AAAAAAAAAAAAAAAAAAAA+P////////8PAAAAAAAAAAAAAPj/AAhg+Pz///8B/////////////x+EBwAcAAAAAAAAAAAAAAAAAAAA8P////////8PAAAAAAAAAAAAAPB/AAA++Pn///8B/////////////3/ADwAPAAAAAAAAAAAAAAAAAAAA4P////////8HAAAAAAAAAAAAAPA/ABAeYPP///8H/////////////38PH0APAAAAAAAAAAAAAAAAAAAA4P////////8HAAAAAAAAAAAAAIAf/n8IYOL9///f//////////////8DH8APAAAAAAAAAAAAAAAAAAAAwP////////8HAAAAAAAAAAAAAACB/z8AAAAA//////////////////8BHuAPAAAAAAAAAAAAAAAAAAAAgP////////8HAAAAAAAAAAAAAAD//38AAAc4/////////////////38AD/8HAAAAAAAAAAAAAAAAAAAAgP////////8BAAAAAAAAAAAAAID//z8AAACA//////////////////8Ak38AAAAAAAAAAAAAAAAAAAAAAPz//////38AAAAAAAAAAAAAAOD//38AAACA//////////////////8B4RcAAAAAAAAAAAAAAAAAAAAAAPj//////z8AAAAAAAAAAAAAAPD///8HcACA//////////////////8B8AIAAAAAAAAAAAAAAAAAAAAAAPD//////x8AAAAAAAAAAAAAAPj///8f+AHA//////////////////8D4AAAAAAAAAAAAAAAAAAAAAAAAHD//////w8AAAAAAAAAAAAAAPj///8/+B/n//////////////////8HYAAAAAAAAAAAAAAAAAAAAAAAAGD+/////w8AAAAAAAAAAAAAAPj//////f////////////////////8DQAAAAAAAAAAAAAAAAAAAAAAAAMD8////ww8AAAAAAAAAAAAAAPj////////////9//////////////8HAAAAAAAAAAAAAAAAAAAAAAAAAID9//+DAQ4AAAAAAAAAAAAAAPz////////////4//////////////8HAAAAAAAAAAAAAAAAAAAAAAAAAAD7//8AABwAAAAAAAAAAAAAIv/////////////x//////////////8DEAAAAAAAAAAAAAAAAAAAAAAAAIDz/38AAB4AAAAAAAAAAAAAwP////////+f///j//////////////8BAAAAAAAAAAAAAAAAAAAAAAAAAADn/z8AAJwBAAAAAAAAAAAAwP////////8f//+H9/////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAADM/38AABgAAAAAAAAAAAAA4P////////8///8X8P////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAACM/z8AABAAAAAAAAAAAAAA8P////////8//v8fxP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAc/z8AAIABAAAAAAAAAAAA8P////////9//P8fDwD+/////////z8GAAAAAAAAAAAAAAAAAAAAAAAAAAAw/j8AAAABAAAAAAAAAAAA+P//////////+P//HwD8/////////x8DAAAAAAAAAAAAAAAAAAAAAAAAAAAg/D8AAB4AAAAAAAAAAAAA/P//////////+P//fwDw/////////w8DAAAAAAAAAAAAAAAAAAAAAAAAAAAA+D8AgP8gAAAAAAAAAAAA/P//////////8f///wDw/////////wEBAAAAAAAAAAAAAAAAIAAAAAAAAAAA+D8ADOIDAAAAAAAAAAAA/v//////////8f///wDg//9//P//fwAAAAAAAAAAAAAAAAAAwAAAAAAAAAAA+H+AD4APAAAAAAAAAAAA/v//////////8///fwDA/v8P+P9/DAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA+H+ADwAeAAAAAAAAAAAA/P//////////4///HwAA/v8P+P8/DAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAA8P+ADwDADwAAAAAAAAAA/P//////////w///HwAA/v8D4P8fDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwP/zBwDhnwAAAAAAAAAA/P//////////h///DwAA/v8B4P8fBgAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAgP//BwADgQAAAAAAAAAA/P//////////D///BwAA/n8AwP8/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP7/BwAAAAAAAAAAAEAA/P//////////D///AwAA/j8AwP9/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD/AwAAAAAAAAAAAAAA/P//////////D/4/AAAA/D8A4P3/AAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID4/wAAAEAAAAAAAAAA/P//////////P/4/AAAA/AcAAPz/AQADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADw/wEAAEAAAAAAAAAA/v//////////f/4HAAAA+AcAAPz/AwAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADA/wEAAAAAAAAAAAAA/v////////////4BAAAA+AcAAPj/AwAfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wEAAAAAAAAAAAAA/v///////////38AAAAA+AcAAPj/AwA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AEAAAAAAAAAAAAA/v///////////w+AAAAA8AcACLj/AwB2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8AGABQAAAAAAAAAA/P///////////wMIAAAA8AcACBj/AwDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AHwHwQAAAAAAAAA/P///////////4MPAAAA4AcAABj+AYD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AH4/3wAAAAAAAAA4P////////////8PAAAA4AMAABh8AID4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwEP4/n8AAAAAAAAAwP////////////8PAAAAwAcAABgwAAC4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/9/38AAAAAAAAAwP////////////8PAAAAwA0AADgQADDQAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ7///8BAAAAAAAAwP////////////8HAAAAgBwAEDgAAAD4AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABD///8DAAAAAAAAgP////////////8DAAAAABwAADAAAADoAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8HAAAAAAAAAP7///////////8DAAAAABwAAOAAABjkAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////AAAAAAAAAPz/w/////////8BAAAAAAgAAMABADzCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////AwAAAAAAAPh/gP////////8BAAAAAAAAgMMDAH4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////BwAAAAAAAGAAAP////////8AAAAAAAAAAMcDAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+////DwAAAAAAAAAAAOj//////38AAAAAAAAAAM4DgB8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////DwAAAAAAAAAAAOD//////z8AAAAAAAAAALwD4B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID/////HwAAAAAAAAAAAOD//////x8AAAAAAAAAAPwH8B8ADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD/////PwAAAAAAAAAAAPD//////wcAAAAAAAAAAPAH/j9CDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOD/////PwAAAAAAAAAAAPD//////wMAAAAAAAAAAPQD/h8/DAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAOD/////fwAAAAAAAAAAAPD//////wEAAAAAAAAAAOAP/p8ARAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAPD//////wMAAAAAAAAAAPD//////wAAAAAAAAAAAOgH/J8dxCcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD//////x8AAAAAAAAAAPD//////wAAAAAAAAAAAMA//I9XpOcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD//////38AAAAAAAAAAOD/////fwAAAAAAAAAAAMA/+IcHAMcPAAEAAAAAAAAAAAAAAAAAAAAAAAAAAOD///////8PAAAAAAAAAMD/////PwAAAAAAAAAAAIC/+McHP+8/AAQAAAAAAAAAAAAAAAAAAAAAAAAAAPD///////8fAAAAAAAAAID/////HwAAAAAAAAAAAAAfAIYPAP7/AQgAAAAAAAAAAAAAAAAAAAAAAAAAAPj///////8/AAAAAAAAAID/////HwAAAAAAAAAAAAAeAIANAPD/AwwAAAAAAAAAAAAAAAAAAAAAAAAAAPD/////////AQAAAAAAAAD/////DwAAAAAAAAAAAAAYAIAJAID/R0cAAAAAAAAAAAAAAAAAAAAAAAAAAPD/////////AQAAAAAAAAD/////HwAAAAAAAAAAAADgAAAAAAj/n8EAAAAAAAAAAAAAAAAAAAAAAAAAAOD/////////AwAAAAAAAAD+////HwAAAAAAAAAAAADg/wAAAAD+H4AAAAAAAAAAAAAAAAAAAAAAAAAAAMD/////////AwAAAAAAAAD+////HwAAAAAAAAAAAACA/wAAgQD/HwAKAAAAAAAAAAAAAAAAAAAAAAAAAMD/////////AwAAAAAAAAD8////HwAAAAAAAAAAAAAA8P//AwD7OAAWAAAAAAAAAAAAAAAAAAAAAAAAAID/////////AQAAAAAAAAD+////HwAAAAAAAAAAAAAAAJDAAQBwcABgAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////AAAAAAAAAAD8////HwAAAAAAAAAAAAAAAIBhAAAA8AMgAAAAAAAAAAAAAAAAAAAAAAAAAAD///////9/AAAAAAAAAAD8////PwAAAAAAAAAAAAAAAAAQAAAgAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////9/AAAAAAAAAAD8////PwAAAAAAAAAAAAAAAAAA4AFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+//////8/AAAAAAAAAAD8////PwACAAAAAAAAAAAAAAAAwH9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8//////8fAAAAAAAAAAD+////PwAGAAAAAAAAAAAAAAAAwD/gAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAD8//////8PAAAAAAAAAAD/////PwAHAAAAAAAAAAAAAAAA4D/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8//////8PAAAAAAAAAAD/////f4AHAAAAAAAAAAAAAACA5x/wAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4//////8PAAAAAAAAAAD/////P8AHAAAAAAAAAAAAAADA/x/gAwAAQAAAAAAAAAAAAAAAAAAAAAAAAADg//////8PAAAAAAAAAID/////P/AHAAAAAAAAAAAAAADA/3/wAwAAAAAAAAAAAAAAAAAAAAAAAAAAAACA//////8PAAAAAAAAAAD/////H/gHAAAAAAAAAAAAAADo///zAwAAgAHAAAAAAAABAAAAAAAAAAAAAAAA//////8PAAAAAAAAAID/////B/gDAAAAAAAAAAAAAAD4////BwAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA/P////8PAAAAAAAAAAD/////AfwDAAAAAAAAAAAAAAD4////BwAAAAAwAAAAAAAAAAAAAAAAAAAAAAAA/P////8HAAAAAAAAAAD/////APgDAAAAAAAAAAAAAAD8////DwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8HAAAAAAAAAAD+//9/APgBAAAAAAAAAAAAAAD+////HwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD+//9/APgBEAAAAAAAAAAAAOD/////fwAACAAAQAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD8//9/APwBBAAAAAAAAAAAAPz/////fwAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8DAAAAAAAAAAD4//9/APwAAAAAAAAAAAAAAP7//////wAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA/P////8AAAAAAAAAAAD4////APwAAAAAAAAAAAAAgP///////wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///x8AAAAAAAAAAAD4//9/APwAAAAAAAAAAAAAgP///////wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wMAAAAAAAAAAAD4//9/AHwAAAAAAAAAAAAAgP///////wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wEAAAAAAAAAAADw//8/AHwAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P///wAAAAAAAAAAAADw//8PABAAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/P//fwAAAAAAAAAAAADw//8PAAAAAAAAAAAAAAAAgP///////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADw//8PAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADg//8PAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//fwAAAAAAAAAAAADA//8HAAAAAAAAAAAAAAAAAP///////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//PwAAAAAAAAAAAADA//8DAAAAAAAAAAAAAAAAAP7//////x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA/v//HwAAAAAAAAAAAACA//8BAAAAAAAAAAAAAAAAAP7//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////HwAAAAAAAAAAAACA//8BAAAAAAAAAAAAAAAAAP7//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////BwAAAAAAAAAAAAAA//8AAAAAAAAAAAAAAAAAAPz//////w8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AwAAAAAAAAAAAAAA/38AAAAAAAAAAAAAAAAAAPz/A/z//wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AwAAAAAAAAAAAAAA/x8AAAAAAAAAAAAAAAAAAPw/APj//wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AQAAAAAAAAAAAAAA/wcAAAAAAAAAAAAAAAAAAP4fAPD//wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAHwAALD//wEAAEAAAAAAAAAAAAAAAAAAAAAAAACA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD//wEAAIABAAAAAAAAAAAAAAAAAAAAAACA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAED8/wAAAAABAAAAAAAAAAAAAAAAAAAAAADA//8fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8/wAAAAAHAAAAAAAAAAAAAAAAAAAAAADA//8PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4/wAAAAAmAAAAAAAAAAAAAAAAAAAAAADA//8HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwHwAAAAA+AAAAAAAAAAAAAAAAAAAAAADA/38AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAAAAAAAAAAAAAAAAAADA/x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAOAAAAAAAAAAAAAAAAAAAAAADg/x8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAEAOAAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAOAHAAAAAAAAAAAAAAAAAAAAAADg/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAPAAAAAAAAAAAAAAAAAAAAAAAACg/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAHgAEAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAHwAAAAAAAAAAAAAAAAAAAAAAADg/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAAAAAAAAAADg/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwA8AAAAAAAAAAAAAAAAAAAAAAADwPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwA8AAAAAAAAAAAAAAAAAAAAAAAD4PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAADw/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4HwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDwACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwH4AHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAfwAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
@@ -1954,6 +2107,55 @@ const Rally = (() => {
       avenue: { row: 5, col: 5 }, scramble: true, drift: true, drive: 'L',
       civ: [['taxi', CIV.cab], ['taxi', CIV.taxiJp], ['sedan', CIV.white]], life: 'DERRAPE Y GRAN CRUCE PEATONAL' },
   ];
+  // lo propio de cada ciudad (se muestra en la pantalla de carga)
+  const FEATS = {
+    scl: ['AVENIDA DE DOS PISTAS CON COLECTIVOS Y MICROS', 'TEMBLORES: LAS PATRULLAS PIERDEN EL CONTROL'],
+    bue: ['AVENIDA ANCHA DE NORTE A SUR', 'COLECTIVOS: SI LOS TOPAS, TE FRENAN'],
+    mex: ['AVENIDA CON TAXIS ROSADOS', 'MÁS BARRERAS EN LAS CALLES'],
+    lax: ['BOULEVARD CON DESCAPOTABLES', 'PISCINAS Y CALLES LARGAS PARA ESCAPAR'],
+    lon: ['CURVAS MOJADAS: EL AUTO DERRAPA', 'SAL DEL DERRAPE Y GANAS UN MINI TURBO'],
+    tyo: ['CURVAS PARA DERRAPAR Y MINI TURBO', 'GRAN CRUCE: CUANDO CRUZAN PEATONES, TODOS FRENAN'],
+  };
+  const TIPS = [
+    'EL GAS ATURDE A TODAS LAS PATRULLAS QUE LO TOQUEN, NO SOLO A UNA',
+    'JUNTA BIDONES SEGUIDOS PARA HACER COMBO Y GANAR MÁS',
+    'PASA RASPANDO UNA PATRULLA SIN CHOCAR: DA PUNTOS Y MONEDAS',
+    'LAS PATRULLAS MORADAS DOBLAN AL AZAR Y A VECES CHOCAN BARRERAS',
+    'LAS NARANJAS TE CORTAN EL PASO: NO VAYAS DERECHO HACIA ELLAS',
+    'LAS VERDES CUIDAN SU ZONA: SI TE ALEJAS, VUELVEN A SU ESQUINA',
+    'CADA CIERTO RATO LAS PATRULLAS SE DISPERSAN UNOS SEGUNDOS',
+    'CON ESCUDO PUEDES ROMPER UNA BARRERA O AGUANTAR UN CHOQUE',
+    'EL BIDÓN S DUPLICA LOS PUNTOS: BÚSCALO PRIMERO EN EL RADAR',
+    'LAS FLECHAS DEL BORDE TE MARCAN EL BIDÓN MÁS CERCANO Y LAS PATRULLAS',
+    'EN LA RONDA 3 ESCAPA DEL FOCO DEL HELICÓPTERO: SI TE ILUMINA, TODAS TE VEN',
+    'MEJORA EL MOTOR EN EL TALLER SI LAS PATRULLAS TE ALCANZAN',
+  ];
+  // misiones: siempre hay 3 activas; al cumplir una se paga y aparece otra
+  const MISSIONS = {
+    gas: { t: 'ATURDE {n} PATRULLAS CON GAS', n: 12, c: 50 },
+    oil: { t: 'HAZ RESBALAR {n} PATRULLAS CON ACEITE', n: 4, c: 60 },
+    cans: { t: 'JUNTA {n} BIDONES', n: 40, c: 50 },
+    combo: { t: 'HAZ UN COMBO ×{n}', n: 4, c: 60, max: true },
+    near: { t: 'PASA RASPANDO {n} PATRULLAS', n: 8, c: 60 },
+    nitro: { t: 'USA {n} NITROS', n: 4, c: 40 },
+    rocks: { t: 'ROMPE {n} BARRERAS CON ESCUDO', n: 2, c: 70 },
+    boxes: { t: 'ABRE {n} CAJAS DE ÍTEM', n: 10, c: 40 },
+    duel: { t: 'GANA {n} DUELOS', n: 2, c: 100 },
+    clean: { t: 'TERMINA UNA CIUDAD SIN CHOCAR', n: 1, c: 120 },
+    heli: { t: 'ESCAPA DEL HELICÓPTERO {n} VECES', n: 2, c: 90 },
+    icp: { t: 'ATURDE AL INTERCEPTOR {n} VECES', n: 2, c: 80, need: 2 },
+    boost: { t: 'SAL DE {n} DERRAPES CON MINI TURBO', n: 12, c: 70, need: 5 },
+  };
+  const mText = (m) => MISSIONS[m.id].t.replace('{n}', MISSIONS[m.id].n);
+  // patrullas: cada una con su forma de perseguir (y su color)
+  const PTYPES = [
+    { n: 'PERSEGUIDORA', d: 'VA DIRECTO HACIA TI' },
+    { n: 'CORTADORA', d: 'APUNTA DONDE VAS A ESTAR Y TE CORTA EL PASO' },
+    { n: 'VIGILANTE', d: 'CUIDA SU ZONA; SI TE ALEJAS, VUELVE A SU ESQUINA' },
+    { n: 'ERRÁTICA', d: 'DOBLA AL AZAR Y A VECES CHOCA BARRERAS' },
+  ];
+  const PORDER = [0, 1, 2, 3, 0, 1, 0, 2];
+  const PAR = 210;   // tiempo para la tercera estrella (segundos jugando la ciudad)
   // rivales del modo duelo (uno por ciudad, cada vez más hábil)
   const RIVALS = {
     scl: { name: 'LA JOYITA', car: 'muscle', c: 2 }, bue: { name: 'EL TANO', car: 'roadster', c: 1 },
@@ -1968,7 +2170,7 @@ const Rally = (() => {
   const iconURL = (k) => iconImg[k] || (iconImg[k] = itemIconCanvas(k).toDataURL());
   let grid = null, rockAt = null, avLane = new Int8Array(MW * MH), laneDir = new Int8Array(MW * MH).fill(-1), bends = new Map();
   let cans = [], enemies = [], smokes = [], clouds = [], popups = [], glows = [], player = null, icp = null, rival = null;
-  let boxes = [], slicks = [], civs = [], peds = [], lights = [];
+  let boxes = [], slicks = [], civs = [], peds = [], lights = [], arrows = [], heli = null, goalSpr = null;
   const distA = new Int16Array(MW * MH), distB = new Int16Array(MW * MH), distV = new Int16Array(MW * MH), distC = new Int16Array(MW * MH);
   let lastPT = -1, lastVT = -1;
   let startTile = [0, 0], rivalTile = [0, 0], enemyStarts = [];
@@ -1994,6 +2196,38 @@ const Rally = (() => {
   }
   const unlocked = () => clamp(Store.get('rally_unlocked', 1), 1, CITIES.length);
   const clearedMask = () => Store.get('rally_cleared', 0);
+  const fmtT = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  const starsOf = (id) => Store.get('rally_stars', {})[id] || 0;
+  const starStr = (mask) => [1, 2, 4].map((b) => (mask & b ? '★' : '☆')).join('');
+  function missionList() {
+    let ms = Store.get('rally_missions', null);
+    if (!ms || !Array.isArray(ms.list)) ms = { list: [], done: 0 };
+    ms.list = ms.list.filter((m) => MISSIONS[m.id]);
+    while (ms.list.length < 3) {
+      const pool = Object.keys(MISSIONS).filter((k) => !ms.list.some((m) => m.id === k) && unlocked() >= (MISSIONS[k].need || 0) && k !== ms.last);
+      ms.list.push({ id: pool[(Math.random() * pool.length) | 0], n: 0 });
+    }
+    Store.set('rally_missions', ms);
+    return ms;
+  }
+  function mission(id, amount = 1) {
+    const ms = missionList();
+    let changed = false;
+    for (let i = 0; i < ms.list.length; i++) {
+      const m = ms.list[i], def = MISSIONS[m.id];
+      if (m.id !== id) continue;
+      m.n = def.max ? Math.max(m.n, amount) : m.n + amount;
+      changed = true;
+      if (m.n >= def.n) {
+        ms.done++; ms.last = m.id;
+        ms.list.splice(i, 1); i--;
+        S.coins += def.c; Store.set('rally_coins', S.coins); S.coinBump = 0.4;
+        UI.toast(`MISIÓN CUMPLIDA · +${def.c} MONEDAS`); Snd.sfx('oneup'); UI.vibrate([30, 40, 30]);
+      }
+    }
+    if (changed) { Store.set('rally_missions', ms); missionList(); }
+  }
+  const missionsHtml = () => missionList().list.map((m) => `<li>${mText(m)} <b>${Math.min(m.n, MISSIONS[m.id].n)}/${MISSIONS[m.id].n}</b> <em>+${MISSIONS[m.id].c}</em></li>`).join('');
   function addCoins(n, quiet) {
     S.coins = Math.max(0, S.coins + n);
     Store.set('rally_coins', S.coins);
@@ -2514,18 +2748,34 @@ const Rally = (() => {
     player.vis = true; player.puffQ = [];
     S.want = -1; S.wantT = 0;
     const nE = duel ? 2 : Math.min(2 + S.city + S.round + S.loop, 8);
+    const fromTop = S.mode === 'tour' && S.city * 3 + S.round + S.loop * 6 >= 4;
+    const corners = [[4, MH - 5], [MW - 5, 4], [4, 4], [MW - 5, MH - 5]];
     let i = 0;
     for (const e of enemies) {
       if (e.icp) { e.active = false; e.spr.show(false); e.hl.show(false); e.stars.forEach((s) => s.show(false)); continue; }
       e.active = i < nE; e.spr.show(e.active); e.hl.show(e.active && !!city.night);
-      placeCar(e, enemyStarts[i % enemyStarts.length], 0);
-      e.stun = 0; e.hold = duel ? 2 + i * 1.6 : 0.6 + i * 1.3; e.persona = i % 3;
-      e.noise = 0.12 + (i % 3) * 0.06; e.spin = 0;
+      // en rondas altas algunas patrullas salen desde arriba del mapa (como en el original)
+      const top = fromTop && i >= 2 && i % 2 === 1;
+      placeCar(e, top ? [NX([1, 9, 5, 3][(i >> 1) % 4]), NY(0)] : enemyStarts[i % enemyStarts.length], top ? 2 : 0);
+      e.stun = 0; e.hold = duel ? 2 + i * 1.6 : 0.6 + i * 1.3; e.persona = PORDER[i];
+      e.noise = [0.08, 0.12, 0.25, 0.2][e.persona]; e.spin = 0; e.near = false; e.nearCd = 0;
+      e.spr.set(A.carT[e.persona][0]);
       e.stars.forEach((s) => s.show(false));
+      if (full || !e.distH) {
+        // casa: la calle más cercana a su esquina (para dispersarse o vigilar)
+        const [cx, cy] = corners[i % 4];
+        let best = null, bd = 1e9;
+        for (const [x, y] of S.roadTiles) { const d = Math.abs(x - cx) + Math.abs(y - cy); if (!rockAt[y * MW + x] && d < bd) { bd = d; best = [x, y]; } }
+        e.home = best; e.distH = e.distH || new Int16Array(MW * MH);
+        bfs(e.distH, best[0], best[1]);
+      }
       i++;
     }
+    S.scatter = false; S.chaseT = rand(16, 22);
     if (S.icpOn) S.icpAt = (S.playT || 0) + 12;
     S.icpOn = false;
+    S.lookX = 0; S.lookY = 0; S.spotted = false;
+    if (heli && heli.on && S.escape) { heli.x = startTile[0] * TS - 150; heli.y = startTile[1] * TS - 120; }
     player.hl.show(!!city.night);
     for (const s of smokes) { s.life = 0; s.spr.show(false); }
     // efectos de ítems y estados del jugador
@@ -2573,18 +2823,34 @@ const Rally = (() => {
     for (const d of [(c.dir + 1) % 4, (c.dir + 3) % 4]) if (openP(tx + DX[d], ty + DY[d])) return d;
     return (c.dir + 2) % 4;
   }
+  function enemyField(e, t) {
+    if (S.spotted) return distA;                       // el foco del helicóptero delata al jugador
+    if (S.scatter && !e.icp && e.distH) return e.distH; // fase de dispersión: cada una a su esquina
+    let field = distA;
+    if (!e.icp) {
+      if (e.persona === 1 && distA[t] > 5) field = distB;
+      else if (e.persona === 2 && e.distH && distA[t] > 9 && e.distH[lastPT >= 0 ? lastPT : t] > 10) field = e.distH;
+    }
+    // en duelo persigue al más cercano (jugador o rival)
+    if (S.mode === 'duel' && rival.active && rival.dead <= 0 && distV[t] < distA[t]) field = distV;
+    return field;
+  }
   function decideEnemy(e, tx, ty) {
     const rev = (e.dir + 2) % 4, opts = [];
+    // errática: a veces dobla al azar, aunque haya una barrera
+    if (e.persona === 3 && !e.icp && !S.spotted && Math.random() < 0.3) {
+      const wild = [0, 1, 2, 3].filter((d) => d !== rev && isRoad(tx + DX[d], ty + DY[d]));
+      if (wild.length) { e.dir = wild[(Math.random() * wild.length) | 0]; return; }
+    }
     for (let d = 0; d < 4; d++) if (d !== rev && openE(tx + DX[d], ty + DY[d])) opts.push(d);
     if (!opts.length) { e.dir = rev; return; }
-    const t = ty * MW + tx;
-    // en duelo la patrulla persigue al más cercano (jugador o rival)
-    let field = e.persona === 1 && distA[t] > 5 ? distB : distA;
-    if (S.mode === 'duel' && rival.active && rival.dead <= 0 && distV[t] < distA[t]) field = distV;
+    const t = ty * MW + tx, field = enemyField(e, t);
+    const roam = field === e.distH && e.distH[t] < 3;   // ya en casa: da vueltas por la zona
     let best = opts[0], bv = 1e9;
     for (const d of opts) {
       let v = field[(ty + DY[d]) * MW + tx + DX[d]];
-      if (Math.random() < e.noise) v += Math.random() * 7;
+      if (roam) v = Math.random() * 6;
+      else if (Math.random() < e.noise) v += Math.random() * 7;
       if (v < bv) { bv = v; best = d; }
     }
     e.dir = best;
@@ -2638,7 +2904,7 @@ const Rally = (() => {
     if (p && p.t === ty * MW + tx && open(tx + DX[p.dir], ty + DY[p.dir])) c.dir = p.dir; else decide(c, tx, ty);
     c.plan = null;
   };
-  const decideEnemyP = planned(decideEnemy, openE), decideCivP = planned(decideCiv, openE), decideRivalP = planned(decideRival, openE);
+  const decideEnemyP = planned(decideEnemy, openE), decideWildP = planned(decideEnemy, openP), decideCivP = planned(decideCiv, openE), decideRivalP = planned(decideRival, openE);
   const predPlan = (c, tx, ty) => (c.plan && c.plan.t === ty * MW + tx ? c.plan.dir : -1);
 
   // ---------------- dibujo de autos: curvas (derrape) y orientación
@@ -2706,7 +2972,7 @@ const Rally = (() => {
       c.driftT = (c.driftT || 0) + dt;
     } else if (a < 0.12 && c.driftT) {
       if (c.driftT > 0.12 && isPlayer) {
-        S.boostT = 0.5;
+        S.boostT = 0.5; mission('boost');
         for (let i = 0; i < 6; i++) parts.emit(c.vx, c.vy, rand(-40, 40), rand(-40, 40), 0.35, 0x8fe8ff, 0x2f6ff2, 2, 1, 0, 3);
       }
       c.driftT = 0;
@@ -2730,6 +2996,12 @@ const Rally = (() => {
     A.glowPink = T(glowCanvas('255,255,255', 9));
     const IC = { b: '#22222e', l: '#4a4a5e', d: '#111118', s: '#f2f2f2' };
     A.carI = [rallyCar(IC, 0, true), rallyCar(IC, 1, true)].map(T);
+    A.carT = POLICE_LIVERY.map((P) => [rallyCar(P, 0, true), rallyCar(P, 1, true)].map(T));
+    A.carTc = POLICE_LIVERY.map((P) => rallyCar(P, 0, true));
+    A.heli = T(heliCanvas()); A.rotor = T(rotorCanvas()); A.heliSh = T(whiten(heliCanvas(), '#000000'));
+    A.spot = T(spotCanvas(30));
+    A.goal = [0, 1, 2, 3].map((f) => T(goalCanvas(f)));
+    A.arrow = T(arrowCanvas());
     A.box = [itemBoxCanvas(0), itemBoxCanvas(1)].map(T);
     A.slick = [1, 2, 3].map((s) => T(slickCanvas(s)));
     A.shield = T(shieldCanvas());
@@ -2771,6 +3043,10 @@ const Rally = (() => {
     for (let i = 0; i < 3; i++) civs.push({ spr: new Spr(world, A.carP[0], 9).show(false), hl: new Spr(world, A.headlight, 13, { transparent: true, add: true }).show(false), active: false, x: 0, y: 0, dir: 0, ang: 0, spin: 0, ghost: 0 });
     for (let i = 0; i < 14; i++) peds.push({ spr: new Spr(world, A.ped[i % SHIRTS.length][0], 7).show(false), shirt: i % SHIRTS.length, x: 0, y: 0 });
     for (let i = 0; i < 4; i++) lights.push(new Spr(world, A.light[1], 8).show(false));
+    heli = { spr: new Spr(world, A.heli, 45).show(false), rotor: new Spr(world, A.rotor, 46, { transparent: true }).show(false),
+      sh: new Spr(world, A.heliSh, 15, { transparent: true, opacity: 0.3 }).show(false), spot: new Spr(world, A.spot, 16, { transparent: true, add: true }).show(false), x: 0, y: 0, on: false };
+    goalSpr = new Spr(world, A.goal[0], 8).show(false);
+    for (let i = 0; i < 6; i++) arrows.push(new Spr(world, A.arrow, 58, { transparent: true }).show(false));
   }
   function initGarage() {
     if (gScene) return;
@@ -2871,6 +3147,7 @@ const Rally = (() => {
   const GROWS = 5;
   function openGarage() {
     init(); initGarage();
+    Snd.loopsOff();
     S.state = 'garage'; S.gRow = S.gRow || 0; S.gUpg = S.gUpg || 0;
     document.body.classList.add('inmenu');
     UI.setButtons('ELEGIR', 'VOLVER');
@@ -2878,7 +3155,7 @@ const Rally = (() => {
     UI.setHud(`
       <div class="hud-ui gar" id="gar">
         <div class="gtitle">GARAJE</div>
-        <div class="gcoins hcoin" id="gco"></div>
+        <div class="gcoins"><span class="hcoin" id="gco"></span><button class="chip" id="gguide">? GUÍA</button></div>
         <div class="gpanel">
           <div class="grow" data-row="0"><button class="arr" data-d="-1" aria-label="Auto anterior">◀</button><div class="gname"><b id="gcn"></b><small id="gcd"></small></div><button class="arr" data-d="1" aria-label="Auto siguiente">▶</button></div>
           <div class="gstats" id="gst"></div>
@@ -2891,6 +3168,7 @@ const Rally = (() => {
     const root = UI.$('#gar');
     root.querySelectorAll('.arr').forEach((b) => b.addEventListener('click', () => { S.gRow = 0; changeSel(0, +b.dataset.d); }));
     UI.$('#ggo').addEventListener('click', () => { Snd.unlock(); S.gRow = 4; garageGo(); });
+    UI.$('#gguide').addEventListener('click', () => openGuide('garage'));
     root.querySelectorAll('.grow').forEach((rw) => rw.addEventListener('pointerdown', () => { S.gRow = +rw.dataset.row; refreshGarage(); }));
     refreshGarage();
   }
@@ -2966,7 +3244,8 @@ const Rally = (() => {
       if (S.gRow === 3) { S.gUpg = (S.gUpg + d + 3) % 3; Snd.sfx('move'); refreshGarage(); } else changeSel(S.gRow, d);
     }
     if (Input.pressed.a || Input.pressed.start) { if (S.gRow === 3) buyUpgrade(S.gUpg); else garageGo(); }
-    else if (Input.pressed.b || Input.pressed.select) { toMenu(); return; }
+    else if (Input.pressed.select) { openGuide('garage'); return; }
+    else if (Input.pressed.b) { toMenu(); return; }
     if ((G.puffT += dt) > 0.55) { G.puffT = 0; spawnGaragePuff(); }
     for (const p of G.puffs) if (p.life > 0) p.life -= dt;
   }
@@ -2997,6 +3276,7 @@ const Rally = (() => {
   function goMap() { Snd.sfx('start'); openMap({ sel: S.city != null ? S.city : clamp(Store.get('rally_last', 0), 0, unlocked() - 1) }); }
   function openMap(o = {}) {
     init(); initMap();
+    Snd.loopsOff();
     S.state = 'map';
     S.mapSel = o.sel != null ? o.sel : S.mapSel || 0;
     if (o.mode) S.mapMode = o.mode;
@@ -3011,13 +3291,14 @@ const Rally = (() => {
           <div class="wmode" role="group" aria-label="Modo de juego"><button class="chip" id="wmT">GIRA</button><button class="chip" id="wmD">DUELO</button></div>
           <div class="wnav"><button class="arr" id="wprev" aria-label="Ciudad anterior">◀</button><div class="wname"><b><img class="flagimg" id="wfl" alt=""> <span id="wcn"></span></b><small id="wcc"></small></div><button class="arr" id="wnext" aria-label="Ciudad siguiente">▶</button></div>
           <div class="wst" id="wst"></div>
-          <div class="wbtns"><button class="chip" id="wgar">GARAJE</button><button class="gbtn" id="wgo">VIAJAR ▶</button></div>
+          <div class="wbtns"><button class="chip" id="wgar">GARAJE</button><button class="chip" id="wguide">GUÍA</button><button class="gbtn" id="wgo">VIAJAR ▶</button></div>
         </div>
       </div>`);
     UI.$('#wprev').addEventListener('click', () => moveMapSel(-1));
     UI.$('#wnext').addEventListener('click', () => moveMapSel(1));
     UI.$('#wgo').addEventListener('click', () => { Snd.unlock(); travel(); });
     UI.$('#wgar').addEventListener('click', () => openGarage());
+    UI.$('#wguide').addEventListener('click', () => openGuide('map'));
     UI.$('#wmT').addEventListener('click', () => setMapMode('tour'));
     UI.$('#wmD').addEventListener('click', () => setMapMode('duel'));
     M.parts.clear();
@@ -3037,7 +3318,7 @@ const Rally = (() => {
     const wins = Store.get('rally_duels', {})[c.id] || 0;
     UI.$('#wst').textContent = !open ? `BLOQUEADA · COMPLETA ${CITIES[i - 1].name} EN LA GIRA PARA ABRIRLA`
       : duel ? `VS ${RIVALS[c.id].name} · EL PRIMERO EN JUNTAR ${DUEL_WIN} GANA ${80 + 20 * i} MONEDAS${wins ? ` · GANADOS ${wins}` : ''}`
-      : done ? 'COMPLETADA · 3 RONDAS · JUGAR OTRA VEZ' : '3 RONDAS · LISTA PARA VIAJAR';
+      : done ? `${starStr(starsOf(c.id))} · RÉCORD ${pad6((Store.get('rally_best', {})[c.id] || {}).score || 0)} · ${fmtT((Store.get('rally_best', {})[c.id] || {}).time || 0)}` : `☆☆☆ · 3 RONDAS · LISTA PARA VIAJAR`;
     UI.$('#wst').classList.toggle('lock', !open);
     UI.$('#wgo').disabled = !open;
     UI.$('#wgo').textContent = duel ? 'DUELO ▶' : 'VIAJAR ▶';
@@ -3067,7 +3348,8 @@ const Rally = (() => {
       if (Input.pressed.right) moveMapSel(1);
       if (Input.pressed.up || Input.pressed.down) setMapMode(S.mapMode === 'duel' ? 'tour' : 'duel');
       if (Input.pressed.a || Input.pressed.start) travel();
-      else if (Input.pressed.b || Input.pressed.select) openGarage();
+      else if (Input.pressed.select) openGuide('map');
+      else if (Input.pressed.b) openGarage();
     } else if (S.state === 'travel') {
       const tr = S.trip;
       tr.t = Math.min(tr.dur, tr.t + dt);
@@ -3084,7 +3366,7 @@ const Rally = (() => {
       if (tr.t >= tr.dur) { S.state = 'arrive'; S.t = 0; Snd.sfx('fuelS'); }
     } else if (S.state === 'arrive') {
       S.t += dt;
-      if (S.t > 1.1) { S.from = S.trip.ci; if (S.mapMode === 'duel') startDuel(S.trip.ci); else startCity(S.trip.ci); }
+      if (S.t > 1.1) { S.from = S.trip.ci; openLoading(S.trip.ci); }
     }
   }
   function renderMap() {
@@ -3141,6 +3423,7 @@ const Rally = (() => {
     if (!owned.has(CARS[sel.m].id)) { sel.m = 0; sel.c = 0; }
     if (sel.c >= 4 && !paints[CARS[sel.m].id]) sel.c = 0;
     S.mode = mode; S.city = ci; S.round = 0;
+    Object.assign(S, { cityTime: 0, cityDeaths: 0, cityScore0: S.score || 0, escape: null, spotted: false, combo: 0, comboT: 0 });
     Store.set('rally_last', ci);
     document.body.classList.remove('inmenu');
     UI.setButtons('GAS', 'ÍTEM');
@@ -3160,7 +3443,7 @@ const Rally = (() => {
     if (m === sel.m && col === sel.c) col = (col + 1) % 4;
     rival.frames = carTex(m, col);
     rival.name = rv.name;
-    rival.spd = 70 + ci * 3.2;
+    rival.spd = 68 + ci * 3.4;
     rival.noise = Math.max(0.05, 0.25 - ci * 0.04);
     rival.tag.set(textTex(rv.name, '#ffb347'));
   }
@@ -3181,6 +3464,7 @@ const Rally = (() => {
     boxes.forEach((b, i) => { b.on = false; b.t = 1.5 + i * 3.5; b.spr.show(false); });
     setupCivs();
     setupCross();
+    hideHeli(); S.escape = null; S.spotted = false;
     S.playT = 0; S.icpOn = false; S.icpDone = false;
     S.icpAt = S.mode === 'tour' && !S.bonus && (S.round === 2 || (S.round === 0 && (S.city > 0 || S.loop > 0))) ? (S.round === 2 ? 20 : 35) : Infinity;
     S.quakeT = rand(16, 26);
@@ -3284,7 +3568,9 @@ const Rally = (() => {
     player.vis = false; player.shield.show(false);
     Snd.sfx('crash');
     shake(4, 0.5); flash(0.35, [1, 0.6, 0.4]);
-    UI.vibrate(60);
+    UI.vibrate([80, 40, 120]);
+    if (S.mode === 'tour') S.cityDeaths++;
+    S.combo = 0; S.comboT = 0;
     S.boom = { t: 0, x: player.vx, y: player.vy, spr: S.boom ? S.boom.spr : new Spr(world, A.boom[0], 40) };
     S.boom.spr.show(true).at(player.vx, player.vy);
     parts.burst(player.vx, player.vy, 40, 140, 0.8, 0xffd84a, 0x7a2a3a, 2, 1, 0, 3);
@@ -3358,7 +3644,7 @@ const Rally = (() => {
     b.on = false; b.t = 9; b.spr.show(false);
     parts.burst(b.x, b.y, 14, 70, 0.5, 0xd8c8ff, 0x7a6ae8, 2, 1, 0, 3);
     if (c === player) {
-      Snd.sfx('item');
+      Snd.sfx('item'); UI.vibrate(20); mission('boxes');
       if (S.item || S.rollT > 0) { addCoins(5); popup('+5', b.x, b.y - 10, '#ffd23f'); return; }
       S.rollT = 0.7; S.rollItem = rollItem();
     } else if (!rival.item) { rival.item = rollItem(); rival.useT = rand(0.5, 1.6); }
@@ -3369,6 +3655,8 @@ const Rally = (() => {
     S.item = null;
     applyItem(S, k);
     UI.toast(`¡${ITEMS[k].n}!`);
+    UI.vibrate(k === 'nitro' ? [30, 30, 30, 30, 60] : 20);
+    if (k === 'nitro') mission('nitro');
   }
   function applyItem(st, k, quiet) {
     const sfx = (n) => { if (!quiet) Snd.sfx(n); };
@@ -3397,15 +3685,16 @@ const Rally = (() => {
   function shieldBreak(st) {
     st.shieldT = 0;
     Snd.sfx('shieldOff'); flash(0.2, [0.5, 0.9, 1]);
+    if (st === S) UI.vibrate([40, 30, 60]);
   }
   function breakRock(rk) {
     rockAt[rk.y * MW + rk.x] = 0;
     rk.spr.remove();
     S.rockList.splice(S.rockList.indexOf(rk), 1);
     parts.burst(rk.cx, rk.cy, 24, 110, 0.6, 0xff8a1e, 0xf4f1ea, 2, 1, 0, 3);
-    Snd.sfx('explode'); shake(2, 0.25);
+    Snd.sfx('explode'); shake(2, 0.25); UI.vibrate(60);
     lastPT = -1; lastVT = -1;
-    addCoins(2);
+    addCoins(2); mission('rocks');
   }
 
   // ---------------- bidones
@@ -3419,12 +3708,13 @@ const Rally = (() => {
         if (S.duelR >= DUEL_WIN) { duelEnd(false); return true; }
         return false;
       }
-      S.duelP++; S.fuel = Math.min(100, S.fuel + 12); addCoins(3); Snd.sfx('fuel');
+      S.duelP++; S.fuel = Math.min(100, S.fuel + 12); addCoins(3); Snd.sfx('fuel'); comboHit(c); mission('cans');
       popup(`${S.duelP}/${DUEL_WIN}`, c.x, c.y - 10, '#ffffff');
       if (S.duelP >= DUEL_WIN) { duelEnd(true); return true; }
       return false;
     }
     S.collected++;
+    comboHit(c); mission('cans');
     let pts = S.collected * 100;
     if (S.special) pts *= 2;
     S.fuel = Math.min(100, S.fuel + (c.kind === 'L' ? 25 : 12));
@@ -3434,8 +3724,9 @@ const Rally = (() => {
     else Snd.sfx('fuel');
     addScore(pts, c.x, c.y - 10);
     if (S.collected >= 10) {
-      S.state = 'clear'; S.t = 0; S.tallyT = 0; S.tallyAcc = 0; S.tallyTotal = S.fuel * 10;
       addCoins(15);
+      if (S.round === ROUNDS - 1) { startEscape(); return false; }
+      S.state = 'clear'; S.t = 0; S.tallyT = 0; S.tallyAcc = 0; S.tallyTotal = S.fuel * 10;
       banner('¡RONDA COMPLETA!', 'BONO DE GAS · +15 MONEDAS');
       Snd.sfx('clear');
       return true;
@@ -3447,10 +3738,22 @@ const Rally = (() => {
     S.state = 'cityclear'; S.t = 0;
     const bonus = 5000 * (S.city + 1), coins = 40 * (S.city + 1);
     addScore(bonus); addCoins(coins);
+    // estrellas: terminar, sin chocar y bajo el tiempo; récord de la ciudad
+    const mask = 1 | (S.cityDeaths === 0 ? 2 : 0) | (S.cityTime <= PAR ? 4 : 0);
+    const all = Store.get('rally_stars', {}), old = all[c.id] || 0;
+    all[c.id] = old | mask; Store.set('rally_stars', all);
+    const fresh = [1, 2, 4].filter((b) => mask & b && !(old & b)).length;
+    if (fresh) addCoins(10 * fresh);
+    const best = Store.get('rally_best', {}), b0 = best[c.id] || {};
+    best[c.id] = { score: Math.max(b0.score || 0, S.score - S.cityScore0), time: Math.min(b0.time || 1e9, S.cityTime) };
+    Store.set('rally_best', best);
+    if (S.cityDeaths === 0) mission('clean');
+    UI.vibrate([40, 40, 40, 40, 120]);
+    S.cityMask = mask;
     Store.set('rally_cleared', clearedMask() | (1 << S.city));
     const next = S.city + 1;
     if (next < CITIES.length) Store.set('rally_unlocked', Math.max(unlocked(), next + 1));
-    banner(`¡${c.name} COMPLETADA!`, `BONO DE CIUDAD +${bonus} · +${coins} MONEDAS`);
+    banner(`¡${c.name} COMPLETADA! ${starStr(mask)}`, `${fmtT(S.cityTime)} · BONO +${bonus} · +${coins + 10 * fresh} MONEDAS`);
     Snd.sfx('clear');
     if (S.score > S.hi) { S.hi = S.score; Store.set('hi_rally', S.score); }
   }
@@ -3459,10 +3762,84 @@ const Rally = (() => {
     const c = CITIES[S.city];
     const prize = win ? 80 + 20 * S.city : 15;
     addCoins(prize);
-    if (win) { const d = Store.get('rally_duels', {}); d[c.id] = (d[c.id] || 0) + 1; Store.set('rally_duels', d); }
+    if (win) { const d = Store.get('rally_duels', {}); d[c.id] = (d[c.id] || 0) + 1; Store.set('rally_duels', d); mission('duel'); UI.vibrate([40, 40, 120]); }
     banner(win ? '¡GANASTE EL DUELO!' : `GANÓ ${rival.name}`, `${S.duelP} - ${S.duelR} · +${prize} MONEDAS`);
     Snd.sfx(win ? 'clear' : 'gameover');
     if (win) flash(0.3, [1, 0.9, 0.5]);
+  }
+
+  // ---------------- combo, pasar raspando
+  function comboHit(c) {
+    S.combo = S.comboT > 0 ? S.combo + 1 : 1; S.comboT = 4.5;
+    if (S.combo < 2) { UI.vibrate(12); return; }
+    if (S.mode === 'tour') addScore(100 * (S.combo - 1));
+    popup(`COMBO ×${S.combo}`, c.x, c.y - 22, '#ff9ae0');
+    if (S.combo >= 3) addCoins(1);
+    mission('combo', S.combo);
+    UI.vibrate(25);
+  }
+  function nearMiss() {
+    S.nNear = (S.nNear || 0) + 1;
+    if (S.mode === 'tour') addScore(200);
+    addCoins(1);
+    popup(S.mode === 'tour' ? 'RASPANDO +200' : 'RASPANDO', player.x, player.y - 16, '#7dffea');
+    Snd.sfx('whoosh'); UI.vibrate(15);
+    mission('near');
+  }
+
+  // ---------------- escape final (ronda 3): helicóptero con foco y meta
+  function startEscape() {
+    const ok = ([x, y]) => { const i = y * MW + x; return !rockAt[i] && !inCross(x, y) && !bends.has(i); };
+    const pool = S.roadTiles.filter(([x, y]) => ok([x, y]) && distA[y * MW + x] >= 24 && distA[y * MW + x] <= 34);
+    let pickT = pool.length ? pool[(Math.random() * pool.length) | 0] : null;
+    if (!pickT) { let bd = -1; for (const t of S.roadTiles) { const d = distA[t[1] * MW + t[0]]; if (ok(t) && d < 9999 && d > bd) { bd = d; pickT = t; } } }
+    S.escape = { x: pickT[0] * TS + 8, y: pickT[1] * TS + 8 };
+    goalSpr.show(true);
+    heli.on = true; heli.away = 0; heli.x = player.x - 170; heli.y = player.y - 130; heli.ang = 0;
+    [heli.spr, heli.rotor, heli.sh, heli.spot].forEach((q) => q.show(true));
+    banner('¡ESCAPA!', 'LLEGA A LA META · SI EL FOCO TE ILUMINA, TODAS TE VEN');
+    S.goT = 2.4;
+    Snd.sfx('siren'); UI.vibrate([50, 50, 50, 50, 100]);
+    if (!S.icpOn) { S.icpDone = false; spawnIcp(); }
+    S.icpT = 999;
+  }
+  function updateEscape(dt) {
+    const X = S.escape, p = player;
+    const [fx, fy] = fwdOf(p.ang);
+    const dx = p.vx + fx * 24 - heli.x, dy = p.vy + fy * 24 - heli.y, d = Math.hypot(dx, dy);
+    const sp = (72 + S.city * 2.5) * dt;
+    if (d > 1) {
+      heli.x += (dx / d) * Math.min(d, sp); heli.y += (dy / d) * Math.min(d, sp);
+      heli.ang += wrapA(-(Math.atan2(dy, dx) + Math.PI / 2) - heli.ang) * 0.06;
+    }
+    const was = S.spotted;
+    S.spotted = Math.hypot(p.vx - heli.x, p.vy - heli.y) < 26;
+    if (S.spotted && !was) { UI.vibrate(30); Snd.sfx('spot'); }
+    if ((S.chopT = (S.chopT || 0) - dt) <= 0) { S.chopT = 0.13; if (near(heli, p, 260)) Snd.sfx('chop'); }
+    if (near(p, X, 12)) { escapeDone(); return true; }
+    return false;
+  }
+  function escapeDone() {
+    S.escape = null; S.spotted = false;
+    goalSpr.show(false); heli.away = 2.5;
+    addScore(3000, player.x, player.y - 12); addCoins(20); mission('heli');
+    if (S.icpOn) { S.icpT = 0; retireIcp(); }
+    S.state = 'clear'; S.t = 0; S.tallyT = 0; S.tallyAcc = 0; S.tallyTotal = S.fuel * 10;
+    banner('¡ESCAPASTE!', 'BONO DE ESCAPE +3000 · +20 MONEDAS');
+    Snd.sfx('clear'); UI.vibrate([40, 40, 80]);
+  }
+  function hideHeli() { heli.on = false; [heli.spr, heli.rotor, heli.sh, heli.spot].forEach((q) => q.show(false)); goalSpr.show(false); }
+  // motor (tono según velocidad) y sirena (según la patrulla más cercana)
+  function soundLoops() {
+    if ((S.sndN = (S.sndN || 0) + 1) % 3) return;
+    if (S.state === 'play') {
+      Snd.engine(0.85 + (S.nitroT > 0 ? 0.3 : 0), clamp((S.curSpd || 0) / 120, 0, 1.3));
+      let lv = 0;
+      if (!(S.bonus && S.fuel > 0)) for (const e of enemies) if (e.active && e.stun <= 0 && e.hold <= 0) lv = Math.max(lv, 1 - Math.hypot(e.x - player.x, e.y - player.y) / 230);
+      if (heli.on && !heli.away) lv = Math.max(lv, 0.5);
+      Snd.siren(clamp(lv, 0, 1) * 0.9);
+    } else if (S.state === 'intro') { Snd.engine(0.45, 0.04); Snd.siren(0); }
+    else { Snd.engine(0, 0); Snd.siren(0); }
   }
 
   // ---------------- interceptor y eventos de ciudad
@@ -3482,7 +3859,8 @@ const Rally = (() => {
     Object.assign(icp, { active: true, stun: 0, hold: 0.6, persona: 0, noise: 0.05, spin: 0 });
     icp.spr.show(true); icp.hl.show(!!CITIES[S.city].night);
     S.icpOn = true; S.icpT = 22;
-    Snd.sfx('siren'); UI.toast('¡INTERCEPTOR EN CAMINO!');
+    Snd.sfx('siren'); UI.vibrate([60, 60, 60]);
+    if (!S.escape) UI.toast('¡INTERCEPTOR EN CAMINO!');
   }
   function retireIcp() {
     S.icpOn = false; S.icpDone = true;
@@ -3492,7 +3870,7 @@ const Rally = (() => {
   }
   function quake() {
     shake(3, 1.6); flash(0.12, [1, 0.85, 0.6]);
-    Snd.sfx('quake'); UI.toast('¡TEMBLOR!');
+    Snd.sfx('quake'); UI.toast('¡TEMBLOR!'); UI.vibrate([100, 60, 140, 60, 220]);
     for (const e of enemies) if (e.active && e.hold <= 0) e.stun = Math.max(e.stun, 1.6);
     if (rival && rival.active && rival.dead <= 0) rival.slowT = 1.2;
     S.slowT = Math.max(S.slowT, 0.6);
@@ -3500,6 +3878,9 @@ const Rally = (() => {
   }
   function events(dt) {
     const city = CITIES[S.city];
+    // cada cierto rato las patrullas se dispersan hacia sus esquinas (salvo en el escape)
+    if (!S.escape && (S.chaseT -= dt) <= 0) { S.scatter = !S.scatter; S.chaseT = S.scatter ? 4 : rand(16, 22); }
+    if (S.escape) S.scatter = false;
     if (S.mode === 'tour' && !S.icpDone) {
       if (!S.icpOn && S.playT >= S.icpAt) spawnIcp();
       else if (S.icpOn && (S.icpT -= dt) <= 0) retireIcp();
@@ -3510,6 +3891,8 @@ const Rally = (() => {
   // ---------------- actualización
   function update(dt) {
     if (S.state === 'garage') { updateGarage(dt); return; }
+    if (S.state === 'loading') { updateLoading(dt); return; }
+    if (S.state === 'guide') { updateGuide(); return; }
     if (S.state === 'map' || S.state === 'travel' || S.state === 'arrive') { updateMap(dt); return; }
     S.t += dt;
     if (S.coinBump > 0) S.coinBump -= dt;
@@ -3574,6 +3957,7 @@ const Rally = (() => {
     }
     updateCross(dt);
     updateFx(dt);
+    soundLoops();
   }
   function updatePlay(dt) {
     const city = CITIES[S.city], duel = S.mode === 'duel', p = player;
@@ -3594,6 +3978,8 @@ const Rally = (() => {
     if (prevFuel > 0 && S.fuel <= 0) { Snd.sfx('alarm'); UI.toast('¡SIN GAS!'); }
     if (S.fuel <= 0 && Math.random() < dt * 3) parts.emit(p.vx, p.vy, rand(-10, 10), rand(-10, 10), 0.5, 0x2a2638, 0x5a5468, 2, 3, 0, 1);
     let spd = (S.fuel > 0 ? S.spd : S.spd * 0.48) * (S.nitroT > 0 ? 1.6 : 1) * (S.boostT > 0 ? 1.15 : 1) * (S.slowT > 0 ? 0.5 : 1) * (zoneSlow(p) ? 0.45 : 1);
+    if (S.mode === 'tour') S.cityTime += dt;
+    if (S.comboT > 0 && (S.comboT -= dt) <= 0) S.combo = 0;
     if (S.spinT > 0) {
       S.spinT -= dt; S.spinA += dt * 16; spd *= 0.25;
       if (S.spinT <= 0) S.spinA = 0;
@@ -3615,7 +4001,13 @@ const Rally = (() => {
     advance(p, spd * dt, decidePlayer, openP);
     const moved = Math.abs(p.x - ox) + Math.abs(p.y - oy);
     carVisual(p, city.drift ? predictPlayer : null, dt, 0.45, true);
+    S.curSpd = moved / dt;
     if (city.drift) driftFx(p, dt, true);
+    // la cámara mira hacia donde vas
+    {
+      const [lfx, lfy] = fwdOf(p.ang), LA = Math.min(56, Engine.W * 0.16), k = 1 - Math.exp(-dt * 2.2);
+      S.lookX += (lfx * LA - S.lookX) * k; S.lookY += (lfy * LA * 0.75 - S.lookY) * k;
+    }
     exhaust(p, S.nitroT > 0, dt);
     if (S.oilT > 0 && (S.oilAcc += moved) >= 14) { S.oilAcc = 0; dropSlick(p, 'p'); }
     if (S.magT > 0) magnet(p, dt);
@@ -3637,7 +4029,7 @@ const Rally = (() => {
       if (gotCan(c, p)) return;
     }
     if (S.spinT <= 0 && S.shieldT <= 0) {
-      for (const s of slicks) if (s.life > 0 && s.owner === 'r' && near(s, p, 8)) { s.life = 0; s.spr.show(false); S.spinT = 1; S.spinA = 0; Snd.sfx('spin'); break; }
+      for (const s of slicks) if (s.life > 0 && s.owner === 'r' && near(s, p, 8)) { s.life = 0; s.spr.show(false); S.spinT = 1; S.spinA = 0; Snd.sfx('spin'); UI.vibrate([20, 20, 20, 20, 20]); break; }
     }
     updateBoxes(dt);
     updateCivs(dt);
@@ -3649,10 +4041,18 @@ const Rally = (() => {
       duelContacts();
     }
     for (const e of enemies) {
-      if (!e.active || e.stun > 0 || e.hold > 0 || S.invT > 0 || !near(e, p, 11)) continue;
-      if (S.shieldT > 0) { shieldBreak(S); e.stun = 3; e.spin = 0; Snd.sfx('stun'); addCoins(1); continue; }
-      crash(); return;
+      if (!e.active || e.hold > 0) continue;
+      if (e.nearCd > 0) e.nearCd -= dt;
+      if (e.stun > 0) { e.near = false; continue; }
+      const cheb = Math.max(Math.abs(e.x - p.x), Math.abs(e.y - p.y));
+      if (cheb < 11 && S.invT <= 0) {
+        if (S.shieldT > 0) { shieldBreak(S); e.stun = 3; e.spin = 0; e.near = false; Snd.sfx('stun'); addCoins(1); continue; }
+        crash(); return;
+      }
+      if (cheb < 19) e.near = true;
+      else if (e.near && cheb > 26) { e.near = false; if (e.nearCd <= 0 && S.invT <= 0) { e.nearCd = 2.5; nearMiss(); } }
     }
+    if (S.escape && updateEscape(dt)) return;
     events(dt);
   }
   function civBumps(c, st) {
@@ -3665,7 +4065,7 @@ const Rally = (() => {
         st.slowT = 0.5;
         if (towards(cv, c)) { cv.dir = (cv.dir + 2) % 4; cv.plan = null; cv.tile = -1; }
       }
-      if (c === player) shake(1, 0.15);
+      if (c === player) { shake(1, 0.15); UI.vibrate(35); }
     }
   }
   function updateCivs(dt) {
@@ -3696,20 +4096,29 @@ const Rally = (() => {
         continue;
       }
       if (idle && !e.icp) continue;
-      advance(e, base * (e.icp ? 1.12 : 1) * (zoneSlow(e) ? 0.45 : 1) * dt, decideEnemyP, openE);
+      const wild = e.persona === 3 && !e.icp;
+      advance(e, base * (e.icp ? 1.12 : 1) * (S.spotted ? 1.15 : 1) * (zoneSlow(e) ? 0.45 : 1) * dt, wild ? decideWildP : decideEnemyP, wild ? openP : openE);
       planAhead(e, decideEnemy);
       carVisual(e, predPlan, dt, 0.35, false);
+      if (wild) {
+        const rk = S.rockList.find((r) => Math.abs(r.cx - e.x) < 11 && Math.abs(r.cy - e.y) < 11);
+        if (rk) {
+          e.stun = 2.4; e.dir = (e.dir + 2) % 4; e.plan = null; e.tile = -1; S.nRock = (S.nRock || 0) + 1;
+          Snd.sfx('stun'); parts.burst(e.vx, e.vy, 12, 70, 0.4, 0xff8a1e, 0xf4f1ea, 2, 1, 0, 3);
+          continue;
+        }
+      }
       for (const s of smokes) {
         if (s.life <= 0 || s.hit.has(e) || Math.abs(s.x - e.x) >= 11 || Math.abs(s.y - e.y) >= 11) continue;
         s.hit.add(e); e.stun = e.icp ? 1.4 : 2.8; Snd.sfx('stun');
-        if (s.owner === 'p') { if (S.mode === 'tour') addScore(e.icp ? 300 : 50, e.x, e.y - 12); addCoins(e.icp ? 3 : 1); }
+        if (s.owner === 'p') { if (S.mode === 'tour') addScore(e.icp ? 300 : 50, e.x, e.y - 12); addCoins(e.icp ? 3 : 1); mission('gas'); if (e.icp) mission('icp'); }
         break;
       }
       if (e.stun > 0) continue;
       for (const s of slicks) {
         if (s.life <= 0 || !near(s, e, 8)) continue;
         s.life = 0; s.spr.show(false); e.stun = 2.2; Snd.sfx('spin');
-        if (s.owner === 'p') addCoins(1);
+        if (s.owner === 'p') { addCoins(1); mission('oil'); }
         break;
       }
       if (e.stun > 0) continue;
@@ -3808,7 +4217,7 @@ const Rally = (() => {
     const rv = rival, p = player;
     if (rv.dead > 0 || !p.vis || S.bumpCd > 0 || !near(rv, p, 11)) return;
     S.bumpCd = 0.6;
-    Snd.sfx('horn'); shake(1.5, 0.2);
+    Snd.sfx('horn'); shake(1.5, 0.2); UI.vibrate(35);
     parts.burst((p.vx + rv.vx) / 2, (p.vy + rv.vy) / 2, 10, 80, 0.4, 0xffffff, 0xffb347, 1, 1, 0, 3);
     if (S.shieldT > 0 || S.nitroT > 0) { rv.spinT = 1.2; return; }
     if (rv.shieldT > 0 || rv.nitroT > 0) { S.spinT = 0.8; S.spinA = 0; return; }
@@ -3827,6 +4236,10 @@ const Rally = (() => {
       if (s.life <= 0) s.spr.show(false);
     }
     for (const s of slicks) if (s.life > 0 && (s.life -= dt) <= 0) s.spr.show(false);
+    if (heli.on && heli.away > 0) {
+      heli.away -= dt; heli.y -= 110 * dt; heli.x += 50 * dt;
+      if (heli.away <= 0) hideHeli();
+    }
     for (const c of clouds) {
       c.x += dt * 9; c.y += dt * 4.5;
       if (c.x > MW * TS + 90) c.x = -90;
@@ -3854,8 +4267,8 @@ const Rally = (() => {
     spr.mat.opacity = 0.65 + 0.3 * Math.sin(T0 * 9);
   }
   function render() {
-    if (S.state === 'garage') { renderGarage(); return; }
-    if (S.state === 'map' || S.state === 'travel' || S.state === 'arrive') { renderMap(); return; }
+    if (S.state === 'garage' || (S.state === 'guide' && S.guideFrom === 'garage')) { renderGarage(); return; }
+    if (S.state === 'map' || S.state === 'travel' || S.state === 'arrive' || S.state === 'loading' || S.state === 'guide') { renderMap(); return; }
     const p = player, T0 = performance.now() / 1000, city = CITIES[S.city], night = !!city.night;
     const wf = Math.floor(T0 * 14) & 1;
     const pa = p.ang + (S.spinT > 0 ? S.spinA : 0);
@@ -3868,7 +4281,7 @@ const Rally = (() => {
     for (const e of enemies) {
       if (!e.active) continue;
       const fade = e.icp && S.icpT < 2.5 && Math.floor(T0 * 10) % 2 === 0;
-      e.spr.set((e.icp ? A.carI : A.carE)[Math.floor(T0 * (e.icp ? 10 : 6)) & 1]).show(!fade).at(e.vx, e.vy).rot(e.ang + e.spin);
+      e.spr.set((e.icp ? A.carI : A.carT[e.persona])[Math.floor(T0 * (e.icp ? 10 : 6)) & 1]).show(!fade).at(e.vx, e.vy).rot(e.ang + e.spin);
       if (night) headlight(e.hl, e.vx, e.vy, e.ang);
     }
     if (rival.active) {
@@ -3898,14 +4311,54 @@ const Rally = (() => {
     glows.forEach((g, i) => { if (g.visible) g.mat.opacity = 0.55 + 0.35 * Math.sin(T0 * (3 + (i % 3)) + i); });
     if (S.flagAt) flagSpr.set(S.flagFrames[Math.floor(T0 * 7) % 4]).anchor(S.flagAt[0], S.flagAt[1], 4, 37);
     for (const rk of S.rockList) rk.spr.set((rk.h ? A.barrierV : A.barrier)[Math.floor(T0 * 3) & 1]);
+    if (heli.on) {
+      const hy = heli.y - 24;
+      heli.spr.at(heli.x, hy).rot(heli.ang);
+      heli.rotor.at(heli.x, hy - 2).rot(T0 * 26);
+      heli.sh.at(heli.x + 10, heli.y + 4).rot(heli.ang);
+      heli.spot.show(!heli.away).at(heli.x, heli.y);
+      heli.spot.mat.opacity = S.spotted ? 1 : 0.75;
+    }
+    if (S.escape) goalSpr.set(A.goal[Math.floor(T0 * 8) % 4]).anchor(S.escape.x, S.escape.y + 6, 2, 24);
     parts.sync();
     skid.sync();
     const W = Engine.W;
-    camX = clamp(Math.round(p.vx) - W / 2, 0, MW * TS - W); camY = clamp(Math.round(p.vy) - H / 2, 0, MH * TS - H);
+    const live = S.state === 'play' || S.state === 'intro';
+    camX = clamp(Math.round(p.vx + (live ? S.lookX || 0 : 0)) - W / 2, 0, MW * TS - W);
+    camY = clamp(Math.round(p.vy + (live ? S.lookY || 0 : 0)) - H / 2, 0, MH * TS - H);
+    drawArrows(T0, camX, camY);
     setCam(camX, camY);
     renderScene(scene);
     drawRadar(T0, camX, camY);
     drawHud();
+  }
+  // flechas en el borde: bidón más cercano (o la meta), patrullas que vienen, rival
+  function drawArrows(T0, cx, cy) {
+    const W = Engine.W, list = [];
+    const inView = (x, y) => x > cx + 6 && x < cx + W - 6 && y > cy + 6 && y < cy + H - 6;
+    const dist = (o) => Math.hypot(o.x - player.x, o.y - player.y);
+    if (S.state === 'play' && player.vis) {
+      if (S.escape) { if (!inView(S.escape.x, S.escape.y)) list.push([S.escape.x, S.escape.y, '#7dff7a', false]); }
+      else {
+        let best = null, bd = 1e9;
+        for (const c of cans) if (!c.got && dist(c) < bd) { bd = dist(c); best = c; }
+        if (best && !inView(best.x, best.y)) list.push([best.x, best.y, best.kind === 'S' ? '#fff09a' : best.kind === 'L' ? '#7dff7a' : '#ffd23f', false]);
+      }
+      const cops = enemies.filter((e) => e.active && e.hold <= 0 && e.stun <= 0 && !inView(e.x, e.y) && dist(e) < 300).sort((a, b) => dist(a) - dist(b)).slice(0, 3);
+      for (const e of cops) list.push([e.x, e.y, e.icp ? '#e07bff' : '#ff4a5a', dist(e) < 190]);
+      if (rival.active && rival.dead <= 0 && !inView(rival.x, rival.y)) list.push([rival.x, rival.y, '#ffb347', false]);
+    }
+    const mx = cx + W / 2, my = cy + H / 2;
+    arrows.forEach((a, i) => {
+      const it = list[i];
+      if (!it || (it[3] && Math.floor(T0 * 8) % 2)) { a.show(false); return; }
+      // el rectángulo útil deja libre el marcador de arriba
+      const dx = it[0] - mx, dy = it[1] - my, top = 30, bot = 14, side = 10;
+      const cy0 = my + (top - bot) / 2, hh = H / 2 - (top + bot) / 2;
+      const dy2 = it[1] - cy0;
+      const k = Math.min((W / 2 - side) / Math.max(1e-3, Math.abs(dx)), hh / Math.max(1e-3, Math.abs(dy2)));
+      a.show(true).tint(it[2]).at(mx + dx * k, cy0 + dy2 * k).rot(-(Math.atan2(dy2, dx) + Math.PI / 2));
+    });
   }
   function drawRadar(t, cx, cy) {
     if (!rctx) return;
@@ -3950,7 +4403,10 @@ const Rally = (() => {
     } else {
       set('s', S.score, (v) => (hud.s.textContent = pad6(v)));
       set('h', Math.max(S.hi, S.score), (v) => (hud.h.textContent = pad6(v)));
-      set('l', S.round + (S.bonus ? 10 : 0), () => (hud.l.textContent = S.bonus ? 'BONO' : `${S.round + 1}/${ROUNDS}`));
+      if (S.escape) {
+        const m = Math.round(Math.hypot(S.escape.x - player.x, S.escape.y - player.y) / 4);
+        set('l', S.spotted ? 'v' : 'e' + m, () => { hud.l.textContent = S.spotted ? '¡TE VEN!' : `META ${m} M`; hud.l.classList.toggle('pink', S.spotted); });
+      } else set('l', S.round + (S.bonus ? 10 : 0), () => { hud.l.textContent = S.bonus ? 'BONO' : `${S.round + 1}/${ROUNDS}`; hud.l.classList.remove('pink'); });
     }
     set('lbl', S.city, (v) => (hud.lbl.textContent = CITIES[v].name));
     set('f', Math.round(S.fuel), (v) => { hud.f.style.width = v + '%'; hud.fw.classList.toggle('low', v < 22); });
@@ -3966,12 +4422,142 @@ const Rally = (() => {
   }
   function gameOver() {
     S.state = 'over';
+    Snd.loopsOff();
     const rec = S.score > S.hi;
     if (rec) Store.set('hi_rally', S.score);
     banner(null);
     Snd.stop(); Snd.sfx('gameover');
     UI.gameOver('GAS RALLY', S.score, rec, [['Ciudad', CITIES[S.city].name], ['Ronda', `${S.round + 1}/${ROUNDS}`], ['Auto', CARS[sel.m].name], ['Monedas', String(S.coins)]],
       [['retry', 'REINTENTAR CIUDAD'], ['map', 'MAPA'], ['menu', 'MENÚ']]);
+  }
+
+  // ---------------- pantalla de carga: qué trae la ciudad, misiones y un consejo
+  function openLoading(ci, ready) {
+    S.state = 'loading'; S.loadCi = ci; S.loadT = ready ? 2 : 0; S.loadReady = false; S.mapSel = ci;
+    const c = CITIES[ci], duel = S.mapMode === 'duel';
+    UI.setButtons('PARTIR', 'MAPA');
+    const stars = starsOf(c.id), best = Store.get('rally_best', {})[c.id];
+    const rows = duel
+      ? [`VS ${RIVALS[c.id].name}: GANA EL PRIMERO EN JUNTAR ${DUEL_WIN} DE ${DUEL_CANS}`, `PREMIO ${80 + 20 * ci} MONEDAS · SI PIERDES, 15`, 'SI TE ATRAPAN, VUELVES SIN PERDER AUTOS']
+      : [...FEATS[c.id], 'RONDA 2: BONO · RONDA 3: INTERCEPTOR Y ESCAPE'];
+    UI.setHud(`
+      <div class="hud-ui load${ready ? ' ready' : ''}" id="load">
+        <div class="lcard">
+          <div class="lhead"><b><img class="flagimg" src="${flagURL(c.flag)}" alt="Bandera de ${c.country}"> ${c.name}</b>
+            <small>${c.country} · ${duel ? 'DUELO' : `GIRA · ${starStr(stars)}${best ? ` · RÉCORD ${pad6(best.score)}` : ''}`}</small></div>
+          <div class="lbar"><i></i></div>
+          <div class="lcols">
+            <div class="lsec"><h3>${duel ? 'EL DUELO' : 'EN ESTA CIUDAD'}</h3><ul>${rows.map((t) => `<li>${t}</li>`).join('')}</ul></div>
+            <div class="lsec"><h3>MISIONES</h3><ul>${missionsHtml()}</ul></div>
+          </div>
+          <p class="ltip"><b>CONSEJO</b> ${pick(TIPS)}</p>
+          <div class="lbtns"><button class="chip" id="lmap">MAPA</button><button class="chip" id="lguide">GUÍA</button><button class="gbtn" id="lgo" disabled>CARGANDO…</button></div>
+        </div>
+      </div>`);
+    UI.$('#lgo').addEventListener('click', () => { Snd.unlock(); loadGo(); });
+    UI.$('#lguide').addEventListener('click', () => openGuide('loading'));
+    UI.$('#lmap').addEventListener('click', () => openMap({ sel: ci }));
+    if (!ready) Snd.sfx('tick');
+  }
+  function loadGo() {
+    if (S.state !== 'loading' || !S.loadReady) return;
+    Snd.sfx('start');
+    if (S.mapMode === 'duel') startDuel(S.loadCi); else startCity(S.loadCi);
+  }
+  function updateLoading(dt) {
+    S.loadT += dt;
+    if (S.loadT >= 1.2 && !S.loadReady) {
+      S.loadReady = true;
+      const b = UI.$('#lgo');
+      if (b) { b.disabled = false; b.textContent = 'PARTIR ▶'; }
+      Snd.sfx('select');
+    }
+    if (Input.pressed.a || Input.pressed.start) loadGo();
+    else if (Input.pressed.select) openGuide('loading');
+    else if (Input.pressed.b) openMap({ sel: S.loadCi });
+  }
+
+  // ---------------- guía: qué hace cada cosa
+  function guidePages() {
+    if (A.guide) return A.guide;
+    const ka = Engine.touch ? 'A' : 'Z', kb = Engine.touch ? 'B' : 'X';
+    const coin = (() => { const { c, g } = mk(12, 12); disc(g, 6, 6, 5, '#c48a10'); disc(g, 5.6, 5.6, 4.2, '#ffd23f'); R(g, '#fff6b0', 4, 3, 2, 1); return outline(c); })();
+    const star = (() => { const { c, g } = mk(13, 13); poly(g, [[6.5, 0.5], [8.2, 4.6], [12.5, 4.8], [9.2, 7.6], [10.4, 12], [6.5, 9.6], [2.6, 12], [3.8, 7.6], [0.5, 4.8], [4.8, 4.6]], '#ffd23f'); return outline(c); })();
+    const IC = { b: '#22222e', l: '#4a4a5e', d: '#111118', s: '#f2f2f2' };
+    const pages = [
+      { t: 'BIDONES Y GAS', rows: [
+        [A.canNc[0], 'BIDÓN', 'DA BENCINA Y PUNTOS: 100, 200… HASTA 1000. JUNTA 10 PARA PASAR DE RONDA.'],
+        [A.canSc[0], 'BIDÓN S', 'DUPLICA LOS PUNTOS DE LOS BIDONES QUE SIGAN.'],
+        [A.canLc[0], 'BIDÓN L', 'BONO POR LA BENCINA QUE TE QUEDA.'],
+        [rallySmoke(2), `GAS (${ka})`, 'NUBE QUE ATURDE A LAS PATRULLAS. GASTA BENCINA; SIN BENCINA VAS LENTO Y NO HAY GAS.']] },
+      { t: 'ÍTEMS', rows: [
+        [itemBoxCanvas(0), 'CAJA ?', `ÍTEM AL AZAR; SE USA CON ${kb}. SI YA TIENES UNO, DA 5 MONEDAS.`],
+        [itemIconCanvas('nitro'), 'NITRO', 'MUCHA VELOCIDAD POR 3 SEGUNDOS.'],
+        [itemIconCanvas('iman'), 'IMÁN', 'ATRAE LOS BIDONES CERCANOS POR 8 SEGUNDOS.'],
+        [itemIconCanvas('escudo'), 'ESCUDO', 'AGUANTA UN CHOQUE CON PATRULLA O ROMPE UNA BARRERA.'],
+        [itemIconCanvas('aceite'), 'ACEITE', 'DEJA MANCHAS: LA PATRULLA QUE LAS PISA QUEDA GIRANDO.']] },
+      { t: 'PATRULLAS', rows: [
+        ...PTYPES.map((q, i) => [A.carTc[i], q.n, q.d]),
+        [starCanvas(), 'DISPERSIÓN', 'CADA CIERTO RATO TODAS SE VAN A SUS ESQUINAS UNOS SEGUNDOS.']] },
+      { t: 'PELIGROS', rows: [
+        [rallyCar(IC, 0, true), 'INTERCEPTOR', 'PATRULLA NEGRA MÁS RÁPIDA. APARECE UN RATO Y SE RETIRA.'],
+        [heliCanvas(), 'HELICÓPTERO', 'EN EL ESCAPE DE LA RONDA 3: SI SU FOCO TE ILUMINA, TODAS VAN POR TI.'],
+        [rallyBarrier(0), 'BARRERA', 'SI LA CHOCAS PIERDES UN AUTO. LA PATRULLA ERRÁTICA A VECES TAMBIÉN.'],
+        [civCanvas('taxi', CIV.colectivo, 0), 'TRÁFICO', 'LOS AUTOS CIVILES NO TE DESTRUYEN, PERO TE FRENAN. A LAS PATRULLAS LAS ATURDEN.']] },
+      { t: 'CIUDADES', rows: [
+        [goalCanvas(0), 'ESCAPE', 'AL JUNTAR LOS 10 BIDONES DE LA RONDA 3, LLEGA A LA META PARA TERMINAR LA CIUDAD.'],
+        [flagField('CL'), 'TEMBLOR', 'EN SANTIAGO: LAS PATRULLAS PIERDEN EL CONTROL UNOS SEGUNDOS.'],
+        [playerCarCanvas('rayo', CARS[1].colors[0], 0), 'DERRAPE', 'EN LONDRES Y TOKIO: SAL DE LA CURVA DERRAPANDO PARA UN MINI TURBO.'],
+        [pedCanvas('#ff4f9a', 0), 'GRAN CRUCE', 'EN TOKIO: CUANDO CRUZAN PEATONES, TODOS LOS AUTOS FRENAN.']] },
+      { t: 'PROGRESO', rows: [
+        [coin, 'MONEDAS', 'SE GANAN JUGANDO. EN EL GARAJE COMPRAS AUTOS, MEJORAS Y PINTURAS.'],
+        [star, 'ESTRELLAS', `POR CIUDAD: TERMINARLA, SIN CHOCAR Y EN MENOS DE ${fmtT(PAR)}. CADA UNA NUEVA DA 10 MONEDAS.`],
+        [itemBoxCanvas(1), 'MISIONES', 'SIEMPRE HAY 3. AL CUMPLIR UNA COBRAS Y APARECE OTRA.'],
+        [playerCarCanvas('muscle', CARS[3].colors[2], 0), 'DUELO', 'CARRERA POR BIDONES CONTRA EL RIVAL DE CADA CIUDAD.']] },
+      { t: 'CONTROLES', rows: Engine.touch ? [
+        [null, 'CRUCETA', 'DOBLAR. PUEDES MARCAR EL GIRO ANTES DE LLEGAR A LA ESQUINA.'],
+        [null, 'A', 'GAS (HUMO).'], [null, 'B', 'USAR ÍTEM.'], [null, 'START', 'PAUSA, AJUSTES Y MISIONES.'], [null, 'SELECT', 'GUÍA (EN GARAJE Y MAPA).']] : [
+        [null, 'FLECHAS / WASD', 'DOBLAR. PUEDES MARCAR EL GIRO ANTES DE LLEGAR A LA ESQUINA.'],
+        [null, 'Z / ESPACIO', 'GAS (HUMO).'], [null, 'X / SHIFT', 'USAR ÍTEM.'], [null, 'ENTER', 'PAUSA, AJUSTES Y MISIONES.'], [null, 'TAB', 'GUÍA (EN GARAJE Y MAPA) · M SONIDO · C FILTRO CRT']] },
+    ];
+    for (const pg of pages) pg.rows = pg.rows.map(([c, n, d]) => [c ? c.toDataURL() : null, n, d]);
+    return (A.guide = pages);
+  }
+  function openGuide(from) {
+    init();
+    S.guideFrom = from; S.state = 'guide'; S.gPage = S.gPage || 0;
+    document.body.classList.add('inmenu');
+    UI.setButtons('SIGUIENTE', 'VOLVER');
+    Snd.sfx('select');
+    renderGuide();
+  }
+  function renderGuide() {
+    const pages = guidePages(), pg = pages[S.gPage];
+    UI.setHud(`
+      <div class="hud-ui guide" id="guide">
+        <div class="gtitle">GUÍA</div>
+        <div class="gtabs" role="tablist">${pages.map((q, i) => `<button class="chip${i === S.gPage ? ' on' : ''}" data-i="${i}" role="tab" aria-selected="${i === S.gPage}">${q.t}</button>`).join('')}</div>
+        <div class="gpage">
+          <ul>${pg.rows.map(([img, n, d]) => `<li>${img ? `<img src="${img}" alt="">` : '<i class="gkey"></i>'}<div><b>${n}</b><span>${d}</span></div></li>`).join('')}</ul>
+        </div>
+        <div class="gfoot"><button class="arr" id="gprev" aria-label="Página anterior">◀</button><span>${S.gPage + 1}/${pages.length}</span><button class="arr" id="gnext" aria-label="Página siguiente">▶</button><button class="chip" id="gback">VOLVER</button></div>
+      </div>`);
+    UI.$('#guide').querySelectorAll('.gtabs .chip').forEach((b) => b.addEventListener('click', () => { S.gPage = +b.dataset.i; Snd.sfx('move'); renderGuide(); }));
+    UI.$('#gprev').addEventListener('click', () => guideTurn(-1));
+    UI.$('#gnext').addEventListener('click', () => guideTurn(1));
+    UI.$('#gback').addEventListener('click', closeGuide);
+  }
+  function guideTurn(d) { const n = guidePages().length; S.gPage = (S.gPage + d + n) % n; Snd.sfx('move'); renderGuide(); }
+  function closeGuide() {
+    Snd.sfx('back');
+    if (S.guideFrom === 'garage') openGarage();
+    else if (S.guideFrom === 'loading') openLoading(S.loadCi, true);
+    else openMap();
+  }
+  function updateGuide() {
+    if (Input.pressed.left || Input.pressed.up) guideTurn(-1);
+    else if (Input.pressed.right || Input.pressed.down || Input.pressed.a) guideTurn(1);
+    else if (Input.pressed.b || Input.pressed.select || Input.pressed.start) closeGuide();
   }
 
   // ---------------- interfaz con la consola
@@ -3988,10 +4574,12 @@ const Rally = (() => {
     resetRun(); startCity(S.city != null ? S.city : 0);
   }
   function action(act) { if (act === 'map') { resetRun(); openMap({ sel: S.city || 0, mode: 'tour' }); } }
-  function exit() { if (S.score > (S.hi || 0)) Store.set('hi_rally', S.score); document.body.classList.remove('inmenu'); }
-  const capturesStart = () => ['garage', 'map', 'travel', 'arrive', 'cityclear', 'duelend'].includes(S.state);
+  function exit() { if (S.score > (S.hi || 0)) Store.set('hi_rally', S.score); document.body.classList.remove('inmenu'); Snd.loopsOff(); }
+  const capturesStart = () => ['garage', 'map', 'travel', 'arrive', 'cityclear', 'duelend', 'loading', 'guide'].includes(S.state);
+  const pauseInfo = () => (!['play', 'intro', 'dying', 'clear'].includes(S.state) ? ''
+    : `<div class="pinfo"><b>MISIONES</b>${missionList().list.map((m) => `<span>${mText(m)} · ${Math.min(m.n, MISSIONS[m.id].n)}/${MISSIONS[m.id].n}</span>`).join('')}</div>`);
   return {
-    start, update, render, exit, retry, action, capturesStart,
+    start, update, render, exit, retry, action, capturesStart, pauseInfo,
     peek: () => ({ S, player, enemies, cans, smokes, sel, CITIES, CARS, rival, civs, boxes, slicks, peds, bends, icp, owned, upg, paints,
       grid: () => grid, avLane: () => avLane, rockAt: () => rockAt, distC: () => distC, distV: () => distV, laneDir: () => laneDir }),
     dbgCity: (ci) => { init(); resetRun(); S.hi = Store.get('hi_rally', 0); startCity(ci); },
@@ -4925,6 +5513,9 @@ const $ = (s) => document.querySelector(s);
 const scr = $('#screen');
 let mode = 'menu', game = null, overlay = null, osel = 0, sel = Store.get('cart', 0) % 3;
 let toastT = 0;
+const Settings = { musV: Store.get('vol_mus', 5), sfxV: Store.get('vol_sfx', 5), vib: Store.get('vib', true), pad: Store.get('padsize', 1) };
+const PAD_K = [0.85, 1, 1.15], PAD_N = ['CHICOS', 'MEDIANOS', 'GRANDES'];
+let settingsFrom = null;
 
 const UI = {
   $: (s) => $('#hud').querySelector(s),
@@ -4935,7 +5526,14 @@ const UI = {
     t.querySelector('span').textContent = msg;
     t.hidden = false; toastT = 1.8;
   },
-  vibrate(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* sin vibración */ } },
+  // vibración: se puede apagar en AJUSTES; en la app Android usa el vibrador nativo
+  vibrate(ms) {
+    if (!Settings.vib) return;
+    try {
+      if (window.AndroidHaptics) { window.AndroidHaptics.vibrate(Array.isArray(ms) ? JSON.stringify(ms) : String(ms)); return; }
+      if (navigator.vibrate) navigator.vibrate(ms);
+    } catch (e) { /* sin vibración */ }
+  },
   gameOver(name, score, rec, rows, buttons = [['retry', 'REINTENTAR'], ['menu', 'MENÚ']]) {
     openOverlay('over', `
       <div class="panel" role="dialog" aria-label="Fin del juego">
@@ -4968,12 +5566,49 @@ function openPause() {
       <h2>PAUSA</h2>
       <button class="mbtn" data-act="resume">CONTINUAR</button>
       <button class="mbtn" data-act="restart">REINICIAR</button>
+      <button class="mbtn" data-act="settings">AJUSTES</button>
       <button class="mbtn" data-act="menu">SALIR AL MENÚ</button>
+      ${game && game.pauseInfo ? game.pauseInfo() : ''}
       <p>${Engine.touch ? 'START pausa · A elegir' : 'ENTER pausa · Z elegir · M sonido · C filtro CRT'}</p>
     </div>`);
 }
+// ---------------- ajustes: volúmenes, vibración, tamaño de botones, filtro CRT
+function settingsHtml() {
+  const bar = (v) => `<span class="vbar">${'<i class="on"></i>'.repeat(v)}${'<i></i>'.repeat(5 - v)}</span>`;
+  return `
+    <div class="panel set" role="dialog" aria-label="Ajustes">
+      <h2>AJUSTES</h2>
+      <button class="mbtn srow" data-act="s_mus" aria-label="Volumen de música ${Settings.musV} de 5"><span>MÚSICA</span>${bar(Settings.musV)}</button>
+      <button class="mbtn srow" data-act="s_sfx" aria-label="Volumen de efectos ${Settings.sfxV} de 5"><span>EFECTOS</span>${bar(Settings.sfxV)}</button>
+      <button class="mbtn srow" data-act="s_vib"><span>VIBRACIÓN</span><b>${Settings.vib ? 'ON' : 'OFF'}</b></button>
+      ${Engine.touch ? `<button class="mbtn srow" data-act="s_pad"><span>BOTONES</span><b>${PAD_N[Settings.pad]}</b></button>` : ''}
+      <button class="mbtn srow" data-act="s_crt"><span>FILTRO CRT</span><b>${Engine.crt ? 'ON' : 'OFF'}</b></button>
+      <button class="mbtn" data-act="s_back">VOLVER</button>
+      <p>◀ ▶ CAMBIAR · ${Engine.touch ? 'B' : 'X'} VOLVER</p>
+    </div>`;
+}
+function openSettings(from) { settingsFrom = from; Snd.resume(); openOverlay('settings', settingsHtml()); }
+function settingsChange(act, d) {
+  if (act === 's_mus') { Settings.musV = (Settings.musV + d + 6) % 6; Store.set('vol_mus', Settings.musV); }
+  else if (act === 's_sfx') { Settings.sfxV = (Settings.sfxV + d + 6) % 6; Store.set('vol_sfx', Settings.sfxV); }
+  else if (act === 's_vib') { Settings.vib = !Settings.vib; Store.set('vib', Settings.vib); if (Settings.vib) UI.vibrate(40); }
+  else if (act === 's_pad') { Settings.pad = (Settings.pad + d + 3) % 3; Store.set('padsize', Settings.pad); layout(); }
+  else if (act === 's_crt') { Engine.crt = !Engine.crt; Store.set('crt', Engine.crt); }
+  else if (act !== '') return;
+  Snd.setVol(Settings.musV, Settings.sfxV);
+  Snd.sfx('select');
+  const keep = osel;
+  openOverlay('settings', settingsHtml());
+  osel = keep; markOverlay();
+}
+function closeSettings() {
+  if (settingsFrom === 'pause') openPause();
+  else { closeOverlay(); refreshMenu(); }
+}
 function overlayAct(act) {
   Snd.unlock(); Snd.resume();
+  if (act.startsWith('s_')) { if (act === 's_back') closeSettings(); else settingsChange(act, 1); return; }
+  if (act === 'settings') { openSettings(mode === 'menu' ? 'menu' : 'pause'); return; }
   if (act === 'resume') { closeOverlay(); Snd.sfx('select'); }
   else if (act === 'restart' || act === 'retry') { closeOverlay(); Snd.sfx('start'); if (game.retry) game.retry(); else { game.exit(); game.start(); } }
   else if (act === 'menu') { closeOverlay(); toMenu(); }
@@ -4981,6 +5616,12 @@ function overlayAct(act) {
 }
 function overlayStep() {
   const btns = $('#overlay').querySelectorAll('.mbtn');
+  if (overlay === 'settings') {
+    const act = btns[osel] && btns[osel].dataset.act;
+    if (Input.pressed.left && act !== 's_back') settingsChange(act, -1);
+    if (Input.pressed.right && act !== 's_back') settingsChange(act, 1);
+    if (Input.pressed.b || Input.pressed.select || Input.pressed.start) { closeSettings(); return; }
+  }
   if (Input.pressed.up) { osel = (osel + btns.length - 1) % btns.length; markOverlay(); Snd.sfx('move'); }
   if (Input.pressed.down) { osel = (osel + 1) % btns.length; markOverlay(); Snd.sfx('move'); }
   if (Input.pressed.a || (Input.pressed.start && overlay === 'over')) overlayAct(btns[osel].dataset.act);
@@ -5094,8 +5735,7 @@ function refreshMenu() {
   document.querySelectorAll('.cart').forEach((c, i) => c.classList.toggle('sel', i === sel));
   $('#optSound').textContent = Snd.isMuted() ? 'SONIDO OFF' : 'SONIDO ON';
   $('#optSound').classList.toggle('on', !Snd.isMuted());
-  $('#optCrt').textContent = Engine.crt ? 'CRT ON' : 'CRT OFF';
-  $('#optCrt').classList.toggle('on', Engine.crt);
+
   const fb = $('#optFull');
   fb.hidden = !fsOK || !!window.__NATIVE_APP || matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches;
   fb.textContent = isFull() ? 'SALIR PANT. COMPLETA' : 'PANTALLA COMPLETA';
@@ -5105,7 +5745,7 @@ function menuStep() {
   if (Input.pressed.left) { sel = (sel + 2) % 3; Snd.sfx('move'); refreshMenu(); }
   if (Input.pressed.right) { sel = (sel + 1) % 3; Snd.sfx('move'); refreshMenu(); }
   if (Input.pressed.a || Input.pressed.start) launch(sel);
-  if (Input.pressed.select) toggleSound();
+  if (Input.pressed.select) openSettings('menu');
 }
 function launch(i) {
   Snd.unlock();
@@ -5123,6 +5763,7 @@ function launch(i) {
 }
 function toMenu() {
   if (game) game.exit();
+  Snd.loopsOff();
   keepAwake(false);
   game = null; mode = 'menu';
   document.body.classList.add('inmenu');
@@ -5154,7 +5795,7 @@ async function keepAwake(on) {
   } catch (e) { wake = null; }
 }
 function toggleSound() { Snd.unlock(); Snd.toggleMute(); refreshMenu(); Snd.sfx('select'); }
-function toggleCrt() { Engine.crt = !Engine.crt; Store.set('crt', Engine.crt); refreshMenu(); }
+function toggleCrt() { Engine.crt = !Engine.crt; Store.set('crt', Engine.crt); refreshMenu(); if (overlay === 'settings') settingsChange('', 0); }
 
 // ---------------- controles táctiles
 function bindPad() {
@@ -5229,8 +5870,8 @@ function layout() {
   if (touch && portrait) {
     st.style.height = sh + 8 + 'px';
     const ph = app.clientHeight - (sh + 8);
-    pad.style.setProperty('--s', clamp(Math.min(ph / 330, (app.clientWidth / 2 - 26) / 158), 0.7, 1.25).toFixed(3));
-  } else if (ovl) pad.style.setProperty('--s', clamp(app.clientHeight / 360, 0.72, 1.15).toFixed(3));
+    pad.style.setProperty('--s', (clamp(Math.min(ph / 330, (app.clientWidth / 2 - 26) / 158), 0.7, 1.25) * PAD_K[Settings.pad]).toFixed(3));
+  } else if (ovl) pad.style.setProperty('--s', (clamp(app.clientHeight / 360, 0.72, 1.15) * PAD_K[Settings.pad]).toFixed(3));
   else pad.style.setProperty('--s', 1);
   scr.style.width = sw + 'px'; scr.style.height = sh + 'px';
   scr.style.setProperty('--px', sh / H + 'px');
@@ -5246,8 +5887,8 @@ let last = performance.now(), acc = 0;
 function step(dt) {
   if (Engine.shakeT > 0) Engine.shakeT -= dt;
   if (toastT > 0 && (toastT -= dt) <= 0) $('#toast').hidden = true;
-  if (mode === 'menu') menuStep();
-  else if (overlay) overlayStep();
+  if (overlay) overlayStep();
+  else if (mode === 'menu') menuStep();
   else if (Input.pressed.start && !(game.capturesStart && game.capturesStart())) openPause();
   else game.update(dt);
 }
@@ -5287,7 +5928,7 @@ function boot() {
   document.body.classList.add('inmenu');
   document.querySelectorAll('.cart').forEach((c, i) => c.addEventListener('click', () => launch(i)));
   $('#optSound').addEventListener('click', toggleSound);
-  $('#optCrt').addEventListener('click', toggleCrt);
+  $('#optSet').addEventListener('click', () => { Snd.unlock(); openSettings('menu'); });
   $('#optFull').addEventListener('click', toggleFull);
   document.addEventListener('fullscreenchange', () => { refreshMenu(); setTimeout(layout, 60); });
   document.addEventListener('webkitfullscreenchange', () => { refreshMenu(); setTimeout(layout, 60); });
@@ -5306,6 +5947,7 @@ function boot() {
 }
 // botón "atrás" de la app Android: pausa / vuelve / sale desde el menú
 window.__androidBack = () => {
+  if (overlay === 'settings') { closeSettings(); return 'ok'; }
   if (mode === 'menu') return 'exit';
   if (overlay === 'pause') overlayAct('resume');
   else if (overlay === 'over') overlayAct('menu');

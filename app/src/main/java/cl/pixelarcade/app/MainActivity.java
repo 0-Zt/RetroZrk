@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -62,10 +65,38 @@ public class MainActivity extends Activity {
                 return loader.shouldInterceptRequest(request.getUrl());
             }
         });
+        web.addJavascriptInterface(new Haptics(), "AndroidHaptics");
         setContentView(web);
         hideSystemBars();
         if (state != null) web.restoreState(state);
         else web.loadUrl(HOME);
+    }
+
+    /** Vibración para el juego: "40" (milisegundos) o "[60,40,120]" (patrón encendido/apagado). */
+    private class Haptics {
+        @JavascriptInterface
+        @SuppressWarnings("deprecation")
+        public void vibrate(String spec) {
+            Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            if (v == null || !v.hasVibrator() || spec == null) return;
+            try {
+                String t = spec.trim();
+                if (t.startsWith("[")) {
+                    String[] parts = t.substring(1, t.length() - 1).split(",");
+                    long[] pattern = new long[parts.length + 1];
+                    pattern[0] = 0;
+                    for (int i = 0; i < parts.length; i++) pattern[i + 1] = Math.max(0, Math.min(1000, Long.parseLong(parts[i].trim())));
+                    if (Build.VERSION.SDK_INT >= 26) v.vibrate(VibrationEffect.createWaveform(pattern, -1));
+                    else v.vibrate(pattern, -1);
+                } else {
+                    long ms = Math.max(1, Math.min(1000, Long.parseLong(t)));
+                    if (Build.VERSION.SDK_INT >= 26) v.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));
+                    else v.vibrate(ms);
+                }
+            } catch (RuntimeException e) {
+                // valor inválido: no vibra
+            }
+        }
     }
 
     private void hideSystemBars() {
