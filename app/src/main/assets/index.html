@@ -288,6 +288,10 @@ body.ovl #toast{align-items:flex-start;padding:calc(var(--px)*44) 0 0}
 .gpage li b{color:var(--pink);font-weight:700;font-size:calc(var(--px)*5.5)}
 .gfoot{position:absolute;left:0;right:0;bottom:calc(var(--px)*5);display:flex;gap:calc(var(--px)*5);justify-content:center;align-items:center;font-size:calc(var(--px)*6)}
 @media (max-aspect-ratio:13/10){.lcols{grid-template-columns:1fr;gap:calc(var(--px)*4)}}
+.ptag{font-family:var(--ui);font-size:calc(var(--px)*5);color:var(--sun);letter-spacing:.08em;vertical-align:middle;text-shadow:0 var(--px) 0 #000}
+.lround{display:flex;flex-wrap:wrap;align-items:center;gap:calc(var(--px)*3)}
+.lround span{color:var(--sun);margin-right:calc(var(--px)*2)}
+.lround .chip{font-size:calc(var(--px)*5);padding:calc(var(--px)*2) calc(var(--px)*4)}
 @media (prefers-reduced-motion:reduce){.cart,.rb,.pill{transition:none}.fuel.low i{animation:none}}
 </style>
 
@@ -2194,7 +2198,9 @@ const Rally = (() => {
     if (!carCache[k]) carCache[k] = [0, 1].map((f) => T(playerCarCanvas(CARS[m].id, palOf(m, c), f)));
     return carCache[k];
   }
-  const unlocked = () => clamp(Store.get('rally_unlocked', 1), 1, CITIES.length);
+  const realUnlocked = () => clamp(Store.get('rally_unlocked', 1), 1, CITIES.length);
+  const freeMode = () => !!Store.get('rally_free', false);
+  const unlocked = () => (freeMode() ? CITIES.length : realUnlocked());
   const clearedMask = () => Store.get('rally_cleared', 0);
   const fmtT = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
   const starsOf = (id) => Store.get('rally_stars', {})[id] || 0;
@@ -2204,7 +2210,7 @@ const Rally = (() => {
     if (!ms || !Array.isArray(ms.list)) ms = { list: [], done: 0 };
     ms.list = ms.list.filter((m) => MISSIONS[m.id]);
     while (ms.list.length < 3) {
-      const pool = Object.keys(MISSIONS).filter((k) => !ms.list.some((m) => m.id === k) && unlocked() >= (MISSIONS[k].need || 0) && k !== ms.last);
+      const pool = Object.keys(MISSIONS).filter((k) => !ms.list.some((m) => m.id === k) && realUnlocked() >= (MISSIONS[k].need || 0) && k !== ms.last);
       ms.list.push({ id: pool[(Math.random() * pool.length) | 0], n: 0 });
     }
     Store.set('rally_missions', ms);
@@ -3285,7 +3291,7 @@ const Rally = (() => {
     Snd.play(SONGS.menu);
     UI.setHud(`
       <div class="hud-ui wmap" id="wmap">
-        <div class="gtitle">RUTA MUNDIAL</div>
+        <div class="gtitle">RUTA MUNDIAL${freeMode() ? ' <small class="ptag">MODO PRUEBA</small>' : ''}</div>
         <div class="wscore"><span class="hlab">PUNTOS</span> <span class="hval" id="wps"></span> <span class="hlab">VIDAS</span> <span class="hval pink" id="wpv"></span> <span class="hcoin" id="wco"></span></div>
         <div class="wpanel">
           <div class="wmode" role="group" aria-label="Modo de juego"><button class="chip" id="wmT">GIRA</button><button class="chip" id="wmD">DUELO</button></div>
@@ -3418,11 +3424,11 @@ const Rally = (() => {
     player.glow.tint(GASES[sel.g].neon);
   }
   function resetRun() { Object.assign(S, { score: 0, lives: 3, nextLife: 20000, loop: 0 }); }
-  function enterPlay(ci, mode) {
+  function enterPlay(ci, mode, round = 0) {
     init();
     if (!owned.has(CARS[sel.m].id)) { sel.m = 0; sel.c = 0; }
     if (sel.c >= 4 && !paints[CARS[sel.m].id]) sel.c = 0;
-    S.mode = mode; S.city = ci; S.round = 0;
+    S.mode = mode; S.city = ci; S.round = mode === 'tour' ? clamp(round, 0, ROUNDS - 1) : 0;
     Object.assign(S, { cityTime: 0, cityDeaths: 0, cityScore0: S.score || 0, escape: null, spotted: false, combo: 0, comboT: 0 });
     Store.set('rally_last', ci);
     document.body.classList.remove('inmenu');
@@ -3432,7 +3438,7 @@ const Rally = (() => {
     Snd.play(SONGS[CITIES[ci].id] || SONGS.rally);
     beginRound();
   }
-  function startCity(ci) { enterPlay(ci, 'tour'); }
+  function startCity(ci, round = 0) { enterPlay(ci, 'tour', round); }
   function startDuel(ci) {
     S.duelP = 0; S.duelR = 0; S.duelN = (S.duelN || 0) + 1;
     enterPlay(ci, 'duel');
@@ -3752,7 +3758,7 @@ const Rally = (() => {
     S.cityMask = mask;
     Store.set('rally_cleared', clearedMask() | (1 << S.city));
     const next = S.city + 1;
-    if (next < CITIES.length) Store.set('rally_unlocked', Math.max(unlocked(), next + 1));
+    if (next < CITIES.length) Store.set('rally_unlocked', Math.max(realUnlocked(), next + 1));
     banner(`¡${c.name} COMPLETADA! ${starStr(mask)}`, `${fmtT(S.cityTime)} · BONO +${bonus} · +${coins + 10 * fresh} MONEDAS`);
     Snd.sfx('clear');
     if (S.score > S.hi) { S.hi = S.score; Store.set('hi_rally', S.score); }
@@ -4434,6 +4440,7 @@ const Rally = (() => {
   // ---------------- pantalla de carga: qué trae la ciudad, misiones y un consejo
   function openLoading(ci, ready) {
     S.state = 'loading'; S.loadCi = ci; S.loadT = ready ? 2 : 0; S.loadReady = false; S.mapSel = ci;
+    if (!ready) S.loadRound = 0;
     const c = CITIES[ci], duel = S.mapMode === 'duel';
     UI.setButtons('PARTIR', 'MAPA');
     const stars = starsOf(c.id), best = Store.get('rally_best', {})[c.id];
@@ -4451,18 +4458,25 @@ const Rally = (() => {
             <div class="lsec"><h3>MISIONES</h3><ul>${missionsHtml()}</ul></div>
           </div>
           <p class="ltip"><b>CONSEJO</b> ${pick(TIPS)}</p>
+          ${freeMode() && !duel ? `<div class="lround" role="group" aria-label="Ronda de inicio"><span>MODO PRUEBA · PARTIR EN</span>${[0, 1, 2].map((r) => `<button class="chip${r === S.loadRound ? ' on' : ''}" data-r="${r}">RONDA ${r + 1}${r === 1 ? ' (BONO)' : r === 2 ? ' (ESCAPE)' : ''}</button>`).join('')}</div>` : ''}
           <div class="lbtns"><button class="chip" id="lmap">MAPA</button><button class="chip" id="lguide">GUÍA</button><button class="gbtn" id="lgo" disabled>CARGANDO…</button></div>
         </div>
       </div>`);
     UI.$('#lgo').addEventListener('click', () => { Snd.unlock(); loadGo(); });
     UI.$('#lguide').addEventListener('click', () => openGuide('loading'));
     UI.$('#lmap').addEventListener('click', () => openMap({ sel: ci }));
+    UI.$('#load').querySelectorAll('.lround .chip').forEach((b) => b.addEventListener('click', () => setLoadRound(+b.dataset.r)));
     if (!ready) Snd.sfx('tick');
+  }
+  function setLoadRound(r) {
+    S.loadRound = (r + ROUNDS) % ROUNDS;
+    Snd.sfx('move');
+    UI.$('#load').querySelectorAll('.lround .chip').forEach((b) => b.classList.toggle('on', +b.dataset.r === S.loadRound));
   }
   function loadGo() {
     if (S.state !== 'loading' || !S.loadReady) return;
     Snd.sfx('start');
-    if (S.mapMode === 'duel') startDuel(S.loadCi); else startCity(S.loadCi);
+    if (S.mapMode === 'duel') startDuel(S.loadCi); else startCity(S.loadCi, freeMode() ? S.loadRound : 0);
   }
   function updateLoading(dt) {
     S.loadT += dt;
@@ -4472,6 +4486,7 @@ const Rally = (() => {
       if (b) { b.disabled = false; b.textContent = 'PARTIR ▶'; }
       Snd.sfx('select');
     }
+    if (freeMode() && S.mapMode !== 'duel' && (Input.pressed.up || Input.pressed.down)) setLoadRound(S.loadRound + (Input.pressed.down ? 1 : -1));
     if (Input.pressed.a || Input.pressed.start) loadGo();
     else if (Input.pressed.select) openGuide('loading');
     else if (Input.pressed.b) openMap({ sel: S.loadCi });
@@ -5583,6 +5598,7 @@ function settingsHtml() {
       <button class="mbtn srow" data-act="s_vib"><span>VIBRACIÓN</span><b>${Settings.vib ? 'ON' : 'OFF'}</b></button>
       ${Engine.touch ? `<button class="mbtn srow" data-act="s_pad"><span>BOTONES</span><b>${PAD_N[Settings.pad]}</b></button>` : ''}
       <button class="mbtn srow" data-act="s_crt"><span>FILTRO CRT</span><b>${Engine.crt ? 'ON' : 'OFF'}</b></button>
+      <button class="mbtn srow" data-act="s_free" aria-label="Modo prueba: todas las ciudades abiertas"><span>MODO PRUEBA</span><b>${Store.get('rally_free', false) ? 'ON' : 'OFF'}</b></button>
       <button class="mbtn" data-act="s_back">VOLVER</button>
       <p>◀ ▶ CAMBIAR · ${Engine.touch ? 'B' : 'X'} VOLVER</p>
     </div>`;
@@ -5594,6 +5610,11 @@ function settingsChange(act, d) {
   else if (act === 's_vib') { Settings.vib = !Settings.vib; Store.set('vib', Settings.vib); if (Settings.vib) UI.vibrate(40); }
   else if (act === 's_pad') { Settings.pad = (Settings.pad + d + 3) % 3; Store.set('padsize', Settings.pad); layout(); }
   else if (act === 's_crt') { Engine.crt = !Engine.crt; Store.set('crt', Engine.crt); }
+  else if (act === 's_free') {
+    const on = !Store.get('rally_free', false);
+    Store.set('rally_free', on);
+    UI.toast(on ? 'GAS RALLY: TODAS LAS CIUDADES Y RONDAS ABIERTAS' : 'MODO PRUEBA APAGADO');
+  }
   else if (act !== '') return;
   Snd.setVol(Settings.musV, Settings.sfxV);
   Snd.sfx('select');
