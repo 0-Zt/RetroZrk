@@ -2159,7 +2159,20 @@ const Rally = (() => {
     { n: 'ERRÁTICA', d: 'DOBLA AL AZAR Y A VECES CHOCA BARRERAS' },
   ];
   const PORDER = [0, 1, 2, 3, 0, 1, 0, 2];
-  const PAR = 210;   // tiempo para la tercera estrella (segundos jugando la ciudad)
+  const PAR = 210;
+  // patrullas por ronda en cada ciudad (dificultad NORMAL); sube despacio, como en el Rally-X original
+  const POLICE = { scl: [2, 3, 3], bue: [3, 3, 3], mex: [3, 4, 4], lax: [4, 4, 5], lon: [4, 5, 5], tyo: [5, 5, 6] };
+  const diff = () => clamp(Store.get('rally_diff', 1), 0, 2);   // 0 fácil · 1 normal · 2 difícil
+  function policeCount() {
+    if (S.mode === 'duel') return diff() === 0 ? 1 : 2;
+    return clamp(POLICE[CITIES[S.city].id][S.round] + Math.min(S.loop, 2) + diff() - 1, 1, 8);
+  }
+  // velocidad base: 72 px/s en Santiago hasta 82 (= Bólido) en Tokio; la segunda vuelta al mundo suma un poco
+  function policeSpeed() {
+    const L = S.city * 3 + S.round;
+    const k = Math.min(1 + 0.04 * S.loop, 0.88 + 0.008 * L + 0.04 * S.loop);
+    return BASE_SPEED * k * [0.9, 1, 1.08][diff()] * (S.mode === 'duel' ? 0.95 : 1);
+  }   // tiempo para la tercera estrella (segundos jugando la ciudad)
   // rivales del modo duelo (uno por ciudad, cada vez más hábil)
   const RIVALS = {
     scl: { name: 'LA JOYITA', car: 'muscle', c: 2 }, bue: { name: 'EL TANO', car: 'roadster', c: 1 },
@@ -2674,7 +2687,7 @@ const Rally = (() => {
     const roadTiles = [];
     for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (isRoad(x, y)) roadTiles.push([x, y]);
     const total = () => { let n = 0; for (const [x, y] of roadTiles) if (!rockAt[y * MW + x]) n++; return n; };
-    const nRocks = duel ? Math.min(2 + S.city, 6) : Math.min(2 + S.city + S.round + S.loop, 9);
+    const nRocks = duel ? Math.min(2 + S.city, 6) : Math.min(2 + S.city + S.loop + (diff() === 2 ? 1 : 0), 8);
     let tries = 0;
     const placed = [];
     const far = (x, y, [a, b], d) => Math.abs(x - a) + Math.abs(y - b) >= d;
@@ -2753,8 +2766,8 @@ const Rally = (() => {
     placeCar(player, startTile, 0);
     player.vis = true; player.puffQ = [];
     S.want = -1; S.wantT = 0;
-    const nE = duel ? 2 : Math.min(2 + S.city + S.round + S.loop, 8);
-    const fromTop = S.mode === 'tour' && S.city * 3 + S.round + S.loop * 6 >= 4;
+    const nE = policeCount();
+    const fromTop = S.mode === 'tour' && diff() > 0 && (S.city >= 3 || S.loop > 0);
     const corners = [[4, MH - 5], [MW - 5, 4], [4, 4], [MW - 5, MH - 5]];
     let i = 0;
     for (const e of enemies) {
@@ -3472,7 +3485,9 @@ const Rally = (() => {
     setupCross();
     hideHeli(); S.escape = null; S.spotted = false;
     S.playT = 0; S.icpOn = false; S.icpDone = false;
-    S.icpAt = S.mode === 'tour' && !S.bonus && (S.round === 2 || (S.round === 0 && (S.city > 0 || S.loop > 0))) ? (S.round === 2 ? 20 : 35) : Infinity;
+    // interceptor: ronda 3 a los 30 s; desde México también en la ronda 1 (en FÁCIL no aparece)
+    const icpR1 = S.round === 0 && (S.city >= 2 || S.loop > 0 || diff() === 2);
+    S.icpAt = S.mode === 'tour' && !S.bonus && diff() > 0 && (S.round === 2 || icpR1) ? (S.round === 2 ? 30 : 40) : Infinity;
     S.quakeT = rand(16, 26);
     S.state = 'intro'; S.t = 0; S.lastStep = -1;
     const c = CITIES[S.city];
@@ -3806,14 +3821,14 @@ const Rally = (() => {
     banner('¡ESCAPA!', 'LLEGA A LA META · SI EL FOCO TE ILUMINA, TODAS TE VEN');
     S.goT = 2.4;
     Snd.sfx('siren'); UI.vibrate([50, 50, 50, 50, 100]);
-    if (!S.icpOn) { S.icpDone = false; spawnIcp(); }
-    S.icpT = 999;
+    if (!S.icpOn && S.city >= 2 && diff() > 0) { S.icpDone = false; spawnIcp(); }
+    if (S.icpOn) S.icpT = 999;
   }
   function updateEscape(dt) {
     const X = S.escape, p = player;
     const [fx, fy] = fwdOf(p.ang);
     const dx = p.vx + fx * 24 - heli.x, dy = p.vy + fy * 24 - heli.y, d = Math.hypot(dx, dy);
-    const sp = (72 + S.city * 2.5) * dt;
+    const sp = (66 + S.city * 1.5) * [0.9, 1, 1.08][diff()] * dt;
     if (d > 1) {
       heli.x += (dx / d) * Math.min(d, sp); heli.y += (dy / d) * Math.min(d, sp);
       heli.ang += wrapA(-(Math.atan2(dy, dx) + Math.PI / 2) - heli.ang) * 0.06;
@@ -3980,7 +3995,7 @@ const Rally = (() => {
     if (S.rollT > 0 && (S.rollT -= dt) <= 0) { S.item = S.rollItem; Snd.sfx('powerup'); UI.toast(`${ITEMS[S.item].n} · ÚSALO CON ${Engine.touch ? 'B' : 'X'}`); }
     tickPuffs(p, dt, 'p');
     const prevFuel = S.fuel;
-    S.fuel = Math.max(0, S.fuel - dt * S.drain * (S.bonus ? 100 / 42 : 100 / 82));
+    S.fuel = Math.max(0, S.fuel - dt * S.drain * (S.bonus ? 100 / 42 : 100 / 82) * (diff() === 0 ? 0.85 : 1));
     if (prevFuel > 0 && S.fuel <= 0) { Snd.sfx('alarm'); UI.toast('¡SIN GAS!'); }
     if (S.fuel <= 0 && Math.random() < dt * 3) parts.emit(p.vx, p.vy, rand(-10, 10), rand(-10, 10), 0.5, 0x2a2638, 0x5a5468, 2, 3, 0, 1);
     let spd = (S.fuel > 0 ? S.spd : S.spd * 0.48) * (S.nitroT > 0 ? 1.6 : 1) * (S.boostT > 0 ? 1.15 : 1) * (S.slowT > 0 ? 0.5 : 1) * (zoneSlow(p) ? 0.45 : 1);
@@ -4090,7 +4105,7 @@ const Rally = (() => {
     }
   }
   function updateEnemies(dt) {
-    const base = BASE_SPEED * Math.min(1.1, 0.93 + 0.02 * (S.city * 3 + S.round) + 0.03 * S.loop) * (S.mode === 'duel' ? 0.95 : 1);
+    const base = policeSpeed();
     const idle = S.bonus && S.fuel > 0 && S.state === 'play';
     for (const e of enemies) {
       if (!e.active) continue;
@@ -4103,7 +4118,7 @@ const Rally = (() => {
       }
       if (idle && !e.icp) continue;
       const wild = e.persona === 3 && !e.icp;
-      advance(e, base * (e.icp ? 1.12 : 1) * (S.spotted ? 1.15 : 1) * (zoneSlow(e) ? 0.45 : 1) * dt, wild ? decideWildP : decideEnemyP, wild ? openP : openE);
+      advance(e, base * (e.icp ? 1.1 : 1) * (S.spotted ? 1.08 : 1) * (zoneSlow(e) ? 0.45 : 1) * dt, wild ? decideWildP : decideEnemyP, wild ? openP : openE);
       planAhead(e, decideEnemy);
       carVisual(e, predPlan, dt, 0.35, false);
       if (wild) {
@@ -4451,7 +4466,7 @@ const Rally = (() => {
       <div class="hud-ui load${ready ? ' ready' : ''}" id="load">
         <div class="lcard">
           <div class="lhead"><b><img class="flagimg" src="${flagURL(c.flag)}" alt="Bandera de ${c.country}"> ${c.name}</b>
-            <small>${c.country} · ${duel ? 'DUELO' : `GIRA · ${starStr(stars)}${best ? ` · RÉCORD ${pad6(best.score)}` : ''}`}</small></div>
+            <small>${c.country} · ${duel ? 'DUELO' : `GIRA · ${starStr(stars)}${best ? ` · RÉCORD ${pad6(best.score)}` : ''}`} · ${['FÁCIL', 'NORMAL', 'DIFÍCIL'][diff()]}</small></div>
           <div class="lbar"><i></i></div>
           <div class="lcols">
             <div class="lsec"><h3>${duel ? 'EL DUELO' : 'EN ESTA CIUDAD'}</h3><ul>${rows.map((t) => `<li>${t}</li>`).join('')}</ul></div>
@@ -4597,7 +4612,7 @@ const Rally = (() => {
     start, update, render, exit, retry, action, capturesStart, pauseInfo,
     peek: () => ({ S, player, enemies, cans, smokes, sel, CITIES, CARS, rival, civs, boxes, slicks, peds, bends, icp, owned, upg, paints,
       grid: () => grid, avLane: () => avLane, rockAt: () => rockAt, distC: () => distC, distV: () => distV, laneDir: () => laneDir }),
-    dbgCity: (ci) => { init(); resetRun(); S.hi = Store.get('hi_rally', 0); startCity(ci); },
+    dbgCity: (ci, round = 0) => { init(); resetRun(); S.hi = Store.get('hi_rally', 0); startCity(ci, round); },
     dbgDuel: (ci) => { init(); resetRun(); startDuel(ci); },
     dbgItem: (k) => { S.item = k; S.rollT = 0; },
     dbgCoins: (n) => { S.coins = n; Store.set('rally_coins', n); if (S.state === 'garage') refreshGarage(); },
@@ -5529,7 +5544,7 @@ const scr = $('#screen');
 let mode = 'menu', game = null, overlay = null, osel = 0, sel = Store.get('cart', 0) % 3;
 let toastT = 0;
 const Settings = { musV: Store.get('vol_mus', 5), sfxV: Store.get('vol_sfx', 5), vib: Store.get('vib', true), pad: Store.get('padsize', 1) };
-const PAD_K = [0.85, 1, 1.15], PAD_N = ['CHICOS', 'MEDIANOS', 'GRANDES'];
+const PAD_K = [0.85, 1, 1.15], PAD_N = ['CHICOS', 'MEDIANOS', 'GRANDES'], DIFF_N = ['FÁCIL', 'NORMAL', 'DIFÍCIL'];
 let settingsFrom = null;
 
 const UI = {
@@ -5598,6 +5613,7 @@ function settingsHtml() {
       <button class="mbtn srow" data-act="s_vib"><span>VIBRACIÓN</span><b>${Settings.vib ? 'ON' : 'OFF'}</b></button>
       ${Engine.touch ? `<button class="mbtn srow" data-act="s_pad"><span>BOTONES</span><b>${PAD_N[Settings.pad]}</b></button>` : ''}
       <button class="mbtn srow" data-act="s_crt"><span>FILTRO CRT</span><b>${Engine.crt ? 'ON' : 'OFF'}</b></button>
+      <button class="mbtn srow" data-act="s_diff"><span>DIFICULTAD</span><b>${DIFF_N[Store.get('rally_diff', 1)]}</b></button>
       <button class="mbtn srow" data-act="s_free" aria-label="Modo prueba: todas las ciudades abiertas"><span>MODO PRUEBA</span><b>${Store.get('rally_free', false) ? 'ON' : 'OFF'}</b></button>
       <button class="mbtn" data-act="s_back">VOLVER</button>
       <p>◀ ▶ CAMBIAR · ${Engine.touch ? 'B' : 'X'} VOLVER</p>
@@ -5610,6 +5626,7 @@ function settingsChange(act, d) {
   else if (act === 's_vib') { Settings.vib = !Settings.vib; Store.set('vib', Settings.vib); if (Settings.vib) UI.vibrate(40); }
   else if (act === 's_pad') { Settings.pad = (Settings.pad + d + 3) % 3; Store.set('padsize', Settings.pad); layout(); }
   else if (act === 's_crt') { Engine.crt = !Engine.crt; Store.set('crt', Engine.crt); }
+  else if (act === 's_diff') { Store.set('rally_diff', (Store.get('rally_diff', 1) + d + 3) % 3); }
   else if (act === 's_free') {
     const on = !Store.get('rally_free', false);
     Store.set('rally_free', on);
