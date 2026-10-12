@@ -2328,27 +2328,45 @@ const Rally = (() => {
   function findBends(city) {
     bends = new Map();
     if (!city.drift) return;
-    const straight = (x, y) => {
-      if (!isRoad(x, y)) return false;
+    const straight = (x, y, ax) => {
+      if (!isRoad(x, y) || avLane[y * MW + x]) return false;
       const L = isRoad(x - 1, y), Rr = isRoad(x + 1, y), U = isRoad(x, y - 1), D = isRoad(x, y + 1);
-      return (L && Rr && !U && !D) || (U && D && !L && !Rr);
+      return ax & 1 ? L && Rr && !U && !D : U && D && !L && !Rr;
     };
+    const cands = [];
     for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
       if (!isRoad(x, y) || avLane[y * MW + x]) continue;
       const ds = [0, 1, 2, 3].filter((d) => isRoad(x + DX[d], y + DY[d]));
       if (ds.length !== 2 || (ds[0] & 1) === (ds[1] & 1)) continue;
       const [a, b] = ds;
       if (isRoad(x + DX[a] + DX[b], y + DY[a] + DY[b])) continue;
-      if (!straight(x + DX[a], y + DY[a]) || !straight(x + DX[b], y + DY[b])) continue;
-      const tcx = x * TS + 8, tcy = y * TS + 8;
-      bends.set(y * MW + x, { x, y, a, b, cx: tcx + 16 * (DX[a] + DX[b]), cy: tcy + 16 * (DY[a] + DY[b]) });
+      if (!straight(x + DX[a], y + DY[a], a) || !straight(x + DX[b], y + DY[b], b)) continue;
+      const big = straight(x + 2 * DX[a], y + 2 * DY[a], a) && straight(x + 2 * DX[b], y + 2 * DY[b], b);
+      cands.push({ x, y, a, b, big });
     }
+    // cada brazo ocupa tramos de medio tile; dos curvas no pueden compartir tramo
+    const used = new Set();
+    const units = (c, r) => {
+      const out = [], cx = c.x * TS + 8, cy = c.y * TS + 8;
+      for (const d of [c.a, c.b]) for (let k = 1; k <= r / 8; k++) out.push(`${cx + DX[d] * (k * 8 - 4)},${cy + DY[d] * (k * 8 - 4)}`);
+      return out;
+    };
+    const take = (c, r) => {
+      const u = units(c, r);
+      if (u.some((k) => used.has(k))) return false;
+      u.forEach((k) => used.add(k));
+      const tcx = c.x * TS + 8, tcy = c.y * TS + 8;
+      bends.set(c.y * MW + c.x, { x: c.x, y: c.y, a: c.a, b: c.b, r, cx: tcx + r * (DX[c.a] + DX[c.b]), cy: tcy + r * (DY[c.a] + DY[c.b]) });
+      return true;
+    };
+    for (const c of cands) if (c.big) take(c, 32);   // primero las curvas largas
+    for (const c of cands) if (!bends.has(c.y * MW + c.x)) take(c, 16);
   }
   // punto donde se dibuja algo apoyado en una casilla (en las curvas, sobre el arco)
   function tilePos(x, y) {
     const bd = bends.get(y * MW + x);
     if (!bd) return [x * TS + 8, y * TS + 8];
-    const k = 16 * Math.SQRT1_2;
+    const k = bd.r * Math.SQRT1_2;
     return [bd.cx - k * (DX[bd.a] + DX[bd.b]), bd.cy - k * (DY[bd.a] + DY[bd.b])];
   }
   const inCross = (x, y) => !!S.cross && x >= S.cross.ix - 1 && x <= S.cross.ix + 2 && y >= S.cross.iy - 1 && y <= S.cross.iy + 2;
@@ -2480,22 +2498,6 @@ const Rally = (() => {
           g.fillStyle = 'rgba(12,8,30,0.30)';
           if (Rr) g.fillRect(px + 16, py + 3, sh, 13);
           if (D) g.fillRect(px + 3, py + 16, 13, sh);
-        }
-      }
-    }
-    // --- curvas redondeadas (ciudades de derrape): asfalto en el arco, vereda en la esquina exterior
-    for (const bd of bends.values()) {
-      const ax = DX[bd.a], ay = DY[bd.a], bx = DX[bd.b], by = DY[bd.b];
-      for (let Y = bd.cy - 34; Y < bd.cy + 34; Y++) for (let X = bd.cx - 34; X < bd.cx + 34; X++) {
-        const rx = X + 0.5 - bd.cx, ry = Y + 0.5 - bd.cy;
-        if (rx * ax + ry * ay > 0 || rx * bx + ry * by > 0) continue;
-        const d = Math.hypot(rx, ry), road = isRoad(Math.floor(X / TS), Math.floor(Y / TS));
-        if (d >= 24 && d < 34 && road) R(g, d < 25 ? CU : (X + Y) % 4 === 0 ? SE : SW, X, Y);
-        else if (d >= 8 && d < 24 && !road) R(g, ASPH, X, Y);
-        else if (d >= 4 && d < 8 && !road) R(g, d >= 7 ? CU : SW, X, Y);
-        if (d >= 15 && d < 17) {
-          const s = Math.atan2(-(rx * ax + ry * ay), -(rx * bx + ry * by)) * 16;
-          R(g, Math.floor(s / 4) % 2 === 0 ? '#e8dfb8' : ASPH, X, Y);
         }
       }
     }
@@ -2653,6 +2655,29 @@ const Rally = (() => {
         for (const [x, y] of rg.tiles) if (r() < 0.12) TREE[city.plazaTree](x * TS + 8, y * TS + 8, 3);
       }
     }
+    // --- curvas redondeadas (ciudades de derrape): asfalto en el arco, vereda en la esquina exterior
+    for (const bd of bends.values()) {
+      const ax = DX[bd.a], ay = DY[bd.a], bx = DX[bd.b], by = DY[bd.b], Rr = bd.r, n = Rr / 16;
+      const mine = new Set([bd.y * MW + bd.x]);
+      for (let k = 1; k <= n; k++) { mine.add((bd.y + ay * k) * MW + bd.x + ax * k); mine.add((bd.y + by * k) * MW + bd.x + bx * k); }
+      const span = Rr + 28;
+      for (let Y = bd.cy - span; Y < bd.cy + span; Y++) for (let X = bd.cx - span; X < bd.cx + span; X++) {
+        const rx = X + 0.5 - bd.cx, ry = Y + 0.5 - bd.cy;
+        if (rx * ax + ry * ay > 0 || rx * bx + ry * by > 0) continue;
+        const d = Math.hypot(rx, ry), tx = Math.floor(X / TS), ty = Math.floor(Y / TS), road = isRoad(tx, ty);
+        if (d >= Rr + 8 && road && mine.has(ty * MW + tx)) R(g, d < Rr + 9 ? CU : (X + Y) % 4 === 0 ? SE : SW, X, Y);
+        else if (d >= Rr - 8 && d < Rr + 8 && !road) R(g, ASPH, X, Y);
+        else if (d >= Rr - 12 && d < Rr - 8 && !road) R(g, d >= Rr - 9 ? CU : SW, X, Y);
+        if (d >= Rr - 1 && d < Rr + 1) {
+          const sl = Math.atan2(-(rx * ax + ry * ay), -(rx * bx + ry * by)) * Rr;
+          R(g, Math.floor(sl / 4) % 2 === 0 ? '#e8dfb8' : ASPH, X, Y);
+        } else if (d >= Rr - 6 && d < Rr + 6 && road) {
+          // limpia la línea recta vieja dentro de la curva
+          const px = X - (tx * TS), py = Y - (ty * TS);
+          if (px >= 7 && px <= 8 || py >= 7 && py <= 8) R(g, ASPH, X, Y);
+        }
+      }
+    }
     // asta con la bandera del país: plaza/parque/hito más cercano a la partida
     const sx = startTile[0] * TS + 8, sy = startTile[1] * TS + 8;
     const flagRegs = regions.filter((q) => ['zocalo', 'obelisco', 'plaza', 'park', 'cerro', 'pool'].includes(q.theme));
@@ -2755,10 +2780,17 @@ const Rally = (() => {
     S.bonus = !duel && S.round === 1;
     lastPT = -1; lastVT = -1;
     S.roadTiles = roadTiles;
+    // fondo del radar: calles en tenue, avenidas un poco más claras
+    const rb = S.radarBg || (S.radarBg = document.createElement('canvas'));
+    rb.width = MW * 2; rb.height = MH * 2;
+    const rg = rb.getContext('2d');
+    rg.clearRect(0, 0, rb.width, rb.height);
+    for (const [x, y] of roadTiles) { rg.fillStyle = avLane[y * MW + x] ? 'rgba(170,180,230,0.42)' : 'rgba(140,150,200,0.26)'; rg.fillRect(x * 2, y * 2, 2, 2); }
   }
   function placeCar(c, [tx, ty], dir) {
     c.x = tx * TS + 8; c.y = ty * TS + 8; c.dir = dir;
     c.vx = c.x; c.vy = c.y; c.hd = null; c.om = 0; c.lead = 0; c.ang = ROT[dir];
+    c.tpx = null; c.wvx = 0; c.wvy = 0; c.tvx = 0; c.tvy = 0; c.slip = 0; c.drift = 0;
     c.turnTile = -1; c.turnIn = dir; c.plan = null; c.tile = -1;
   }
   function resetActors(full) {
@@ -2927,50 +2959,58 @@ const Rally = (() => {
   const predPlan = (c, tx, ty) => (c.plan && c.plan.t === ty * MW + tx ? c.plan.dir : -1);
 
   // ---------------- dibujo de autos: curvas (derrape) y orientación
-  function curvePos(c, pred) {
-    const tx = Math.floor(c.x / TS), ty = Math.floor(c.y / TS), t = ty * MW + tx;
-    if (c.turnTile >= 0 && c.turnTile !== t) c.turnTile = -1;
-    for (let k = 0; k < 3; k++) {
-      const bx = tx + (k === 1 ? DX[c.dir] : k === 2 ? -DX[c.dir] : 0), by = ty + (k === 1 ? DY[c.dir] : k === 2 ? -DY[c.dir] : 0);
+  function curvePos(c) {
+    const tx = Math.floor(c.x / TS), ty = Math.floor(c.y / TS);
+    for (const k of [0, 1, -1, 2, -2]) {
+      const bx = tx + DX[c.dir] * k, by = ty + DY[c.dir] * k;
       if (bx < 0 || by < 0 || bx >= MW || by >= MH) continue;
       const bd = bends.get(by * MW + bx);
       if (!bd) continue;
-      const ox = c.x - (bx * TS + 8), oy = c.y - (by * TS + 8);
+      const Rr = bd.r, ox = c.x - (bx * TS + 8), oy = c.y - (by * TS + 8);
       const sa = ox * DX[bd.a] + oy * DY[bd.a], pa = ox * DY[bd.a] - oy * DX[bd.a];
       const sb = ox * DX[bd.b] + oy * DY[bd.b], pb = ox * DY[bd.b] - oy * DX[bd.b];
       let u = null;
-      if (Math.abs(pa) < 0.5 && sa >= 0 && sa <= 16) u = -sa;
-      else if (Math.abs(pb) < 0.5 && sb >= 0 && sb <= 16) u = sb;
+      if (Math.abs(pa) < 0.5 && sa >= 0 && sa <= Rr) u = -sa;
+      else if (Math.abs(pb) < 0.5 && sb >= 0 && sb <= Rr) u = sb;
       if (u == null) continue;
-      const ph = ((u + 16) / 32) * (Math.PI / 2), co = Math.cos(ph), si = Math.sin(ph);
-      return [bd.cx - 16 * (co * DX[bd.b] + si * DX[bd.a]), bd.cy - 16 * (co * DY[bd.b] + si * DY[bd.a])];
+      const ph = ((u + Rr) / (2 * Rr)) * (Math.PI / 2), co = Math.cos(ph), si = Math.sin(ph);
+      return [bd.cx - Rr * (co * DX[bd.b] + si * DX[bd.a]), bd.cy - Rr * (co * DY[bd.b] + si * DY[bd.a])];
     }
-    const cx = tx * TS + 8, cy = ty * TS + 8;
-    const s = DX[c.dir] ? (c.x - cx) * DX[c.dir] : (c.y - cy) * DY[c.dir];
-    let din = -1, dout = -1;
-    if (s < 0) { din = c.dir; dout = pred ? pred(c, tx, ty) : -1; }
-    else if (c.turnTile === t) { din = c.turnIn; dout = c.dir; }
-    if (din < 0 || dout < 0 || (din & 1) === (dout & 1)) return [c.x, c.y];
-    const u = (s + 8) / 16, a = (1 - u) * (1 - u), b = 2 * (1 - u) * u, d = u * u;
-    return [a * (cx - 8 * DX[din]) + b * cx + d * (cx + 8 * DX[dout]), a * (cy - 8 * DY[din]) + b * cy + d * (cy + 8 * DY[dout])];
+    return [c.x, c.y];
   }
   function carVisual(c, pred, dt, k, drifter) {
     if (CITIES[S.city].drift) {
-      const ox = c.vx, oy = c.vy;
-      const [nx, ny] = curvePos(c, pred);
-      if (Math.hypot(nx - ox, ny - oy) < 14) { c.vx = ox + (nx - ox) * 0.6; c.vy = oy + (ny - oy) * 0.6; } else { c.vx = nx; c.vy = ny; }
-      const mx = c.vx - ox, my = c.vy - oy;
+      const [tx, ty] = curvePos(c);
+      if (c.tpx == null || Math.hypot(tx - c.tpx, ty - c.tpy) > 24) {
+        c.vx = tx; c.vy = ty; c.wvx = 0; c.wvy = 0; c.tvx = 0; c.tvy = 0;
+      } else {
+        // velocidad del punto a seguir (si saltó, como en el giro anticipado, se ignora ese salto)
+        const mx = tx - c.tpx, my = ty - c.tpy;
+        if (Math.hypot(mx, my) < 4) { c.tvx = mx / dt; c.tvy = my / dt; }
+      }
+      c.tpx = tx; c.tpy = ty;
+      const W = drifter ? 10 : 15;
+      c.wvx += (W * W * (tx - c.vx) + 2 * W * (c.tvx - c.wvx)) * dt;
+      c.wvy += (W * W * (ty - c.vy) + 2 * W * (c.tvy - c.wvy)) * dt;
+      c.vx += c.wvx * dt; c.vy += c.wvy * dt;
+      // la trompa apunta hacia donde va el auto; en curvas se adelanta un poco (derrape)
       if (c.hd == null) c.hd = Math.atan2(DY[c.dir], DX[c.dir]);
-      if (mx * mx + my * my > 1e-3) {
-        const h = Math.atan2(my, mx), dh = wrapA(h - c.hd);
-        c.om = Math.abs(dh) < 1 ? dh / dt : 0;
+      if (c.tvx * c.tvx + c.tvy * c.tvy > 1) {
+        const h = Math.atan2(c.tvy, c.tvx), dh = wrapA(h - c.hd);
+        c.om = Math.abs(dh) < 0.6 ? dh / dt : 0;
+        // giro seco en un cruce: la trompa se pasa hacia adentro y la cola se abre
+        if (drifter && Math.abs(dh) >= 0.6 && Math.abs(dh) < 2.5) c.lead = Math.sign(dh) * 0.42;
         c.hd = h;
       } else c.om = 0;
       if (drifter) {
-        const tgt = clamp(c.om * 0.06, -0.55, 0.55);
-        c.lead += (tgt - c.lead) * (1 - Math.exp(-dt * (Math.abs(tgt) > Math.abs(c.lead) ? 14 : 4.5)));
+        const tgt = clamp(c.om * 0.1, -0.6, 0.6);
+        c.lead += (tgt - c.lead) * (1 - Math.exp(-dt * (Math.abs(tgt) > Math.abs(c.lead) ? 12 : 5)));
       } else c.lead = 0;
-      c.ang += wrapA(-(c.hd + c.lead + Math.PI / 2) - c.ang) * 0.5;
+      c.ang += wrapA(-(c.hd + c.lead + Math.PI / 2) - c.ang) * (drifter ? 0.28 : 0.4);
+      // ángulo de derrape: diferencia entre hacia dónde apunta y hacia dónde se mueve
+      const sp = Math.hypot(c.wvx, c.wvy);
+      c.slip = sp > 30 ? Math.abs(wrapA(-c.ang - Math.PI / 2 - Math.atan2(c.wvy, c.wvx))) : 0;
+      c.drift = Math.max(Math.abs(c.lead), c.slip > 1.4 ? 0 : c.slip);
     } else {
       c.vx = c.x; c.vy = c.y;
       const tg = ROT[c.dir], da = wrapA(tg - c.ang);
@@ -2980,9 +3020,9 @@ const Rally = (() => {
   }
   // marcas de neumático y mini turbo al salir de un derrape
   function driftFx(c, dt, isPlayer) {
-    const a = Math.abs(c.lead);
+    const a = c.drift || 0;
     if (a > 0.2) {
-      const b = c.hd + c.lead, fx = Math.cos(b), fy = Math.sin(b);
+      const b = -c.ang - Math.PI / 2, fx = Math.cos(b), fy = Math.sin(b);
       const rx = c.vx - fx * 6, ry = c.vy - fy * 6;
       skid.emit(rx - fy * 4, ry + fx * 4, 0, 0, 2.6, 0x23212d, 0x34364a, 2, 2);
       skid.emit(rx + fy * 4, ry - fx * 4, 0, 0, 2.6, 0x23212d, 0x34364a, 2, 2);
@@ -2990,7 +3030,7 @@ const Rally = (() => {
       if (!c.driftT) { if (isPlayer) Snd.sfx('skid'); }
       c.driftT = (c.driftT || 0) + dt;
     } else if (a < 0.12 && c.driftT) {
-      if (c.driftT > 0.12 && isPlayer) {
+      if (c.driftT > 0.25 && isPlayer) {
         S.boostT = 0.5; mission('boost');
         for (let i = 0; i < 6; i++) parts.emit(c.vx, c.vy, rand(-40, 40), rand(-40, 40), 0.35, 0x8fe8ff, 0x2f6ff2, 2, 1, 0, 3);
       }
@@ -4026,7 +4066,7 @@ const Rally = (() => {
     if (city.drift) driftFx(p, dt, true);
     // la cámara mira hacia donde vas
     {
-      const [lfx, lfy] = fwdOf(p.ang), LA = Math.min(56, Engine.W * 0.16), k = 1 - Math.exp(-dt * 2.2);
+      const lfx = DX[p.dir], lfy = DY[p.dir], LA = Math.min(56, Engine.W * 0.16), k = 1 - Math.exp(-dt * 2.2);
       S.lookX += (lfx * LA - S.lookX) * k; S.lookY += (lfy * LA * 0.75 - S.lookY) * k;
     }
     exhaust(p, S.nitroT > 0, dt);
@@ -4385,7 +4425,8 @@ const Rally = (() => {
     if (!rctx) return;
     const g = rctx, RW = MW * 2, RH = MH * 2;
     g.clearRect(0, 0, RW, RH);
-    g.fillStyle = 'rgba(79,227,255,0.07)';
+    if (S.radarBg) g.drawImage(S.radarBg, 0, 0);
+    g.fillStyle = 'rgba(79,227,255,0.05)';
     for (let x = 0; x < RW; x += 8) g.fillRect(x, 0, 1, RH);
     for (let y = 0; y < RH; y += 8) g.fillRect(0, y, RW, 1);
     g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 1;
@@ -4611,7 +4652,7 @@ const Rally = (() => {
   return {
     start, update, render, exit, retry, action, capturesStart, pauseInfo,
     peek: () => ({ S, player, enemies, cans, smokes, sel, CITIES, CARS, rival, civs, boxes, slicks, peds, bends, icp, owned, upg, paints,
-      grid: () => grid, avLane: () => avLane, rockAt: () => rockAt, distC: () => distC, distV: () => distV, laneDir: () => laneDir }),
+      grid: () => grid, avLane: () => avLane, rockAt: () => rockAt, distC: () => distC, distV: () => distV, laneDir: () => laneDir, mapCanvas: () => mapTex && mapTex.src }),
     dbgCity: (ci, round = 0) => { init(); resetRun(); S.hi = Store.get('hi_rally', 0); startCity(ci, round); },
     dbgDuel: (ci) => { init(); resetRun(); startDuel(ci); },
     dbgItem: (k) => { S.item = k; S.rollT = 0; },
