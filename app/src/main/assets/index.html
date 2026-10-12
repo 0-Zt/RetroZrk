@@ -66,7 +66,7 @@ button{font:inherit;color:inherit}
 .boss .bar i{display:block;height:100%;background:linear-gradient(90deg,#ff2d6f,#ff9a3c)}
 .banner{position:absolute;left:0;right:0;top:42%;transform:translateY(-50%);text-align:center;font-family:var(--display);font-weight:700;font-size:calc(var(--px)*16);color:var(--ink);letter-spacing:.06em;
   text-shadow:0 calc(var(--px)*2) 0 #000,0 0 calc(var(--px)*8) rgba(255,79,154,.8)}
-.banner small{display:block;font-family:var(--ui);font-weight:400;font-size:calc(var(--px)*6);color:var(--cyan);margin-top:calc(var(--px)*5);text-shadow:0 var(--px) 0 #000}
+.banner small{display:block;text-transform:uppercase;font-family:var(--ui);font-weight:400;font-size:calc(var(--px)*6);color:var(--cyan);margin-top:calc(var(--px)*5);text-shadow:0 var(--px) 0 #000}
 @keyframes blink{50%{opacity:.25}}
 /* ---------- Menú ---------- */
 #menu{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--px)*9);padding:calc(var(--px)*8)}
@@ -262,7 +262,7 @@ body.touch .panel.set p{display:none}
 .vbar i.on{background:var(--cyan)}
 .mbtn.sel .vbar i{background:rgba(26,11,30,.35)}
 .mbtn.sel .vbar i.on{background:#1a0b1e}
-.pinfo{width:100%;display:flex;flex-direction:column;gap:calc(var(--px)*2);font-size:calc(var(--px)*5);text-align:left;color:var(--muted)}
+.pinfo{width:100%;display:flex;flex-direction:column;gap:calc(var(--px)*2);font-size:calc(var(--px)*5.5);text-align:left;color:var(--muted);font-family:var(--display);font-weight:500}
 .pinfo b{color:var(--sun);font-weight:400}
 .pinfo .ok{color:#7dff7a}
 /* ---------- Rally: pantalla de carga y guía ---------- */
@@ -333,6 +333,141 @@ body.touch .panel.set p{display:none}
 .credits p b{color:var(--cyan);font-weight:400}
 @keyframes roll{from{transform:translateY(calc(var(--px)*46))}to{transform:translateY(-100%)}}
 .lbtns .arr + .arr{margin-right:auto}
+/* ---------- Gas Rally · menús (inicio, taller, mapa y tarjeta de embarque) ----------
+   Texto en Pixelify Sans con mayúscula inicial para leer cómodo; Silkscreen queda para botones y cifras. */
+.gar .gtitle{text-transform:none;letter-spacing:.02em}
+.gbar{position:absolute;right:calc(var(--px)*7);top:calc(var(--px)*7);display:flex;align-items:center;gap:calc(var(--px)*3);font-size:calc(var(--px)*7);text-shadow:0 var(--px) 0 #000}
+.gbar .coin{width:calc(var(--px)*6);height:calc(var(--px)*6)}
+.gbar .chip,.wtop .chip{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*6);letter-spacing:.02em;color:var(--ink);padding:calc(var(--px)*2) calc(var(--px)*4)}
+.gbar .chip b{color:var(--sun);font-weight:700}
+.gar .gpanel{font-family:var(--display);font-weight:500}
+.hhead b{display:block;font-family:var(--display);font-weight:700;font-size:calc(var(--px)*11);line-height:1.05;color:var(--ink)}
+.hhead span{display:block;margin-top:var(--px);font-size:calc(var(--px)*6);line-height:1.3;color:var(--muted);text-wrap:balance}
+.route{list-style:none;margin:0;padding:0 calc(var(--px)*2);display:flex;justify-content:space-between;position:relative}
+.route::before{content:"";position:absolute;left:calc(var(--px)*8);right:calc(var(--px)*8);top:calc(var(--px)*4.5);border-top:var(--px) dashed #5a4f8c}
+.route li{position:relative;display:flex;flex-direction:column;align-items:center;gap:calc(var(--px)*1.5)}
+.route img{display:block;width:calc(var(--px)*13);height:calc(var(--px)*9);image-rendering:pixelated;box-shadow:0 0 0 var(--px) #000}
+.route li.lock img{filter:grayscale(1) brightness(.5)}
+.route li.now img{box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) var(--pink),0 0 calc(var(--px)*6) rgba(255,79,154,.8);animation:now 1.2s steps(2) infinite}
+@keyframes now{50%{transform:translateY(calc(var(--px)*-1))}}
+.route li span{font-family:var(--ui);font-size:calc(var(--px)*4);line-height:1;letter-spacing:.06em;color:#5a5080}
+.route li.done span{color:#ffd23f}
+.runst{display:flex;gap:calc(var(--px)*6);font-size:calc(var(--px)*6);color:var(--muted)}
+.runst em,.wchip em{font-style:normal;font-weight:700;color:var(--ink)}
+.gbtn.go{font-family:var(--display);font-size:calc(var(--px)*8);letter-spacing:.01em;padding:calc(var(--px)*4) calc(var(--px)*6);box-shadow:0 calc(var(--px)*2) 0 #a8245e}
+.gbtn.go.sel,.tiles button.sel{outline:var(--px) solid #fff;outline-offset:var(--px)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--px)*3)}
+.tiles button{border:0;cursor:pointer;background:#241d47;color:var(--ink);box-shadow:inset 0 0 0 var(--px) #463c7c;display:flex;flex-direction:column;align-items:center;gap:calc(var(--px)*1.5);padding:calc(var(--px)*3) calc(var(--px)*1.5);font-family:var(--display)}
+.tiles button.sel{box-shadow:inset 0 0 0 var(--px) var(--cyan);background:#2a2456}
+.tiles img{width:calc(var(--px)*14);height:calc(var(--px)*14);image-rendering:pixelated}
+.tiles b{font-weight:700;font-size:calc(var(--px)*6)}
+.tiles small{font-weight:500;font-size:calc(var(--px)*4.5);line-height:1.2;color:var(--muted);text-align:center}
+.mis{margin:0;font-size:calc(var(--px)*5.5);line-height:1.35;color:var(--muted)}
+.mis b{color:var(--sun);font-weight:700;margin-right:calc(var(--px)*2)}
+.mis em{font-style:normal;color:var(--cyan);margin:0 calc(var(--px)*2)}
+.mis .coin{width:calc(var(--px)*4.5);height:calc(var(--px)*4.5);margin-right:var(--px)}
+.gar.hub.narrow .hhead span,.gar.hub.narrow .tiles small{display:none}
+.gar.hub.narrow .hhead b{font-size:calc(var(--px)*9)}
+.gar.hub.narrow .gpanel{gap:calc(var(--px)*3.5)}
+.gar.hub.narrow .gbtn.go{font-size:calc(var(--px)*7);padding:calc(var(--px)*3.5) calc(var(--px)*4)}
+/* taller */
+.gar.shop .gname small,.gstats,.glab{font-family:var(--display);font-weight:500}
+.gar.shop .gname small{font-size:calc(var(--px)*5.5)}
+.gstats{font-size:calc(var(--px)*5.5)}
+.glab{font-size:calc(var(--px)*5.5)}
+.glab em{font-size:calc(var(--px)*6);font-weight:700}
+.gar.shop .upg button{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*5.5)}
+.gar.shop .upg .pips{font-weight:500;font-size:calc(var(--px)*4.5);color:var(--cyan)}
+.gar.shop .gbtn{font-family:var(--display);font-size:calc(var(--px)*7);letter-spacing:.01em}
+/* mapa */
+.wtop{position:absolute;left:calc(var(--px)*7);top:calc(var(--px)*7);display:flex;align-items:center;gap:calc(var(--px)*4)}
+.wscore{font-family:var(--display);font-size:calc(var(--px)*6);gap:calc(var(--px)*3);align-items:center;top:calc(var(--px)*7);right:calc(var(--px)*7)}
+.wchip{background:rgba(14,10,30,.82);padding:calc(var(--px)*1.5) calc(var(--px)*4);color:var(--muted);box-shadow:0 0 0 var(--px) #000}
+.wscore .hcoin{background:rgba(14,10,30,.82);padding:calc(var(--px)*1.5) calc(var(--px)*4);box-shadow:0 0 0 var(--px) #000;margin-left:0}
+.wmode .chip{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*6);letter-spacing:.02em}
+.wname b{text-transform:none}
+.wname small{font-family:var(--display);font-weight:500;font-size:calc(var(--px)*6);color:var(--muted)}
+.wst{font-family:var(--display);font-weight:500;font-size:calc(var(--px)*6);line-height:1.35;color:var(--ink);text-wrap:balance;min-height:calc(var(--px)*8)}
+.wst.lock{color:var(--muted)}
+.stars{display:inline-flex;gap:calc(var(--px)*.5);margin-right:calc(var(--px)*2);font-family:var(--ui);vertical-align:baseline}
+.stars i{font-style:normal;color:#4a4270}
+.stars i.on{color:#ffd23f;text-shadow:0 0 calc(var(--px)*3) rgba(255,210,63,.6)}
+.gbtn.wgo{font-family:var(--display);font-size:calc(var(--px)*7.5);letter-spacing:.01em;padding:calc(var(--px)*4) calc(var(--px)*6);box-shadow:0 calc(var(--px)*2) 0 #a8245e}
+.gbtn.wgo.buy{box-shadow:0 calc(var(--px)*2) 0 #a8840c}
+.gbtn.wgo:disabled{box-shadow:none}
+/* tarjeta de embarque (pantalla de carga) */
+.ticket{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);width:min(calc(var(--px)*330),calc(100% - var(--px)*12));max-height:calc(100% - var(--px)*10);
+  padding:calc(var(--px)*2.5);text-shadow:none;font-family:var(--display);font-weight:500;color:#2b2342;
+  background:repeating-linear-gradient(-45deg,#e8483a 0 calc(var(--px)*5),#fbf4e6 calc(var(--px)*5) calc(var(--px)*7),#2f63d8 calc(var(--px)*7) calc(var(--px)*12),#fbf4e6 calc(var(--px)*12) calc(var(--px)*14));
+  box-shadow:0 0 0 var(--px) #000,0 calc(var(--px)*5) 0 rgba(0,0,0,.45);animation:tkin .45s steps(5) both}
+@keyframes tkin{from{transform:translateY(calc(var(--px)*24));opacity:0}to{transform:none;opacity:1}}
+.tk-main,.tk-stub{background:#fbf4e6;padding:calc(var(--px)*5) calc(var(--px)*6);display:flex;flex-direction:column;gap:calc(var(--px)*3);min-height:0;overflow:hidden}
+.tk-stub{border-left:var(--px) dashed #b3a383;background:#f4ead6}
+.tk-head{display:flex;align-items:baseline;gap:calc(var(--px)*3)}
+.tk-head b{font-weight:700;font-size:calc(var(--px)*7);color:#e8483a}
+.tk-head span{flex:1;font-size:calc(var(--px)*5);color:#7a6c8f}
+.tk-head .stars i{color:#cfc2a8;text-shadow:none}
+.tk-head .stars i.on{color:#e8a20c;text-shadow:none}
+.tk-route{display:flex;align-items:center;gap:calc(var(--px)*4)}
+.tk-route>div{display:flex;flex-direction:column;line-height:1}
+.tk-route>div.to{flex:1}
+.tk-route small{font-size:calc(var(--px)*4.5);color:#7a6c8f}
+.tk-route b{font-weight:700;font-size:calc(var(--px)*17);letter-spacing:.02em;color:#2b2342}
+.tk-route span{font-size:calc(var(--px)*5.5);color:#4a3e66;white-space:nowrap}
+.tk-plane{font-style:normal;font-size:calc(var(--px)*11);color:#2f63d8;align-self:center}
+.tk-meta{display:grid;grid-template-columns:repeat(4,auto);justify-content:space-between;gap:calc(var(--px)*4);margin:0;padding:calc(var(--px)*2.5) 0;border-top:var(--px) solid #ddd0b6;border-bottom:var(--px) solid #ddd0b6}
+.tk-meta div{display:flex;flex-direction:column;gap:var(--px)}
+.tk-meta dt{font-size:calc(var(--px)*4.5);color:#7a6c8f}
+.tk-meta dd{margin:0;font-weight:700;font-size:calc(var(--px)*6);color:#2b2342;white-space:nowrap}
+.ticket h3{margin:0;font-weight:700;font-size:calc(var(--px)*6);color:#2b2342}
+.ticket ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:calc(var(--px)*2);font-size:calc(var(--px)*5.5);line-height:1.3;color:#3a2f55}
+.ticket ul li{padding-left:calc(var(--px)*5);position:relative}
+.ticket ul li::before{content:"";position:absolute;left:0;top:.5em;width:calc(var(--px)*2);height:calc(var(--px)*2);background:#e8483a}
+.tk-tip{margin:0;font-size:calc(var(--px)*5);line-height:1.35;color:#6a5c80}
+.tk-tip b{color:#2f63d8;font-weight:700}
+.tk-mis li{display:grid;grid-template-columns:1fr auto auto;align-items:baseline;gap:calc(var(--px)*2)}
+.tk-mis li::before{background:#2f63d8!important}
+.tk-mis em{font-style:normal;font-weight:700;color:#2f63d8}
+.tk-mis .hcoin{font-style:normal;color:#a8730c;font-weight:700}
+.tk-mis .coin{width:calc(var(--px)*4.5);height:calc(var(--px)*4.5);margin-right:var(--px)}
+.tk-code{margin-top:auto;height:calc(var(--px)*11);background:#efe3c8;box-shadow:inset 0 0 0 var(--px) #ddd0b6;overflow:hidden}
+.tk-code i{display:block;height:100%;width:0;animation:lfill 1.2s steps(12) forwards;
+  background:repeating-linear-gradient(90deg,#2b2342 0 calc(var(--px)*1),transparent calc(var(--px)*1) calc(var(--px)*2),#2b2342 calc(var(--px)*2) calc(var(--px)*4),transparent calc(var(--px)*4) calc(var(--px)*5),#2b2342 calc(var(--px)*5) calc(var(--px)*6),transparent calc(var(--px)*6) calc(var(--px)*8),#2b2342 calc(var(--px)*8) calc(var(--px)*11),transparent calc(var(--px)*11) calc(var(--px)*12))}
+.load.ready .tk-code i{animation:none;width:100%}
+.tk-btns{display:flex;gap:calc(var(--px)*3);align-items:center}
+.tk-btns .gbtn{flex:1;font-family:var(--display);font-size:calc(var(--px)*7);letter-spacing:.01em;padding:calc(var(--px)*3.5) calc(var(--px)*4);box-shadow:0 calc(var(--px)*2) 0 #a8245e}
+.tk-btns .gbtn:disabled{box-shadow:none;background:#d8ccb4;color:#8a7c98}
+.tk-btns .chip,.ticket .lround .chip{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*5.5);letter-spacing:.02em;color:var(--ink)}
+.ticket .lround{display:flex;flex-wrap:wrap;align-items:center;gap:calc(var(--px)*2);font-size:calc(var(--px)*5);color:#6a5c80}
+.ticket .lround .chip.on{color:var(--cyan)}
+
+/* tarjetas (historia, récords, logros, final) y guía: mismo texto cómodo */
+.lcard{font-family:var(--display);font-weight:500;font-size:calc(var(--px)*5.5)}
+.lhead b{text-transform:none}
+.lhead small{font-size:calc(var(--px)*5.5);color:var(--muted);line-height:1.35}
+.lsec h3{font-family:var(--display);font-size:calc(var(--px)*6);letter-spacing:.02em}
+.lcard .gbtn,.lcard .chip{font-family:var(--display);letter-spacing:.01em}
+.lcard .gbtn{font-size:calc(var(--px)*7)}
+.achl li div{font-size:calc(var(--px)*4.8)}
+.achl li b{font-size:calc(var(--px)*5.5)}
+.rtab{font-family:var(--display)}
+.rtab li b{font-family:var(--ui)}
+.guide .gtitle{text-transform:none}
+.gtabs .chip{font-family:var(--display);font-weight:700;font-size:calc(var(--px)*5.5);letter-spacing:.02em}
+.gpage li div{font-family:var(--display);font-weight:500;font-size:calc(var(--px)*5.5)}
+.gpage li b{font-size:calc(var(--px)*6.5)}
+.gfoot .chip{font-family:var(--display);font-weight:700;letter-spacing:.02em}
+.tk-mis .coin,.mis .coin{margin-right:calc(var(--px)*1.5)}
+.tk-mis .hcoin{margin-left:calc(var(--px)*1)}
+@media (max-aspect-ratio:13/10){
+  .ticket{grid-template-columns:1fr;width:calc(100% - var(--px)*8)}
+  .tk-stub{border-left:0;border-top:var(--px) dashed #b3a383}
+  .tk-meta,.tk-tip{display:none}
+  .tk-main,.tk-stub{padding:calc(var(--px)*4) calc(var(--px)*5);gap:calc(var(--px)*2.5)}
+  .tk-route b{font-size:calc(var(--px)*13)}
+  .tk-code{height:calc(var(--px)*6)}
+}
+
 @media (max-aspect-ratio:13/10){.achl{grid-template-columns:1fr}}
 .ptag{font-family:var(--ui);font-size:calc(var(--px)*5);color:var(--sun);letter-spacing:.08em;vertical-align:middle;text-shadow:0 var(--px) 0 #000}
 .lround{display:flex;flex-wrap:wrap;align-items:center;gap:calc(var(--px)*3)}
@@ -848,6 +983,7 @@ const Snd = (() => {
         return ctx.createPeriodicWave(re, im);
       };
       pulse.p25 = mkPulse(0.25); pulse.p12 = mkPulse(0.125);
+      G = makeGraph(ctx, mus);
       if (pending) { const s = pending; pending = null; api.play(s); }
     }
     if (ctx.state === 'suspended') ctx.resume();
@@ -1019,112 +1155,189 @@ const Snd = (() => {
     list.forEach((b, i) => { const n = b.trim().split(/\s+/).length; if (n !== len) console.warn(`compás ${i + 1} tiene ${n} pasos (esperados ${len}): ${b}`); });
     return api.seq(list.join(' '));
   };
-  let song = null, step = 0, nextT = 0, timer = 0;
-  function drum(ch, t) {
-    if (ch === 't') {
-      // taiko: tambor grave con cuerpo
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.type = 'triangle'; o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.32);
-      g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
-      o.connect(g); g.connect(mus); o.start(t); o.stop(t + 0.4);
-      ch = 'x';
+  // ===== música =====
+  // Cada canción pasa por su propio "bus": compresor suave, eco (delay con filtro) y un leve
+  // bombeo del resto de la mezcla con cada golpe de bombo. Los instrumentos van más allá del
+  // chip clásico: sierra doble desafinada, bajo con filtro, pluck, pad y campana.
+  let song = null, step = 0, nextT = 0, timer = 0, G = null;
+  function makeGraph(c, dest) {
+    const g = { ctx: c };
+    const nb = c.createBuffer(1, c.sampleRate, c.sampleRate), nd = nb.getChannelData(0);
+    for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    g.noise = nb;
+    const pw = (duty) => {
+      const n = 48, re = new Float32Array(n), im = new Float32Array(n);
+      for (let k = 1; k < n; k++) re[k] = (2 / (k * Math.PI)) * Math.sin(k * Math.PI * duty);
+      return c.createPeriodicWave(re, im);
+    };
+    g.pulse = { p25: pw(0.25), p12: pw(0.125) };
+    g.comp = c.createDynamicsCompressor();
+    g.comp.threshold.value = -16; g.comp.knee.value = 8; g.comp.ratio.value = 3; g.comp.attack.value = 0.004; g.comp.release.value = 0.14;
+    g.post = c.createGain(); g.comp.connect(g.post); g.post.connect(dest);
+    g.out = c.createGain(); g.out.connect(g.comp);
+    g.duck = c.createGain(); g.duck.connect(g.out);
+    g.drums = c.createGain(); g.drums.gain.value = 0.9; g.drums.connect(g.out);
+    g.echoIn = c.createGain(); g.echoDel = c.createDelay(1.5); g.echoLp = c.createBiquadFilter(); g.echoFb = c.createGain(); g.echoWet = c.createGain();
+    g.echoLp.type = 'lowpass'; g.echoLp.frequency.value = 2600; g.echoFb.gain.value = 0.34; g.echoWet.gain.value = 0.6;
+    g.echoIn.connect(g.echoDel); g.echoDel.connect(g.echoLp); g.echoLp.connect(g.echoFb); g.echoFb.connect(g.echoDel);
+    g.echoLp.connect(g.echoWet); g.echoWet.connect(g.out);
+    return g;
+  }
+  function oscG(g, type) {
+    const o = g.ctx.createOscillator();
+    if (g.pulse[type]) o.setPeriodicWave(g.pulse[type]); else o.type = type;
+    return o;
+  }
+  // Cada canal es un sintetizador monofónico persistente (osciladores que quedan sonando y solo se
+  // automatizan): mucho más liviano que crear nodos por nota, ideal para teléfonos.
+  function makeVoice(g, ch, s) {
+    const c = g.ctx, type = ch.type || 'p25', v = { ch, oscs: [] };
+    v.amp = c.createGain(); v.amp.gain.value = 0;
+    let tail = v.amp;
+    if (ch.pan && c.createStereoPanner) { const pn = c.createStereoPanner(); pn.pan.value = ch.pan; v.amp.connect(pn); tail = pn; }
+    tail.connect(s.pump && ch.duck !== false ? g.duck : g.out);
+    if (ch.fx) { const sg = c.createGain(); sg.gain.value = ch.fx; tail.connect(sg); sg.connect(g.echoIn); }
+    const add = (w, mul, det, dest, gain) => {
+      const o = oscG(g, w);
+      if (det) o.detune.value = det;
+      if (gain != null) { const gg = c.createGain(); gg.gain.value = gain; o.connect(gg); gg.connect(dest); } else o.connect(dest);
+      v.oscs.push({ o, mul });
+    };
+    const lp = (cut, q) => { const fl = c.createBiquadFilter(); fl.type = 'lowpass'; fl.Q.value = q; fl.frequency.value = cut; fl.connect(v.amp); v.flt = fl; return fl; };
+    if (type === 'saw') { const fl = lp(ch.cut || 3000, ch.q || 1.4); add('sawtooth', 1, -7, fl, 0.6); add('sawtooth', 1, 7, fl, 0.6); v.fenv = [ch.cut || 3000, 0.75, 0.3]; }
+    else if (type === 'supersq') { const fl = lp(ch.cut || 3400, 0.7); add('square', 1, -9, fl, 0.5); add('square', 1, 9, fl, 0.5); }
+    else if (type === 'pad') { const fl = lp(ch.cut || 1300, 0.7); add('sawtooth', 1, -12, fl, 0.45); add('sawtooth', 1, 12, fl, 0.45); }
+    else if (type === 'bass') { const fl = lp(ch.cut || 1500, ch.q || 5); add('sawtooth', 1, 0, fl, 0.85); add('sine', 0.5, 0, v.amp, 0.45); v.fenv = [ch.cut || 1500, 0.32, 0.16]; }
+    else if (type === 'pluck') { const fl = lp(ch.cut || 4200, ch.q || 2); add('p25', 1, 0, fl, 0.9); v.fenv = [ch.cut || 4200, 0.09, 0.25]; }
+    else if (type === 'bell') {
+      add('sine', 1, 0, v.amp);
+      v.fm = c.createGain(); v.fm.gain.value = 0; v.fm.connect(v.amp);
+      add('sine', 3.01, 0, v.fm); add('sine', 2, 0, v.amp, 0.18);
     }
-    if (ch === 'c' || ch === 'g' || ch === 'x' || ch === 'b') {
-      // palmas (c), güiro raspado (g), golpe de parche (x), cencerro (b)
-      if (ch === 'b') {
-        for (const f of [540, 800]) { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'square'; o.frequency.value = f; g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.12); o.connect(g); g.connect(mus); o.start(t); o.stop(t + 0.14); }
-        return;
-      }
-      const s = ctx.createBufferSource(); s.buffer = noiseBuf;
-      const f = ctx.createBiquadFilter(), g = ctx.createGain();
-      f.type = 'bandpass';
-      if (ch === 'c') {
-        f.frequency.value = 1500; f.Q.value = 1.2;
-        for (let k = 0; k < 3; k++) { g.gain.setValueAtTime(0.5, t + k * 0.012); g.gain.exponentialRampToValueAtTime(0.05, t + k * 0.012 + 0.01); }
-        g.gain.setValueAtTime(0.45, t + 0.036); g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-        s.connect(f); f.connect(g); g.connect(mus); s.start(t, Math.random() * 0.5); s.stop(t + 0.17);
-      } else if (ch === 'g') {
-        f.frequency.setValueAtTime(2600, t); f.frequency.linearRampToValueAtTime(4200, t + 0.16); f.Q.value = 3;
-        for (let k = 0; k < 8; k++) { g.gain.setValueAtTime(0.32, t + k * 0.02); g.gain.linearRampToValueAtTime(0.05, t + k * 0.02 + 0.015); }
-        g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
-        s.connect(f); f.connect(g); g.connect(mus); s.start(t, Math.random() * 0.5); s.stop(t + 0.2);
-      } else {
-        f.frequency.value = 400; f.Q.value = 0.7;
-        g.gain.setValueAtTime(0.35, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-        s.connect(f); f.connect(g); g.connect(mus); s.start(t, Math.random() * 0.5); s.stop(t + 0.22);
-      }
-      return;
-    }
+    else if (type === 'sub') add('sine', 1, 0, v.amp);
+    else add(type, 1, 0, v.amp);
+    const t0 = c.currentTime;
+    for (const { o } of v.oscs) o.start(t0);
+    return v;
+  }
+  function stopVoices(vs, t) { for (const v of vs || []) for (const { o } of v.oscs) { try { o.stop(t); } catch (e) { /* ya detenido */ } } }
+  // los instrumentos nuevos suben un poco para que la melodía se oiga en el parlante del teléfono
+  const LIFT = { saw: 1.45, supersq: 1.45, pluck: 1.4, bell: 1.35, pad: 1.2, bass: 0.85 };
+  function noteOn(v, n, t, dt, s) {
+    const ch = v.ch, f = N(n.m + (s.tr || 0));
+    const len = n.len * dt, dur = ch.decay ? Math.min(ch.decay, len * 1.5) : len * (ch.gate || 0.9);
+    const att = ch.att != null ? ch.att : ch.type === 'pad' ? 0.09 : 0.004;
+    const rel = ch.rel != null ? ch.rel : ch.type === 'pad' ? 0.28 : 0.03;
+    const vol = ch.vol * (n.acc || 1) * (LIFT[ch.type] || 1), a = v.amp.gain;
+    for (const { o, mul } of v.oscs) o.frequency.setValueAtTime(f * mul, t);
+    a.setTargetAtTime(0, t - 0.006, 0.0015);              // corte breve: cada nota se ataca de nuevo
+    a.setTargetAtTime(vol, t, att / 3 + 0.0008);
+    if (ch.decay) a.setTargetAtTime(0, t + att, dur / 4);
+    else a.setTargetAtTime(0, t + Math.max(att, dur), rel / 3 + 0.002);
+    if (v.fenv) { const [c0, k, tm] = v.fenv; v.flt.frequency.setValueAtTime(c0, t); v.flt.frequency.setTargetAtTime(c0 * k, t, Math.min(tm, dur) / 3 + 0.01); }
+    if (v.fm) { v.fm.gain.setValueAtTime(0.55, t); v.fm.gain.setTargetAtTime(0, t, 0.08); }
+  }
+  // batería: voces de ruido y tono persistentes; solo se automatiza el volumen y la altura
+  // k bombo · s caja · h/o hi-hat cerrado/abierto · c palmas · r platillo · m tom · z shaker
+  // i aro · w subida de ruido (un compás) · g güiro · x golpe · b cencerro · t taiko. En mayúscula, más fuerte.
+  function drumVoices(g) {
+    if (g.dv) return g.dv;
+    const c = g.ctx, dv = {};
+    const nv = (type, f, q) => {
+      const n = c.createBufferSource(); n.buffer = g.noise; n.loop = true;
+      const fl = c.createBiquadFilter(); fl.type = type; fl.frequency.value = f; fl.Q.value = q;
+      const gg = c.createGain(); gg.gain.value = 0;
+      n.connect(fl); fl.connect(gg); gg.connect(g.drums); n.start();
+      return { fl, g: gg.gain };
+    };
+    const tv = (w) => { const o = c.createOscillator(); o.type = w; const gg = c.createGain(); gg.gain.value = 0; o.connect(gg); gg.connect(g.drums); o.start(); return { f: o.frequency, g: gg.gain }; };
+    dv.hat = nv('highpass', 8200, 0.7); dv.sn = nv('bandpass', 1900, 0.9); dv.shk = nv('bandpass', 6400, 1.5);
+    dv.clap = nv('bandpass', 1500, 1.2); dv.click = nv('highpass', 2200, 0.7); dv.cr = nv('highpass', 4600, 0.7);
+    dv.low = nv('bandpass', 400, 0.7); dv.rim = nv('bandpass', 3200, 3); dv.gui = nv('bandpass', 3000, 3);
+    dv.kick = tv('sine'); dv.body = tv('triangle'); dv.tom = tv('sine'); dv.bell1 = tv('square'); dv.bell2 = tv('square');
+    return (g.dv = dv);
+  }
+  function drum(g, ch0, t, s, dt) {
+    const ch = ch0.toLowerCase(), A = ch0 !== ch ? 1.35 : 1, dv = drumVoices(g);
+    const hit = (p, v, d) => { p.setValueAtTime(v * A, t); p.setTargetAtTime(0, t + 0.002, d / 4); };
     if (ch === 'k') {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.frequency.setValueAtTime(160, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
-      g.gain.setValueAtTime(0.75, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-      o.connect(g); g.connect(mus); o.start(t); o.stop(t + 0.17);
-    } else if (ch === 's' || ch === 'h' || ch === 'o') {
-      const s = ctx.createBufferSource(); s.buffer = noiseBuf;
-      const f = ctx.createBiquadFilter(); f.type = ch === 's' ? 'bandpass' : 'highpass'; f.frequency.value = ch === 's' ? 1800 : 7000;
-      const g = ctx.createGain(); const d = ch === 's' ? 0.13 : ch === 'o' ? 0.12 : 0.035;
-      g.gain.setValueAtTime(ch === 's' ? 0.5 : 0.16, t); g.gain.exponentialRampToValueAtTime(0.001, t + d);
-      s.connect(f); f.connect(g); g.connect(mus); s.start(t, Math.random() * 0.5); s.stop(t + d + 0.02);
+      dv.kick.f.setValueAtTime(155, t); dv.kick.f.setTargetAtTime(44, t, 0.035);
+      hit(dv.kick.g, 0.7, 0.24); hit(dv.click.g, 0.32, 0.014);
+      if (s.pump) { const dk = typeof s.pump === 'number' ? s.pump : 0.42; g.duck.gain.setValueAtTime(1 - dk, t); g.duck.gain.linearRampToValueAtTime(1, t + 0.22); }
+    } else if (ch === 's') { hit(dv.sn.g, 0.42, 0.17); dv.body.f.setValueAtTime(210, t); dv.body.f.setTargetAtTime(160, t, 0.03); hit(dv.body.g, 0.25, 0.09); }
+    else if (ch === 'h') hit(dv.hat.g, 0.17, 0.035);
+    else if (ch === 'o') hit(dv.hat.g, 0.16, 0.22);
+    else if (ch === 'r') hit(dv.cr.g, 0.15, 1.4);
+    else if (ch === 'm') { dv.tom.f.setValueAtTime(210, t); dv.tom.f.setTargetAtTime(105, t, 0.09); hit(dv.tom.g, 0.5, 0.28); }
+    else if (ch === 'z') hit(dv.shk.g, 0.15, 0.045);
+    else if (ch === 'i') hit(dv.rim.g, 0.3, 0.04);
+    else if (ch === 'x') hit(dv.low.g, 0.35, 0.2);
+    else if (ch === 't') { dv.tom.f.setValueAtTime(120, t); dv.tom.f.setTargetAtTime(48, t, 0.1); hit(dv.tom.g, 0.9, 0.38); hit(dv.low.g, 0.35, 0.2); }
+    else if (ch === 'b') { dv.bell1.f.setValueAtTime(540, t); dv.bell2.f.setValueAtTime(800, t); hit(dv.bell1.g, 0.06, 0.12); hit(dv.bell2.g, 0.06, 0.12); }
+    else if (ch === 'c') {
+      const p = dv.clap.g;
+      for (let k = 0; k < 3; k++) { p.setValueAtTime(0.5 * A, t + k * 0.012); p.setTargetAtTime(0.05, t + k * 0.012, 0.003); }
+      p.setValueAtTime(0.45 * A, t + 0.036); p.setTargetAtTime(0, t + 0.036, 0.03);
+    } else if (ch === 'g') {
+      const p = dv.gui.g;
+      dv.gui.fl.frequency.setValueAtTime(2600, t); dv.gui.fl.frequency.linearRampToValueAtTime(4200, t + 0.16);
+      for (let k = 0; k < 8; k++) { p.setValueAtTime(0.32 * A, t + k * 0.02); p.setTargetAtTime(0.05, t + k * 0.02, 0.005); }
+      p.setTargetAtTime(0, t + 0.16, 0.01);
+    } else if (ch === 'w') {
+      const c = g.ctx, d = dt * 16, n = c.createBufferSource(); n.buffer = g.noise;
+      const fl = c.createBiquadFilter(); fl.type = 'bandpass'; fl.Q.value = 3; fl.frequency.setValueAtTime(300, t); fl.frequency.exponentialRampToValueAtTime(7000, t + d);
+      const gg = c.createGain(); gg.gain.setValueAtTime(0.0001, t); gg.gain.exponentialRampToValueAtTime(0.16 * A, t + d); gg.gain.exponentialRampToValueAtTime(0.001, t + d + 0.06);
+      n.connect(fl); fl.connect(gg); gg.connect(g.drums); n.start(t); n.stop(t + d + 0.1);
     }
   }
+  function schedStep(g, s, vs, st, t0, dt) {
+    const t = t0 + (st % 2 ? (s.swing || 0) * dt : 0);
+    for (let i = 0; i < s.ch.length; i++) { const n = s.ch[i].notes[st % s.ch[i].notes.length]; if (n) noteOn(vs[i], n, t, dt, s); }
+    if (s.drums) for (const lay of Array.isArray(s.drums) ? s.drums : [s.drums]) { const d = lay[st % lay.length]; if (d && d !== '.') drum(g, d, t, s, dt); }
+  }
+  let voices = null;
   function sched() {
     if (!song || !ctx || ctx.state !== 'running') return;
     const dt = 60 / song.bpm / 4;
-    while (nextT < ctx.currentTime + 0.14) {
-      for (const ch of song.ch) {
-        const n = ch.notes[step % ch.notes.length];
-        if (!n) continue;
-        const o = osc(ch.type), g = ctx.createGain();
-        o.frequency.setValueAtTime(N(n.m + (song.tr || 0)), nextT);
-        const dur = ch.decay ? Math.min(ch.decay, n.len * dt * 1.5) : n.len * dt * (ch.gate || 0.9);
-        g.gain.setValueAtTime(0, nextT);
-        g.gain.linearRampToValueAtTime(ch.vol, nextT + 0.005);
-        if (!ch.decay) g.gain.setValueAtTime(ch.vol, nextT + dur * 0.55);
-        g.gain.exponentialRampToValueAtTime(0.001, nextT + dur);
-        o.connect(g); g.connect(mus); o.start(nextT); o.stop(nextT + dur + 0.02);
-      }
-      if (song.drums) for (const lay of Array.isArray(song.drums) ? song.drums : [song.drums]) { const d = lay[step % lay.length]; if (d !== '.') drum(d, nextT); }
-      nextT += dt; step++;
-    }
+    while (nextT < ctx.currentTime + 0.14) { schedStep(G, song, voices, step, nextT, dt); nextT += dt; step++; }
   }
   api.play = (s) => {
     if (!ctx) { pending = s; return; }
     if (song === s) return;
     api.stop();
-    song = s; step = 0; nextT = ctx.currentTime + 0.06;
+    song = s; step = 0; nextT = ctx.currentTime + 0.08;
+    voices = s.ch.map((ch) => makeVoice(G, ch, s));
+    G.post.gain.setTargetAtTime(s.gain || 1, ctx.currentTime, 0.02);
+    G.echoDel.delayTime.setValueAtTime((s.echo || 0.75) * 60 / s.bpm, ctx.currentTime);
+    G.duck.gain.cancelScheduledValues(ctx.currentTime); G.duck.gain.setValueAtTime(1, ctx.currentTime);
     timer = setInterval(sched, 25);
   };
-  api.stop = () => { clearInterval(timer); timer = 0; song = null; pending = null; };
+  api.stop = () => {
+    clearInterval(timer); timer = 0; song = null; pending = null;
+    if (voices && ctx) {
+      const t = ctx.currentTime;
+      for (const v of voices) { v.amp.gain.cancelScheduledValues(t); v.amp.gain.setTargetAtTime(0, t, 0.02); }
+      stopVoices(voices, t + 0.12);
+    }
+    voices = null;
+  };
+  // para pruebas: renderiza una canción sin reproducirla (devuelve un AudioBuffer)
+  api.render = (s, seconds = 20, sr = 22050) => {
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const c = new OAC(2, Math.ceil(sr * seconds), sr), g = makeGraph(c, c.destination);
+    g.echoDel.delayTime.value = (s.echo || 0.75) * 60 / s.bpm;
+    g.post.gain.value = s.gain || 1;
+    const vs = s.ch.map((ch) => makeVoice(g, ch, s)), dt = 60 / s.bpm / 4;
+    for (let st = 0, t = 0.05; t < seconds; st++, t += dt) schedStep(g, s, vs, st, t, dt);
+    return c.startRendering();
+  };
+  // largo de una canción antes de repetirse (segundos)
+  api.length = (s) => Math.max(...s.ch.map((c) => c.notes.length), ...(Array.isArray(s.drums) ? s.drums : [s.drums || '']).map((d) => d.length)) * 15 / s.bpm;
   return api;
 })();
 
 // canciones originales (no son las de los juegos clásicos)
 const SONGS = {
-  menu: {
-    bpm: 104,
-    ch: [
-      { type: 'triangle', vol: 0.5, gate: 0.85, notes: Snd.seq(
-        'A2 . A2 . A3 . A2 . A2 . A2 . A3 . A2 .  F2 . F2 . F3 . F2 . F2 . F2 . F3 . F2 .  C3 . C3 . C4 . C3 . C3 . C3 . C4 . C3 .  G2 . G2 . G3 . G2 . G2 . G2 . G3 . B2 .') },
-      { type: 'p12', vol: 0.11, gate: 0.7, notes: Snd.seq(
-        'A4 C5 E5 A5 E5 C5 A4 C5 E5 A5 E5 C5 A4 C5 E5 C5  F4 A4 C5 F5 C5 A4 F4 A4 C5 F5 C5 A4 F4 A4 C5 A4  C5 E5 G5 C6 G5 E5 C5 E5 G5 C6 G5 E5 C5 E5 G5 E5  G4 B4 D5 G5 D5 B4 G4 B4 D5 G5 D5 B4 G4 B4 D5 B4') },
-      { type: 'p25', vol: 0.12, gate: 0.95, notes: Snd.seq(
-        'E5 - - - - - - - C5 - - - B4 - - -  A4 - - - - - - - C5 - - - F5 - - -  E5 - - - - - - - G5 - - - E5 - - -  D5 - - - - - - - B4 - - - D5 - - -') },
-    ],
-    drums: 'k...h...s...h.h.k...h.k.s...h...',
-  },
-  rally: {
-    bpm: 152,
-    ch: [
-      { type: 'triangle', vol: 0.55, gate: 0.8, notes: Snd.seq(
-        'D3 . D3 D4 . D3 A2 . D3 . D3 D4 . D3 C#3 .  B2 . B2 B3 . B2 F#2 . B2 . B2 B3 . B2 A2 .  G2 . G2 G3 . G2 D3 . G2 . G2 G3 . G2 B2 .  A2 . A2 A3 . A2 E3 . A2 . A2 A3 . C#3 E3 .') },
-      { type: 'p25', vol: 0.13, gate: 0.85, notes: Snd.seq(
-        'F#5 . A5 . D6 - - . A5 . F#5 . E5 . D5 .  D5 . F#5 . B5 - - . A5 . F#5 . D5 . C#5 .  B4 . D5 . G5 - - . F#5 . E5 . D5 . B4 .  C#5 . E5 . A5 - - - G5 . F#5 . E5 . C#5 .') },
-      { type: 'p12', vol: 0.06, gate: 0.5, notes: Snd.seq(
-        'D5 A4 F#4 A4 D5 A4 F#4 A4 D5 A4 F#4 A4 D5 A4 F#4 A4  B4 F#4 D4 F#4 B4 F#4 D4 F#4 B4 F#4 D4 F#4 B4 F#4 D4 F#4  B4 G4 D4 G4 B4 G4 D4 G4 B4 G4 D4 G4 B4 G4 D4 G4  C#5 A4 E4 A4 C#5 A4 E4 A4 C#5 A4 E4 A4 C#5 A4 E4 A4') },
-    ],
-    drums: 'k.h.s.h.k.hks.h.',
-  },
   contra: {
     bpm: 146,
     ch: [
@@ -1138,142 +1351,424 @@ const SONGS = {
     drums: 'k.hks.h.k.hks.hhk.hks.h.kkhks.hs',
   },
 };
-// ---------- música por ciudad (composiciones originales en estilos de cada lugar)
+// ---------- las canciones del Gas Rally están en music.js
 const B = Snd.bars;
-// SANTIAGO · cueca chiptune en 6/8 con hemiola de palmas (Re mayor)
-SONGS.scl = {
-  bpm: 140,
-  ch: [
-    { type: 'triangle', vol: 0.55, gate: 0.85, notes: B(12, ['D2 - - - - - A2 - - - - -', 'G2 - - - - - D2 - - - - -', 'A2 - - - - - E2 - - - - -', 'D2 - - - - - A2 - - - - -', 'D2 - - - - - F#2 - - - - -', 'G2 - - - - - B2 - - - - -', 'A2 - - - - - C#3 - - - - -', 'D3 - - - - - A2 - - - - -']) },
-    { type: 'p12', vol: 0.07, decay: 0.16, notes: B(12, ['D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . G4 . B4 . D4 . G4 . B4 .', 'C#4 . E4 . A4 . C#4 . E4 . G4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . G4 . B4 . D4 . G4 . B4 .', 'C#4 . E4 . A4 . C#4 . E4 . G4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .']) },
-    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(12, ['A4 - D5 - F#5 - E5 - D5 - C#5 -', 'B4 - D5 - G5 - - - F#5 - E5 -', 'C#5 - E5 - A5 - G5 - F#5 - E5 -', 'F#5 - E5 - D5 - - - - - . .', 'D5 - F#5 - A5 - - - B5 - A5 -', 'G5 - B5 - D6 - - - B5 - G5 -', 'A5 - G5 - F#5 - E5 - C#5 - E5 -', 'D5 - - - - - . . F#4 - A4 -']) },
-    { type: 'p12', vol: 0.06, gate: 0.85, notes: B(12, ['F#4 - A4 - D5 - C#5 - B4 - A4 -', 'G4 - B4 - D5 - - - D5 - C#5 -', 'A4 - C#5 - E5 - E5 - D5 - C#5 -', 'D5 - C#5 - A4 - - - - - . .', 'A4 - D5 - F#5 - - - G5 - F#5 -', 'D5 - G5 - B5 - - - G5 - D5 -', 'E5 - E5 - D5 - C#5 - A4 - C#5 -', 'A4 - - - - - . . D4 - F#4 -']) },
-  ],
-  drums: ['k.....k.....k...........', '....c...c.......c.....c.', '..h...h...h...h...h...h.'],
-};
-// BUENOS AIRES · cumbia con güiro y teclado (La menor, cadencia andaluza)
-SONGS.bue = {
-  bpm: 98,
-  ch: [
-    { type: 'triangle', vol: 0.6, gate: 0.7, notes: B(16, ['A2 - . . E3 - . . A2 - . . E3 - . .', 'G2 - . . D3 - . . G2 - . . D3 - . .', 'F2 - . . C3 - . . F2 - . . C3 - . .', 'E2 - . . B2 - . . E2 - . . G#2 - . .']) },
-    { type: 'p12', vol: 0.06, decay: 0.12, notes: B(16, ['. . C5 . . . E5 . . . C5 . . . E5 .', '. . B4 . . . D5 . . . B4 . . . D5 .', '. . A4 . . . C5 . . . A4 . . . C5 .', '. . G#4 . . . B4 . . . G#4 . . . B4 .']) },
-    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(16, [
-      'E5 - - . E5 . D5 . C5 - - . B4 . C5 .', 'D5 - - . D5 . C5 . B4 - - . A4 . B4 .', 'C5 - - . C5 . B4 . A4 - - . G#4 . A4 .', 'B4 - - - - - - - G#4 - - - E4 - - -',
-      'A5 - . A5 G5 . E5 . G5 - . G5 E5 . C5 .', 'D5 - . D5 E5 . D5 . B4 - . B4 G4 . B4 .', 'C5 - . C5 D5 . C5 . A4 - . A4 B4 . C5 .', 'B4 - - . G#4 . B4 . E5 - - - D5 . B4 .']) },
-  ],
-  drums: ['k.......k.......', 'g.hhg.hhg.hhg.hh', '....s.......s..s', '......b.......b.'],
-};
-// CIUDAD DE MÉXICO · ranchera 2/4 con trompetas en terceras (Sol mayor)
-SONGS.mex = {
-  bpm: 150,
-  ch: [
-    { type: 'triangle', vol: 0.6, gate: 0.6, notes: B(8, ['G2 - - - D2 - - -', 'G2 - - - B2 - - -', 'D2 - - - A2 - - -', 'D2 - - - F#2 - - -', 'D2 - - - A2 - - -', 'D2 - - - C3 - - -', 'G2 - - - D2 - - -', 'G2 - - - D2 - - -']) },
-    { type: 'p12', vol: 0.07, decay: 0.09, notes: B(8, ['. . B4 . . . D5 .', '. . B4 . . . D5 .', '. . C5 . . . F#4 .', '. . C5 . . . F#4 .', '. . C5 . . . F#4 .', '. . C5 . . . A4 .', '. . B4 . . . D5 .', '. . B4 . . . D5 .']) },
-    { type: 'p25', vol: 0.12, gate: 0.8, notes: B(8, ['D5 - B4 - G4 - B4 -', 'D5 - - - E5 - D5 -', 'C5 - A4 - F#4 - A4 -', 'C5 - - - D5 - C5 -', 'A4 - C5 - E5 - D5 -', 'C5 - A4 - F#4 - A4 -', 'G4 - B4 - D5 - G5 -', 'G5 - - - . . D5 -']) },
-    { type: 'p25', vol: 0.08, gate: 0.8, notes: B(8, ['B4 - G4 - D4 - G4 -', 'B4 - - - C5 - B4 -', 'A4 - F#4 - D4 - F#4 -', 'A4 - - - B4 - A4 -', 'F#4 - A4 - C5 - B4 -', 'A4 - F#4 - D4 - F#4 -', 'D4 - G4 - B4 - D5 -', 'D5 - - - . . B4 -']) },
-  ],
-  drums: ['k...k...', '..h...h.', '........c.......'],
-};
-// LOS ÁNGELES · surf rock con trémolo (Mi menor)
-SONGS.lax = {
-  bpm: 168,
-  ch: [
-    { type: 'triangle', vol: 0.55, gate: 0.6, notes: B(16, ['E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'C3 . C3 . C3 . C3 . E3 . E3 . G2 . G2 .', 'D3 . D3 . D3 . D3 . F#2 . F#2 . A2 . A2 .', 'E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'E2 . E2 . E2 . E2 . G2 . G2 . A2 . B2 .', 'C3 . C3 . C3 . C3 . E3 . E3 . G2 . G2 .', 'B2 . B2 . B2 . B2 . D#3 . D#3 . F#2 . F#2 .']) },
-    { type: 'p25', vol: 0.1, gate: 0.55, notes: B(16, [
-      'E5 E5 E5 E5 E5 E5 E5 E5 G5 G5 G5 G5 F#5 F#5 F#5 F#5', 'E5 E5 E5 E5 D5 D5 D5 D5 B4 B4 B4 B4 D5 D5 D5 D5', 'C5 C5 C5 C5 E5 E5 E5 E5 G5 G5 G5 G5 E5 E5 E5 E5', 'D5 D5 D5 D5 F#5 F#5 F#5 F#5 A5 A5 A5 A5 F#5 F#5 D5 D5',
-      'B5 B5 B5 B5 A5 A5 G5 G5 E5 E5 E5 E5 G5 G5 A5 A5', 'B5 B5 B5 B5 B5 B5 B5 B5 . . . . . . . .', 'C6 C6 C6 C6 B5 B5 A5 A5 G5 G5 G5 G5 E5 E5 E5 E5', 'D#5 D#5 D#5 D#5 F#5 F#5 F#5 F#5 B5 B5 B5 B5 A5 A5 F#5 F#5']) },
-    { type: 'p12', vol: 0.04, decay: 0.3, notes: B(16, ['E4 . . . . . . . B3 . . . . . . .', 'E4 . . . . . . . B3 . . . . . . .', 'C4 . . . . . . . G3 . . . . . . .', 'D4 . . . . . . . A3 . . . . . . .']) },
-  ],
-  drums: ['k.......k.k.....', '....s.......s...', 'h.h.h.h.h.h.h.hh'],
-};
-// LONDRES · punk británico rápido (Mi mixolidio: I - bVII - IV - I)
-SONGS.lon = {
-  bpm: 172,
-  ch: [
-    { type: 'triangle', vol: 0.55, gate: 0.55, notes: B(16, ['E2 . E2 . E2 . E2 . E2 . E2 . E2 . E2 .', 'D2 . D2 . D2 . D2 . D2 . D2 . D2 . D2 .', 'A2 . A2 . A2 . A2 . A2 . A2 . A2 . A2 .', 'E2 . E2 . E2 . E2 . B2 . B2 . E2 . E2 .']) },
-    { type: 'square', vol: 0.045, gate: 0.5, notes: B(16, ['B3 . B3 . B3 . B3 . B3 . B3 . B3 . B3 .', 'A3 . A3 . A3 . A3 . A3 . A3 . A3 . A3 .', 'E4 . E4 . E4 . E4 . E4 . E4 . E4 . E4 .', 'B3 . B3 . B3 . B3 . F#4 . F#4 . B3 . B3 .']) },
-    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(16, [
-      'G#4 - B4 - E5 - - - D5 - B4 - G#4 - . .', 'F#4 - A4 - D5 - - - C#5 - A4 - F#4 - . .', 'A4 - C#5 - E5 - F#5 - E5 - C#5 - A4 - B4 -', 'B4 - - - G#4 - - - E4 - - - . . . .',
-      'E5 - E5 - E5 - D5 - E5 - - - B4 - - -', 'D5 - D5 - D5 - C#5 - D5 - - - A4 - - -', 'C#5 - E5 - A5 - G#5 - F#5 - E5 - C#5 - E5 -', 'E5 - - - - - - - . . . . B4 - D5 -']) },
-  ],
-  drums: ['k...k...k...k.k.', '....s.......s...', '..h...h...h...h.'],
-};
-// TOKIO · escala japonesa (miyako-bushi en Mi) con koto, bajo sintetizado y taiko
-SONGS.tyo = {
-  bpm: 116,
-  ch: [
-    { type: 'triangle', vol: 0.55, gate: 0.7, notes: B(16, ['E2 - - . . . E3 . E2 - - . . . B1 .', 'C2 - - . . . C3 . A1 - - . . . B1 .', 'E2 - - . . . E3 . E2 - - . . . B1 .', 'A1 - - . . . A2 . F1 - - . . . B1 .']) },
-    { type: 'p12', vol: 0.07, decay: 0.22, notes: B(16, ['E4 . B4 . E5 . F5 . E5 . B4 . A4 . B4 .', 'C5 . A4 . F4 . A4 . C5 . E5 . F5 . E5 .', 'E4 . B4 . E5 . F5 . E5 . B4 . A4 . B4 .', 'A4 . C5 . F5 . E5 . C5 . B4 . A4 . F4 .']) },
-    { type: 'p25', vol: 0.11, gate: 0.92, notes: B(16, [
-      'E5 - - - F5 - - - E5 - - - B4 - - -', 'C5 - - - B4 - A4 - B4 - - - - - - -', 'A5 - - - B5 - - - C6 - - - B5 - A5 -', 'F5 - - - E5 - - - - - - - . . . .',
-      'B5 - - - C6 - B5 - A5 - - - F5 - - -', 'E5 - F5 - E5 - C5 - B4 - - - A4 - - -', 'B4 - - - C5 - - - E5 - - - F5 - - -', 'E5 - - - - - - - - - - - . . . .']) },
-  ],
-  drums: ['t.......t...t...', '....s.......s...', 'h.h.h.h.h.h.h.h.', '..............x.'],
-};
-// GARAJE · groove funky tranquilo (Fa mayor) mientras eliges auto
-SONGS.garage = {
-  bpm: 100,
-  ch: [
-    { type: 'triangle', vol: 0.55, gate: 0.6, notes: B(16, ['F2 . . F2 . . A2 . C3 . . C3 . . A2 .', 'Bb1 . . Bb1 . . D2 . F2 . . F2 . . D2 .', 'G2 . . G2 . . Bb2 . D3 . . D3 . . Bb2 .', 'C2 . . C2 . . E2 . G2 . . G2 E2 . C2 .']) },
-    { type: 'p12', vol: 0.06, decay: 0.14, notes: B(16, ['. . A4 . . . C5 . . . A4 . . . C5 .', '. . F4 . . . Bb4 . . . F4 . . . D5 .', '. . Bb4 . . . D5 . . . Bb4 . . . F5 .', '. . G4 . . . Bb4 . . . E5 . . . G4 .']) },
-    { type: 'p25', vol: 0.11, gate: 0.85, notes: B(16, [
-      'C5 - - . A4 . C5 . F5 - E5 - D5 . C5 .', 'D5 - - . Bb4 . D5 . F5 - - - . . . .', 'D5 - - . Bb4 . D5 . G5 - F5 - E5 . D5 .', 'E5 - - . C5 . E5 . G5 - - - . . . .',
-      'F5 - . F5 E5 . C5 . A4 - . C5 D5 . C5 .', 'Bb4 - . Bb4 C5 . D5 . F5 - - - E5 . D5 .', 'D5 - . D5 E5 . F5 . G5 - . F5 E5 . D5 .', 'C5 - - - E5 - - - F5 - - - . . . .']) },
-  ],
-  drums: ['k.......k.k.....', '....s.......s...', 'h.h.h.h.h.h.h.hh'],
-};
-// VICTORIA · fanfarria para el final de la gira y los récords (Do mayor)
-SONGS.victory = {
-  bpm: 132,
-  ch: [
-    { type: 'triangle', vol: 0.55, gate: 0.7, notes: B(16, ['C3 . C3 . G2 . G2 . A2 . A2 . E2 . E2 .', 'F2 . F2 . C3 . C3 . G2 . G2 . G2 . B2 .']) },
-    { type: 'p12', vol: 0.07, decay: 0.16, notes: B(16, ['E4 G4 C5 G4 E4 G4 C5 G4 E4 A4 C5 A4 E4 A4 C5 A4', 'F4 A4 C5 A4 F4 A4 C5 A4 G4 B4 D5 B4 G4 B4 D5 B4']) },
-    { type: 'p25', vol: 0.12, gate: 0.9, notes: B(16, ['C5 - E5 - G5 - C6 - - - G5 - C6 - - -', 'A5 - - - F5 - A5 - G5 - - - - - . .', 'C5 - E5 - G5 - E6 - - - D6 - C6 - - -', 'A5 - C6 - B5 - G5 - C6 - - - - - . .']) },
-  ],
-  drums: ['k...k...k...k.k.', '....s.......s...', 'h.h.h.h.h.h.h.h.', '..............c.'],
-};
-// PERSECUCIÓN · escape final con helicóptero (Mi menor, rápido y tenso)
-SONGS.chase = {
-  bpm: 172,
-  ch: [
-    { type: 'triangle', vol: 0.6, gate: 0.5, notes: B(16, ['E2 E2 E3 E2 E2 E3 E2 E3 E2 E2 E3 E2 G2 G3 A2 A3', 'C2 C2 C3 C2 C2 C3 C2 C3 D2 D2 D3 D2 D2 D3 B1 B2']) },
-    { type: 'square', vol: 0.04, gate: 0.4, notes: B(16, ['B3 . B3 . B3 . B3 . B3 . B3 . D4 . E4 .', 'G3 . G3 . G3 . G3 . A3 . A3 . F#3 . F#3 .']) },
-    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(16, ['E5 - - B4 E5 - G5 - F#5 - E5 - D5 - B4 -', 'C5 - - G4 C5 - E5 - D5 - - - F#5 - - -', 'E5 - G5 - B5 - - - A5 - G5 - F#5 - E5 -', 'C5 - E5 - G5 - F#5 - D5 - - - B4 - - -']) },
-  ],
-  drums: ['k.k.k.k.k.k.k.k.', '....s.......s..s', 'hhhhhhhhhhhhhhhh'],
-};
-// ARENA · rock de estadio con palmas (La menor)
-SONGS.arena = {
-  bpm: 150,
-  ch: [
-    { type: 'square', vol: 0.05, gate: 0.6, notes: B(16, ['A2 A2 A3 A2 A2 A2 G2 A2 A2 A2 A3 A2 C3 C3 D3 D3', 'F2 F2 F3 F2 F2 F2 E2 F2 G2 G2 G3 G2 E2 E2 E3 E2']) },
-    { type: 'triangle', vol: 0.55, gate: 0.6, notes: B(16, ['A1 . A1 . A1 . A1 . A1 . A1 . C2 . D2 .', 'F1 . F1 . F1 . F1 . G1 . G1 . E1 . E1 .']) },
-    { type: 'p25', vol: 0.12, gate: 0.85, notes: B(16, ['A4 - C5 - E5 - - D5 E5 - - - G5 - E5 -', 'F5 - E5 - D5 - C5 - D5 - - - B4 - - -', 'A5 - - - G5 - E5 - G5 - - A5 - - - -', 'F5 - - E5 - - D5 - E5 - - - - - . .']) },
-  ],
-  drums: ['k...k...k...k...', '....c.......c...', '..h...h...h...h.', '....s.......s..s'],
-};
-// PUEBLO NEVADO · vals invernal con cascabeles (Re mayor)
-SONGS.snow = {
-  bpm: 116,
-  ch: [
-    { type: 'triangle', vol: 0.5, gate: 0.7, notes: B(12, ['D2 - - . . . A2 - - . . .', 'G2 - - . . . D2 - - . . .', 'E2 - - . . . A2 - - . . .', 'D2 - - . . . A1 - - . . .']) },
-    { type: 'p12', vol: 0.06, decay: 0.2, notes: B(12, ['. . F#4 . A4 . . . F#4 . A4 .', '. . G4 . B4 . . . G4 . B4 .', '. . G4 . B4 . . . E4 . C#5 .', '. . F#4 . A4 . . . E4 . C#5 .']) },
-    { type: 'p25', vol: 0.11, gate: 0.9, notes: B(12, ['F#5 - - - - - A5 - - G5 - -', 'B5 - - - - - D5 - - - - -', 'E5 - - F#5 - - G5 - - B5 - -', 'A5 - - - - - . . . . . .', 'D6 - - - - - C#6 - - B5 - -', 'A5 - - - - - F#5 - - - - -', 'G5 - - E5 - - C#5 - - E5 - -', 'D5 - - - - - . . . . . .']) },
-  ],
-  drums: ['k...........', '....h...h...', 'g.g.g.g.g.g.'],
-};
-// CUARTO DE JUGUETES · caja de música (Sol mayor)
-SONGS.toy = {
-  bpm: 96,
-  ch: [
-    { type: 'triangle', vol: 0.4, gate: 0.5, notes: B(16, ['G2 . . . D3 . . . G2 . . . D3 . . .', 'C3 . . . G2 . . . D3 . . . D2 . . .']) },
-    { type: 'p12', vol: 0.09, decay: 0.28, notes: B(16, [
-      'B5 . D6 . G6 . D6 . B5 . D6 . A5 . B5 .', 'C6 . E6 . G6 . E6 . D6 . C6 . B5 . A5 .', 'B5 . D6 . G6 . A6 . B6 . A6 . G6 . D6 .', 'E6 . C6 . A5 . F#5 . G5 . . . . . . .']) },
-    { type: 'triangle', vol: 0.18, decay: 0.3, notes: B(16, ['G4 . . . B4 . . . D5 . . . B4 . . .', 'E4 . . . G4 . . . F#4 . . . A4 . . .']) },
-  ],
-  drums: ['........', '..h...h.', 'b...............'],
-};
+// ---------- canciones largas por secciones (intro, A, B, puente…), para que no se repitan a cada rato.
+// parts: { A: { bars: 8, bajo: [compases…], drums: [capas…], fill: [capas del último compás] } }
+// Cada patrón se repite hasta llenar la sección; si un canal no tiene patrón, calla.
+function mkSong(d) {
+  const steps = d.steps || 16, names = Object.keys(d.ch), notes = {}, lays = [];
+  names.forEach((k) => (notes[k] = []));
+  let total = 0;
+  for (const sec of d.form) {
+    const P = d.parts[sec], bars = P.bars, n = bars * steps;
+    if (!P) throw new Error('falta la sección ' + sec);
+    for (const k of names) {
+      const seq = P[k] ? Snd.bars(steps, P[k]) : [];
+      for (let i = 0; i < n; i++) notes[k].push(seq.length ? seq[i % seq.length] : null);
+    }
+    const L = Math.max((P.drums || []).length, (P.fill || []).length);
+    for (let li = 0; li < L; li++) {
+      let str = '';
+      for (let b = 0; b < bars; b++) {
+        const src = P.fill && b === bars - 1 ? P.fill[li] || '' : (P.drums || [])[li] || '';
+        const off = src.length ? (b * steps) % src.length : 0;
+        str += (src.slice(off, off + steps) || '').padEnd(steps, '.');
+      }
+      lays[li] = (lays[li] || '').padEnd(total, '.') + str;
+    }
+    total += n;
+    for (let li = 0; li < lays.length; li++) lays[li] = lays[li].padEnd(total, '.');
+  }
+  return { bpm: d.bpm, tr: d.tr, swing: d.swing, pump: d.pump, echo: d.echo, gain: d.gain, ch: names.map((k) => ({ ...d.ch[k], notes: notes[k] })), drums: lays };
+}
+// nota sostenida o silencio de n pasos (para escribir compases más corto)
+const hold = (n, len) => [n, ...Array(len - 1).fill('-')].join(' ');
+const rest = (len) => Array(len).fill('.').join(' ');
 SONGS.boss = { ...SONGS.contra, bpm: 168, tr: 1, drums: 'k.hsk.hsk.hsk.hskkhsk.hsk.hskhss' };
+
+// =====================================================================
+//  MÚSICA DEL GAS RALLY · composiciones originales por secciones
+//  Cada canción dura entre 50 s y 1,5 min antes de repetirse (intro, A, B,
+//  puente…) y mezcla el chip clásico con instrumentos actuales: bajo con
+//  filtro, pads anchos, plucks con eco y batería con bombeo.
+// =====================================================================
+(() => {
+  const H = hold, Z = rest;
+  const crash = (bars) => 'r'.padEnd(bars * 16, '.');
+  const riser = (bars) => '.'.repeat((bars - 1) * 16) + 'w'.padEnd(16, '.');
+
+  // ---------- INICIO / TALLER · chillhop con swing (Fa mayor)
+  const gBass = ['F2 - - . . . F3 . C3 - . . A2 . . .', 'A2 - - . . . A3 . E3 - . . C3 . . .', 'D2 - - . . . D3 . A2 - . . F2 . . .', 'Bb1 - - . . . Bb2 . C2 - - . . . C3 .'];
+  const gPadL = [H('A3', 16), H('C4', 16), H('C4', 16), `${H('D4', 8)} ${H('E4', 8)}`];
+  const gPadH = [H('E4', 16), H('G4', 16), H('F4', 16), `${H('A4', 8)} ${H('Bb4', 8)}`];
+  const gKeys = ['F4 . A4 . C5 . E5 . C5 . A4 . E5 . C5 .', 'A4 . C5 . E5 . G5 . E5 . C5 . G5 . E5 .', 'D5 . F5 . A5 . C6 . A5 . F5 . C6 . A5 .', 'Bb4 . D5 . F5 . A5 . C5 . E5 . G5 . Bb5 .'];
+  SONGS.garage = mkSong({
+    gain: 1.44, bpm: 92, swing: 0.16, pump: 0.3, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.34, gate: 0.6, cut: 1000 },
+      padL: { type: 'pad', vol: 0.05, cut: 1100, pan: -0.3 },
+      padH: { type: 'pad', vol: 0.045, cut: 1300, pan: 0.3 },
+      keys: { type: 'bell', vol: 0.065, decay: 0.45, fx: 0.25, pan: 0.25 },
+      lead: { type: 'saw', vol: 0.07, gate: 0.85, cut: 2200, fx: 0.35, pan: -0.1 },
+    },
+    parts: {
+      I: { bars: 2, padL: gPadL, padH: gPadH, keys: gKeys, drums: ['k.......k.......', '................', 'h.h.h.h.h.h.h.h.'] },
+      A: { bars: 4, bass: gBass, padL: gPadL, padH: gPadH, keys: gKeys,
+        drums: ['k.......k.k.....', '....c.......c...', 'h.h.h.h.h.h.h.hh', '..z...z...z...z.'] },
+      B: { bars: 4, bass: gBass, padL: gPadL, padH: gPadH, keys: gKeys,
+        lead: ['C5 - - . A4 . C5 . D5 - . . C5 . A4 .', 'E5 - - - - - . . D5 . C5 . A4 - G4 .', 'F5 - - . E5 . D5 . C5 - . . A4 . C5 .', 'D5 - - - - - - - E5 - - - G5 - - -'],
+        drums: ['k.......k.k.....', '....c.......c...', 'h.h.h.h.h.h.h.hh', '..z...z...z...z.'], fill: ['k.......k.k.....', '....c.......cccc', 'h.h.h.h.h.h.....', '..z...z...z...z.'] },
+      C: { bars: 4, bass: ['F2 - - - - - - - . . . . . . . .', 'A2 - - - - - - - . . . . . . . .', 'D2 - - - - - - - . . . . . . . .', 'Bb1 - - - - - - - C2 - - - - - - -'], padL: gPadL, padH: gPadH,
+        lead: ['A5 - - - G5 - E5 - D5 - - - C5 - - -', 'E5 - - - - - - - G5 - - - E5 - - -', 'F5 - - - E5 - D5 - C5 - - - A4 - - -', 'Bb4 - - - - - - - C5 - - - - - - -'],
+        drums: ['k...........k...', '....i.......i...', 'h...h...h...h...'], fill: ['k...........k...', '....i.......i...', 'h...h...h...w...'] },
+    },
+    form: ['I', 'A', 'A', 'B', 'B', 'C', 'A', 'B'],
+  });
+
+  // ---------- MAPA Y MENÚ · tema de viaje, pop alegre (Re mayor)
+  const mBassA = ['D2 . D3 . D2 . D3 . D2 . D3 . A2 . D3 .', 'C#2 . C#3 . C#2 . C#3 . C#2 . C#3 . A2 . C#3 .', 'B1 . B2 . B1 . B2 . B1 . B2 . F#2 . B2 .', 'G1 . G2 . G1 . G2 . A1 . A2 . A1 . C#2 .'];
+  const mBassB = ['E2 . E3 . E2 . E3 . E2 . E3 . B2 . E3 .', 'G2 . G3 . G2 . G3 . G2 . G3 . D3 . G3 .', 'D2 . D3 . D2 . D3 . D2 . D3 . A2 . D3 .', 'A1 . A2 . A1 . A2 . A1 . A2 . E2 . C#3 .'];
+  const mBassC = ['G2 . G3 . G2 . G3 . G2 . G3 . D3 . G3 .', 'A2 . A3 . A2 . A3 . A2 . A3 . E3 . A3 .', 'F#2 . F#3 . F#2 . F#3 . F#2 . F#3 . C#3 . F#3 .', 'B1 . B2 . B1 . B2 . A1 . A2 . A1 . A2 .'];
+  const mPlA = ['D4 F#4 A4 D5 F#4 A4 D5 F#5 D4 F#4 A4 D5 F#4 A4 D5 A4', 'C#4 E4 A4 C#5 E4 A4 C#5 E5 C#4 E4 A4 C#5 E4 A4 C#5 A4', 'B3 D4 F#4 B4 D4 F#4 B4 D5 B3 D4 F#4 B4 D4 F#4 B4 F#4', 'G3 B3 D4 G4 B3 D4 G4 B4 A3 C#4 E4 A4 C#4 E4 A4 E4'];
+  const mPlB = ['E4 G4 B4 E5 G4 B4 E5 G5 E4 G4 B4 E5 G4 B4 E5 B4', 'G4 B4 D5 G5 B4 D5 G5 B5 G4 B4 D5 G5 B4 D5 G5 D5', 'D4 F#4 A4 D5 F#4 A4 D5 F#5 D4 F#4 A4 D5 F#4 A4 D5 A4', 'A3 C#4 E4 A4 C#4 E4 A4 C#5 A3 C#4 E4 A4 C#4 E4 G4 E4'];
+  const mPadA = [H('F#4', 16), H('E4', 16), H('D4', 16), `${H('D4', 8)} ${H('C#4', 8)}`];
+  const mDr = ['k...k...k...k...', '....c.......c...', '..o...o...o...o.'];
+  const mFill = ['k...k...k...k.k.', '....c.......cccc', '..o...o...o.....', '............mmmm'];
+  SONGS.menu = mkSong({
+    gain: 1.56, bpm: 116, pump: 0.35, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.34, gate: 0.5, cut: 1300 },
+      pluck: { type: 'pluck', vol: 0.055, gate: 0.5, fx: 0.3, pan: 0.25 },
+      pad: { type: 'pad', vol: 0.05, cut: 1400, pan: -0.2 },
+      lead: { type: 'supersq', vol: 0.065, gate: 0.85, fx: 0.3, cut: 3000 },
+      bell: { type: 'bell', vol: 0.05, decay: 0.4, fx: 0.25, pan: -0.3 },
+    },
+    parts: {
+      I: { bars: 2, pluck: mPlA, pad: mPadA, drums: ['..h...h...h...h.', riser(2)] },
+      A: { bars: 4, bass: mBassA, pluck: mPlA, pad: mPadA, drums: [...mDr, crash(4)], fill: mFill },
+      A2: { bars: 8, bass: mBassA, pluck: mPlA, pad: mPadA,
+        lead: ['F#5 - - . E5 . D5 . E5 - - . F#5 . A5 .', 'E5 - - - - - . . C#5 . D5 . E5 - - .', 'D5 - - . C#5 . B4 . F#5 - - . E5 . D5 .', 'D5 - - - - - . . . . A4 . B4 . D5 .',
+          'F#5 - - . E5 . D5 . E5 - - . F#5 . A5 .', 'B5 - - - A5 - - - E5 - - - . . . .', 'D5 - - . C#5 . B4 . A5 - - . G5 . F#5 .', 'G5 - - - F#5 - - - E5 - - - D5 - - -'],
+        drums: [...mDr, 'z.z.z.z.z.z.z.z.', crash(8)], fill: mFill },
+      B: { bars: 4, bass: mBassB, pluck: mPlB, pad: [H('G4', 16), H('D4', 16), H('F#4', 16), H('E4', 16)],
+        lead: ['G5 - - - F#5 - E5 - D5 - - - B4 - - -', 'D5 - - - E5 - F#5 - G5 - - - - - . .', 'F#5 - - - E5 - D5 - A5 - - - F#5 - - -', 'E5 - - - - - - - C#5 - - - E5 - - -'],
+        drums: [...mDr, 'z.z.z.z.z.z.z.z.', crash(4)], fill: mFill },
+      C: { bars: 4, bass: mBassC, pad: [H('D4', 16), H('C#4', 16), H('C#4', 16), H('D4', 16)],
+        bell: ['B5 . . . D6 . . . G5 . . . B5 . . .', 'C#6 . . . E6 . . . A5 . . . C#6 . . .', 'A5 . . . C#6 . . . F#5 . . . A5 . . .', 'B5 . . . D6 . . . F#6 . . . E6 . . .'],
+        lead: ['D5 - - - - - B4 - G4 - - - B4 - D5 -', 'E5 - - - - - C#5 - A4 - - - C#5 - E5 -', 'F#5 - - - - - E5 - C#5 - - - A4 - - -', 'B4 - - - - - - - . . . . . . . .'],
+        drums: ['k.......k.......', '........c.......', 'h.h.h.h.h.h.h.h.'], fill: ['k.......k.......', '........c.......', 'h.h.h.h.w.......'] },
+    },
+    form: ['I', 'A', 'A2', 'B', 'C', 'B', 'A2'],
+  });
+
+  // ---------- SANTIAGO · cueca electrónica en 6/8 con palmas en hemiola (Re mayor)
+  const sBassA = ['D2 - - - - - A2 - - - - -', 'G2 - - - - - D2 - - - - -', 'A2 - - - - - E2 - - - - -', 'D2 - - - - - A2 - - - - -', 'D2 - - - - - F#2 - - - - -', 'G2 - - - - - B2 - - - - -', 'A2 - - - - - C#3 - - - - -', 'D3 - - - - - A2 - - - - -'];
+  const sGuitA = ['D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . G4 . B4 . D4 . G4 . B4 .', 'C#4 . E4 . A4 . C#4 . E4 . G4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .', 'D4 . G4 . B4 . D4 . G4 . B4 .', 'C#4 . E4 . A4 . C#4 . E4 . G4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .'];
+  const sDr = ['k.....k.....', '....c...c.......c.....c.', '..h...h...h.', 'z.z.z.z.z.z.'];
+  SONGS.scl = mkSong({
+    gain: 1.0, bpm: 140, steps: 12, pump: 0.25, echo: 0.5,
+    ch: {
+      bass: { type: 'bass', vol: 0.32, gate: 0.85, cut: 1100 },
+      guit: { type: 'pluck', vol: 0.055, decay: 0.2, pan: 0.3 },
+      pad: { type: 'pad', vol: 0.04, cut: 1200, pan: -0.25 },
+      lead: { type: 'saw', vol: 0.08, gate: 0.85, cut: 2600, fx: 0.22 },
+      harm: { type: 'supersq', vol: 0.04, gate: 0.85, cut: 2400, pan: -0.25 },
+    },
+    parts: {
+      I: { bars: 2, guit: sGuitA, pad: [H('F#4', 12), H('G4', 12)], drums: ['', '....c...c.......c.....c.'] },
+      A: { bars: 8, bass: sBassA, guit: sGuitA, pad: [H('F#4', 12), H('G4', 12), H('E4', 12), H('F#4', 12)],
+        lead: ['A4 - D5 - F#5 - E5 - D5 - C#5 -', 'B4 - D5 - G5 - - - F#5 - E5 -', 'C#5 - E5 - A5 - G5 - F#5 - E5 -', 'F#5 - E5 - D5 - - - - - . .', 'D5 - F#5 - A5 - - - B5 - A5 -', 'G5 - B5 - D6 - - - B5 - G5 -', 'A5 - G5 - F#5 - E5 - C#5 - E5 -', 'D5 - - - - - . . F#4 - A4 -'],
+        harm: ['F#4 - A4 - D5 - C#5 - B4 - A4 -', 'G4 - B4 - D5 - - - D5 - C#5 -', 'A4 - C#5 - E5 - E5 - D5 - C#5 -', 'D5 - C#5 - A4 - - - - - . .', 'A4 - D5 - F#5 - - - G5 - F#5 -', 'D5 - G5 - B5 - - - G5 - D5 -', 'E5 - E5 - D5 - C#5 - A4 - C#5 -', 'A4 - - - - - . . D4 - F#4 -'],
+        drums: [...sDr, 'r'.padEnd(96, '.')], fill: ['k.....k.....', '....c...c...', 'mm.m.m.mmmmm', 'z.z.z.z.z.z.'] },
+      B: { bars: 8, bass: ['B1 - - - - - F#2 - - - - -', 'G2 - - - - - D2 - - - - -', 'A2 - - - - - E2 - - - - -', 'D2 - - - - - A2 - - - - -', 'B1 - - - - - F#2 - - - - -', 'E2 - - - - - B2 - - - - -', 'A2 - - - - - C#3 - - - - -', 'D2 - - - - - A2 - - - - -'],
+        guit: ['B3 . D4 . F#4 . B3 . D4 . F#4 .', 'B3 . D4 . G4 . B3 . D4 . G4 .', 'C#4 . E4 . A4 . C#4 . E4 . A4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .', 'B3 . D4 . F#4 . B3 . D4 . F#4 .', 'B3 . E4 . G4 . B3 . E4 . G4 .', 'C#4 . E4 . A4 . C#4 . E4 . G4 .', 'D4 . F#4 . A4 . D4 . F#4 . A4 .'],
+        pad: [H('D4', 12), H('D4', 12), H('C#4', 12), H('D4', 12), H('D4', 12), H('E4', 12), H('C#4', 12), H('D4', 12)],
+        lead: ['F#5 - - - D5 - B4 - D5 - F#5 -', 'G5 - - - F#5 - E5 - D5 - B4 -', 'A4 - C#5 - E5 - A5 - G5 - E5 -', 'F#5 - - - - - D5 - - - . .', 'B5 - - - A5 - F#5 - - - D5 -', 'E5 - G5 - B5 - - - A5 - G5 -', 'E5 - C#5 - A4 - C#5 - E5 - G5 -', 'F#5 - - - - - . . A4 - D5 -'],
+        harm: ['D5 - - - B4 - G4 - B4 - D5 -', 'E5 - - - D5 - C#5 - B4 - G4 -', 'E4 - A4 - C#5 - E5 - E5 - C#5 -', 'D5 - - - - - A4 - - - . .', 'G5 - - - F#5 - D5 - - - B4 -', 'B4 - E5 - G5 - - - E5 - E5 -', 'C#5 - A4 - E4 - A4 - C#5 - E5 -', 'D5 - - - - - . . F#4 - A4 -'],
+        drums: [...sDr, 'r'.padEnd(96, '.')] },
+      C: { bars: 4, bass: sBassA, guit: ['D4 . . F#4 . A4 D4 . . F#4 . A4', 'G4 . . B4 . D5 G4 . . B4 . D5', 'A4 . . C#5 . E5 A4 . . C#5 . E5', 'D4 . . F#4 . A4 D4 - - - - -'],
+        drums: ['k...........', '....c...c.......c.....c.', '', 'z.z.z.z.z.z.'], fill: ['k...........', '....c...c...', '', 'w...........'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B', 'A'],
+  });
+
+  // ---------- BUENOS AIRES · cumbia digital con güiro y acordeón (La menor)
+  const bBassA = ['A2 - . . E3 - . . A2 - . . E3 - . .', 'G2 - . . D3 - . . G2 - . . D3 - . .', 'F2 - . . C3 - . . F2 - . . C3 - . .', 'E2 - . . B2 - . . E2 - . . G#2 - . .'];
+  const bChA = ['. . C5 . . . E5 . . . C5 . . . E5 .', '. . B4 . . . D5 . . . B4 . . . D5 .', '. . A4 . . . C5 . . . A4 . . . C5 .', '. . G#4 . . . B4 . . . G#4 . . . B4 .'];
+  const bBassB = ['F2 - . . C3 - . . F2 - . . C3 - . .', 'G2 - . . D3 - . . G2 - . . D3 - . .', 'C3 - . . G2 - . . C3 - . . G2 - . .', 'E2 - . . B2 - . . E2 - . . G#2 - . .', 'F2 - . . C3 - . . F2 - . . C3 - . .', 'G2 - . . D3 - . . G2 - . . D3 - . .', 'A2 - . . E3 - . . A2 - . . E3 - . .', 'E2 - . . B2 - . . E2 - . . G#2 - . .'];
+  const bChB = ['. . A4 . . . C5 . . . A4 . . . C5 .', '. . B4 . . . D5 . . . B4 . . . D5 .', '. . G4 . . . C5 . . . G4 . . . E5 .', '. . G#4 . . . B4 . . . G#4 . . . B4 .', '. . A4 . . . C5 . . . A4 . . . C5 .', '. . B4 . . . D5 . . . B4 . . . D5 .', '. . C5 . . . E5 . . . C5 . . . E5 .', '. . G#4 . . . B4 . . . G#4 . . . B4 .'];
+  const bDr = ['k.......k.......', 'g.hhg.hhg.hhg.hh', '....s.......s..s', '......b.......b.'];
+  SONGS.bue = mkSong({
+    gain: 1.56, bpm: 98, pump: 0.25, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.36, gate: 0.7, cut: 900 },
+      keys: { type: 'pluck', vol: 0.055, decay: 0.14, pan: 0.3 },
+      lead: { type: 'saw', vol: 0.08, gate: 0.85, cut: 2400, fx: 0.25, pan: -0.1 },
+      bell: { type: 'bell', vol: 0.05, decay: 0.4, fx: 0.3, pan: -0.3 },
+      pad: { type: 'pad', vol: 0.035, cut: 1100, pan: 0.2 },
+    },
+    parts: {
+      I: { bars: 2, keys: bChA, pad: [H('C5', 16), H('B4', 16)], drums: ['', 'g.hhg.hhg.hhg.hh', '', '', riser(2)] },
+      A: { bars: 8, bass: bBassA, keys: bChA,
+        lead: ['E5 - - . E5 . D5 . C5 - - . B4 . C5 .', 'D5 - - . D5 . C5 . B4 - - . A4 . B4 .', 'C5 - - . C5 . B4 . A4 - - . G#4 . A4 .', 'B4 - - - - - - - G#4 - - - E4 - - -', 'A5 - . A5 G5 . E5 . G5 - . G5 E5 . C5 .', 'D5 - . D5 E5 . D5 . B4 - . B4 G4 . B4 .', 'C5 - . C5 D5 . C5 . A4 - . A4 B4 . C5 .', 'B4 - - . G#4 . B4 . E5 - - - D5 . B4 .'],
+        drums: [...bDr, 'r'.padEnd(128, '.')], fill: ['k.......k.......', 'g.hhg.hhg.hhg.hh', '....s.......sSss', '......b.......b.'] },
+      B: { bars: 8, bass: bBassB, keys: bChB, pad: [H('A4', 16), H('B4', 16), H('G4', 16), H('G#4', 16), H('A4', 16), H('B4', 16), H('C5', 16), H('B4', 16)],
+        lead: ['A4 - - . C5 . E5 . A5 - - . G5 . E5 .', 'G5 - - . F5 . E5 . D5 - - . E5 . F5 .', 'E5 - - . D5 . C5 . G4 - - . A4 . C5 .', 'B4 - - - - - - - G#4 - - - B4 - - -', 'C5 - - . D5 . E5 . F5 - - . E5 . D5 .', 'D5 - - . E5 . F5 . G5 - - . F5 . E5 .', 'E5 - - . C5 . A4 . C5 - - . E5 . A5 .', 'G#5 - - - - - - - E5 - - - . . . .'],
+        drums: [...bDr, 'z.z.z.z.z.z.z.z.'] },
+      C: { bars: 4, bass: bBassA,
+        bell: ['E5 . . . . . A5 . . . G5 . . . E5 .', 'D5 . . . . . G5 . . . F5 . . . D5 .', 'C5 . . . . . F5 . . . E5 . . . C5 .', 'B4 . . . . . E5 . . . D5 . . . B4 .'],
+        drums: ['k.......k.......', 'g.hhg.hhg.hhg.hh'], fill: ['k.......k.......', 'g.hhg.hhg.hhg.hh', '', '', 'w...............'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B'],
+  });
+
+  // ---------- CIUDAD DE MÉXICO · ranchera electrónica: polka con trompetas en terceras (Sol mayor)
+  const xBass = ['G2 . . . D2 . . . G2 . . . D2 . . .', 'D2 . . . A2 . . . D2 . . . F#2 . . .', 'D2 . . . A2 . . . D2 . . . C3 . . .', 'G2 . . . D2 . . . G2 . . . B2 . . .', 'C3 . . . G2 . . . C3 . . . E3 . . .', 'G2 . . . D2 . . . G2 . . . D2 . . .', 'D2 . . . A2 . . . D2 . . . F#2 . . .', 'G2 . . . D2 . . . G2 . . . . . . .'];
+  const xPah = ['. . D5 . . . D5 . . . D5 . . . D5 .', '. . C5 . . . C5 . . . C5 . . . C5 .', '. . C5 . . . C5 . . . C5 . . . C5 .', '. . D5 . . . D5 . . . D5 . . . D5 .', '. . E5 . . . E5 . . . E5 . . . E5 .', '. . D5 . . . D5 . . . D5 . . . D5 .', '. . C5 . . . C5 . . . C5 . . . C5 .', '. . D5 . . . D5 . . . . . . . . .'];
+  const xBassB = ['C3 . . . G2 . . . C3 . . . G2 . . .', 'G2 . . . D2 . . . G2 . . . D2 . . .', 'D2 . . . A2 . . . D2 . . . F#2 . . .', 'G2 . . . D2 . . . G2 . . . B2 . . .'];
+  const xPahB = ['. . E5 . . . E5 . . . E5 . . . E5 .', '. . D5 . . . D5 . . . D5 . . . D5 .', '. . C5 . . . C5 . . . C5 . . . C5 .', '. . D5 . . . D5 . . . D5 . . . D5 .'];
+  const xDr = ['k...k...k...k...', '....c.......c...', '..o...o...o...o.', 'z.z.z.z.z.z.z.z.'];
+  SONGS.mex = mkSong({
+    gain: 1.75, bpm: 126, pump: 0.3, echo: 0.5,
+    ch: {
+      bass: { type: 'bass', vol: 0.36, gate: 0.4, cut: 1200 },
+      pah: { type: 'pluck', vol: 0.05, decay: 0.12, pan: 0.25 },
+      tp1: { type: 'supersq', vol: 0.07, gate: 0.8, cut: 3200, fx: 0.18, pan: -0.15 },
+      tp2: { type: 'supersq', vol: 0.05, gate: 0.8, cut: 2800, pan: 0.2 },
+      acc: { type: 'saw', vol: 0.07, gate: 0.75, cut: 2600, fx: 0.2 },
+    },
+    parts: {
+      I: { bars: 2, tp1: ['G4 - B4 - D5 - G5 - - - - - - - - -', 'D5 - - - . . . . . . . . . . . .'], tp2: ['D4 - G4 - B4 - D5 - - - - - - - - -', 'B4 - - - . . . . . . . . . . . .'], drums: ['', '', '', '', riser(2)] },
+      A: { bars: 8, bass: xBass, pah: xPah,
+        tp1: ['D5 - B4 - G4 - B4 - D5 - - - E5 - D5 -', 'C5 - A4 - F#4 - A4 - C5 - - - D5 - C5 -', 'A4 - C5 - E5 - D5 - C5 - A4 - F#4 - A4 -', 'G4 - B4 - D5 - G5 - G5 - - - . . D5 -', 'E5 - - - D5 - C5 - E5 - - - G5 - - -', 'D5 - B4 - D5 - G5 - - - D5 - B4 - G4 -', 'A4 - B4 - C5 - D5 - E5 - D5 - C5 - A4 -', 'G4 - - - - - - - . . . . D5 - D5 -'],
+        tp2: ['B4 - G4 - D4 - G4 - B4 - - - C5 - B4 -', 'A4 - F#4 - D4 - F#4 - A4 - - - B4 - A4 -', 'F#4 - A4 - C5 - B4 - A4 - F#4 - D4 - F#4 -', 'D4 - G4 - B4 - D5 - D5 - - - . . B4 -', 'C5 - - - B4 - A4 - C5 - - - E5 - - -', 'B4 - G4 - B4 - D5 - - - B4 - G4 - D4 -', 'F#4 - G4 - A4 - B4 - C5 - B4 - A4 - F#4 -', 'D4 - - - - - - - . . . . B4 - B4 -'],
+        drums: [...xDr, 'r'.padEnd(128, '.')], fill: ['k...k...k...k.k.', '....c.......cccc', '..o...o...o.....', 'z.z.z.z.mmmmmmmm'] },
+      B: { bars: 8, bass: xBassB, pah: xPahB,
+        acc: ['E5 . G5 . E5 . C5 . G5 - - - E5 - - -', 'D5 . B4 . D5 . G5 . B5 - - - G5 - - -', 'F#5 . A5 . F#5 . D5 . C6 - - - A5 - - -', 'G5 - - - D5 - - - B4 - - - . . . .', 'E5 . G5 . C6 . G5 . E5 - - - C5 - - -', 'D5 . G5 . B5 . G5 . D5 - - - B4 - - -', 'C5 . E5 . F#5 . A5 . D6 - - - C6 - A5 -', 'G5 - - - - - - - . . . . . . . .'],
+        drums: [...xDr, 'r'.padEnd(128, '.')] },
+      C: { bars: 4, bass: xBassB, pah: xPahB,
+        tp1: ['G5 - - - - - - - E5 - - - - - - -', 'D5 - - - - - - - B4 - - - - - - -', 'C5 - - - - - - - A4 - - - - - - -', 'B4 - - - - - - - . . . . . . . .'],
+        drums: ['k.......k.......', '................', '..h...h...h...h.'], fill: ['k.......k.......', '................', '..h...h...h...h.', 'w...............'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B', 'A'],
+  });
+
+  // ---------- LOS ÁNGELES · synthwave al atardecer con guitarra surf (Mi menor)
+  const lBassA = ['E2 . E3 . E2 . E3 . E2 . E3 . E2 . E3 .', 'C2 . C3 . C2 . C3 . C2 . C3 . C2 . C3 .', 'G2 . G3 . G2 . G3 . G2 . G3 . G2 . G3 .', 'D2 . D3 . D2 . D3 . D2 . D3 . D2 . D3 .'];
+  const lArpA = ['E4 G4 B4 E5 B4 G4 E4 G4 B4 E5 G5 E5 B4 G4 E4 B3', 'C4 E4 G4 C5 G4 E4 C4 E4 G4 C5 E5 C5 G4 E4 C4 G3', 'G3 B3 D4 G4 D4 B3 G3 B3 D4 G4 B4 G4 D4 B3 G3 D3', 'D4 F#4 A4 D5 A4 F#4 D4 F#4 A4 D5 F#5 D5 A4 F#4 D4 A3'];
+  const lPadL = [H('B3', 16), H('C4', 16), H('D4', 16), H('D4', 16)];
+  const lPadH = [H('G4', 16), H('G4', 16), H('B4', 16), H('A4', 16)];
+  const lDr = ['k...k...k...k...', '....S.......S...', 'h.h.h.h.h.h.h.h.'];
+  SONGS.lax = mkSong({
+    gain: 1.81, bpm: 118, pump: 0.5, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.34, gate: 0.45, cut: 900 },
+      arp: { type: 'pluck', vol: 0.045, gate: 0.4, fx: 0.35, pan: 0.3 },
+      padL: { type: 'pad', vol: 0.05, cut: 1500, pan: -0.3 },
+      padH: { type: 'pad', vol: 0.045, cut: 1700, pan: 0.3 },
+      lead: { type: 'saw', vol: 0.075, gate: 0.9, cut: 3200, fx: 0.4 },
+      surf: { type: 'supersq', vol: 0.05, gate: 0.5, cut: 2600, fx: 0.25, pan: -0.2 },
+    },
+    parts: {
+      I: { bars: 4, arp: lArpA, padL: lPadL, padH: lPadH, drums: ['', '', '', riser(4)] },
+      A: { bars: 8, bass: lBassA, arp: lArpA, padL: lPadL, padH: lPadH,
+        lead: ['B4 - - - E5 - - - G5 - - - F#5 - E5 -', 'E5 - - - - - - - D5 - - - C5 - - -', 'D5 - - - G5 - - - B5 - - - A5 - G5 -', 'F#5 - - - - - - - - - - - . . . .', 'B4 - - - E5 - - - G5 - - - B5 - A5 -', 'G5 - - - - - - - E5 - - - C5 - - -', 'D5 - - - G5 - - - B5 - - - D6 - B5 -', 'A5 - - - - - - - F#5 - - - D5 - - -'],
+        drums: [...lDr, 'r'.padEnd(128, '.')], fill: ['k...k...k...k.k.', '....S.......SSSS', 'h.h.h.h.h.h.....'] },
+      B: { bars: 8, bass: ['E2 . E3 . E2 . E3 . G2 . G3 . A2 . B2 .', 'E2 . E3 . E2 . E3 . G2 . G3 . A2 . B2 .', 'C3 . C3 . C3 . C3 . E3 . E3 . G2 . G2 .', 'D3 . D3 . D3 . D3 . F#2 . F#2 . A2 . A2 .', 'E2 . E3 . E2 . E3 . G2 . G3 . A2 . B2 .', 'E2 . E3 . E2 . E3 . G2 . G3 . A2 . B2 .', 'C3 . C3 . C3 . C3 . E3 . E3 . G2 . G2 .', 'B2 . B2 . B2 . B2 . D#3 . D#3 . F#2 . F#2 .'],
+        padL: [H('B3', 16), H('B3', 16), H('C4', 16), H('D4', 16), H('B3', 16), H('B3', 16), H('C4', 16), H('B3', 16)],
+        surf: ['E5 E5 E5 E5 E5 E5 E5 E5 G5 G5 G5 G5 F#5 F#5 F#5 F#5', 'E5 E5 E5 E5 D5 D5 D5 D5 B4 B4 B4 B4 D5 D5 D5 D5', 'C5 C5 C5 C5 E5 E5 E5 E5 G5 G5 G5 G5 E5 E5 E5 E5', 'D5 D5 D5 D5 F#5 F#5 F#5 F#5 A5 A5 A5 A5 F#5 F#5 D5 D5', 'B5 B5 B5 B5 A5 A5 G5 G5 E5 E5 E5 E5 G5 G5 A5 A5', 'B5 B5 B5 B5 B5 B5 B5 B5 . . . . . . . .', 'C6 C6 C6 C6 B5 B5 A5 A5 G5 G5 G5 G5 E5 E5 E5 E5', 'D#5 D#5 D#5 D#5 F#5 F#5 F#5 F#5 B5 B5 B5 B5 A5 A5 F#5 F#5'],
+        drums: ['k...k...k...k...', '....S.......S...', '..o...o...o...o.', 'r'.padEnd(128, '.')] },
+      C: { bars: 4, padL: [H('C4', 16), H('D4', 16), H('B3', 16), H('B3', 16)], padH: [H('G4', 16), H('A4', 16), H('F#4', 16), H('G4', 16)],
+        arp: ['C4 E4 G4 C5 G4 E4 C4 E4 G4 C5 E5 C5 G4 E4 C4 G3', 'D4 F#4 A4 D5 A4 F#4 D4 F#4 A4 D5 F#5 D5 A4 F#4 D4 A3', 'B3 D4 F#4 B4 F#4 D4 B3 D4 F#4 B4 D5 B4 F#4 D4 B3 F#3', 'E4 G4 B4 E5 B4 G4 E4 G4 B4 E5 G5 E5 B4 G4 E4 B3'],
+        lead: ['E5 - - - - - - - G5 - - - - - - -', 'F#5 - - - - - - - A5 - - - - - - -', 'B5 - - - - - - - A5 - - - F#5 - - -', 'G5 - - - - - - - - - - - . . . .'],
+        drums: ['k.......k.......', '....S.......S...'], fill: ['k.......k.......', '....S.......S...', 'w...............'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B'],
+  });
+
+  // ---------- LONDRES · drum and bass con guitarras punk (Mi mixolidio)
+  const nGuit = ['B3 . B3 . B3 . B3 . B3 . B3 . B3 . B3 .', 'A3 . A3 . A3 . A3 . A3 . A3 . A3 . A3 .', 'E4 . E4 . E4 . E4 . E4 . E4 . E4 . E4 .', 'B3 . B3 . B3 . B3 . F#4 . F#4 . B3 . B3 .'];
+  const nBass = [H('E2', 16), H('D2', 16), H('A1', 16), `${H('E2', 8)} ${H('B1', 8)}`];
+  const nDr = ['k.........k.....', '....s.......s...', 'hhhhhhhhhhhhhhhh'];
+  const nDr2 = ['k.........k.k...', '....s..s.s..s..s', 'h.h.h.h.h.h.h.h.', '..o...o...o...o.'];
+  SONGS.lon = mkSong({
+    gain: 1.0, bpm: 172, pump: 0.35, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.34, gate: 0.95, cut: 1100, q: 3 },
+      guit: { type: 'supersq', vol: 0.04, gate: 0.5, cut: 2200, pan: 0.3 },
+      lead: { type: 'saw', vol: 0.08, gate: 0.85, cut: 3000, fx: 0.3, pan: -0.1 },
+      pad: { type: 'pad', vol: 0.045, cut: 1300, pan: -0.3 },
+    },
+    parts: {
+      I: { bars: 2, pad: [H('B3', 16), H('A3', 16)], guit: nGuit, drums: ['', '', 'hhhhhhhhhhhhhhhh', riser(2)] },
+      A: { bars: 8, bass: nBass, guit: nGuit,
+        lead: ['G#4 - B4 - E5 - - - D5 - B4 - G#4 - . .', 'F#4 - A4 - D5 - - - C#5 - A4 - F#4 - . .', 'A4 - C#5 - E5 - F#5 - E5 - C#5 - A4 - B4 -', 'B4 - - - G#4 - - - E4 - - - . . . .', 'E5 - E5 - E5 - D5 - E5 - - - B4 - - -', 'D5 - D5 - D5 - C#5 - D5 - - - A4 - - -', 'C#5 - E5 - A5 - G#5 - F#5 - E5 - C#5 - E5 -', 'E5 - - - - - - - . . . . B4 - D5 -'],
+        drums: [...nDr, 'r'.padEnd(128, '.')], fill: ['k.........k.....', '....s.......ssss', 'hhhhhhhhhhhh....'] },
+      B: { bars: 8, bass: [H('C#2', 16), H('A1', 16), H('E2', 16), H('B1', 16)],
+        guit: ['G#3 . G#3 . G#3 . G#3 . G#3 . G#3 . G#3 . G#3 .', 'E3 . E3 . E3 . E3 . E3 . E3 . E3 . E3 .', 'B3 . B3 . B3 . B3 . B3 . B3 . B3 . B3 .', 'F#3 . F#3 . F#3 . F#3 . F#3 . F#3 . F#3 . F#3 .'],
+        pad: [H('E4', 16), H('E4', 16), H('G#4', 16), H('F#4', 16)],
+        lead: ['G#5 - - - E5 - - - C#5 - - - E5 - G#5 -', 'A5 - - - - - - - E5 - - - C#5 - - -', 'B5 - - - G#5 - - - E5 - - - G#5 - B5 -', 'F#5 - - - - - - - D#5 - - - B4 - - -', 'G#5 - - - E5 - - - C#5 - - - E5 - G#5 -', 'A5 - - - B5 - - - C#6 - - - A5 - - -', 'B5 - - - - - - - G#5 - - - E5 - - -', 'F#5 - - - - - - - - - - - . . . .'],
+        drums: [...nDr2, 'r'.padEnd(128, '.')] },
+      C: { bars: 4, bass: nBass, pad: [H('B3', 16), H('A3', 16), H('C#4', 16), H('B3', 16)],
+        drums: ['k...............', '........s.......', 'h...h...h...h...'], fill: ['k...............', '........s.......', 'h...h...h...h...', 'w...............'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B', 'A'],
+  });
+
+  // ---------- TOKIO · future funk con koto y taiko (escala miyako-bushi en Mi)
+  const tBassA = ['E1 . E2 . . E1 E2 . E1 . E2 . . E1 B1 .', 'C2 . C3 . . C2 C3 . A1 . A2 . . A1 B1 .', 'E1 . E2 . . E1 E2 . E1 . E2 . . E1 B1 .', 'A1 . A2 . . A1 A2 . F1 . F2 . . F1 B1 .'];
+  const tKotoA = ['E4 . B4 . E5 . F5 . E5 . B4 . A4 . B4 .', 'C5 . A4 . F4 . A4 . C5 . E5 . F5 . E5 .', 'E4 . B4 . E5 . F5 . E5 . B4 . A4 . B4 .', 'A4 . C5 . F5 . E5 . C5 . B4 . A4 . F4 .'];
+  const tDr = ['k...k...k...k...', '....c.......c...', '..o...o...o...o.', 'h.hhh.hhh.hhh.hh'];
+  SONGS.tyo = mkSong({
+    gain: 1.35, bpm: 124, pump: 0.4, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.34, gate: 0.5, cut: 1300, q: 6 },
+      koto: { type: 'pluck', vol: 0.05, decay: 0.24, fx: 0.3, pan: 0.3 },
+      pad: { type: 'pad', vol: 0.045, cut: 1500, pan: -0.25 },
+      lead: { type: 'bell', vol: 0.085, decay: 0.5, fx: 0.3 },
+      lead2: { type: 'saw', vol: 0.06, gate: 0.9, cut: 2800, fx: 0.3, pan: -0.1 },
+    },
+    parts: {
+      I: { bars: 2, koto: tKotoA, drums: ['t.......t...t...', '', '', '', riser(2)] },
+      A: { bars: 8, bass: tBassA, koto: tKotoA, pad: [H('B3', 16), H('A3', 16), H('B3', 16), H('C4', 16)],
+        lead: ['E5 - - - F5 - - - E5 - - - B4 - - -', 'C5 - - - B4 - A4 - B4 - - - - - - -', 'A5 - - - B5 - - - C6 - - - B5 - A5 -', 'F5 - - - E5 - - - - - - - . . . .', 'B5 - - - C6 - B5 - A5 - - - F5 - - -', 'E5 - F5 - E5 - C5 - B4 - - - A4 - - -', 'B4 - - - C5 - - - E5 - - - F5 - - -', 'E5 - - - - - - - - - - - . . . .'],
+        drums: [...tDr, 'r'.padEnd(128, '.')], fill: ['k...k...k...k...', '....c.......c...', '..o...o...o.....', 't.......t.t.t.t.'] },
+      B: { bars: 8, bass: ['A1 . A2 . . A1 A2 . A1 . A2 . . A1 G2 .', 'F1 . F2 . . F1 F2 . F1 . F2 . . F1 E2 .', 'E1 . E2 . . E1 E2 . E1 . E2 . . E1 B1 .', 'E1 . E2 . . E1 E2 . E1 . E2 . B1 . C2 .'],
+        koto: ['A4 . C5 . E5 . A5 . E5 . C5 . B4 . C5 .', 'F4 . A4 . C5 . F5 . C5 . A4 . F4 . A4 .', 'E4 . B4 . E5 . F5 . E5 . B4 . A4 . B4 .', 'E4 . B4 . E5 . B5 . A5 . F5 . E5 . B4 .'],
+        pad: [H('C4', 16), H('C4', 16), H('B3', 16), H('B3', 16)],
+        lead2: ['A5 - - - B5 - C6 - B5 - A5 - F5 - - -', 'E5 - - - F5 - A5 - - - - - . . . .', 'C6 - - - B5 - A5 - F5 - A5 - B5 - - -', 'E6 - - - - - - - - - - - . . . .', 'A5 - - - B5 - C6 - E6 - C6 - B5 - A5 -', 'F5 - - - E5 - F5 - A5 - - - . . . .', 'B5 - - - A5 - F5 - E5 - F5 - A5 - - -', 'E5 - - - - - - - - - - - . . . .'],
+        drums: [...tDr, 'r'.padEnd(128, '.')] },
+      C: { bars: 4, koto: tKotoA, pad: [H('B3', 16), H('A3', 16), H('B3', 16), H('C4', 16)],
+        drums: ['t.......t...t...', '....c.......c...'], fill: ['t...t...t.t.t.t.', '....c.......c...', 'w...............'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B'],
+  });
+
+  // ---------- PERSECUCIÓN · electro rápido y tenso para el escape (Mi frigio)
+  const cBass = ['E2 E2 E3 E2 E2 E2 E3 E2 E2 E2 E3 E2 G2 G2 E3 E2', 'E2 E2 E3 E2 E2 E2 E3 E2 F2 F2 F3 F2 F2 F2 F3 F2', 'C2 C2 C3 C2 C2 C2 C3 C2 C2 C2 C3 C2 D2 D2 D3 D2', 'B1 B1 B2 B1 B1 B1 B2 B1 B1 B1 B2 B1 D#2 D#2 F#2 B1'];
+  SONGS.chase = mkSong({
+    gain: 1.23, bpm: 170, pump: 0.3, echo: 0.5,
+    ch: {
+      bass: { type: 'bass', vol: 0.3, gate: 0.55, cut: 1100, q: 6 },
+      siren: { type: 'saw', vol: 0.065, gate: 0.95, cut: 3600, fx: 0.25 },
+      arp: { type: 'pluck', vol: 0.045, gate: 0.4, fx: 0.2, pan: 0.3 },
+      pad: { type: 'pad', vol: 0.04, cut: 1200, pan: -0.3 },
+    },
+    parts: {
+      I: { bars: 2, bass: [cBass[0]], pad: [H('B3', 16), H('B3', 16)], drums: ['', '', 'hhhhhhhhhhhhhhhh', riser(2)] },
+      A: { bars: 8, bass: cBass, pad: [H('B3', 16), H('C4', 16), H('C4', 16), H('B3', 16)],
+        siren: ['B5 - - - C6 - - - B5 - - - G5 - - -', 'B5 - - - C6 - - - D6 - - - C6 - - -', 'G5 - - - E5 - - - G5 - - - A5 - - -', 'B5 - - - - - - - D#5 - - - F#5 - - -'],
+        drums: ['k.........k.....', '....s.......s...', 'hhhhhhhhhhhhhhhh', 'r'.padEnd(128, '.')], fill: ['k.........k.k...', '....s.......ssss', 'hhhhhhhhhhhh....'] },
+      B: { bars: 8, bass: cBass,
+        arp: ['E4 G4 B4 E5 F5 E5 B4 G4 E4 G4 B4 E5 F5 E5 B4 G4', 'E4 G4 B4 E5 F5 E5 B4 G4 F4 A4 C5 F5 G5 F5 C5 A4', 'C4 E4 G4 C5 D5 C5 G4 E4 C4 E4 G4 C5 D5 C5 G4 E4', 'B3 D#4 F#4 B4 C5 B4 F#4 D#4 B3 D#4 F#4 B4 D#5 B4 F#4 D#4'],
+        siren: ['E6 - - - - - - - F6 - - - - - - -', 'E6 - - - - - - - F6 - - - G6 - - -', 'E6 - - - - - - - C6 - - - - - - -', 'B5 - - - - - - - - - - - . . . .'],
+        drums: ['k.........k.k...', '....s..s.s..s..s', 'h.h.h.h.h.h.h.h.', '..o...o...o...o.'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'B'],
+  });
+
+  // ---------- VICTORIA · fanfarria y celebración (Do mayor)
+  SONGS.victory = mkSong({
+    gain: 1.5, bpm: 128, pump: 0.3, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.34, gate: 0.5, cut: 1300 },
+      brass: { type: 'supersq', vol: 0.075, gate: 0.85, cut: 3400, fx: 0.25 },
+      pluck: { type: 'pluck', vol: 0.05, gate: 0.5, fx: 0.3, pan: 0.3 },
+      pad: { type: 'pad', vol: 0.045, cut: 1500, pan: -0.3 },
+    },
+    parts: {
+      F: { bars: 4, brass: ['C5 - E5 - G5 - C6 - - - G5 - C6 - - -', 'A5 - - - F5 - A5 - G5 - - - - - . .', 'C5 - E5 - G5 - E6 - - - D6 - C6 - - -', 'A5 - C6 - B5 - G5 - C6 - - - - - . .'],
+        bass: ['C2 . . . C3 . . . G2 . . . G1 . . .', 'F2 . . . F3 . . . G2 . . . G1 . . .', 'C2 . . . C3 . . . A2 . . . A1 . . .', 'F2 . . . G2 . . . C2 - - - . . . .'],
+        drums: ['k.......k.......', '....s.......s...', 'r'.padEnd(64, '.')], fill: ['k.......k.......', '....s...ssssSSSS', ''] },
+      A: { bars: 8, bass: ['C2 . C3 . C2 . C3 . C2 . C3 . C2 . C3 .', 'A1 . A2 . A1 . A2 . A1 . A2 . A1 . A2 .', 'F1 . F2 . F1 . F2 . F1 . F2 . F1 . F2 .', 'G1 . G2 . G1 . G2 . G1 . G2 . B1 . D2 .'],
+        pluck: ['E4 G4 C5 E5 G4 C5 E5 G5 E4 G4 C5 E5 G4 C5 E5 C5', 'E4 A4 C5 E5 A4 C5 E5 A5 E4 A4 C5 E5 A4 C5 E5 C5', 'F4 A4 C5 F5 A4 C5 F5 A5 F4 A4 C5 F5 A4 C5 F5 C5', 'G4 B4 D5 G5 B4 D5 G5 B5 G4 B4 D5 G5 F5 D5 B4 G4'],
+        pad: [H('E4', 16), H('E4', 16), H('F4', 16), H('D4', 16)],
+        brass: ['G5 - - - E5 - - - C6 - - - G5 - - -', 'A5 - - - E5 - - - C6 - - - A5 - - -', 'F5 - - - A5 - - - C6 - - - F6 - - -', 'D6 - - - B5 - - - G5 - - - . . . .', 'G5 - - - E5 - - - C6 - - - E6 - - -', 'E6 - - - D6 - C6 - A5 - - - . . . .', 'F5 - - - A5 - - - C6 - - - A5 - F5 -', 'G5 - - - - - - - D6 - - - B5 - - -'],
+        drums: ['k...k...k...k...', '....c.......c...', '..o...o...o...o.', 'z.z.z.z.z.z.z.z.'] },
+    },
+    form: ['F', 'A', 'A'],
+  });
+
+  // ---------- ARENA · rock de estadio con pisotones y palmas (La menor)
+  const aGuit = ['A3 A3 . A3 A3 . A3 . G3 G3 . G3 G3 . G3 .', 'F3 F3 . F3 F3 . F3 . G3 G3 . G3 E3 . E3 .'];
+  const aDr = ['k...k...k...k...', '....c.......c...', '....s.......s...', 'h.h.h.h.h.h.h.h.'];
+  SONGS.arena = mkSong({
+    gain: 1.38, bpm: 150, pump: 0.25, echo: 0.5,
+    ch: {
+      bass: { type: 'bass', vol: 0.36, gate: 0.6, cut: 900 },
+      gt1: { type: 'supersq', vol: 0.05, gate: 0.6, cut: 1800, pan: -0.35 },
+      gt2: { type: 'saw', vol: 0.04, gate: 0.6, cut: 1600, pan: 0.35 },
+      lead: { type: 'saw', vol: 0.08, gate: 0.9, cut: 3600, fx: 0.3 },
+    },
+    parts: {
+      I: { bars: 4, drums: ['k.k.....k.k.....', '....c.......c...', '', '', riser(4)] },
+      A: { bars: 8, bass: ['A1 . A1 . A1 . A1 . G1 . G1 . G1 . G1 .', 'F1 . F1 . F1 . F1 . G1 . G1 . E1 . E1 .'], gt1: aGuit, gt2: aGuit.map((b) => b.replace(/([A-G]#?)3/g, '$14')),
+        lead: ['A4 - C5 - E5 - - - D5 - C5 - D5 - - -', 'C5 - - - A4 - - - B4 - G#4 - E4 - - -', 'A4 - C5 - E5 - - - G5 - E5 - D5 - - -', 'C5 - D5 - E5 - - - . . . . . . . .', 'A5 - - - G5 - E5 - G5 - - - A5 - - -', 'F5 - - - E5 - D5 - E5 - - - - - . .', 'A5 - - - B5 - C6 - B5 - - - G5 - - -', 'A5 - - - - - - - G#5 - - - E5 - - -'],
+        drums: [...aDr, 'r'.padEnd(128, '.')], fill: ['k...k...k...k.k.', '....c.......c...', '....s.......ssss', 'h.h.h.h.mmmmmmmm'] },
+      B: { bars: 8, bass: ['F1 . F1 . F1 . F1 . C2 . C2 . C2 . C2 .', 'G1 . G1 . G1 . G1 . E1 . E1 . E1 . E1 .'],
+        gt1: ['F3 F3 . F3 F3 . F3 . C4 C4 . C4 C4 . C4 .', 'G3 G3 . G3 G3 . G3 . E3 E3 . E3 E3 . E3 .'], gt2: ['C4 C4 . C4 C4 . C4 . G4 G4 . G4 G4 . G4 .', 'D4 D4 . D4 D4 . D4 . B3 B3 . B3 B3 . B3 .'],
+        lead: ['C6 - - - - - A5 - G5 - - - E5 - - -', 'D5 - - - E5 - - - G#5 - - - B5 - - -', 'C6 - - - - - A5 - G5 - - - E5 - G5 -', 'B5 - - - - - - - G#5 - - - . . . .'],
+        drums: [...aDr, 'o.o.o.o.o.o.o.o.'] },
+      C: { bars: 4, bass: ['A1 - - - - - - - . . . . . . . .'],
+        drums: ['k...k.......k...', '....c.......c...'], fill: ['k...k.......k...', '....c.......cccc', '', '', 'w...............'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B', 'A'],
+  });
+
+  // ---------- PUEBLO NEVADO · vals invernal con cascabeles (Re mayor, 3/4)
+  const wBass = ['D2 - - . . . A2 - - . . .', 'G2 - - . . . D2 - - . . .', 'E2 - - . . . A2 - - . . .', 'D2 - - . . . A1 - - . . .'];
+  const wHarp = ['. . F#4 . A4 . . . F#4 . A4 .', '. . G4 . B4 . . . G4 . B4 .', '. . G4 . B4 . . . E4 . C#5 .', '. . F#4 . A4 . . . E4 . C#5 .'];
+  const wDr = ['k...........', '....h...h...', 'z.z.z.z.z.z.'];
+  SONGS.snow = mkSong({
+    gain: 1.75, bpm: 116, steps: 12, pump: 0.2, echo: 0.5,
+    ch: {
+      bass: { type: 'bass', vol: 0.3, gate: 0.7, cut: 800 },
+      harp: { type: 'pluck', vol: 0.05, decay: 0.3, fx: 0.3, pan: 0.3 },
+      pad: { type: 'pad', vol: 0.05, cut: 1300, pan: -0.3 },
+      bell: { type: 'bell', vol: 0.09, decay: 0.6, fx: 0.35 },
+      flute: { type: 'saw', vol: 0.06, gate: 0.9, cut: 2000, fx: 0.3, att: 0.03 },
+    },
+    parts: {
+      I: { bars: 4, harp: wHarp, pad: [H('F#4', 12), H('G4', 12), H('E4', 12), H('F#4', 12)], drums: ['', '', 'z.z.z.z.z.z.'] },
+      A: { bars: 8, bass: wBass, harp: wHarp, pad: [H('F#4', 12), H('G4', 12), H('E4', 12), H('F#4', 12)],
+        bell: ['F#5 - - - - - A5 - - G5 - -', 'B5 - - - - - D5 - - - - -', 'E5 - - F#5 - - G5 - - B5 - -', 'A5 - - - - - . . . . . .', 'D6 - - - - - C#6 - - B5 - -', 'A5 - - - - - F#5 - - - - -', 'G5 - - E5 - - C#5 - - E5 - -', 'D5 - - - - - . . . . . .'],
+        drums: [...wDr, 'r'.padEnd(96, '.')] },
+      B: { bars: 8, bass: ['B1 - - . . . F#2 - - . . .', 'G2 - - . . . D2 - - . . .', 'E2 - - . . . B1 - - . . .', 'A1 - - . . . E2 - - . . .'], harp: ['. . D4 . F#4 . . . D4 . F#4 .', '. . D4 . G4 . . . D4 . G4 .', '. . E4 . G4 . . . E4 . G4 .', '. . C#4 . E4 . . . C#4 . G4 .'],
+        pad: [H('D4', 12), H('D4', 12), H('E4', 12), H('C#4', 12)],
+        flute: ['B5 - - - - - A5 - - F#5 - -', 'G5 - - - - - D5 - - - - -', 'E5 - - G5 - - B5 - - A5 - -', 'A5 - - - - - G5 - - E5 - -', 'B5 - - - - - D6 - - C#6 - -', 'B5 - - - - - G5 - - - - -', 'G5 - - F#5 - - E5 - - G5 - -', 'A5 - - - - - . . . . . .'],
+        drums: [...wDr, 'o.....o.....'] },
+      C: { bars: 4, harp: wHarp, bell: ['A5 . . F#5 . . D5 . . F#5 . .', 'B5 . . G5 . . D5 . . G5 . .', 'C#6 . . A5 . . E5 . . A5 . .', 'D6 - - - - - . . . . . .'], drums: ['', '', 'z.z.z.z.z.z.'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B', 'A'],
+  });
+
+  // ---------- CUARTO DE JUGUETES · caja de música con bossa de juguete (Sol mayor)
+  const yBass = ['G2 . . D3 . . G2 . D2 . . G2 . . D3 .', 'C3 . . G2 . . C3 . D3 . . A2 . . D3 .'];
+  const yBox = ['B5 . D6 . G6 . D6 . B5 . D6 . A5 . B5 .', 'C6 . E6 . G6 . E6 . D6 . C6 . B5 . A5 .', 'B5 . D6 . G6 . A6 . B6 . A6 . G6 . D6 .', 'E6 . C6 . A5 . F#5 . G5 . . . . . . .'];
+  const yDr = ['k.....k.....k...', '..i...i.....i...', 'z.z.z.z.z.z.z.z.'];
+  SONGS.toy = mkSong({
+    gain: 1.88, bpm: 100, swing: 0.1, pump: 0.2, echo: 0.75,
+    ch: {
+      bass: { type: 'bass', vol: 0.3, gate: 0.6, cut: 900 },
+      box: { type: 'bell', vol: 0.08, decay: 0.5, fx: 0.3, pan: 0.15 },
+      xylo: { type: 'pluck', vol: 0.05, decay: 0.16, pan: -0.3 },
+      pad: { type: 'pad', vol: 0.035, cut: 1200, pan: 0.3 },
+    },
+    parts: {
+      I: { bars: 4, box: yBox, drums: ['', '', ''] },
+      A: { bars: 8, bass: yBass, box: yBox, pad: [H('B4', 16), H('C5', 16)],
+        drums: [...yDr, 'b'.padEnd(64, '.')] },
+      B: { bars: 8, bass: ['E2 . . B2 . . E2 . B1 . . E2 . . B2 .', 'C3 . . G2 . . C3 . D3 . . A2 . . D3 .'],
+        xylo: ['G5 . B5 . E6 . B5 . G5 . B5 . E6 . D6 .', 'E6 . C6 . G5 . C6 . F#6 . D6 . A5 . D6 .', 'G5 . B5 . E6 . G6 . F#6 . E6 . D6 . B5 .', 'C6 . A5 . E5 . A5 . D6 . . . . . . .'],
+        box: ['E6 - - - - - - - D6 - - - B5 - - -', 'C6 - - - E6 - - - D6 - - - - - - -', 'G6 - - - F#6 - - - E6 - - - D6 - - -', 'C6 - - - - - - - D6 - - - - - - -'],
+        pad: [H('G4', 16), H('E4', 16), H('G4', 16), H('F#4', 16)], drums: yDr },
+      C: { bars: 4, box: ['G5 . . . B5 . . . D6 . . . G6 . . .', 'E6 . . . C6 . . . A5 . . . F#5 . . .'], xylo: ['. . D5 . . . D5 . . . D5 . . . D5 .'], drums: ['', '', 'z.z.z.z.z.z.z.z.'], fill: ['', '', 'z.z.z.z.z.z.z.z.', 'w...............'] },
+    },
+    form: ['I', 'A', 'B', 'A', 'C', 'B', 'A'],
+  });
+  SONGS.rally = SONGS.lax;
+})();
 
 // =====================================================================
 //  ART · todos los assets pixel se generan por código (sin imágenes)
@@ -2570,6 +3065,36 @@ const RT = (() => {
     return outline(c);
   }
 
+  // íconos del inicio del juego (16x16)
+  function hubIcon(kind) {
+    const { c, g } = mk(18, 18);
+    g.translate(1, 1);
+    if (kind === 'taller') {
+      // llave inglesa
+      line(g, 3, 13, 10, 6, '#9aa3b4', 3); line(g, 3, 13, 10, 6, '#d6dce6', 1);
+      disc(g, 11.5, 4.5, 4, '#9aa3b4'); disc(g, 12.5, 3.5, 1.8, '#15112a'); R(g, '#15112a', 12, 0, 4, 3);
+      R(g, '#ffffff', 10, 3);
+    } else if (kind === 'duel') {
+      // dos banderas a cuadros cruzadas
+      line(g, 2, 15, 9, 2, '#d6d6e4', 1); line(g, 14, 15, 7, 2, '#d6d6e4', 1);
+      for (let y = 0; y < 4; y++) for (let x = 0; x < 5; x++) {
+        R(g, (x + y) & 1 ? '#1b1a26' : '#ffffff', 1 + x, 1 + y);
+        R(g, (x + y) & 1 ? '#ff4f9a' : '#ffffff', 10 + x, 1 + y);
+      }
+    } else if (kind === 'esp') {
+      // rampa con aro de fuego
+      poly(g, [[1, 14], [11, 14], [11, 8]], '#e8d8b0'); R(g, '#ff8a1e', 1, 14, 11, 1);
+      for (let k = 0; k < 12; k++) { const a = (k / 12) * Math.PI * 2; R(g, k & 1 ? '#ffd23f' : '#ff4a1e', 11.5 + Math.cos(a) * 3.5, 5 + Math.sin(a) * 3.5); }
+    } else {
+      // copa
+      R(g, '#ffd23f', 4, 1, 8, 6); R(g, '#fff2a0', 5, 1, 2, 5); R(g, '#c48a10', 11, 1, 1, 6);
+      R(g, '#ffd23f', 2, 2, 2, 3); R(g, '#ffd23f', 12, 2, 2, 3); R(g, '#15112a', 3, 3); R(g, '#15112a', 12, 3);
+      R(g, '#ffd23f', 5, 7, 6, 1); R(g, '#c48a10', 7, 8, 2, 3); R(g, '#ffd23f', 5, 11, 6, 2); R(g, '#c48a10', 4, 13, 8, 2);
+    }
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    return outline(c);
+  }
+
   // ---------------- dibujo de los mapas
   // regiones (manzanas) entre calles
   function regionsOf(ctx) {
@@ -2839,7 +3364,7 @@ const RT = (() => {
     return spots;
   }
 
-  return { ramp, fireRing, monster, suv, windup, plow, battery, gift, paw, shadowDisc, train, gate, marble, drift, pile, drill, icon, arenaMap, snowMap, toyMap };
+  return { hubIcon, ramp, fireRing, monster, suv, windup, plow, battery, gift, paw, shadowDisc, train, gate, marble, drift, pile, drill, icon, arenaMap, snowMap, toyMap };
 })();
 
 // =====================================================================
@@ -2862,35 +3387,35 @@ const Rally = (() => {
 
   // ---------------- autos (diseños propios inspirados en estilos de época)
   const CARS = [
-    { id: 'bolido', name: 'BÓLIDO GT', desc: 'EL CLÁSICO DEL RALLY. PAREJO EN TODO.', vel: 3, giro: 3, tanque: 3, gas: 3, neon: 0.55, price: 0,
+    { id: 'bolido', name: 'BÓLIDO GT', desc: 'El clásico del rally: parejo en todo.', vel: 3, giro: 3, tanque: 3, gas: 3, neon: 0.55, price: 0,
       colors: [
         { n: 'AZUL', b: '#2f6ff2', l: '#7fb0ff', d: '#1c44a6', s: '#f2f5ff' },
         { n: 'NARANJO', b: '#ff8a1e', l: '#ffc070', d: '#b85a10', s: '#1b1424' },
         { n: 'VERDE', b: '#2fbf5a', l: '#8ff0a0', d: '#1a7a3a', s: '#f2f5ff' },
         { n: 'BLANCO', b: '#e4e6f0', l: '#ffffff', d: '#9a9ab0', s: '#2f6ff2' }],
       special: { n: 'ORO', b: '#e8b830', l: '#fff2a0', d: '#a0700c', s: '#1b1424', fx: 'gold' } },
-    { id: 'rayo', name: 'RAYO 90', desc: 'COUPÉ TURBO NOVENTERO CON NEÓN. EL MÁS RÁPIDO.', vel: 5, giro: 3, tanque: 2, gas: 3, neon: 1, price: 700,
+    { id: 'rayo', name: 'RAYO 90', desc: 'Coupé turbo noventero con neón. El más rápido.', vel: 5, giro: 3, tanque: 2, gas: 3, neon: 1, price: 700,
       colors: [
         { n: 'MORADO', b: '#5a3fa8', l: '#9b82e8', d: '#33246a', s: '#ff6ec7' },
         { n: 'PERLA', b: '#e8eaf2', l: '#ffffff', d: '#a0a6b8', s: '#ff3355' },
         { n: 'PLATA', b: '#9aa3b4', l: '#d6dce6', d: '#5f6778', s: '#5ff2ff' },
         { n: 'AZUL', b: '#2d5fd0', l: '#7fa6ff', d: '#1b3a8a', s: '#ffd23f' }],
       special: { n: 'NEÓN', b: '#1a1430', l: '#4fe3ff', d: '#0a0818', s: '#ff4f9a', fx: 'neon' } },
-    { id: 'roadster', name: 'ROADSTER 65', desc: 'DESCAPOTABLE CLÁSICO. DOBLA COMO NINGUNO.', vel: 4, giro: 5, tanque: 2, gas: 2, neon: 0.5, price: 300,
+    { id: 'roadster', name: 'ROADSTER 65', desc: 'Descapotable clásico. Dobla como ninguno.', vel: 4, giro: 5, tanque: 2, gas: 2, neon: 0.5, price: 300,
       colors: [
         { n: 'AZUL', b: '#2f5fd6', l: '#7fa0ff', d: '#1b3a8a', s: '#f4f4fa' },
         { n: 'VINO', b: '#b5283a', l: '#e8667a', d: '#7a1424', s: '#f4f4fa' },
         { n: 'VERDE', b: '#1f6a44', l: '#4fae78', d: '#0f3f28', s: '#f2e2a0' },
         { n: 'PLATA', b: '#b8c0cc', l: '#e8eef6', d: '#7a8290', s: '#2f5fd6' }],
       special: { n: 'CROMO', b: '#c8d0dc', l: '#ffffff', d: '#6a7488', s: '#4fe3ff', fx: 'chrome' } },
-    { id: 'muscle', name: 'MUSCLE 70', desc: 'V8 PESADO. TANQUE GRANDE, DOBLA LENTO.', vel: 4, giro: 2, tanque: 4, gas: 4, neon: 0.6, price: 450,
+    { id: 'muscle', name: 'MUSCLE 70', desc: 'V8 pesado: tanque grande, pero dobla lento.', vel: 4, giro: 2, tanque: 4, gas: 4, neon: 0.6, price: 450,
       colors: [
         { n: 'AMARILLO', b: '#ffd23f', l: '#fff09a', d: '#c49a10', s: '#1b1424' },
         { n: 'NARANJO', b: '#ff6a1e', l: '#ffaa6a', d: '#b8400a', s: '#f4f4fa' },
         { n: 'NEGRO', b: '#2e2e3c', l: '#5a5a70', d: '#141420', s: '#ff3355' },
         { n: 'LIMA', b: '#8ae03a', l: '#c8ff8a', d: '#4a8a14', s: '#1b1424' }],
       special: { n: 'LLAMAS', b: '#1b1a26', l: '#4a4a5e', d: '#0a0a12', s: '#ff8a1e', fx: 'flames' } },
-    { id: 'pulga', name: 'PULGA', desc: 'CHIQUITO Y AHORRADOR. EL GAS LE DURA HARTO.', vel: 2, giro: 4, tanque: 5, gas: 4, neon: 0.45, price: 0,
+    { id: 'pulga', name: 'PULGA', desc: 'Chiquito y ahorrador. La bencina le dura harto.', vel: 2, giro: 4, tanque: 5, gas: 4, neon: 0.45, price: 0,
       colors: [
         { n: 'CELESTE', b: '#6ad0f0', l: '#b8f0ff', d: '#2a8ab0', s: '#ffffff' },
         { n: 'MENTA', b: '#7fe0b0', l: '#c8ffe0', d: '#3a9a70', s: '#ffffff' },
@@ -2909,8 +3434,8 @@ const Rally = (() => {
   const UPG_PRICE = [120, 250], PAINT_PRICE = 200;
   // equipo para el auto (sirve con cualquier auto): se compra una vez y se puede apagar
   const EQUIP = [
-    { id: 'taladro', n: 'TALADRO', price: 600, d: 'SE CARGA EN 8 S. CON CARGA, CHOCA UNA PATRULLA DE FRENTE Y LA SACAS 12 S.' },
-    { id: 'clavos', n: 'CLAVOS', price: 400, d: 'RUEDAS CON CLAVOS: NO RESBALAS EN ACEITE, CANICAS NI HIELO, Y DOBLAS ANTES.' },
+    { id: 'taladro', n: 'TALADRO', price: 600, d: 'Se carga en 8 s. Con carga, choca una patrulla de frente y la sacas 12 s.' },
+    { id: 'clavos', n: 'CLAVOS', price: 400, d: 'Ruedas con clavos: no resbalas en aceite, canicas ni hielo, y doblas antes.' },
   ];
   const ITEMS = {
     nitro: { n: 'NITRO', w: 0.3 }, iman: { n: 'IMÁN', w: 0.25 }, escudo: { n: 'ESCUDO', w: 0.25 }, aceite: { n: 'ACEITE', w: 0.2 },
@@ -2945,48 +3470,48 @@ const Rally = (() => {
     taxiJp: { b: '#3a8a5a', l: '#6ac08a', d: '#1e5a3a', s: '#f2c440' },
   };
   const CITIES = [
-    { id: 'scl', flag: 'CL', name: 'SANTIAGO', country: 'CHILE', lat: -33.45, lon: -70.67, side: -1, tag: 'CORDILLERA, JACARANDAS Y PALMERAS',
+    { id: 'scl', code: 'SCL', flag: 'CL', name: 'SANTIAGO', country: 'CHILE', lat: -33.45, lon: -70.67, side: -1, tag: 'Cordillera, jacarandas y palmeras',
       border: 'andes', grass: ['#7fa84a', '#94bc5a', '#64903a'], trees: ['jacaranda', 'jacaranda', 'green', 'palm'], plazaTree: 'palm',
       roofs: ['teja', 'teja', 'crema', 'hormigon', 'ocre'], specials: ['torre', 'cerro'], big: ['estadio'], margin: 84, mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#1b1a26', '#f2c440', '#f2f2f2', '#5ad1e0', '#e05a5a'],
       avenue: { row: 6 }, civ: [['taxi', CIV.colectivo], ['taxi', CIV.colectivo], ['bus', CIV.redBus]], event: 'temblor',
-      life: 'AVENIDA, COLECTIVOS Y TEMBLORES' },
-    { id: 'bue', flag: 'AR', name: 'BUENOS AIRES', country: 'ARGENTINA', lat: -34.6, lon: -58.38, side: 1, tag: 'AVENIDAS ANCHAS FRENTE AL RÍO',
+      life: 'Avenida, colectivos y temblores' },
+    { id: 'bue', code: 'BUE', flag: 'AR', name: 'BUENOS AIRES', country: 'ARGENTINA', lat: -34.6, lon: -58.38, side: 1, tag: 'Avenidas anchas frente al río',
       border: 'river', water: ['#7a6a4a', '#9a8a68', '#5e5038'], grass: ['#5aa04a', '#72b85a', '#448238'], trees: ['green', 'jacaranda', 'green'], plazaTree: 'green',
       roofs: ['crema', 'blanco', 'gris', 'teja'], specials: ['obelisco'], big: ['estadio', 'puerto'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#1b1a26', '#f2c440', '#f2f2f2', '#2f6ff2'], tint: [0xffb070, 0.08],
-      avenue: { col: 5 }, civ: [['bus', CIV.porteno1], ['bus', CIV.porteno2], ['taxi', CIV.colectivo]], life: 'AVENIDA ANCHA Y COLECTIVOS' },
-    { id: 'mex', flag: 'MX', name: 'CIUDAD DE MÉXICO', country: 'MÉXICO', lat: 19.43, lon: -99.13, side: -1, tag: 'VOLCANES Y TECHOS DE COLORES',
+      avenue: { col: 5 }, civ: [['bus', CIV.porteno1], ['bus', CIV.porteno2], ['taxi', CIV.colectivo]], life: 'Avenida ancha y colectivos' },
+    { id: 'mex', code: 'MEX', flag: 'MX', name: 'CIUDAD DE MÉXICO', country: 'MÉXICO', lat: 19.43, lon: -99.13, side: -1, tag: 'Volcanes y techos de colores',
       border: 'volcano', grass: ['#6aa448', '#82bc5a', '#528836'], trees: ['jacaranda', 'green', 'palm'], plazaTree: 'jacaranda',
       roofs: ['rosa', 'amarillo', 'turquesa', 'naranjo', 'teja'], specials: ['zocalo'], big: ['estadio', 'mercado'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#e84a8a', '#f2c440', '#f2f2f2', '#3ab8b0'],
-      avenue: { row: 4 }, civ: [['taxi', CIV.taxiMx], ['taxi', CIV.taxiMx], ['sedan', CIV.vocho]], life: 'AVENIDA Y TAXIS ROSADOS' },
-    { id: 'lax', flag: 'US', name: 'LOS ÁNGELES', country: 'EE. UU.', lat: 34.05, lon: -118.24, side: -1, tag: 'PISCINAS, PALMERAS Y ATARDECER',
+      avenue: { row: 4 }, civ: [['taxi', CIV.taxiMx], ['taxi', CIV.taxiMx], ['sedan', CIV.vocho]], life: 'Avenida y taxis rosados' },
+    { id: 'lax', code: 'LAX', flag: 'US', name: 'LOS ÁNGELES', country: 'EE. UU.', lat: 34.05, lon: -118.24, side: -1, tag: 'Piscinas, palmeras y atardecer',
       border: 'hills', grass: ['#7ab84e', '#92cc62', '#5e9a3c'], trees: ['palm', 'palm', 'green'], plazaTree: 'palm',
       roofs: ['blanco', 'crema', 'teja', 'azul'], specials: [], big: ['autocine', 'estadio'], mixSmall: MIX_SMALL,
       mixBig: [['roof', 0.35], ['pool', 0.3], ['park', 0.15], ['parking', 0.2]],
       parked: ['#f2f2f2', '#1b1a26', '#e05a5a', '#ffd23f', '#5ad1e0'], tint: [0xff7a40, 0.12],
-      avenue: { row: 8 }, civ: [['convertible', CIV.convRed], ['convertible', CIV.convTeal], ['sedan', CIV.white]], life: 'BOULEVARD Y DESCAPOTABLES' },
-    { id: 'lon', flag: 'UK', name: 'LONDRES', country: 'REINO UNIDO', lat: 51.5, lon: -0.13, side: 1, tag: 'LLUVIA, LADRILLO Y BUSES ROJOS',
+      avenue: { row: 8 }, civ: [['convertible', CIV.convRed], ['convertible', CIV.convTeal], ['sedan', CIV.white]], life: 'Boulevard y descapotables' },
+    { id: 'lon', code: 'LON', flag: 'UK', name: 'LONDRES', country: 'REINO UNIDO', lat: 51.5, lon: -0.13, side: 1, tag: 'Lluvia, ladrillo y buses rojos',
       border: 'river', water: ['#3a5a7a', '#5a7a9a', '#2a4460'], grass: ['#4a8a4a', '#5ea05a', '#3a7038'], trees: ['darkgreen', 'green'], plazaTree: 'darkgreen',
       roofs: ['pizarra', 'ladrillo', 'gris', 'cobre'], specials: [], big: ['estadio'], bridge: true, mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: 'bus', rain: true, tint: [0x5a6a8a, 0.18],
-      civ: [['bus', CIV.london], ['bus', CIV.london], ['taxi', CIV.cab]], drift: true, drive: 'L', life: 'CURVAS MOJADAS PARA DERRAPAR' },
-    { id: 'tyo', flag: 'JP', name: 'TOKIO', country: 'JAPÓN', lat: 35.68, lon: 139.69, side: -1, tag: 'NOCHE DE NEÓN Y CEREZOS',
+      civ: [['bus', CIV.london], ['bus', CIV.london], ['taxi', CIV.cab]], drift: true, drive: 'L', life: 'Curvas mojadas para derrapar' },
+    { id: 'tyo', code: 'TYO', flag: 'JP', name: 'TOKIO', country: 'JAPÓN', lat: 35.68, lon: 139.69, side: -1, tag: 'Noche de neón y cerezos',
       border: 'sea', water: ['#1a3a6a', '#2f5a9a', '#10284a'], grass: ['#4f9a5a', '#66b070', '#3a7a44'], trees: ['sakura', 'sakura', 'green'], plazaTree: 'sakura',
       roofs: ['gris', 'azul', 'blanco', 'pizarra'], specials: [], big: ['domo', 'templo'], mixSmall: MIX_SMALL, mixBig: MIX_BIG,
       parked: ['#f2f2f2', '#1b1a26', '#ffd23f', '#5ad1e0'], night: true, neon: true,
       avenue: { row: 5, col: 5 }, scramble: true, drift: true, drive: 'L',
-      civ: [['taxi', CIV.cab], ['taxi', CIV.taxiJp], ['sedan', CIV.white]], life: 'DERRAPE Y GRAN CRUCE PEATONAL' },
+      civ: [['taxi', CIV.cab], ['taxi', CIV.taxiJp], ['sedan', CIV.white]], life: 'Derrape y gran cruce peatonal' },
   ];
   // pistas especiales: se compran con monedas (o se abren con equipo) y se juegan aparte de la gira
   const TRACKS = [
-    { id: 'arena', kind: 'arena', name: 'ARENA SHOW', country: 'PISTA ESPECIAL', tag: 'RAMPAS, AROS DE FUEGO Y MONSTER TRUCKS', price: 500, lvl: 3, rounds: 1,
-      loops: 0.62, margin: 56, civ: [], specials: [], life: 'SHOW DE 90 SEGUNDOS', song: 'arena' },
-    { id: 'nieve', kind: 'snow', name: 'PUEBLO NEVADO', country: 'PISTA ESPECIAL', tag: 'HIELO, AVALANCHAS Y QUITANIEVES', price: 0, need: 'clavos', lvl: 3, rounds: 3,
-      margin: 48, civ: [['plow', null], ['sedan', { b: '#e6e6ee', l: '#ffffff', d: '#9a9aaa', s: '#3a3a4c' }]], specials: [], life: 'HIELO Y AVALANCHAS', song: 'snow' },
-    { id: 'cuarto', kind: 'toy', name: 'CUARTO DE JUGUETES', country: 'PISTA ESPECIAL', tag: 'ALFOMBRA, TREN, CANICAS Y UN GATO', price: 700, lvl: 4, rounds: 3,
-      margin: 64, civ: [['convertible', { b: '#ffd23f', l: '#fff09a', d: '#c49a10', s: '#e8383d' }]], specials: [], life: 'TREN, CANICAS Y EL GATO', song: 'toy' },
+    { id: 'arena', code: 'SHW', kind: 'arena', name: 'ARENA SHOW', country: 'PISTA ESPECIAL', tag: 'Rampas, aros de fuego y monster trucks', price: 500, lvl: 3, rounds: 1,
+      loops: 0.62, margin: 56, civ: [], specials: [], life: 'Show de 90 segundos', song: 'arena' },
+    { id: 'nieve', code: 'SNW', kind: 'snow', name: 'PUEBLO NEVADO', country: 'PISTA ESPECIAL', tag: 'Hielo, avalanchas y quitanieves', price: 0, need: 'clavos', lvl: 3, rounds: 3,
+      margin: 48, civ: [['plow', null], ['sedan', { b: '#e6e6ee', l: '#ffffff', d: '#9a9aaa', s: '#3a3a4c' }]], specials: [], life: 'Hielo y avalanchas', song: 'snow' },
+    { id: 'cuarto', code: 'TOY', kind: 'toy', name: 'CUARTO DE JUGUETES', country: 'PISTA ESPECIAL', tag: 'Alfombra, tren, canicas y un gato', price: 700, lvl: 4, rounds: 3,
+      margin: 64, civ: [['convertible', { b: '#ffd23f', l: '#fff09a', d: '#c49a10', s: '#e8383d' }]], specials: [], life: 'Tren, canicas y el gato', song: 'toy' },
   ];
   const NC = CITIES.length, ALLC = CITIES.concat(TRACKS);
   const curC = () => ALLC[S.city];
@@ -2994,81 +3519,81 @@ const Rally = (() => {
   const roundsOf = () => (ALLC[S.city] && ALLC[S.city].rounds) || ROUNDS;
   // lo propio de cada ciudad (se muestra en la pantalla de carga)
   const FEATS = {
-    scl: ['AVENIDA DE DOS PISTAS CON COLECTIVOS Y MICROS', 'TEMBLORES: LAS PATRULLAS PIERDEN EL CONTROL'],
-    bue: ['AVENIDA ANCHA DE NORTE A SUR', 'COLECTIVOS: SI LOS TOPAS, TE FRENAN'],
-    mex: ['AVENIDA CON TAXIS ROSADOS', 'MÁS BARRERAS EN LAS CALLES'],
-    lax: ['BOULEVARD CON DESCAPOTABLES', 'PISCINAS Y CALLES LARGAS PARA ESCAPAR'],
-    lon: ['CURVAS MOJADAS: EL AUTO DERRAPA', 'SAL DEL DERRAPE Y GANAS UN MINI TURBO'],
-    tyo: ['CURVAS PARA DERRAPAR Y MINI TURBO', 'GRAN CRUCE: CUANDO CRUZAN PEATONES, TODOS FRENAN'],
-    arena: ['RAMPAS: SALTA Y QUEDAS INVENCIBLE EN EL AIRE', 'AROS DE FUEGO +500 · SALTAR SOBRE UN MONSTER +400', 'NO PIERDES AUTOS: CADA CHOQUE RESTA 10 SEGUNDOS'],
-    nieve: ['HIELO: LAS PATRULLAS NO PUEDEN DOBLAR (TÚ SÍ, CON CLAVOS)', 'MONTÍCULOS QUE FRENAN · EL QUITANIEVES LOS LIMPIA', 'AVALANCHAS: CORTAN UNA CALLE UNOS SEGUNDOS'],
-    cuarto: ['PILAS EN VEZ DE BIDONES · REGALOS CON ÍTEM', 'EL TREN PASA: ESPERA CUANDO BAJA LA BARRERA', 'CANICAS QUE RUEDAN · CUIDADO CON LA PATA DEL GATO'],
+    scl: ['Avenida de dos pistas con colectivos y micros', 'Temblores: las patrullas pierden el control unos segundos'],
+    bue: ['Avenida ancha de norte a sur', 'Colectivos: si los topas, te frenan'],
+    mex: ['Avenida con taxis rosados', 'Más barreras en las calles'],
+    lax: ['Boulevard con descapotables', 'Piscinas y calles largas para escapar'],
+    lon: ['Curvas mojadas: el auto derrapa', 'Sal del derrape y ganas un mini turbo'],
+    tyo: ['Curvas para derrapar y mini turbo', 'Gran cruce: cuando cruzan peatones, todos frenan'],
+    arena: ['Rampas: en el aire nadie te atrapa', 'Aro de fuego: +500. Saltar sobre un monster: +400', 'No pierdes autos: cada choque resta 10 segundos'],
+    nieve: ['Hielo: las patrullas no pueden doblar (tú sí, con clavos)', 'Montículos que frenan; el quitanieves los limpia', 'Avalanchas: cortan una calle unos segundos'],
+    cuarto: ['Pilas en vez de bidones y regalos con ítem', 'El tren pasa: espera cuando baja la barrera', 'Canicas que ruedan y la pata del gato'],
   };
   const TIPS = [
-    'EL GAS ATURDE A TODAS LAS PATRULLAS QUE LO TOQUEN, NO SOLO A UNA',
-    'JUNTA BIDONES SEGUIDOS PARA HACER COMBO Y GANAR MÁS',
-    'PASA RASPANDO UNA PATRULLA SIN CHOCAR: DA PUNTOS Y MONEDAS',
-    'LAS PATRULLAS MORADAS DOBLAN AL AZAR Y A VECES CHOCAN BARRERAS',
-    'LAS NARANJAS TE CORTAN EL PASO: NO VAYAS DERECHO HACIA ELLAS',
-    'LAS VERDES CUIDAN SU ZONA: SI TE ALEJAS, VUELVEN A SU ESQUINA',
-    'CADA CIERTO RATO LAS PATRULLAS SE DISPERSAN UNOS SEGUNDOS',
-    'CON ESCUDO PUEDES ROMPER UNA BARRERA O AGUANTAR UN CHOQUE',
-    'EL BIDÓN S DUPLICA LOS PUNTOS: BÚSCALO PRIMERO EN EL RADAR',
-    'LAS FLECHAS DEL BORDE TE MARCAN EL BIDÓN MÁS CERCANO Y LAS PATRULLAS',
-    'EN LA RONDA 3 ESCAPA DEL FOCO DEL HELICÓPTERO: SI TE ILUMINA, TODAS TE VEN',
-    'MEJORA EL MOTOR EN EL TALLER SI LAS PATRULLAS TE ALCANZAN',
+    'El gas aturde a todas las patrullas que lo tocan, no solo a una.',
+    'Junta bidones seguidos para hacer combo y ganar más.',
+    'Pasa raspando una patrulla sin chocar: da puntos y monedas.',
+    'Las patrullas moradas doblan al azar y a veces chocan barreras.',
+    'Las naranjas te cortan el paso: no vayas derecho hacia ellas.',
+    'Las verdes cuidan su zona: si te alejas, vuelven a su esquina.',
+    'Cada cierto rato las patrullas se dispersan unos segundos.',
+    'Con escudo puedes romper una barrera o aguantar un choque.',
+    'El bidón S duplica los puntos: búscalo primero en el radar.',
+    'Las flechas del borde marcan el bidón más cercano y las patrullas.',
+    'En la ronda 3 escapa del foco del helicóptero: si te ilumina, todas te ven.',
+    'Si las patrullas te alcanzan, mejora el motor en el taller.',
   ];
   // misiones: siempre hay 3 activas; al cumplir una se paga y aparece otra
   const MISSIONS = {
-    gas: { t: 'ATURDE {n} PATRULLAS CON GAS', n: 12, c: 50 },
-    oil: { t: 'HAZ RESBALAR {n} PATRULLAS CON ACEITE', n: 4, c: 60 },
-    cans: { t: 'JUNTA {n} BIDONES', n: 40, c: 50 },
-    combo: { t: 'HAZ UN COMBO ×{n}', n: 4, c: 60, max: true },
-    near: { t: 'PASA RASPANDO {n} PATRULLAS', n: 8, c: 60 },
-    nitro: { t: 'USA {n} NITROS', n: 4, c: 40 },
-    rocks: { t: 'ROMPE {n} BARRERAS CON ESCUDO', n: 2, c: 70 },
-    boxes: { t: 'ABRE {n} CAJAS DE ÍTEM', n: 10, c: 40 },
-    duel: { t: 'GANA {n} DUELOS', n: 2, c: 100 },
-    clean: { t: 'TERMINA UNA CIUDAD SIN CHOCAR', n: 1, c: 120 },
-    heli: { t: 'ESCAPA DEL HELICÓPTERO {n} VECES', n: 2, c: 90 },
-    icp: { t: 'ATURDE AL INTERCEPTOR {n} VECES', n: 2, c: 80, need: 2 },
-    boost: { t: 'SAL DE {n} DERRAPES CON MINI TURBO', n: 12, c: 70, need: 5 },
-    drill: { t: 'TALADRA {n} PATRULLAS', n: 4, c: 90, eq: 'taladro' },
+    gas: { t: 'Aturde {n} patrullas con gas', n: 12, c: 50 },
+    oil: { t: 'Haz resbalar {n} patrullas con aceite', n: 4, c: 60 },
+    cans: { t: 'Junta {n} bidones', n: 40, c: 50 },
+    combo: { t: 'Haz un combo ×{n}', n: 4, c: 60, max: true },
+    near: { t: 'Pasa raspando {n} patrullas', n: 8, c: 60 },
+    nitro: { t: 'Usa {n} nitros', n: 4, c: 40 },
+    rocks: { t: 'Rompe {n} barreras con escudo', n: 2, c: 70 },
+    boxes: { t: 'Abre {n} cajas de ítem', n: 10, c: 40 },
+    duel: { t: 'Gana {n} duelos', n: 2, c: 100 },
+    clean: { t: 'Termina una ciudad sin chocar', n: 1, c: 120 },
+    heli: { t: 'Escapa del helicóptero {n} veces', n: 2, c: 90 },
+    icp: { t: 'Aturde al interceptor {n} veces', n: 2, c: 80, need: 2 },
+    boost: { t: 'Sal de {n} derrapes con mini turbo', n: 12, c: 70, need: 5 },
+    drill: { t: 'Taladra {n} patrullas', n: 4, c: 90, eq: 'taladro' },
   };
   // logros (con porcentaje en su pantalla)
   const ACHS = [
-    ['city1', 'PRIMERA PARADA', 'COMPLETA SANTIAGO'],
-    ['tour', 'VUELTA AL MUNDO', 'COMPLETA LA GIRA HASTA TOKIO'],
-    ['master', 'MAESTRO DEL VOLANTE', 'COMPLETA TOKIO EN DIFICULTAD MAESTRO'],
-    ['stars', 'CIELO ESTRELLADO', 'LAS 3 ESTRELLAS EN UNA CIUDAD'],
-    ['allstars', 'CONSTELACIÓN', 'LAS 3 ESTRELLAS EN LAS 6 CIUDADES'],
-    ['clean', 'SIN UN RASGUÑO', 'TERMINA UNA CIUDAD SIN CHOCAR'],
-    ['combo6', 'COMBO LOCO', 'HAZ UN COMBO ×6'],
-    ['heli', 'BAJO EL RADAR', 'ESCAPA SIN QUE EL FOCO TE ILUMINE'],
-    ['final', 'GRAN FINAL', 'ESCAPA DE LOS DOS HELICÓPTEROS DE TOKIO'],
-    ['duel', 'DUELISTA', 'GANA UN DUELO'],
-    ['duels', 'REY DEL DUELO', 'GANA UN DUELO EN CADA CIUDAD'],
-    ['cars', 'COLECCIONISTA', 'TEN LOS 5 AUTOS'],
-    ['equip', 'BIEN EQUIPADO', 'COMPRA UN EQUIPO EN EL GARAJE'],
-    ['drill', 'PERFORADOR', 'TALADRA UNA PATRULLA'],
-    ['track', 'PISTA PROPIA', 'ABRE UNA PISTA ESPECIAL'],
-    ['ring', 'ARO DE FUEGO', 'SALTA POR UN ARO DE FUEGO'],
-    ['jumpover', 'POR ENCIMA', 'SALTA SOBRE UN MONSTER TRUCK'],
-    ['arena', 'ESTRELLA DEL SHOW', '3 ESTRELLAS EN LA ARENA'],
-    ['snow', 'REY DEL HIELO', 'COMPLETA EL PUEBLO NEVADO'],
-    ['toy', 'JUGUETERO', 'COMPLETA EL CUARTO DE JUGUETES'],
-    ['paw', 'GATO ALIADO', 'QUE EL GATO ATURDA A UNA PATRULLA'],
-    ['rich', 'MILLONARIO', 'JUNTA 2000 MONEDAS'],
-    ['score', 'CIEN MIL', 'HAZ 100.000 PUNTOS EN UNA GIRA'],
-    ['top', 'SALÓN DE LA FAMA', 'ENTRA A LOS 10 MEJORES'],
+    ['city1', 'Primera parada', 'Completa Santiago.'],
+    ['tour', 'Vuelta al mundo', 'Completa la gira hasta Tokio.'],
+    ['master', 'Maestro del volante', 'Completa Tokio en dificultad Maestro.'],
+    ['stars', 'Cielo estrellado', 'Las 3 estrellas en una ciudad.'],
+    ['allstars', 'Constelación', 'Las 3 estrellas en las 6 ciudades.'],
+    ['clean', 'Sin un rasguño', 'Termina una ciudad sin chocar.'],
+    ['combo6', 'Combo loco', 'Haz un combo ×6.'],
+    ['heli', 'Bajo el radar', 'Escapa sin que el foco te ilumine.'],
+    ['final', 'Gran final', 'Escapa de los dos helicópteros de Tokio.'],
+    ['duel', 'Duelista', 'Gana un duelo.'],
+    ['duels', 'Rey del duelo', 'Gana un duelo en cada ciudad.'],
+    ['cars', 'Coleccionista', 'Ten los 5 autos.'],
+    ['equip', 'Bien equipado', 'Compra un equipo en el taller.'],
+    ['drill', 'Perforador', 'Taladra una patrulla.'],
+    ['track', 'Pista propia', 'Abre una pista especial.'],
+    ['ring', 'Aro de fuego', 'Salta por un aro de fuego.'],
+    ['jumpover', 'Por encima', 'Salta sobre un monster truck.'],
+    ['arena', 'Estrella del show', '3 estrellas en la arena.'],
+    ['snow', 'Rey del hielo', 'Completa el pueblo nevado.'],
+    ['toy', 'Juguetero', 'Completa el cuarto de juguetes.'],
+    ['paw', 'Gato aliado', 'Que el gato aturda a una patrulla.'],
+    ['rich', 'Millonario', 'Junta 2000 monedas.'],
+    ['score', 'Cien mil', 'Haz 100.000 puntos en una gira.'],
+    ['top', 'Salón de la fama', 'Entra a los 10 mejores.'],
   ];
   const mText = (m) => MISSIONS[m.id].t.replace('{n}', MISSIONS[m.id].n);
   // patrullas: cada una con su forma de perseguir (y su color)
   const PTYPES = [
-    { n: 'PERSEGUIDORA', d: 'VA DIRECTO HACIA TI' },
-    { n: 'CORTADORA', d: 'APUNTA DONDE VAS A ESTAR Y TE CORTA EL PASO' },
-    { n: 'VIGILANTE', d: 'CUIDA SU ZONA; SI TE ALEJAS, VUELVE A SU ESQUINA' },
-    { n: 'ERRÁTICA', d: 'DOBLA AL AZAR Y A VECES CHOCA BARRERAS' },
+    { n: 'Perseguidora', d: 'Va directo hacia ti.' },
+    { n: 'Cortadora', d: 'Apunta a donde vas a estar y te corta el paso.' },
+    { n: 'Vigilante', d: 'Cuida su zona; si te alejas, vuelve a su esquina.' },
+    { n: 'Errática', d: 'Dobla al azar y a veces choca barreras.' },
   ];
   const PORDER = [0, 1, 2, 3, 0, 1, 0, 2];
   const PAR = 210;
@@ -4223,71 +4748,155 @@ const Rally = (() => {
     hud.b.innerHTML = `${t}${sub ? `<small>${sub}</small>` : ''}`;
   }
 
-  // ---------------- garaje con tienda
-  const STATS = [['VEL', 'vel'], ['GIRO', 'giro'], ['TANQUE', 'tanque'], ['GAS', 'gas']];
+  // ---------------- garaje: inicio (tu gira y a dónde seguir) y taller (autos, pintura, mejoras, equipo)
+  const STATS = [['Velocidad', 'vel'], ['Giro', 'giro'], ['Tanque', 'tanque'], ['Gas', 'gas']];
   const GROWS = 6;
-  function openGarage() {
+  const SMALLW = new Set(['de', 'del', 'y', 'la', 'el', 'en', 'a']);
+  // "CIUDAD DE MÉXICO" → "Ciudad de México" · "BÓLIDO GT" → "Bólido GT" · "EE. UU." se queda igual
+  const nice = (str) => str.toLowerCase().split(' ').map((w, i) => {
+    if (/\d/.test(w) || /^([a-z])\1\.$/.test(w) || (w.length <= 2 && !/[aeiouáéíóú]/.test(w))) return w.toUpperCase();
+    if (i > 0 && SMALLW.has(w)) return w;
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  }).join(' ');
+  const fmtN = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const hubIcons = {};
+  const hubIconURL = (k) => hubIcons[k] || (hubIcons[k] = RT.hubIcon(k).toDataURL());
+  // la próxima ciudad de la gira: la primera abierta sin terminar; con todo terminado, la que sigue a la última jugada
+  function nextCity() {
+    const cm = clearedMask(), un = unlocked();
+    for (let i = 0; i < NC; i++) if (i < un && !((cm >> i) & 1)) return i;
+    return (clamp(Store.get('rally_last', 0), 0, NC - 1) + 1) % NC;
+  }
+  function openGarage(view) {
     init(); initGarage();
     Snd.loopsOff();
     leaveTrackRun();
-    S.state = 'garage'; S.gRow = S.gRow || 0; S.gUpg = S.gUpg || 0; S.gEq = S.gEq || 0;
-    document.body.classList.add('inmenu');
-    UI.setButtons('ELEGIR', 'VOLVER');
     Snd.play(SONGS.garage);
+    S.state = 'garage'; S.gView = view || S.gView || 'home';
+    S.gRow = S.gRow || 0; S.gUpg = S.gUpg || 0; S.gEq = S.gEq || 0; S.hF = S.hF || 0;
+    document.body.classList.add('inmenu');
+    if (S.gView === 'home') renderHub(); else renderShop();
+  }
+  function renderHub() {
+    S.gView = 'home';
+    UI.setButtons('ELEGIR', 'SALIR');
+    const ni = nextCity(), nc = CITIES[ni], cm = clearedMask(), un = unlocked(), left = CITIES.filter((q, i) => !((cm >> i) & 1)).length;
+    const fresh = S.score === 0 && !cm;
+    const hello = fresh ? '¡Bienvenido a la gira!' : '¡Hola de nuevo!';
+    const sub = fresh ? 'Seis ciudades y la policía de cada país detrás de ti.'
+      : left === 0 ? `Ya diste la vuelta al mundo. Sigue sumando puntos en la vuelta ${S.loop + 1}.`
+      : left === 1 ? 'Solo te falta Tokio para terminar la gira.' : `Te faltan ${left} ciudades para llegar a Tokio.`;
+    const route = CITIES.map((q, i) => {
+      const st = starsOf(q.id), cls = [(cm >> i) & 1 ? 'done' : '', i === ni ? 'now' : '', i >= un ? 'lock' : ''].join(' ');
+      return `<li class="${cls}" title="${nice(q.name)}"><img src="${flagURL(q.flag)}" alt="${nice(q.name)}"><span>${[1, 2, 4].map((b) => (st & b ? '★' : '·')).join('')}</span></li>`;
+    }).join('');
+    const ms = missionList().list[0], md = MISSIONS[ms.id];
     UI.setHud(`
-      <div class="hud-ui gar" id="gar">
-        <div class="gtitle">GARAJE</div>
-        <div class="gcoins"><span class="hcoin" id="gco"></span><button class="chip" id="gach">LOGROS</button><button class="chip" id="gguide">? GUÍA</button></div>
+      <div class="hud-ui gar hub" id="gar">
+        <div class="gtitle">Gas Rally${freeMode() ? ' <small class="ptag">MODO PRUEBA</small>' : ''}</div>
+        <div class="gbar"><span class="hcoin" id="gco"></span><button class="chip" id="gach">Logros <b>${achPct()}%</b></button><button class="chip" id="gguide">Guía</button></div>
+        <div class="gpanel">
+          <div class="hhead"><b>${hello}</b><span>${sub}</span></div>
+          <ol class="route" aria-label="Ruta de la gira">${route}</ol>
+          ${fresh ? '' : `<div class="runst"><span><em>${fmtN(S.score)}</em> puntos</span><span><em>${S.lives}</em> ${S.lives === 1 ? 'auto' : 'autos'}</span>${S.loop ? `<span>Vuelta <em>${S.loop + 1}</em></span>` : ''}</div>`}
+          <button class="gbtn go" data-f="0">${fresh ? 'Empezar' : 'Seguir'} en ${nice(nc.name)} ▶</button>
+          <div class="tiles">
+            <button data-f="1"><img src="${hubIconURL('taller')}" alt=""><b>Taller</b><small>Autos y mejoras</small></button>
+            <button data-f="2"><img src="${hubIconURL('duel')}" alt=""><b>Duelos</b><small>Contra los rivales</small></button>
+            <button data-f="3"><img src="${hubIconURL('esp')}" alt=""><b>Especiales</b><small>Arena, nieve y juguetes</small></button>
+            <button data-f="4"><img src="${hubIconURL('rec')}" alt=""><b>Récords</b><small>Los 10 mejores</small></button>
+          </div>
+          <p class="mis"><b>Misión</b> ${mText(ms)} <em>${Math.min(ms.n, md.n)}/${md.n}</em> <span class="hcoin">${coinH(md.c)}</span></p>
+        </div>
+      </div>`);
+    UI.$('#gco').innerHTML = coinH(S.coins);
+    UI.$('#gguide').addEventListener('click', () => openGuide('garage'));
+    UI.$('#gach').addEventListener('click', () => openAchs());
+    UI.$('#gar').querySelectorAll('[data-f]').forEach((b) => b.addEventListener('click', () => { Snd.unlock(); S.hF = +b.dataset.f; hubAct(S.hF); }));
+    markHub();
+  }
+  function markHub() { const r = UI.$('#gar'); if (r) r.querySelectorAll('[data-f]').forEach((b) => b.classList.toggle('sel', +b.dataset.f === S.hF)); }
+  function hubAct(f) {
+    if (f === 0) {
+      // directo al mapa con el avión rumbo a la próxima ciudad
+      const ni = nextCity();
+      if (!selReady()) { renderShop(); UI.toast('ELIGE UN AUTO QUE YA TENGAS'); return; }
+      Snd.sfx('start'); S.mapMode = 'tour'; openMap({ sel: ni, mode: 'tour' }); travel();
+    } else if (f === 1) { Snd.sfx('select'); renderShop(); }
+    else if (f === 2) { Snd.sfx('select'); openMap({ sel: clamp(nextCity(), 0, unlocked() - 1), mode: 'duel' }); }
+    else if (f === 3) { Snd.sfx('select'); openMap({ mode: 'esp' }); }
+    else if (f === 4) { Snd.sfx('select'); openRecords(() => openGarage('home'), null, 'garage'); }
+  }
+  function updateHub() {
+    if (S.hF === 0) {
+      if (Input.pressed.down || Input.pressed.right) { S.hF = S.hLast || 1; Snd.sfx('move'); markHub(); }
+    } else {
+      if (Input.pressed.up) { S.hLast = S.hF; S.hF = 0; Snd.sfx('move'); markHub(); }
+      else if (Input.pressed.left) { S.hF = S.hF === 1 ? 4 : S.hF - 1; Snd.sfx('move'); markHub(); }
+      else if (Input.pressed.right) { S.hF = S.hF === 4 ? 1 : S.hF + 1; Snd.sfx('move'); markHub(); }
+    }
+    if (Input.pressed.a || Input.pressed.start) hubAct(S.hF);
+    else if (Input.pressed.select) openGuide('garage');
+    else if (Input.pressed.b) toMenu();
+  }
+  function renderShop() {
+    S.gView = 'shop';
+    UI.setButtons('ELEGIR', 'VOLVER');
+    UI.setHud(`
+      <div class="hud-ui gar shop" id="gar">
+        <div class="gtitle">Taller</div>
+        <div class="gbar"><span class="hcoin" id="gco"></span><button class="chip" id="gback">◀ Inicio</button></div>
         <div class="gpanel">
           <div class="grow" data-row="0"><button class="arr" data-d="-1" aria-label="Auto anterior">◀</button><div class="gname"><b id="gcn"></b><small id="gcd"></small></div><button class="arr" data-d="1" aria-label="Auto siguiente">▶</button></div>
           <div class="gstats" id="gst"></div>
-          <div class="grow" data-row="1"><span class="glab">COLOR <em id="gcc"></em></span><div class="sw" id="gcol"></div></div>
-          <div class="grow" data-row="2"><span class="glab">GAS / NEÓN <em id="ggc"></em></span><div class="sw" id="ggas"></div></div>
-          <div class="grow" data-row="3"><span class="glab">TALLER</span><div class="upg" id="gupg"></div></div>
-          <div class="grow" data-row="4"><span class="glab">EQUIPO</span><div class="upg" id="geq"></div></div>
+          <div class="grow" data-row="1"><span class="glab">Color <em id="gcc"></em></span><div class="sw" id="gcol"></div></div>
+          <div class="grow" data-row="2"><span class="glab">Gas y neón <em id="ggc"></em></span><div class="sw" id="ggas"></div></div>
+          <div class="grow" data-row="3"><span class="glab">Mejoras <em>para este auto</em></span><div class="upg" id="gupg"></div></div>
+          <div class="grow" data-row="4"><span class="glab">Equipo <em>para todos</em></span><div class="upg" id="geq"></div></div>
           <button class="gbtn" id="ggo" data-row="5"></button>
         </div>
       </div>`);
     const root = UI.$('#gar');
     root.querySelectorAll('.arr').forEach((b) => b.addEventListener('click', () => { S.gRow = 0; changeSel(0, +b.dataset.d); }));
     UI.$('#ggo').addEventListener('click', () => { Snd.unlock(); S.gRow = 5; garageGo(); });
-    UI.$('#gguide').addEventListener('click', () => openGuide('garage'));
-    UI.$('#gach').addEventListener('click', () => openAchs());
+    UI.$('#gback').addEventListener('click', () => { Snd.sfx('back'); renderHub(); });
     root.querySelectorAll('.grow').forEach((rw) => rw.addEventListener('pointerdown', () => { S.gRow = +rw.dataset.row; refreshGarage(); }));
     refreshGarage();
   }
   const swBg = (c, sp) => (sp ? `linear-gradient(135deg,${c.l} 0 25%,${c.b} 25% 60%,${c.s} 60% 72%,${c.d} 72%)` : `linear-gradient(135deg,${c.l},${c.b} 55%,${c.d})`);
+  const capW = (w) => w.charAt(0) + w.slice(1).toLowerCase();
   function refreshGarage() {
     const root = UI.$('#gar');
     if (!root) return;
+    if (S.gView !== 'shop') { const co = UI.$('#gco'); if (co) co.innerHTML = coinH(S.coins); return; }
     const car = CARS[sel.m], id = car.id, has = owned.has(id), col = palOf(sel.m, sel.c), gas = GASES[sel.g], up = upOf(id);
     const paintOk = sel.c < 4 || !!paints[id];
     UI.$('#gco').innerHTML = coinH(S.coins);
-    UI.$('#gcn').textContent = car.name;
+    UI.$('#gcn').textContent = nice(car.name);
     const gcd = UI.$('#gcd');
-    gcd.innerHTML = has ? car.desc : `BLOQUEADO · ${coinH(car.price)}`;
+    gcd.innerHTML = has ? car.desc : `Todavía no es tuyo: cuesta ${coinH(car.price)}`;
     gcd.classList.toggle('lock', !has);
-    UI.$('#gcc').innerHTML = sel.c < 4 ? col.n : paintOk ? `${col.n} ★` : `${col.n} · ${coinH(PAINT_PRICE)}`;
-    UI.$('#ggc').textContent = gas.n;
+    UI.$('#gcc').innerHTML = sel.c < 4 ? capW(col.n) : paintOk ? `${capW(col.n)} ★` : `${capW(col.n)} · ${coinH(PAINT_PRICE)}`;
+    UI.$('#ggc').textContent = capW(gas.n);
     UI.$('#gst').innerHTML = STATS.map(([lab, k]) => {
       const b = car[k], u = k === 'gas' ? 0 : Math.min(up[k] || 0, 7 - b);
       return `<span>${lab}</span><span class="bar5">${'<i class="on"></i>'.repeat(b)}${'<i class="up"></i>'.repeat(u)}${'<i></i>'.repeat(7 - b - u)}</span>`;
     }).join('');
     UI.$('#gcol').innerHTML = [...car.colors, car.special].map((c, i) =>
-      `<button class="${i === sel.c ? 'on' : ''}${i === 4 ? ' sp' : ''}${i === 4 && !paints[id] ? ' lock' : ''}" data-i="${i}" style="background:${swBg(c, i === 4)}" aria-label="Color ${c.n}${i === 4 && !paints[id] ? ' (bloqueado)' : ''}"></button>`).join('');
-    UI.$('#ggas').innerHTML = GASES.map((c, i) => `<button class="${i === sel.g ? 'on' : ''}" data-i="${i}" style="background:${c.c};box-shadow:0 0 calc(var(--px)*4) ${c.neon},inset 0 0 0 var(--px) #000" aria-label="Gas ${c.n}"></button>`).join('');
+      `<button class="${i === sel.c ? 'on' : ''}${i === 4 ? ' sp' : ''}${i === 4 && !paints[id] ? ' lock' : ''}" data-i="${i}" style="background:${swBg(c, i === 4)}" aria-label="Color ${capW(c.n)}${i === 4 && !paints[id] ? ' (bloqueado)' : ''}"></button>`).join('');
+    UI.$('#ggas').innerHTML = GASES.map((c, i) => `<button class="${i === sel.g ? 'on' : ''}" data-i="${i}" style="background:${c.c};box-shadow:0 0 calc(var(--px)*4) ${c.neon},inset 0 0 0 var(--px) #000" aria-label="Gas ${capW(c.n)}"></button>`).join('');
     UI.$('#gupg').innerHTML = UPGS.map(([k, n], i) => {
       const lv = up[k] || 0, max = lv >= 2;
-      return `<button class="${i === S.gUpg && S.gRow === 3 ? 'on' : ''}${max ? ' max' : ''}${!has ? ' off' : ''}" data-i="${i}" aria-label="Mejorar ${n}">${n}<span class="pips">${'<b class="on"></b>'.repeat(lv)}${'<b></b>'.repeat(2 - lv)}</span><i>${max ? 'MÁX' : coinH(UPG_PRICE[lv])}</i></button>`;
+      return `<button class="${i === S.gUpg && S.gRow === 3 ? 'on' : ''}${max ? ' max' : ''}${!has ? ' off' : ''}" data-i="${i}" aria-label="Mejorar ${capW(n)}">${capW(n)}<span class="pips">${'<b class="on"></b>'.repeat(lv)}${'<b></b>'.repeat(2 - lv)}</span><i>${max ? 'Máx' : coinH(UPG_PRICE[lv])}</i></button>`;
     }).join('');
     UI.$('#geq').innerHTML = EQUIP.map((q, i) => {
       const own = hasEq(q.id), on = eqOn(q.id);
-      return `<button class="${i === S.gEq && S.gRow === 4 ? 'on' : ''}${own && !on ? ' off' : ''}" data-i="${i}" aria-label="${own ? (on ? 'Apagar' : 'Encender') : 'Comprar'} ${q.n}">${q.n}<span class="pips">${own ? (on ? 'ON' : 'OFF') : ''}</span><i>${own ? '✓' : coinH(q.price)}</i></button>`;
+      return `<button class="${i === S.gEq && S.gRow === 4 ? 'on' : ''}${own && !on ? ' off' : ''}" data-i="${i}" aria-label="${own ? (on ? 'Apagar' : 'Encender') : 'Comprar'} ${capW(q.n)}">${capW(q.n)}<span class="pips">${own ? (on ? 'Puesto' : 'Apagado') : ''}</span><i>${own ? '✓' : coinH(q.price)}</i></button>`;
     }).join('');
     if (S.gRow === 4) { gcd.innerHTML = EQUIP[S.gEq].d; gcd.classList.remove('lock'); }
     const go = UI.$('#ggo');
     go.classList.toggle('buy', !has || !paintOk);
-    go.innerHTML = !has ? `COMPRAR AUTO · ${coinH(car.price)}` : !paintOk ? `COMPRAR PINTURA · ${coinH(PAINT_PRICE)}` : 'ELEGIR CIUDAD ▶';
+    go.innerHTML = !has ? `Comprar ${nice(car.name)} · ${coinH(car.price)}` : !paintOk ? `Comprar pintura ${capW(car.special.n)} · ${coinH(PAINT_PRICE)}` : 'Listo, volver al inicio';
     UI.$('#gcol').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { sel.c = +b.dataset.i; S.gRow = 1; saveSel(); }));
     UI.$('#ggas').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { sel.g = +b.dataset.i; S.gRow = 2; saveSel(); burstGas(); }));
     UI.$('#gupg').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { S.gRow = 3; S.gUpg = +b.dataset.i; buyUpgrade(S.gUpg); }));
@@ -4314,7 +4923,7 @@ const Rally = (() => {
     const car = CARS[sel.m], id = car.id;
     if (!owned.has(id)) { buy(car.price, () => { owned.add(id); Store.set('rally_owned', [...owned]); UI.toast(`¡EL ${car.name} ES TUYO!`); checkMisc(); }); return; }
     if (sel.c >= 4 && !paints[id]) { buy(PAINT_PRICE, () => { paints[id] = true; Store.set('rally_paint', paints); UI.toast(`PINTURA ${car.special.n} LISTA`); }); return; }
-    goMap();
+    Snd.sfx('select'); renderHub();
   }
   function buyUpgrade(i) {
     const car = CARS[sel.m], id = car.id, [k, n] = UPGS[i], up = upOf(id), lv = up[k] || 0;
@@ -4326,7 +4935,7 @@ const Rally = (() => {
     const q = EQUIP[i];
     if (!hasEq(q.id)) { buy(q.price, () => { eqOwned[q.id] = 1; Store.set('rally_equip', eqOwned); UI.toast(`${q.n} INSTALADO · SIRVE EN TODOS LOS AUTOS`); ach('equip'); }); return; }
     eqOff[q.id] = !eqOff[q.id]; Store.set('rally_eqoff', eqOff);
-    Snd.sfx(eqOff[q.id] ? 'back' : 'select'); UI.toast(`${q.n} ${eqOff[q.id] ? 'APAGADO' : 'ENCENDIDO'}`);
+    Snd.sfx(eqOff[q.id] ? 'back' : 'select'); UI.toast(`${q.n} ${eqOff[q.id] ? 'APAGADO' : 'PUESTO'}`);
     refreshGarage();
   }
   function burstGas() { G.puffT = 0; for (let i = 0; i < 3; i++) spawnGaragePuff(i * 0.12); }
@@ -4335,6 +4944,9 @@ const Rally = (() => {
     p.life = 1.6 + delay; p.max = 1.6; p.delay = delay; p.ang = S.gAng || 0;
   }
   function updateGarage(dt) {
+    if ((G.puffT += dt) > 0.55) { G.puffT = 0; spawnGaragePuff(); }
+    for (const p of G.puffs) if (p.life > 0) p.life -= dt;
+    if (S.gView === 'home') { updateHub(); return; }
     if (Input.pressed.up) { S.gRow = (S.gRow + GROWS - 1) % GROWS; Snd.sfx('move'); refreshGarage(); }
     if (Input.pressed.down) { S.gRow = (S.gRow + 1) % GROWS; Snd.sfx('move'); refreshGarage(); }
     for (const [key, d] of [['left', -1], ['right', 1]]) {
@@ -4345,9 +4957,7 @@ const Rally = (() => {
     }
     if (Input.pressed.a || Input.pressed.start) { if (S.gRow === 3) buyUpgrade(S.gUpg); else if (S.gRow === 4) buyEquip(S.gEq); else garageGo(); }
     else if (Input.pressed.select) { openGuide('garage'); return; }
-    else if (Input.pressed.b) { toMenu(); return; }
-    if ((G.puffT += dt) > 0.55) { G.puffT = 0; spawnGaragePuff(); }
-    for (const p of G.puffs) if (p.life > 0) p.life -= dt;
+    else if (Input.pressed.b) { Snd.sfx('back'); renderHub(); }
   }
   function renderGarage() {
     const W = Engine.W, t = performance.now() / 1000;
@@ -4373,7 +4983,6 @@ const Rally = (() => {
     renderScene(gScene);
   }
   // ---------------- mapa mundial
-  function goMap() { Snd.sfx('start'); openMap({ sel: S.city != null ? S.city : clamp(Store.get('rally_last', 0), 0, unlocked() - 1) }); }
   function openMap(o = {}) {
     init(); initMap();
     Snd.loopsOff();
@@ -4382,25 +4991,23 @@ const Rally = (() => {
     S.mapSel = o.sel != null ? o.sel : S.mapSel || 0;
     if (o.mode) S.mapMode = o.mode;
     document.body.classList.add('inmenu');
-    UI.setButtons('VIAJAR', 'GARAJE');
+    UI.setButtons('VIAJAR', 'INICIO');
     Snd.play(SONGS.menu);
     UI.setHud(`
       <div class="hud-ui wmap" id="wmap">
-        <div class="gtitle">RUTA MUNDIAL${freeMode() ? ' <small class="ptag">MODO PRUEBA</small>' : ''}</div>
-        <div class="wscore"><span class="hlab">PUNTOS</span> <span class="hval" id="wps"></span> <span class="hlab">VIDAS</span> <span class="hval pink" id="wpv"></span> <span class="hcoin" id="wco"></span></div>
+        <div class="wtop"><button class="chip" id="wgar">◀ Inicio</button>${freeMode() ? '<small class="ptag">MODO PRUEBA</small>' : ''}</div>
+        <div class="wscore"><span class="wchip" id="wps"></span><span class="wchip" id="wpv"></span><span class="hcoin" id="wco"></span></div>
         <div class="wpanel">
-          <div class="wmode" role="group" aria-label="Modo de juego"><button class="chip" id="wmT">GIRA</button><button class="chip" id="wmD">DUELO</button><button class="chip" id="wmE">ESPECIALES</button></div>
-          <div class="wnav"><button class="arr" id="wprev" aria-label="Ciudad anterior">◀</button><div class="wname"><b><img class="flagimg" id="wfl" alt=""> <span id="wcn"></span></b><small id="wcc"></small></div><button class="arr" id="wnext" aria-label="Ciudad siguiente">▶</button></div>
+          <div class="wmode" role="group" aria-label="Modo de juego"><button class="chip" id="wmT">Gira</button><button class="chip" id="wmD">Duelo</button><button class="chip" id="wmE">Especiales</button></div>
+          <div class="wnav"><button class="arr" id="wprev" aria-label="Anterior">◀</button><div class="wname"><b><img class="flagimg" id="wfl" alt=""> <span id="wcn"></span></b><small id="wcc"></small></div><button class="arr" id="wnext" aria-label="Siguiente">▶</button></div>
           <div class="wst" id="wst"></div>
-          <div class="wbtns"><button class="chip" id="wgar">GARAJE</button><button class="chip" id="wrec">RÉCORDS</button><button class="chip" id="wguide">GUÍA</button><button class="gbtn" id="wgo">VIAJAR ▶</button></div>
+          <button class="gbtn wgo" id="wgo"></button>
         </div>
       </div>`);
     UI.$('#wprev').addEventListener('click', () => moveMapSel(-1));
     UI.$('#wnext').addEventListener('click', () => moveMapSel(1));
     UI.$('#wgo').addEventListener('click', () => { Snd.unlock(); travel(); });
-    UI.$('#wgar').addEventListener('click', () => openGarage());
-    UI.$('#wguide').addEventListener('click', () => openGuide('map'));
-    UI.$('#wrec').addEventListener('click', () => { Snd.sfx('select'); const m = S.mapMode; openRecords(() => openMap({ mode: m }), null, 'map'); });
+    UI.$('#wgar').addEventListener('click', () => { Snd.sfx('back'); openGarage('home'); });
     UI.$('#wmT').addEventListener('click', () => setMapMode('tour'));
     UI.$('#wmD').addEventListener('click', () => setMapMode('duel'));
     UI.$('#wmE').addEventListener('click', () => setMapMode('esp'));
@@ -4420,38 +5027,42 @@ const Rally = (() => {
   const trackIcons = {};
   const trackIconURL = (k) => trackIcons[k] || (trackIcons[k] = RT.icon(k).toDataURL());
   const iconOf = (c) => (c.kind ? trackIconURL(c.kind) : flagURL(c.flag));
+  const starsH = (mask) => `<span class="stars">${[1, 2, 4].map((b) => `<i class="${mask & b ? 'on' : ''}">★</i>`).join('')}</span>`;
   function refreshEsp() {
     const i = S.espSel || 0, t = TRACKS[i], open = trackOpen(i), st = starsOf(t.id), best = (Store.get('rally_best', {})[t.id] || {}).score;
-    UI.$('#wcn').textContent = t.name;
+    UI.$('#wcn').textContent = nice(t.name);
     UI.$('#wfl').src = trackIconURL(t.kind); UI.$('#wfl').alt = '';
-    UI.$('#wcc').textContent = `${i + 1}/${TRACKS.length} · ${t.tag}`;
+    UI.$('#wcc').textContent = t.tag;
     const needEq = t.need && !hasEq(t.need) && !freeMode();
-    UI.$('#wst').textContent = open ? `${starStr(st)}${best ? ` · RÉCORD ${pad6(best)}` : ''} · ${t.rounds === 1 ? 'SHOW DE 90 SEGUNDOS' : '3 RONDAS'}`
-      : needEq ? 'NECESITAS RUEDAS CON CLAVOS (GARAJE · EQUIPO)' : `PISTA BLOQUEADA · CÓMPRALA CON MONEDAS`;
+    UI.$('#wst').innerHTML = open ? `${starsH(st)} ${best ? `Récord ${fmtN(best)}` : t.rounds === 1 ? 'Un show de 90 segundos' : 'Tres rondas'}`
+      : needEq ? 'Necesitas las ruedas con clavos. Las compras en el taller.' : `Ábrela una vez y es tuya para siempre.`;
     UI.$('#wst').classList.toggle('lock', !open);
     const go = UI.$('#wgo');
     go.disabled = !open && needEq;
-    go.innerHTML = open ? 'JUGAR ▶' : needEq ? 'BLOQUEADA' : `COMPRAR · ${coinH(t.price)}`;
+    go.classList.toggle('buy', !open && !needEq);
+    go.innerHTML = open ? `Jugar ${nice(t.name)} ▶` : needEq ? 'Faltan los clavos' : `Abrir por ${coinH(t.price)}`;
   }
   function refreshMap() {
     const c = CITIES[S.mapSel], i = S.mapSel, open = i < unlocked(), done = (clearedMask() >> i) & 1, duel = S.mapMode === 'duel';
     if (!UI.$('#wcn')) return;
     const esp = S.mapMode === 'esp';
     MODES.forEach((m, k) => { const b = UI.$(['#wmT', '#wmD', '#wmE'][k]); b.classList.toggle('on', S.mapMode === m); b.setAttribute('aria-pressed', String(S.mapMode === m)); });
-    UI.$('#wps').textContent = pad6(S.score);
-    UI.$('#wpv').textContent = String(S.lives);
+    UI.$('#wps').innerHTML = `<em>${fmtN(S.score)}</em> pts`;
+    UI.$('#wpv').innerHTML = `<em>${S.lives}</em> ${S.lives === 1 ? 'auto' : 'autos'}`;
     UI.$('#wco').innerHTML = coinH(S.coins);
+    UI.$('#wgo').classList.remove('buy');
     if (esp) { refreshEsp(); return; }
-    UI.$('#wcn').textContent = c.name;
-    UI.$('#wfl').src = flagURL(c.flag); UI.$('#wfl').alt = `Bandera de ${c.country}`;
-    UI.$('#wcc').textContent = `${c.country} · ${duel ? c.life : c.tag}`;
-    const wins = Store.get('rally_duels', {})[c.id] || 0;
-    UI.$('#wst').textContent = !open ? `BLOQUEADA · COMPLETA ${CITIES[i - 1].name} EN LA GIRA PARA ABRIRLA`
-      : duel ? `VS ${RIVALS[c.id].name} · EL PRIMERO EN JUNTAR ${DUEL_WIN} GANA ${80 + 20 * i} MONEDAS${wins ? ` · GANADOS ${wins}` : ''}`
-      : done ? `${starStr(starsOf(c.id))} · RÉCORD ${pad6((Store.get('rally_best', {})[c.id] || {}).score || 0)} · ${fmtT((Store.get('rally_best', {})[c.id] || {}).time || 0)}` : `☆☆☆ · 3 RONDAS · LISTA PARA VIAJAR`;
+    UI.$('#wcn').textContent = nice(c.name);
+    UI.$('#wfl').src = flagURL(c.flag); UI.$('#wfl').alt = `Bandera de ${nice(c.country)}`;
+    UI.$('#wcc').textContent = `${nice(c.country)}: ${(duel ? c.life : c.tag).toLowerCase()}`;
+    const wins = Store.get('rally_duels', {})[c.id] || 0, best = Store.get('rally_best', {})[c.id] || {};
+    const rv = nice(RIVALS[c.id].name);
+    UI.$('#wst').innerHTML = !open ? `Termina ${nice(CITIES[i - 1].name)} en la gira para abrirla.`
+      : duel ? `Corre contra ${rv}: el primero en juntar ${DUEL_WIN} bidones gana ${80 + 20 * i} monedas.${wins ? ` Le has ganado ${wins} ${wins === 1 ? 'vez' : 'veces'}.` : ''}`
+      : done ? `${starsH(starsOf(c.id))} Récord ${fmtN(best.score || 0)} en ${fmtT(best.time || 0)}` : `${starsH(0)} Tres rondas y un escape final.`;
     UI.$('#wst').classList.toggle('lock', !open);
     UI.$('#wgo').disabled = !open;
-    UI.$('#wgo').textContent = duel ? 'DUELO ▶' : 'VIAJAR ▶';
+    UI.$('#wgo').innerHTML = !open ? 'Bloqueada' : duel ? `Desafiar a ${rv} ▶` : `Viajar a ${nice(c.name)} ▶`;
   }
   function travel() {
     if (S.state !== 'map') return;
@@ -4470,6 +5081,7 @@ const Rally = (() => {
     if (S.from === ci) p0 = { x: p1.x - 46, y: p1.y - 24 };
     const dist = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const mx = (p0.x + p1.x) / 2, my = (p0.y + p1.y) / 2 - dist * 0.22;
+    S.tripFrom = S.from;
     S.trip = { p0, p1, c: { x: mx, y: my }, t: 0, dur: 1.1 + dist / 150, ci, dot: 0 };
     S.state = 'travel';
     M.parts.clear();
@@ -4482,7 +5094,7 @@ const Rally = (() => {
       if (Input.pressed.up || Input.pressed.down) setMapMode(MODES[(MODES.indexOf(S.mapMode) + (Input.pressed.down ? 1 : 2)) % 3]);
       if (Input.pressed.a || Input.pressed.start) travel();
       else if (Input.pressed.select) openGuide('map');
-      else if (Input.pressed.b) openGarage();
+      else if (Input.pressed.b) { Snd.sfx('back'); openGarage('home'); }
     } else if (S.state === 'travel') {
       const tr = S.trip;
       tr.t = Math.min(tr.dur, tr.t + dt);
@@ -5802,6 +6414,7 @@ const Rally = (() => {
   function render() {
     if (S.state === 'garage' || S.state === 'story' || S.state === 'achs' || (S.state === 'guide' && S.guideFrom === 'garage')) { renderGarage(); return; }
     if (S.state === 'records' && S.recBg === 'map') { renderMap(); return; }
+    if (S.state === 'records' && S.recBg === 'garage') { renderGarage(); return; }
     if (S.state === 'map' || S.state === 'travel' || S.state === 'arrive' || S.state === 'loading' || S.state === 'guide') { renderMap(); return; }
     const p = player, T0 = performance.now() / 1000, city = ALLC[S.city], night = !!city.night;
     const wf = Math.floor(T0 * 14) & 1;
@@ -5999,30 +6612,48 @@ const Rally = (() => {
   }
 
   // ---------------- pantalla de carga: qué trae la ciudad, misiones y un consejo
+  // tarjeta de embarque: a dónde vas, qué trae la ciudad, tus misiones y un consejo
   function openLoading(ci, ready) {
     S.state = 'loading'; S.loadCi = ci; S.loadT = ready ? 2 : 0; S.loadReady = false;
     if (ci < NC) S.mapSel = ci; else S.espSel = ci - NC;
-    if (!ready) S.loadRound = 0;
-    const c = ALLC[ci], duel = S.mapMode === 'duel' && ci < NC;
+    if (!ready) { S.loadRound = 0; S.loadTip = pick(TIPS); }
+    S.loadTip = S.loadTip || pick(TIPS);
+    const c = ALLC[ci], duel = S.mapMode === 'duel' && ci < NC, nR = c.rounds || ROUNDS;
     UI.setButtons('PARTIR', 'MAPA');
     const stars = starsOf(c.id), best = Store.get('rally_best', {})[c.id];
+    const fi = S.tripFrom != null ? S.tripFrom : Store.get('rally_last', null);
+    const from = !c.kind && fi != null && fi < NC && fi !== ci ? { code: CITIES[fi].code, name: nice(CITIES[fi].name) } : { code: 'PIT', name: 'Garaje' };
     const rows = duel
-      ? [`VS ${RIVALS[c.id].name}: GANA EL PRIMERO EN JUNTAR ${DUEL_WIN} DE ${DUEL_CANS}`, `PREMIO ${80 + 20 * ci} MONEDAS · SI PIERDES, 15`, 'SI TE ATRAPAN, VUELVES SIN PERDER AUTOS']
-      : [...FEATS[c.id], ...((c.rounds || ROUNDS) > 1 ? ['RONDA 2: BONO · RONDA 3: INTERCEPTOR Y ESCAPE'] : [])];
-    const nR = c.rounds || ROUNDS;
+      ? [`Gana el primero en juntar ${DUEL_WIN} de ${DUEL_CANS} bidones.`, `Premio: ${80 + 20 * ci} monedas. Si pierdes, 15.`, 'Si te atrapan, vuelves a la pista sin perder autos.']
+      : [...FEATS[c.id], ...(nR > 1 ? ['Ronda 2: bono. Ronda 3: interceptor y escape.'] : [])];
+    const meta = [
+      ['Modo', duel ? 'Duelo' : c.kind ? 'Especial' : 'Gira'],
+      [duel ? 'Rival' : 'Rondas', duel ? nice(RIVALS[c.id].name) : nR === 1 ? '1 show' : String(nR)],
+      ['Récord', best ? fmtN(best.score) : '—'],
+      ['Dificultad', ['Fácil', 'Normal', 'Difícil', 'Maestro'][diff()]],
+    ];
     UI.setHud(`
       <div class="hud-ui load${ready ? ' ready' : ''}" id="load">
-        <div class="lcard">
-          <div class="lhead"><b><img class="flagimg" src="${iconOf(c)}" alt="${c.kind ? '' : `Bandera de ${c.country}`}"> ${c.name}</b>
-            <small>${c.country} · ${duel ? 'DUELO' : `${c.kind ? '' : 'GIRA · '}${starStr(stars)}${best ? ` · RÉCORD ${pad6(best.score)}` : ''}`} · ${['FÁCIL', 'NORMAL', 'DIFÍCIL', 'MAESTRO'][diff()]}</small></div>
-          <div class="lbar"><i></i></div>
-          <div class="lcols">
-            <div class="lsec"><h3>${duel ? 'EL DUELO' : c.kind ? 'EN ESTA PISTA' : 'EN ESTA CIUDAD'}</h3><ul>${rows.map((t) => `<li>${t}</li>`).join('')}</ul></div>
-            <div class="lsec"><h3>MISIONES</h3><ul>${missionsHtml()}</ul></div>
+        <div class="ticket" role="dialog" aria-label="Tarjeta de embarque a ${nice(c.name)}">
+          <div class="tk-main">
+            <div class="tk-head"><b>Pixel Air</b><span>Tarjeta de embarque</span>${duel ? '' : starsH(stars)}</div>
+            <div class="tk-route">
+              <div><small>Desde</small><b>${from.code}</b><span>${from.name}</span></div>
+              <i class="tk-plane" aria-hidden="true">✈</i>
+              <div class="to"><small>Hacia</small><b>${c.code}</b><span><img class="flagimg" src="${iconOf(c)}" alt=""> ${nice(c.name)}</span></div>
+            </div>
+            <dl class="tk-meta">${meta.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
+            <h3>${duel ? 'El duelo' : c.kind ? 'En esta pista' : 'En esta ciudad'}</h3>
+            <ul>${rows.map((t) => `<li>${t}</li>`).join('')}</ul>
+            <p class="tk-tip"><b>Consejo:</b> ${S.loadTip}</p>
           </div>
-          <p class="ltip"><b>CONSEJO</b> ${pick(TIPS)}</p>
-          ${freeMode() && !duel && nR > 1 ? `<div class="lround" role="group" aria-label="Ronda de inicio"><span>MODO PRUEBA · PARTIR EN</span>${[0, 1, 2].map((r) => `<button class="chip${r === S.loadRound ? ' on' : ''}" data-r="${r}">RONDA ${r + 1}${r === 1 ? ' (BONO)' : r === 2 ? ' (ESCAPE)' : ''}</button>`).join('')}</div>` : ''}
-          <div class="lbtns"><button class="chip" id="lmap">MAPA</button><button class="chip" id="lguide">GUÍA</button><button class="gbtn" id="lgo" disabled>CARGANDO…</button></div>
+          <div class="tk-stub">
+            <h3>Tus misiones</h3>
+            <ul class="tk-mis">${missionList().list.map((m) => `<li><span>${mText(m)}</span><em>${Math.min(m.n, MISSIONS[m.id].n)}/${MISSIONS[m.id].n}</em><i class="hcoin">${coinH(MISSIONS[m.id].c)}</i></li>`).join('')}</ul>
+            ${freeMode() && !duel && nR > 1 ? `<div class="lround" role="group" aria-label="Ronda de inicio"><span>Partir en</span>${[0, 1, 2].map((r) => `<button class="chip${r === S.loadRound ? ' on' : ''}" data-r="${r}">${r + 1}${r === 1 ? ' bono' : r === 2 ? ' escape' : ''}</button>`).join('')}</div>` : ''}
+            <div class="tk-code" aria-hidden="true"><i></i></div>
+            <div class="tk-btns"><button class="chip" id="lmap">Mapa</button><button class="chip" id="lguide">Guía</button><button class="gbtn" id="lgo" disabled>Embarcando…</button></div>
+          </div>
         </div>
       </div>`);
     UI.$('#lgo').addEventListener('click', () => { Snd.unlock(); loadGo(); });
@@ -6047,7 +6678,8 @@ const Rally = (() => {
     if (S.loadT >= 1.2 && !S.loadReady) {
       S.loadReady = true;
       const b = UI.$('#lgo');
-      if (b) { b.disabled = false; b.textContent = 'PARTIR ▶'; }
+      if (b) { b.disabled = false; b.textContent = '¡A la pista! ▶'; }
+      const l = UI.$('#load'); if (l) l.classList.add('ready');
       Snd.sfx('select');
     }
     if (freeMode() && S.mapMode !== 'duel' && (ALLC[S.loadCi].rounds || ROUNDS) > 1 && (Input.pressed.up || Input.pressed.down)) setLoadRound(S.loadRound + (Input.pressed.down ? 1 : -1));
@@ -6065,47 +6697,47 @@ const Rally = (() => {
     const star = (() => { const { c, g } = mk(13, 13); poly(g, [[6.5, 0.5], [8.2, 4.6], [12.5, 4.8], [9.2, 7.6], [10.4, 12], [6.5, 9.6], [2.6, 12], [3.8, 7.6], [0.5, 4.8], [4.8, 4.6]], '#ffd23f'); return outline(c); })();
     const IC = { b: '#22222e', l: '#4a4a5e', d: '#111118', s: '#f2f2f2' };
     const pages = [
-      { t: 'BIDONES Y GAS', rows: [
-        [A.canNc[0], 'BIDÓN', 'DA BENCINA Y PUNTOS: 100, 200… HASTA 1000. JUNTA 10 PARA PASAR DE RONDA.'],
-        [A.canSc[0], 'BIDÓN S', 'DUPLICA LOS PUNTOS DE LOS BIDONES QUE SIGAN.'],
-        [A.canLc[0], 'BIDÓN L', 'BONO POR LA BENCINA QUE TE QUEDA.'],
-        [rallySmoke(2), `GAS (${ka})`, 'NUBE QUE ATURDE A LAS PATRULLAS. GASTA BENCINA; SIN BENCINA VAS LENTO Y NO HAY GAS.']] },
-      { t: 'ÍTEMS', rows: [
-        [itemBoxCanvas(0), 'CAJA ?', `ÍTEM AL AZAR; SE USA CON ${kb}. SI YA TIENES UNO, DA 5 MONEDAS.`],
-        [itemIconCanvas('nitro'), 'NITRO', 'MUCHA VELOCIDAD POR 3 SEGUNDOS.'],
-        [itemIconCanvas('iman'), 'IMÁN', 'ATRAE LOS BIDONES CERCANOS POR 8 SEGUNDOS.'],
-        [itemIconCanvas('escudo'), 'ESCUDO', 'AGUANTA UN CHOQUE CON PATRULLA O ROMPE UNA BARRERA.'],
-        [itemIconCanvas('aceite'), 'ACEITE', 'DEJA MANCHAS: LA PATRULLA QUE LAS PISA QUEDA GIRANDO.']] },
-      { t: 'PATRULLAS', rows: [
+      { t: 'Bidones', rows: [
+        [A.canNc[0], 'Bidón', 'Da bencina y puntos: 100, 200… hasta 1000. Junta 10 para pasar de ronda.'],
+        [A.canSc[0], 'Bidón S', 'Duplica los puntos de los bidones que siguen.'],
+        [A.canLc[0], 'Bidón L', 'Bono por la bencina que te queda.'],
+        [rallySmoke(2), `Gas (${ka})`, 'Una nube que aturde a las patrullas. Gasta bencina: sin bencina vas lento y no hay gas.']] },
+      { t: 'Ítems', rows: [
+        [itemBoxCanvas(0), 'Caja ?', `Un ítem al azar; se usa con ${kb}. Si ya tienes uno, te da 5 monedas.`],
+        [itemIconCanvas('nitro'), 'Nitro', 'Mucha velocidad por 3 segundos.'],
+        [itemIconCanvas('iman'), 'Imán', 'Atrae los bidones cercanos por 8 segundos.'],
+        [itemIconCanvas('escudo'), 'Escudo', 'Aguanta un choque con una patrulla o rompe una barrera.'],
+        [itemIconCanvas('aceite'), 'Aceite', 'Deja manchas: la patrulla que las pisa queda girando.']] },
+      { t: 'Patrullas', rows: [
         ...PTYPES.map((q, i) => [A.carTc[i], q.n, q.d]),
-        [starCanvas(), 'DISPERSIÓN', 'CADA CIERTO RATO TODAS SE VAN A SUS ESQUINAS UNOS SEGUNDOS.']] },
-      { t: 'PELIGROS', rows: [
-        [rallyCar(IC, 0, true), 'INTERCEPTOR', 'PATRULLA NEGRA MÁS RÁPIDA. APARECE UN RATO Y SE RETIRA.'],
-        [heliCanvas(), 'HELICÓPTERO', 'EN EL ESCAPE DE LA RONDA 3: SI SU FOCO TE ILUMINA, TODAS VAN POR TI.'],
-        [rallyBarrier(0), 'BARRERA', 'SI LA CHOCAS PIERDES UN AUTO. LA PATRULLA ERRÁTICA A VECES TAMBIÉN.'],
-        [civCanvas('taxi', CIV.colectivo, 0), 'TRÁFICO', 'LOS AUTOS CIVILES NO TE DESTRUYEN, PERO TE FRENAN. A LAS PATRULLAS LAS ATURDEN.']] },
-      { t: 'CIUDADES', rows: [
-        [goalCanvas(0), 'ESCAPE', 'AL JUNTAR LOS 10 BIDONES DE LA RONDA 3, LLEGA A LA META PARA TERMINAR LA CIUDAD.'],
-        [flagField('CL'), 'TEMBLOR', 'EN SANTIAGO: LAS PATRULLAS PIERDEN EL CONTROL UNOS SEGUNDOS.'],
-        [playerCarCanvas('rayo', CARS[1].colors[0], 0), 'DERRAPE', 'EN LONDRES Y TOKIO: SAL DE LA CURVA DERRAPANDO PARA UN MINI TURBO.'],
-        [pedCanvas('#ff4f9a', 0), 'GRAN CRUCE', 'EN TOKIO: CUANDO CRUZAN PEATONES, TODOS LOS AUTOS FRENAN.']] },
-      { t: 'ESPECIALES', rows: [
-        [RT.icon('arena'), 'ARENA SHOW', 'SHOW DE 90 S: SALTA RAMPAS, PASA POR AROS DE FUEGO (+500) Y SOBRE LOS MONSTER TRUCKS (+400). CHOCAR RESTA 10 S.'],
-        [RT.icon('snow'), 'PUEBLO NEVADO', 'EN EL HIELO LAS PATRULLAS NO DOBLAN. LOS MONTÍCULOS FRENAN Y LAS AVALANCHAS CORTAN CALLES. NECESITA CLAVOS.'],
-        [RT.icon('toy'), 'CUARTO DE JUGUETES', 'PILAS EN VEZ DE BIDONES. ESPERA EL TREN EN LA BARRERA, ESQUIVA LAS CANICAS Y LA PATA DEL GATO.'],
-        [RT.drill(0), 'TALADRO', 'EQUIPO: SE CARGA EN 8 S; CON CARGA, LA PATRULLA QUE CHOCAS DE FRENTE QUEDA FUERA 12 S (+400).'],
-        [RT.suv(POLICE_LIVERY[2], 0), 'CLAVOS', 'EQUIPO: NO RESBALAS EN ACEITE, CANICAS NI HIELO, Y DOBLAS ANTES.']] },
-      { t: 'PROGRESO', rows: [
-        [coin, 'MONEDAS', 'SE GANAN JUGANDO. EN EL GARAJE COMPRAS AUTOS, MEJORAS Y PINTURAS.'],
-        [star, 'ESTRELLAS', `POR CIUDAD: TERMINARLA, SIN CHOCAR Y EN MENOS DE ${fmtT(PAR)}. CADA UNA NUEVA DA 10 MONEDAS.`],
-        [itemBoxCanvas(1), 'MISIONES', 'SIEMPRE HAY 3. AL CUMPLIR UNA COBRAS Y APARECE OTRA.'],
-        [playerCarCanvas('muscle', CARS[3].colors[2], 0), 'DUELO', 'CARRERA POR BIDONES CONTRA EL RIVAL DE CADA CIUDAD.'],
-        [goalCanvas(1), 'RÉCORDS Y LOGROS', 'LOS 10 MEJORES PUNTAJES CON INICIALES (MAPA) Y LOGROS CON PORCENTAJE (GARAJE). LA GIRA SE GUARDA SOLA.']] },
-      { t: 'CONTROLES', rows: Engine.touch ? [
-        [null, 'CRUCETA', 'DOBLAR. PUEDES MARCAR EL GIRO ANTES DE LLEGAR A LA ESQUINA.'],
-        [null, 'A', 'GAS (HUMO).'], [null, 'B', 'USAR ÍTEM.'], [null, 'START', 'PAUSA, AJUSTES Y MISIONES.'], [null, 'SELECT', 'GUÍA (EN GARAJE Y MAPA).']] : [
-        [null, 'FLECHAS / WASD', 'DOBLAR. PUEDES MARCAR EL GIRO ANTES DE LLEGAR A LA ESQUINA.'],
-        [null, 'Z / ESPACIO', 'GAS (HUMO).'], [null, 'X / SHIFT', 'USAR ÍTEM.'], [null, 'ENTER', 'PAUSA, AJUSTES Y MISIONES.'], [null, 'TAB', 'GUÍA (EN GARAJE Y MAPA) · M SONIDO · C FILTRO CRT']] },
+        [starCanvas(), 'Dispersión', 'Cada cierto rato todas se van a sus esquinas unos segundos.']] },
+      { t: 'Peligros', rows: [
+        [rallyCar(IC, 0, true), 'Interceptor', 'Patrulla negra más rápida. Aparece un rato y se retira.'],
+        [heliCanvas(), 'Helicóptero', 'En el escape de la ronda 3: si su foco te ilumina, todas van por ti.'],
+        [rallyBarrier(0), 'Barrera', 'Si la chocas pierdes un auto. A la patrulla errática a veces también le pasa.'],
+        [civCanvas('taxi', CIV.colectivo, 0), 'Tráfico', 'Los autos civiles no te destruyen, pero te frenan. A las patrullas las aturden.']] },
+      { t: 'Ciudades', rows: [
+        [goalCanvas(0), 'Escape', 'Al juntar los 10 bidones de la ronda 3, llega a la meta para terminar la ciudad.'],
+        [flagField('CL'), 'Temblor', 'En Santiago: las patrullas pierden el control unos segundos.'],
+        [playerCarCanvas('rayo', CARS[1].colors[0], 0), 'Derrape', 'En Londres y Tokio: sal de la curva derrapando y ganas un mini turbo.'],
+        [pedCanvas('#ff4f9a', 0), 'Gran cruce', 'En Tokio: cuando cruzan peatones, todos los autos frenan.']] },
+      { t: 'Especiales', rows: [
+        [RT.icon('arena'), 'Arena Show', 'Un show de 90 s: salta rampas, pasa por aros de fuego (+500) y sobre los monster trucks (+400). Chocar resta 10 s.'],
+        [RT.icon('snow'), 'Pueblo Nevado', 'En el hielo las patrullas no doblan. Los montículos frenan y las avalanchas cortan calles. Necesita clavos.'],
+        [RT.icon('toy'), 'Cuarto de Juguetes', 'Pilas en vez de bidones. Espera el tren en la barrera y esquiva las canicas y la pata del gato.'],
+        [RT.drill(0), 'Taladro', 'Equipo: se carga en 8 s. Con carga, la patrulla que chocas de frente queda fuera 12 s (+400).'],
+        [RT.suv(POLICE_LIVERY[2], 0), 'Clavos', 'Equipo: no resbalas en aceite, canicas ni hielo, y doblas antes.']] },
+      { t: 'Progreso', rows: [
+        [coin, 'Monedas', 'Se ganan jugando. En el taller compras autos, mejoras, pinturas y equipo.'],
+        [star, 'Estrellas', `Por ciudad: terminarla, sin chocar y en menos de ${fmtT(PAR)}. Cada estrella nueva da 10 monedas.`],
+        [itemBoxCanvas(1), 'Misiones', 'Siempre hay 3. Al cumplir una cobras y aparece otra.'],
+        [playerCarCanvas('muscle', CARS[3].colors[2], 0), 'Duelos', 'Carrera por bidones contra el rival de cada ciudad.'],
+        [goalCanvas(1), 'Récords y logros', 'Los 10 mejores puntajes con iniciales y los logros con porcentaje están en el inicio. La gira se guarda sola.']] },
+      { t: 'Controles', rows: Engine.touch ? [
+        [null, 'Cruceta', 'Doblar. Puedes marcar el giro antes de llegar a la esquina.'],
+        [null, 'A', 'Gas (humo).'], [null, 'B', 'Usar ítem.'], [null, 'Start', 'Pausa, ajustes y misiones.'], [null, 'Select', 'Guía (en el inicio, el taller y el mapa).']] : [
+        [null, 'Flechas / WASD', 'Doblar. Puedes marcar el giro antes de llegar a la esquina.'],
+        [null, 'Z / espacio', 'Gas (humo).'], [null, 'X / shift', 'Usar ítem.'], [null, 'Enter', 'Pausa, ajustes y misiones.'], [null, 'Tab', 'Guía (en el inicio, el taller y el mapa). M: sonido. C: filtro CRT.']] },
     ];
     for (const pg of pages) pg.rows = pg.rows.map(([c, n, d]) => [c ? c.toDataURL() : null, n, d]);
     return (A.guide = pages);
@@ -6122,12 +6754,12 @@ const Rally = (() => {
     const pages = guidePages(), pg = pages[S.gPage];
     UI.setHud(`
       <div class="hud-ui guide" id="guide">
-        <div class="gtitle">GUÍA</div>
+        <div class="gtitle">Guía</div>
         <div class="gtabs" role="tablist">${pages.map((q, i) => `<button class="chip${i === S.gPage ? ' on' : ''}" data-i="${i}" role="tab" aria-selected="${i === S.gPage}">${q.t}</button>`).join('')}</div>
         <div class="gpage">
           <ul>${pg.rows.map(([img, n, d]) => `<li>${img ? `<img src="${img}" alt="">` : '<i class="gkey"></i>'}<div><b>${n}</b><span>${d}</span></div></li>`).join('')}</ul>
         </div>
-        <div class="gfoot"><button class="arr" id="gprev" aria-label="Página anterior">◀</button><span>${S.gPage + 1}/${pages.length}</span><button class="arr" id="gnext" aria-label="Página siguiente">▶</button><button class="chip" id="gback">VOLVER</button></div>
+        <div class="gfoot"><button class="arr" id="gprev" aria-label="Página anterior">◀</button><span>${S.gPage + 1}/${pages.length}</span><button class="arr" id="gnext" aria-label="Página siguiente">▶</button><button class="chip" id="gback">Volver</button></div>
       </div>`);
     UI.$('#guide').querySelectorAll('.gtabs .chip').forEach((b) => b.addEventListener('click', () => { S.gPage = +b.dataset.i; Snd.sfx('move'); renderGuide(); }));
     UI.$('#gprev').addEventListener('click', () => guideTurn(-1));
@@ -6198,10 +6830,10 @@ const Rally = (() => {
   function renderInitials() {
     UI.setHud(`
       <div class="hud-ui load" id="ini"><div class="lcard">
-        <div class="lhead"><b>¡NUEVO RÉCORD!</b><small>${pad6(S.iniScore)} PUNTOS · ESCRIBE TUS INICIALES</small></div>
+        <div class="lhead"><b>¡Nuevo récord!</b><small>Hiciste ${fmtN(S.iniScore)} puntos. Escribe tus iniciales.</small></div>
         <div class="inis">${S.ini.map((ch, i) => `<div class="inic${i === S.iniPos ? ' on' : ''}"><button class="arr" data-i="${i}" data-d="1" aria-label="Letra siguiente">▲</button><b>${ch === ' ' ? '_' : ch}</b><button class="arr" data-i="${i}" data-d="-1" aria-label="Letra anterior">▼</button></div>`).join('')}</div>
-        <p class="ltip">${Engine.touch ? '▲▼ CAMBIAN LA LETRA · OK PASA A LA SIGUIENTE' : '↑↓ CAMBIAN LA LETRA · ←→ MUEVEN · Z OK · X BORRA'}</p>
-        <div class="lbtns"><button class="gbtn" id="iok">LISTO ▶</button></div>
+        <p class="ltip">${Engine.touch ? 'Con ▲ y ▼ cambias la letra; A pasa a la siguiente.' : 'Con ↑ y ↓ cambias la letra, con ← y → te mueves. Z confirma y X borra.'}</p>
+        <div class="lbtns"><button class="gbtn" id="iok">Guardar ▶</button></div>
       </div></div>`);
     UI.$('#ini').querySelectorAll('.inic .arr').forEach((b) => b.addEventListener('click', () => { S.iniPos = +b.dataset.i; iniStep(+b.dataset.d); }));
     UI.$('#iok').addEventListener('click', () => iniDone());
@@ -6234,9 +6866,9 @@ const Rally = (() => {
     const list = topList();
     UI.setHud(`
       <div class="hud-ui load" id="recs"><div class="lcard">
-        <div class="lhead"><b>RÉCORDS</b><small>LOS 10 MEJORES DE LA GIRA MUNDIAL</small></div>
-        <ol class="rtab">${list.length ? list.map((e, i) => `<li class="${e.t === hl ? 'me' : ''}"><span>${i + 1}</span><b>${e.n}</b><em>${pad6(e.s)}</em><small>${e.c}${e.l ? ` · VUELTA ${e.l + 1}` : ''}</small></li>`).join('') : '<li class="none">TODAVÍA NO HAY RÉCORDS. ¡SÉ EL PRIMERO!</li>'}</ol>
-        <div class="lbtns"><button class="gbtn" id="rback">SEGUIR ▶</button></div>
+        <div class="lhead"><b>Récords</b><small>Los 10 mejores puntajes de la gira mundial</small></div>
+        <ol class="rtab">${list.length ? list.map((e, i) => `<li class="${e.t === hl ? 'me' : ''}"><span>${i + 1}</span><b>${e.n}</b><em>${fmtN(e.s)}</em><small>${nice(e.c)}${e.l ? `, vuelta ${e.l + 1}` : ''}</small></li>`).join('') : '<li class="none">Todavía no hay récords. Termina una gira o haz un buen puntaje y aparecerás aquí.</li>'}</ol>
+        <div class="lbtns"><button class="gbtn" id="rback">${bg === 'play' ? 'Seguir ▶' : 'Volver'}</button></div>
       </div></div>`);
     UI.$('#rback').addEventListener('click', () => recordsBack());
   }
@@ -6261,20 +6893,20 @@ const Rally = (() => {
     const got = achGot(), pages = Math.ceil(ACHS.length / ACH_PER), pg = S.achPage % pages, pct = achPct();
     UI.setHud(`
       <div class="hud-ui load" id="achs"><div class="lcard">
-        <div class="lhead"><b>LOGROS · ${pct}%</b><small>${ACHS.filter((a) => got[a[0]]).length} DE ${ACHS.length} · PÁGINA ${pg + 1}/${pages}</small></div>
+        <div class="lhead"><b>Logros: ${pct}%</b><small>Llevas ${ACHS.filter((a) => got[a[0]]).length} de ${ACHS.length}. Página ${pg + 1} de ${pages}.</small></div>
         <div class="lbar"><i style="width:${pct}%;animation:none"></i></div>
         <ul class="achl">${ACHS.slice(pg * ACH_PER, pg * ACH_PER + ACH_PER).map((a) => `<li class="${got[a[0]] ? 'ok' : ''}"><i>${got[a[0]] ? '★' : '☆'}</i><div><b>${a[1]}</b><span>${a[2]}</span></div></li>`).join('')}</ul>
-        <div class="lbtns"><button class="arr" id="aprev" aria-label="Página anterior">◀</button><button class="arr" id="anext" aria-label="Página siguiente">▶</button><button class="gbtn" id="aback">VOLVER</button></div>
+        <div class="lbtns"><button class="arr" id="aprev" aria-label="Página anterior">◀</button><button class="arr" id="anext" aria-label="Página siguiente">▶</button><button class="gbtn" id="aback">Volver</button></div>
       </div></div>`);
     UI.$('#aprev').addEventListener('click', () => achTurn(-1));
     UI.$('#anext').addEventListener('click', () => achTurn(1));
-    UI.$('#aback').addEventListener('click', () => { Snd.sfx('back'); openGarage(); });
+    UI.$('#aback').addEventListener('click', () => { Snd.sfx('back'); openGarage('home'); });
   }
   function achTurn(d) { const pages = Math.ceil(ACHS.length / ACH_PER); S.achPage = (S.achPage + d + pages) % pages; Snd.sfx('move'); renderAchs(); }
   function updateAchs() {
     if (Input.pressed.left || Input.pressed.up) achTurn(-1);
     else if (Input.pressed.right || Input.pressed.down || Input.pressed.a) achTurn(1);
-    else if (Input.pressed.b || Input.pressed.start || Input.pressed.select) { Snd.sfx('back'); openGarage(); }
+    else if (Input.pressed.b || Input.pressed.start || Input.pressed.select) { Snd.sfx('back'); openGarage('home'); }
   }
   // historia al empezar por primera vez
   function openStory() {
@@ -6285,19 +6917,19 @@ const Rally = (() => {
     Snd.play(SONGS.garage);
     UI.setHud(`
       <div class="hud-ui load" id="story"><div class="lcard">
-        <div class="lhead"><b>GAS RALLY · GIRA MUNDIAL</b><small>SEIS CIUDADES, UN TANQUE DE BENCINA Y LA POLICÍA DE CADA PAÍS DETRÁS DE TI</small></div>
+        <div class="lhead"><b>Gas Rally: gira mundial</b><small>Seis ciudades, un tanque de bencina y la policía de cada país detrás de ti.</small></div>
         <ul class="slines">
-          <li>JUNTA LOS 10 BIDONES DE CADA RONDA ANTES DE QUEDARTE SIN BENCINA.</li>
-          <li>SUELTA GAS PARA ATURDIR A LAS PATRULLAS Y USA LOS ÍTEMS DE LA CALLE.</li>
-          <li>EN LA RONDA 3 ESCAPA DEL HELICÓPTERO Y LLEGA A LA META.</li>
-          <li>GANA MONEDAS: MEJORA TU AUTO, COMPRA EQUIPO Y ABRE PISTAS ESPECIALES.</li>
-          <li class="route">SANTIAGO → BUENOS AIRES → MÉXICO → LOS ÁNGELES → LONDRES → TOKIO</li>
+          <li>Junta los 10 bidones de cada ronda antes de quedarte sin bencina.</li>
+          <li>Suelta gas para aturdir a las patrullas y usa los ítems de la calle.</li>
+          <li>En la ronda 3, escapa del helicóptero y llega a la meta.</li>
+          <li>Gana monedas para mejorar tu auto, comprar equipo y abrir pistas especiales.</li>
+          <li class="route">Santiago → Buenos Aires → México → Los Ángeles → Londres → Tokio</li>
         </ul>
-        <div class="lbtns"><button class="gbtn" id="sgo">¡A LA PISTA! ▶</button></div>
+        <div class="lbtns"><button class="gbtn" id="sgo">¡A la pista! ▶</button></div>
       </div></div>`);
     UI.$('#sgo').addEventListener('click', () => { Snd.unlock(); storyDone(); });
   }
-  function storyDone() { if (S.state !== 'story') return; Store.set('rally_intro', true); Snd.sfx('start'); openGarage(); }
+  function storyDone() { if (S.state !== 'story') return; Store.set('rally_intro', true); Snd.sfx('start'); openGarage('home'); }
   function updateStory(dt) {
     S.storyT += dt;
     if (S.storyT > 0.4 && (Input.pressed.a || Input.pressed.start || Input.pressed.b)) storyDone();
@@ -6314,17 +6946,17 @@ const Rally = (() => {
     UI.setButtons('SEGUIR', 'SEGUIR');
     UI.setHud(`
       <div class="hud-ui load ending" id="end"><div class="lcard">
-        <div class="lhead"><b>¡GIRA MUNDIAL COMPLETA!</b><small>${done === 1 ? 'LLEGASTE A TOKIO. LA POLICÍA DEL MUNDO TE APLAUDE (A REGAÑADIENTES).' : `VUELTA ${S.loop + 1} TERMINADA. ¡QUÉ MANERA DE MANEJAR!`}</small></div>
+        <div class="lhead"><b>¡Gira mundial completa!</b><small>${done === 1 ? 'Llegaste a Tokio. La policía del mundo te aplaude (a regañadientes).' : `Terminaste la vuelta ${S.loop + 1}. ¡Qué manera de manejar!`}</small></div>
         <div class="lcols">
-          <div class="lsec"><h3>TU GIRA</h3><ul>
-            <li>PUNTOS <b>${pad6(S.score)}</b></li><li>ESTRELLAS <b>${stars}/18</b></li><li>AUTOS <b>${owned.size}/${CARS.length}</b></li>
-            <li>MONEDAS <b>${S.coins}</b></li><li>LOGROS <b>${achPct()}%</b></li></ul></div>
-          <div class="lsec credits"><h3>CRÉDITOS</h3><div class="roll"><div>
-            <p><b>GAS RALLY</b></p><p>UN JUEGO DE PIXEL ARCADE</p><p>IDEA Y PRUEBAS<br><b>SIMON</b></p><p>CÓDIGO, PIXEL ART Y MÚSICA<br><b>CLAUDE</b></p>
-            <p>INSPIRADO EN LOS JUEGOS DE RALLY DE LOS 80</p><p>¡GRACIAS POR JUGAR!</p></div></div></div>
+          <div class="lsec"><h3>Tu gira</h3><ul>
+            <li>Puntos: <b>${fmtN(S.score)}</b></li><li>Estrellas: <b>${stars} de 18</b></li><li>Autos: <b>${owned.size} de ${CARS.length}</b></li>
+            <li>Monedas: <b>${fmtN(S.coins)}</b></li><li>Logros: <b>${achPct()}%</b></li></ul></div>
+          <div class="lsec credits"><h3>Créditos</h3><div class="roll"><div>
+            <p><b>Gas Rally</b></p><p>Un juego de Pixel Arcade</p><p>Idea y pruebas<br><b>Simon</b></p><p>Código, pixel art y música<br><b>Claude</b></p>
+            <p>Inspirado en los juegos de rally de los 80</p><p>¡Gracias por jugar!</p></div></div></div>
         </div>
-        <p class="ltip"><b>NUEVO</b>${done === 1 ? ' DIFICULTAD MAESTRO EN AJUSTES ·' : ''} LA PRÓXIMA VUELTA TRAE MÁS PATRULLAS</p>
-        <div class="lbtns"><button class="gbtn" id="ego">SEGUIR ▶</button></div>
+        <p class="ltip"><b>Nuevo:</b>${done === 1 ? ' se abrió la dificultad Maestro en Ajustes.' : ''} La próxima vuelta trae más patrullas.</p>
+        <div class="lbtns"><button class="gbtn" id="ego">Seguir ▶</button></div>
       </div></div>`);
     UI.$('#ego').addEventListener('click', () => endingDone());
   }
@@ -6349,7 +6981,7 @@ const Rally = (() => {
     S.hi = Store.get('hi_rally', 0);
     S.coins = Store.get('rally_coins', 0);
     S.city = null; S.from = null; S.mode = 'tour';
-    if (!Store.get('rally_intro', false)) openStory(); else openGarage();
+    if (!Store.get('rally_intro', false)) openStory(); else openGarage('home');
   }
   function retry() {
     if (S.mode === 'duel') { startDuel(S.city); return; }
@@ -6366,7 +6998,7 @@ const Rally = (() => {
   function exit() { if (S.score > (S.hi || 0)) Store.set('hi_rally', S.score); document.body.classList.remove('inmenu'); Snd.loopsOff(); }
   const capturesStart = () => ['garage', 'map', 'travel', 'arrive', 'cityclear', 'duelend', 'loading', 'guide', 'story', 'achs', 'initials', 'records', 'ending', 'over'].includes(S.state);
   const pauseInfo = () => (!['play', 'intro', 'dying', 'clear'].includes(S.state) ? ''
-    : `<div class="pinfo"><b>MISIONES</b>${missionList().list.map((m) => `<span>${mText(m)} · ${Math.min(m.n, MISSIONS[m.id].n)}/${MISSIONS[m.id].n}</span>`).join('')}</div>`);
+    : `<div class="pinfo"><b>Misiones</b>${missionList().list.map((m) => `<span>${mText(m)}: ${Math.min(m.n, MISSIONS[m.id].n)} de ${MISSIONS[m.id].n}</span>`).join('')}</div>`);
   return {
     start, update, render, exit, retry, action, capturesStart, pauseInfo,
     peek: () => ({ S, player, enemies, cans, smokes, sel, CITIES, CARS, rival, civs, boxes, slicks, peds, bends, icp, owned, upg, paints,
