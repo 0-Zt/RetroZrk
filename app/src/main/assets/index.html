@@ -3713,7 +3713,10 @@ const Rally = (() => {
     }
     bfs(distA, startTile[0], startTile[1]);
     const nCans = duel ? DUEL_CANS : 10;
-    const cand = roadTiles.filter(([x, y]) => !rockAt[y * MW + x] && distA[y * MW + x] > 6 && distA[y * MW + x] < 9999 && !inCross(x, y) && (!duel || far(x, y, rivalTile, 6)) && (!S.rail || y !== S.rail.ty));
+    // nunca debajo de donde esperan las patrullas (en la ronda de bono se quedan quietas y lo taparían)
+    const parked = [...enemyStarts, ...[1, 9, 5, 3].map((i) => [NX(i), NY(0)])];
+    const cand = roadTiles.filter(([x, y]) => !rockAt[y * MW + x] && distA[y * MW + x] > 6 && distA[y * MW + x] < 9999 && !inCross(x, y) && (!duel || far(x, y, rivalTile, 6)) && (!S.rail || y !== S.rail.ty)
+      && parked.every((q) => far(x, y, q, 3)));
     const chosen = [];
     tries = 0;
     while (chosen.length < nCans && tries++ < 2500) {
@@ -5842,6 +5845,9 @@ const Rally = (() => {
       if (c.got) continue;
       const bob = Math.round(Math.sin(T0 * 4 + c.ph) * 1.5);
       c.spr.set(c.frames[Math.floor(T0 * 3 + c.ph) & 1]).at(c.x, c.y - 1 + bob);
+      // si una patrulla quieta (esperando, aturdida o en la ronda de bono) queda encima, el bidón se dibuja sobre ella
+      const still = enemies.some((e) => e.active && (e.hold > 0 || e.stun > 0 || S.bonus) && Math.abs(e.x - c.x) < 12 && Math.abs(e.y - c.y) < 12);
+      c.spr.m.position.z = still ? 11 : 5;
       c.glow.at(c.x, c.y + 1).mat.opacity = 0.6 + Math.sin(T0 * 5 + c.ph) * 0.4;
     }
     for (const b of boxes) if (b.on) b.spr.set((S.trk === 'toy' ? A.gift : A.box)[Math.floor(T0 * 4 + b.ph) & 1]).at(b.x, b.y - 1 + Math.round(Math.sin(T0 * 3 + b.ph) * 1.5));
