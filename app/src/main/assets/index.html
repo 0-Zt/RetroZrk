@@ -243,9 +243,17 @@ body.ovl #toast{align-items:flex-start;padding:calc(var(--px)*44) 0 0}
 .wscore .hcoin{margin-left:calc(var(--px)*3)}
 /* ---------- Ajustes ---------- */
 .panel.set{min-width:calc(var(--px)*170);gap:calc(var(--px)*4)}
+.panel.set{padding:calc(var(--px)*7) calc(var(--px)*10);gap:calc(var(--px)*3)}
+.panel.set h2{font-size:calc(var(--px)*12)}
+.panel.set .mbtn{padding:calc(var(--px)*3) calc(var(--px)*7)}
+body.touch .panel.set p{display:none}
 .mbtn.srow{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--px)*8);text-align:left}
 .mbtn.srow b{font-weight:400;color:var(--cyan)}
 .mbtn.srow.sel b{color:#1a0b1e}
+.vctl{display:flex;align-items:center;gap:calc(var(--px)*3)}
+.vb{border:0;cursor:pointer;width:calc(var(--px)*13);height:calc(var(--px)*10);background:#1a1533;color:var(--ink);font-family:var(--ui);font-size:calc(var(--px)*7);line-height:1;padding:0;box-shadow:inset 0 0 0 var(--px) #463c7c}
+.mbtn.sel .vb{background:rgba(26,11,30,.25);color:#1a0b1e;box-shadow:inset 0 0 0 var(--px) #1a0b1e}
+.vbar i{cursor:pointer}
 .vbar{display:flex;gap:var(--px)}
 .vbar i{width:calc(var(--px)*5);height:calc(var(--px)*5);background:#3a3260}
 .vbar i.on{background:var(--cyan)}
@@ -5584,7 +5592,14 @@ const $ = (s) => document.querySelector(s);
 const scr = $('#screen');
 let mode = 'menu', game = null, overlay = null, osel = 0, sel = Store.get('cart', 0) % 3;
 let toastT = 0;
+// arreglo: una versión anterior dejaba el volumen en 0 al tocar la fila en AJUSTES; se recupera una vez
+if (!Store.get('vol_fix1', false)) {
+  if (Store.get('vol_mus', 5) === 0) Store.set('vol_mus', 5);
+  if (Store.get('vol_sfx', 5) === 0) Store.set('vol_sfx', 5);
+  Store.set('vol_fix1', true);
+}
 const Settings = { musV: Store.get('vol_mus', 5), sfxV: Store.get('vol_sfx', 5), vib: Store.get('vib', true), pad: Store.get('padsize', 1) };
+Snd.setVol(Settings.musV, Settings.sfxV);
 const PAD_K = [0.85, 1, 1.15], PAD_N = ['CHICOS', 'MEDIANOS', 'GRANDES'], DIFF_N = ['FÁCIL', 'NORMAL', 'DIFÍCIL'];
 let settingsFrom = null;
 
@@ -5645,12 +5660,16 @@ function openPause() {
 }
 // ---------------- ajustes: volúmenes, vibración, tamaño de botones, filtro CRT
 function settingsHtml() {
-  const bar = (v) => `<span class="vbar">${'<i class="on"></i>'.repeat(v)}${'<i></i>'.repeat(5 - v)}</span>`;
+  // volumen: − y + a los lados y cada segmento se puede tocar; tocar la fila nunca lo deja en cero
+  const vol = (act, name, v) => `
+      <div class="mbtn srow" data-act="${act}" role="group" aria-label="Volumen de ${name.toLowerCase()} ${v} de 5"><span>${name}</span>
+        <span class="vctl"><button class="vb" data-v="${act}" data-d="-1" aria-label="Bajar ${name.toLowerCase()}">−</button><span class="vbar">${[1, 2, 3, 4, 5].map((l) => `<i class="${l <= v ? 'on' : ''}" data-v="${act}" data-l="${l}"></i>`).join('')}</span><button class="vb" data-v="${act}" data-d="1" aria-label="Subir ${name.toLowerCase()}">+</button></span></div>`;
   return `
     <div class="panel set" role="dialog" aria-label="Ajustes">
       <h2>AJUSTES</h2>
-      <button class="mbtn srow" data-act="s_mus" aria-label="Volumen de música ${Settings.musV} de 5"><span>MÚSICA</span>${bar(Settings.musV)}</button>
-      <button class="mbtn srow" data-act="s_sfx" aria-label="Volumen de efectos ${Settings.sfxV} de 5"><span>EFECTOS</span>${bar(Settings.sfxV)}</button>
+      ${vol('s_mus', 'MÚSICA', Settings.musV)}
+      ${vol('s_sfx', 'EFECTOS', Settings.sfxV)}
+      <button class="mbtn srow" data-act="s_mute"><span>SONIDO</span><b>${Snd.isMuted() ? 'APAGADO' : 'ENCENDIDO'}</b></button>
       <button class="mbtn srow" data-act="s_vib"><span>VIBRACIÓN</span><b>${Settings.vib ? 'ON' : 'OFF'}</b></button>
       ${Engine.touch ? `<button class="mbtn srow" data-act="s_pad"><span>BOTONES</span><b>${PAD_N[Settings.pad]}</b></button>` : ''}
       <button class="mbtn srow" data-act="s_crt"><span>FILTRO CRT</span><b>${Engine.crt ? 'ON' : 'OFF'}</b></button>
@@ -5660,10 +5679,16 @@ function settingsHtml() {
       <p>◀ ▶ CAMBIAR · ${Engine.touch ? 'B' : 'X'} VOLVER</p>
     </div>`;
 }
-function openSettings(from) { settingsFrom = from; Snd.resume(); openOverlay('settings', settingsHtml()); }
-function settingsChange(act, d) {
-  if (act === 's_mus') { Settings.musV = (Settings.musV + d + 6) % 6; Store.set('vol_mus', Settings.musV); }
-  else if (act === 's_sfx') { Settings.sfxV = (Settings.sfxV + d + 6) % 6; Store.set('vol_sfx', Settings.sfxV); }
+function openSettings(from) { settingsFrom = from; Snd.resume(); openOverlay('settings', settingsHtml()); bindVolume(); }
+function bindVolume() {
+  const o = $('#overlay');
+  o.querySelectorAll('.vb').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); settingsChange(b.dataset.v, +b.dataset.d); }));
+  o.querySelectorAll('.vbar i').forEach((s) => s.addEventListener('click', (e) => { e.stopPropagation(); settingsChange(s.dataset.v, 0, +s.dataset.l); }));
+}
+function settingsChange(act, d, level) {
+  if (act === 's_mus') { Settings.musV = level != null ? level : clamp(Settings.musV + d, 0, 5); Store.set('vol_mus', Settings.musV); }
+  else if (act === 's_sfx') { Settings.sfxV = level != null ? level : clamp(Settings.sfxV + d, 0, 5); Store.set('vol_sfx', Settings.sfxV); }
+  else if (act === 's_mute') { Snd.toggleMute(); }
   else if (act === 's_vib') { Settings.vib = !Settings.vib; Store.set('vib', Settings.vib); if (Settings.vib) UI.vibrate(40); }
   else if (act === 's_pad') { Settings.pad = (Settings.pad + d + 3) % 3; Store.set('padsize', Settings.pad); layout(); }
   else if (act === 's_crt') { Engine.crt = !Engine.crt; Store.set('crt', Engine.crt); }
@@ -5678,6 +5703,7 @@ function settingsChange(act, d) {
   Snd.sfx('select');
   const keep = osel;
   openOverlay('settings', settingsHtml());
+  bindVolume();
   osel = keep; markOverlay();
 }
 function closeSettings() {
@@ -5812,8 +5838,9 @@ function refreshMenu() {
   $('#rec-rally').textContent = 'REC ' + pad6(Store.get('hi_rally', 0));
   $('#rec-contra').textContent = 'REC ' + pad6(Store.get('hi_contra', 0));
   document.querySelectorAll('.cart').forEach((c, i) => c.classList.toggle('sel', i === sel));
-  $('#optSound').textContent = Snd.isMuted() ? 'SONIDO OFF' : 'SONIDO ON';
-  $('#optSound').classList.toggle('on', !Snd.isMuted());
+  const silent = Snd.isMuted() || Settings.musV + Settings.sfxV === 0;
+  $('#optSound').textContent = Snd.isMuted() ? 'SONIDO OFF' : Settings.musV + Settings.sfxV === 0 ? 'VOLUMEN EN 0' : 'SONIDO ON';
+  $('#optSound').classList.toggle('on', !silent);
 
   const fb = $('#optFull');
   fb.hidden = !fsOK || !!window.__NATIVE_APP || matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches;
