@@ -34,6 +34,20 @@ const UI = {
     } catch (e) { /* sin vibración */ }
   },
   gameOver(name, score, rec, rows, buttons = [['retry', 'REINTENTAR'], ['menu', 'MENÚ']], cite = null) {
+    if (cite && cite.report) {
+      // Neón Commando: informe de misión con timbre
+      openOverlay('over', `
+      <div class="panel report" role="dialog" aria-label="Informe de misión">
+        <div class="rp-top"><b>Informe de misión</b><span>Resistencia · Ciudad Neón</span></div>
+        <div class="rp-body">
+          <dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+          <div class="rp-pts"><span>Puntos</span><b>${cite.score}</b></div>
+          <span class="rp-stamp">Misión fallida</span>${rec ? '<span class="rp-stamp rec">Nuevo récord</span>' : ''}
+        </div>
+        <div class="rp-acts">${buttons.map(([act, label]) => `<button class="mbtn" data-act="${act}">${label}</button>`).join('')}</div>
+      </div>`);
+      return;
+    }
     if (cite) {
       // Gas Rally: el fin del juego es un parte de tránsito
       openOverlay('over', `

@@ -1730,8 +1730,9 @@ const Contra = (() => {
     banner(null); hud.b.hidden = true;
     Snd.stop(); Snd.sfx('gameover');
     const got = S.scrap || 0; bankScrap();
-    UI.gameOver('NEÓN COMMANDO', S.score, rec, [['Misión', S.loop + 1], ['Avance', Math.min(100, Math.round((S.camX / (END - Engine.W)) * 100)) + '%'], ['Chatarra', '+' + got]],
-      [['retry', 'REINTENTAR'], ['barracks', 'CUARTEL'], ['menu', 'MENÚ']]);
+    const C = CFX.CHARS[S.ci];
+    UI.gameOver('NEÓN COMMANDO', S.score, rec, [['Soldado', `${C.n} · ${CFX.SUITS[S.si].n.toLowerCase()}`], ['Misión', String(S.loop + 1)], ['Avance', Math.min(100, Math.round((S.camX / (END - Engine.W)) * 100)) + ' %'], ['Chatarra', '+' + got]],
+      [['retry', 'Reintentar'], ['barracks', 'Cuartel'], ['menu', 'Menú']], { report: true, score: fmtN(S.score) });
   }
   function exit() { if (S.state !== 'over' && S.score > (S.hi || 0)) Store.set('hi_contra', S.score); bankScrap(); Snd.bank('arcade'); document.body.classList.remove('inmenu'); }
   function warp(x) { player.x = x; player.y = -10; player.ground = false; S.camX = clamp(x - 100, 0, END - Engine.W); S.spawnI = S.spawnList.findIndex((q) => q.x > S.camX + Engine.W); if (S.spawnI < 0) S.spawnI = S.spawnList.length; }

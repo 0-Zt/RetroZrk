@@ -795,6 +795,86 @@ body.g-contra #screen{--olive:#3f4628;--steel:#5d6672;--steel-d:#3a414b;--steel-
   .cq-desc{display:none}.cq-go{font-size:var(--f2);padding:calc(var(--px)*3) calc(var(--px)*5);margin-top:auto}
   .cq-row{padding:var(--px) calc(var(--px)*3)}
 }
+/* ---------- Neón Commando · marcador, avisos, pausa e informe de misión ----------
+   Misma idea del cuartel: placas de acero, letras caqui de plantilla, naranja de peligro para lo
+   urgente y radio de campaña (verde oscuro) para los avisos. */
+body.g-contra #hud{font-family:var(--t10);font-size:var(--f1);letter-spacing:0}
+body.g-contra .hrow{top:calc(var(--px)*4);left:calc(var(--px)*5);right:calc(var(--px)*5)}
+body.g-contra .hcol{gap:var(--px)}
+body.g-contra .hlab{font-size:var(--f0);color:var(--khaki)}
+body.g-contra .hval{font-family:var(--t15);font-size:var(--f2);line-height:.9;color:#f0e6c0;letter-spacing:.04em}
+body.g-contra .hval.cyan{color:#9aa4b2;font-family:var(--t10);font-size:var(--f1)}
+body.g-contra .lives.pinkl b{width:calc(var(--px)*4);height:calc(var(--px)*7);background:var(--khaki);border-radius:calc(var(--px)*1.5);clip-path:none;box-shadow:0 0 0 calc(var(--px)*.5) #000,inset 0 calc(var(--px)*1.5) 0 0 #8a8160}
+body.g-contra .hbl{left:calc(var(--px)*5);bottom:calc(var(--px)*5);gap:calc(var(--px)*2);padding:calc(var(--px)*2) calc(var(--px)*3);background:rgba(22,24,28,.78);box-shadow:0 0 0 var(--px) #000,inset 0 var(--px) 0 var(--steel-d)}
+body.g-contra .wpn,body.g-contra .wpn2{font-family:var(--t15);font-weight:400;box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) rgba(255,255,255,.35);border-radius:calc(var(--px)*1.5)}
+body.g-contra .wpn{width:calc(var(--px)*12);height:calc(var(--px)*12);font-size:var(--f1)}
+body.g-contra .hbl .hlab{color:#f0e6c0;font-size:var(--f0)}
+body.g-contra .hfix{color:var(--haz)}
+body.g-contra .abil{border-radius:calc(var(--px)*1.5);background:#20242a;box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--steel-d)}
+body.g-contra .abil b{font-family:var(--t15);font-weight:400;font-size:var(--f1)}
+body.g-contra .hscrap{color:#d8dce8;font-size:var(--f0)}
+body.g-contra .hpulse{color:#7ff0dc;font-size:var(--f0)}
+body.g-contra .boss{top:calc(var(--px)*22)}
+body.g-contra .boss .hlab{font-family:var(--t15);font-size:var(--f1);letter-spacing:.08em;color:var(--haz)!important}
+body.g-contra .boss .bar{height:calc(var(--px)*5);background:#141518;box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2.5) transparent;border:calc(var(--px)*1.5) solid transparent;
+  background:linear-gradient(#141518,#141518) padding-box,repeating-linear-gradient(-45deg,#16181c 0 calc(var(--px)*2),#ffd23f calc(var(--px)*2) calc(var(--px)*4)) border-box}
+body.g-contra .boss .bar i{background:linear-gradient(90deg,#d93a2e,var(--haz))}
+body.g-contra .banner{font-family:var(--t15);font-weight:400;font-size:calc(var(--px)*26);letter-spacing:.06em;color:#f0e6c0;text-transform:uppercase;
+  text-shadow:0 calc(var(--px)*2) 0 #000,calc(var(--px)*2) 0 0 #000,calc(var(--px)*-2) 0 0 #000,0 calc(var(--px)*-2) 0 #000}
+body.g-contra .banner small{font-family:var(--t10);font-size:var(--f1);letter-spacing:.08em;color:var(--haz);margin-top:calc(var(--px)*3);text-shadow:0 var(--px) 0 #000,var(--px) 0 0 #000,calc(var(--px)*-1) 0 0 #000,0 calc(var(--px)*-1) 0 #000}
+body.g-contra #toast span{font-family:var(--t10);font-size:var(--f1);letter-spacing:.04em;color:#cfe8b0;background:#18200f;padding:calc(var(--px)*3) calc(var(--px)*6) calc(var(--px)*3) calc(var(--px)*11);position:relative;
+  box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) #3e4a26}
+body.g-contra #toast span::before{content:"";position:absolute;left:calc(var(--px)*4);top:50%;width:calc(var(--px)*3);height:calc(var(--px)*3);margin-top:calc(var(--px)*-1.5);border-radius:50%;background:#8fe04a;box-shadow:0 0 calc(var(--px)*3) #8fe04a;animation:blink .8s steps(2) infinite}
+/* pausa y ajustes: placa de acero con franja de peligro */
+body.g-contra #overlay{background:rgba(10,12,14,.6)}
+body.g-contra .panel{align-items:stretch;text-align:left;gap:calc(var(--px)*2);min-width:calc(var(--px)*160);padding:calc(var(--px)*14) calc(var(--px)*10) calc(var(--px)*8);font-family:var(--t10);position:relative;
+  background:linear-gradient(180deg,#3a414b,#2a3038);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--steel-l),0 calc(var(--px)*5) calc(var(--px)*6) rgba(0,0,0,.45)}
+body.g-contra .panel::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--px)*5);background:repeating-linear-gradient(-45deg,#16181c 0 calc(var(--px)*3),#ffd23f calc(var(--px)*3) calc(var(--px)*6));box-shadow:0 var(--px) 0 #000}
+body.g-contra .panel h2{font-family:var(--t15);font-weight:400;font-size:var(--f3);letter-spacing:.06em;text-transform:uppercase;color:#f0e6c0;text-align:left;margin-bottom:calc(var(--px)*2)}
+body.g-contra .panel p{font-size:var(--f0);color:#aeb6c2;line-height:1.1}
+body.g-contra .mbtn{position:relative;background:transparent;box-shadow:none;font-family:var(--t10);font-size:var(--f1);letter-spacing:0;color:#e8e2cc;text-align:left;padding:calc(var(--px)*1.5) calc(var(--px)*4) calc(var(--px)*1.5) calc(var(--px)*10)}
+body.g-contra .mbtn.sel{background:rgba(255,138,30,.12);color:var(--haz);box-shadow:inset calc(var(--px)*2) 0 0 var(--haz)}
+body.g-contra .mbtn.sel::before{content:"";position:absolute;left:calc(var(--px)*4);top:50%;transform:translateY(-50%);width:calc(var(--px)*3);height:calc(var(--px)*5);background:var(--haz);clip-path:polygon(0 0,100% 50%,0 100%)}
+body.g-contra .mbtn.srow b{color:var(--haz);font-weight:400}
+body.g-contra .vb{background:#20242a;color:#e8e2cc;font-family:var(--t10);box-shadow:inset 0 0 0 var(--px) var(--steel)}
+body.g-contra .vbar i{background:#4a515c}body.g-contra .vbar i.on,body.g-contra .mbtn.sel .vbar i.on{background:var(--haz)}body.g-contra .mbtn.sel .vbar i{background:#4a515c}
+body.g-contra .mbtn.sel .vb{background:#20242a;color:#e8e2cc;box-shadow:inset 0 0 0 var(--px) var(--haz)}
+body.g-contra .panel.set h2{font-size:var(--f2)}
+/* informe de misión al perder: hoja de expediente con timbre rojo */
+body.g-contra .panel.report{padding:0;gap:0;min-width:calc(var(--px)*196);background:#d9cfaa;color:#2a2618;box-shadow:0 0 0 var(--px) #000,0 calc(var(--px)*4) 0 rgba(0,0,0,.45)}
+body.g-contra .panel.report::before{display:none}
+body.g-contra .rp-top{display:flex;justify-content:space-between;align-items:baseline;padding:calc(var(--px)*3) calc(var(--px)*7);background:var(--olive);color:#e8e0c0;border-bottom:calc(var(--px)*1.5) solid #2a2e18}
+body.g-contra .rp-top b{font-family:var(--t15);font-weight:400;font-size:var(--f2)}
+body.g-contra .rp-top span{font-size:var(--f0);color:#b8b48a}
+body.g-contra .rp-body{position:relative;display:grid;grid-template-columns:1fr auto;gap:calc(var(--px)*4) calc(var(--px)*10);padding:calc(var(--px)*6) calc(var(--px)*7) calc(var(--px)*4)}
+body.g-contra .report dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:calc(var(--px)*1.5) calc(var(--px)*6);font-size:var(--f1)}
+body.g-contra .report dt{color:#6e664a}body.g-contra .report dd{margin:0;border-bottom:var(--px) dashed #9a9070}
+body.g-contra .rp-pts{display:flex;flex-direction:column;align-items:flex-end;gap:var(--px)}
+body.g-contra .rp-pts span{font-size:var(--f0);color:#6e664a}
+body.g-contra .rp-pts b{font-family:var(--t15);font-weight:400;font-size:var(--f3);line-height:1}
+body.g-contra .rp-stamp{position:absolute;right:calc(var(--px)*8);bottom:calc(var(--px)*2);transform:rotate(-8deg);padding:var(--px) calc(var(--px)*4);font-family:var(--t15);font-size:var(--f1);letter-spacing:.08em;color:#c0322a;box-shadow:inset 0 0 0 calc(var(--px)*1.2) #c0322a;opacity:.85}
+body.g-contra .rp-stamp.rec{color:#2f6a2a;box-shadow:inset 0 0 0 calc(var(--px)*1.2) #2f6a2a;right:auto;left:calc(var(--px)*8);transform:rotate(5deg)}
+body.g-contra .rp-body{padding-bottom:calc(var(--px)*16)}
+body.g-contra .rp-acts{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--px);padding:calc(var(--px)*3) calc(var(--px)*5) calc(var(--px)*6);border-top:var(--px) dashed #9a9070}
+body.g-contra .report .mbtn{color:#2a2618;padding-left:calc(var(--px)*9)}
+body.g-contra .report .mbtn.sel{color:#9a3a0c;background:rgba(255,138,30,.18);box-shadow:inset calc(var(--px)*2) 0 0 #9a3a0c}
+body.g-contra .report .mbtn.sel::before{background:#9a3a0c}
+@media (max-aspect-ratio:13/10){body.g-contra .rp-acts{grid-template-columns:1fr}}
+/* control táctil del cuartel: acero, A caqui (salto), B rojo (fuego), H naranja, P verde agua */
+body.g-contra #dpad::before{background:radial-gradient(circle,#121416 55%,transparent 72%)}
+body.g-contra #dpad .arm{background:linear-gradient(#5d6672,#3a414b);box-shadow:inset 0 0 0 2px #121416,0 4px 0 #121416}
+body.g-contra #dpad .hub{background:#3a414b}body.g-contra #dpad .hub::after{background:#2a3038;box-shadow:inset 0 2px 0 #121416}
+body.g-contra #dpad.u .tu{border-bottom-color:#ff8a1e}body.g-contra #dpad.d .td{border-top-color:#ff8a1e}body.g-contra #dpad.l .tl{border-right-color:#ff8a1e}body.g-contra #dpad.r .tr{border-left-color:#ff8a1e}
+body.g-contra #dpad.u .tu,body.g-contra #dpad.d .td,body.g-contra #dpad.l .tl,body.g-contra #dpad.r .tr{filter:none}
+body.g-contra .rb{font-family:'Jersey 15',var(--display);font-weight:400;box-shadow:inset 0 -5px 0 rgba(0,0,0,.28),0 5px 0 #121416,0 0 0 3px #121416}
+body.g-contra #btnA{background:radial-gradient(circle at 35% 30%,#fff3d0,#d9cfaa 60%);color:#2a2618;font-size:30px}
+body.g-contra #btnB{background:radial-gradient(circle at 35% 30%,#ff9a8a,#d93a2e 60%);color:#fff;font-size:30px}
+body.g-contra .rb small{display:block;font-family:'Jersey 10',var(--ui);font-size:15px;letter-spacing:0;color:#aeb6c2;text-transform:lowercase}
+body.g-contra .rb small::first-letter{text-transform:uppercase}
+body.g-contra.has-bomb #btnD small{left:auto;right:calc(100% + 4px);bottom:auto;top:50%;transform:translateY(-50%)}
+body.g-contra .pill{font-family:'Jersey 10',var(--ui);font-size:14px;letter-spacing:.02em;color:#aeb6c2;background:#3a414b;box-shadow:0 3px 0 #121416,inset 0 0 0 2px #121416}
+body.g-contra #btnFix.lock{color:#1a0b06;background:#ff8a1e}
+body.g-contra{background:radial-gradient(120% 80% at 50% 0%,#2e333b,#16181c 70%)}
 @media (prefers-reduced-motion:reduce){.cart,.rb,.pill{transition:none}.fuel.low i{animation:none}}
 </style>
 
@@ -9935,8 +10015,9 @@ const Contra = (() => {
     banner(null); hud.b.hidden = true;
     Snd.stop(); Snd.sfx('gameover');
     const got = S.scrap || 0; bankScrap();
-    UI.gameOver('NEÓN COMMANDO', S.score, rec, [['Misión', S.loop + 1], ['Avance', Math.min(100, Math.round((S.camX / (END - Engine.W)) * 100)) + '%'], ['Chatarra', '+' + got]],
-      [['retry', 'REINTENTAR'], ['barracks', 'CUARTEL'], ['menu', 'MENÚ']]);
+    const C = CFX.CHARS[S.ci];
+    UI.gameOver('NEÓN COMMANDO', S.score, rec, [['Soldado', `${C.n} · ${CFX.SUITS[S.si].n.toLowerCase()}`], ['Misión', String(S.loop + 1)], ['Avance', Math.min(100, Math.round((S.camX / (END - Engine.W)) * 100)) + ' %'], ['Chatarra', '+' + got]],
+      [['retry', 'Reintentar'], ['barracks', 'Cuartel'], ['menu', 'Menú']], { report: true, score: fmtN(S.score) });
   }
   function exit() { if (S.state !== 'over' && S.score > (S.hi || 0)) Store.set('hi_contra', S.score); bankScrap(); Snd.bank('arcade'); document.body.classList.remove('inmenu'); }
   function warp(x) { player.x = x; player.y = -10; player.ground = false; S.camX = clamp(x - 100, 0, END - Engine.W); S.spawnI = S.spawnList.findIndex((q) => q.x > S.camX + Engine.W); if (S.spawnI < 0) S.spawnI = S.spawnList.length; }
@@ -9980,6 +10061,20 @@ const UI = {
     } catch (e) { /* sin vibración */ }
   },
   gameOver(name, score, rec, rows, buttons = [['retry', 'REINTENTAR'], ['menu', 'MENÚ']], cite = null) {
+    if (cite && cite.report) {
+      // Neón Commando: informe de misión con timbre
+      openOverlay('over', `
+      <div class="panel report" role="dialog" aria-label="Informe de misión">
+        <div class="rp-top"><b>Informe de misión</b><span>Resistencia · Ciudad Neón</span></div>
+        <div class="rp-body">
+          <dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+          <div class="rp-pts"><span>Puntos</span><b>${cite.score}</b></div>
+          <span class="rp-stamp">Misión fallida</span>${rec ? '<span class="rp-stamp rec">Nuevo récord</span>' : ''}
+        </div>
+        <div class="rp-acts">${buttons.map(([act, label]) => `<button class="mbtn" data-act="${act}">${label}</button>`).join('')}</div>
+      </div>`);
+      return;
+    }
     if (cite) {
       // Gas Rally: el fin del juego es un parte de tránsito
       openOverlay('over', `
