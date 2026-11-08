@@ -708,7 +708,7 @@ const Snd = (() => {
     const now = ctx.currentTime;
     if (last[name] && now - last[name] < 0.035) return;
     last[name] = now;
-    try { if (Foley.has(name, bank)) playFoley(name, o); else if (SFX[name]) SFX[name](); } catch (e) { /* nodo de audio no disponible */ }
+    try { const k = Foley.key(name, bank); if (k) playFoley(k, o); else if (SFX[name]) SFX[name](); } catch (e) { /* nodo de audio no disponible */ }
   };
   // --- secuenciador de música
   const midi = (s) => {

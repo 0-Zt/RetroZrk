@@ -108,7 +108,7 @@ const Foley = (() => {
   // ---------- los efectos. [duración, pico, función, variación de tono al tocar]
   // UI = consola (sirve a todos los juegos); el resto es del Gas Rally
   const D = {};
-  const def = (name, dur, peak, fn, jit = 1, ui = false) => { D[name] = { dur, peak, fn, jit, bank: ui === true ? 'ui' : ui || 'rally' }; };
+  const def = (name, dur, peak, fn, jit = 1, ui = false) => { const bank = ui === true ? 'ui' : ui || 'rally'; D[bank === 'contra' ? 'contra:' + name : name] = { dur, peak, fn, jit, bank }; };
 
   // --- consola y menús: táctiles, como perillas y teclas de verdad
   def('move', 0.06, 0.32, (c) => { c.click(0, c.rr(3000, 3800), 1, 0.0014, 3); c.fm(0.001, c.rr(1900, 2100), 1.41, 0.6, 0.01, 0.35); }, 1, true);
@@ -384,11 +384,58 @@ const Foley = (() => {
   def('dash', 0.35, 0.45, (c) => { const f = svf(), g = pinkGen(c.r); c.layer(0, 0.32, (t) => f(g(), 900 + 3200 * Math.sin(Math.PI * Math.min(1, t / 0.3)), 1.8, c.sr, BP) * Math.sin(Math.PI * t / 0.32), 1.8); let p = 0; c.layer(0, 0.2, (t) => { p += TAU * (600 + 1800 * t / 0.2) / c.sr; return Math.sin(p) * env(t, 0.005, 0.06); }, 0.25); }, 0.5, K);
   def('chink', 0.16, 0.3, (c) => { c.modal(0, 2600, [1, 1.52, 2.33], [1, 0.5, 0.3], [0.04, 0.03, 0.02], 1, 0.0005); c.click(0, 5000, 0.3, 0.0008); }, 1, K);
 
+  // --- Neón Commando: armas con cuerpo propio (golpe del cañón + estampido + cola)
+  def('rifle', 0.26, 0.24, (c) => { c.click(0, 2200, 1.2, 0.0015, 1.5); c.thump(0, 190, 90, 0.022, 0.8, 2.5); c.hiss(0, 0.12, 'white', BP, 3400, 1400, 1.1, 0.0008, 0.022, 1.3); c.hiss(0.008, 0.22, 'pink', LP, 1800, 500, 0.7, 0.003, 0.05, 0.4); }, 1, K);
+  def('shoot', 0.22, 0.22, (c) => { c.click(0, 2600, 1, 0.0012, 1.5); c.thump(0, 220, 120, 0.018, 0.6, 2); c.hiss(0, 0.1, 'white', BP, 3800, 1800, 1.2, 0.0008, 0.018, 1.1); }, 1, K);
+  def('mgun', 0.2, 0.18, (c) => { c.click(0, 3000, 1, 0.001, 1.5); c.thump(0, 240, 120, 0.016, 0.7, 2.5); c.hiss(0, 0.09, 'white', BP, 4200, 2000, 1.1, 0.0006, 0.016, 1.2); c.modal(0.01, 2600, [1, 2.3], [0.15, 0.08], [0.02, 0.015], 0.3); }, 1.4, K);
+  def('shotgun', 0.5, 0.45, (c) => {
+    // escopeta: estampido grave, nube de perdigones y el "chk-chk" de la corredera
+    c.thump(0, 100, 40, 0.07, 1.3, 3.2); c.click(0, 1800, 1.4, 0.002, 1);
+    c.hiss(0, 0.2, 'white', LP, 7000, 300, 0.7, 0.0008, 0.06, 2.1); c.hiss(0, 0.3, 'brown', LP, 900, 120, 0.7, 0.002, 0.09, 1.3);
+    c.click(0.24, 1500, 0.7, 0.002, 3); c.modal(0.24, 900, [1, 2.6, 4.1], [0.4, 0.25, 0.1], [0.03, 0.02, 0.015], 0.35);
+    c.click(0.33, 1100, 0.8, 0.002, 3); c.modal(0.33, 760, [1, 2.6, 4.1], [0.4, 0.25, 0.1], [0.035, 0.02, 0.015], 0.4);
+  }, 0.5, K);
+  def('spread', 0.32, 0.32, (c) => { c.thump(0, 150, 70, 0.04, 1, 2.5); c.click(0, 2400, 1.2, 0.0015, 1); c.hiss(0, 0.16, 'white', LP, 9000, 900, 0.7, 0.0008, 0.04, 1.8); for (let i = 0; i < 4; i++) c.click(c.rr(0.01, 0.05), c.rr(3000, 6000), 0.4, 0.0008, 4); }, 0.7, K);
+  def('vlaser', 0.3, 0.28, (c) => {
+    // riel de energía: zap que cae en picada, chisporroteo y un golpe de aire
+    let p = 0, q = 0; c.layer(0, 0.24, (t) => { const f = 600 + 3000 * Math.exp(-t / 0.035); q += TAU * f * 1.5 / c.sr; p += TAU * f / c.sr; return Math.sin(p + 3.5 * Math.exp(-t / 0.05) * Math.sin(q)) * env(t, 0.001, 0.07); }, 0.9);
+    c.hiss(0, 0.06, 'white', HP, 7000, 5000, 0.8, 0.0005, 0.012, 0.6); c.thump(0, 160, 90, 0.02, 0.5, 2);
+  }, 0.8, K);
+  def('laser', 0.45, 0.34, (c) => {
+    [1, 1.012].forEach((dt) => { let p = 0, q = 0; c.layer(0, 0.38, (t) => { const f = (260 + 2200 * Math.exp(-t / 0.06)) * dt; q += TAU * f * 2.01 / c.sr; p += TAU * f / c.sr; return Math.sin(p + 2.5 * Math.sin(q)) * env(t, 0.002, 0.12); }, 0.55); });
+    c.thump(0, 90, 45, 0.06, 0.9, 2.5); c.hiss(0, 0.3, 'white', BP, 5000, 2500, 2, 0.001, 0.08, 0.5);
+  }, 0.5, K);
+  def('fireball', 0.4, 0.26, (c) => { c.hiss(0, 0.36, 'pink', BP, 400, 1500, 1.2, 0.01, 0.12, 1.5); for (let i = 0; i < 9; i++) c.click(c.rr(0, 0.3), c.rr(1500, 4500), c.rr(0.2, 0.45), 0.0008, 3); c.thump(0, 120, 70, 0.03, 0.5, 2); }, 0.6, K);
+  def('hit', 0.2, 0.26, (c) => { c.thump(0, 150, 80, 0.028, 1, 2.5); c.hiss(0, 0.06, 'white', BP, 1300, 900, 1.5, 0.0008, 0.016, 1.2); c.click(0, 3200, 0.7, 0.0008, 2); }, 0.8, K);
+  def('tink', 0.16, 0.16, (c) => { c.modal(0, c.rr(1700, 2100), [1, 2.4, 3.9], [1, 0.4, 0.2], [0.03, 0.02, 0.012], 1, 0.0004); c.click(0, 5000, 0.4, 0.0006, 3); }, 1.5, K);
+  def('eshot', 0.14, 0.14, (c) => { c.thump(0, 320, 180, 0.014, 0.8, 2); c.hiss(0, 0.06, 'pink', LP, 1600, 500, 0.7, 0.001, 0.014, 0.9); }, 1, K);
+  def('explode', 1.0, 0.5, (c) => { c.thump(0, 78, 32, 0.12, 1.3, 3); c.hiss(0, 0.9, 'brown', LP, 2600, 100, 0.7, 0.001, 0.2, 2.3); c.hiss(0, 0.12, 'white', HP, 3500, 1800, 0.7, 0.001, 0.03, 0.5); for (let i = 0; i < 6; i++) c.modal(c.rr(0.06, 0.6), c.rr(700, 1900), [1, 2.4, 3.7], [0.5, 0.3, 0.2], [0.03, 0.02, 0.015], 0.13); }, 0.5, K);
+  def('boom', 2.3, 0.6, (c) => { c.thump(0, 56, 24, 0.32, 1.5, 3); c.hiss(0, 2.2, 'brown', LP, 2000, 50, 0.7, 0.002, 0.6, 2.8); c.hiss(0, 0.35, 'white', HP, 3000, 1200, 0.7, 0.001, 0.06, 0.6); rumble(c, 2.2, 160, 1.2); for (let i = 0; i < 12; i++) c.modal(c.rr(0.1, 1.6), c.rr(500, 1600), [1, 2.4, 3.7], [0.5, 0.3, 0.2], [0.04, 0.03, 0.02], 0.14); }, 0.2, K);
+  def('jump', 0.18, 0.18, (c) => { c.hiss(0, 0.16, 'pink', BP, 700, 1900, 1.4, 0.005, 0.04, 1.4); c.click(0, 900, 0.6, 0.003, 2); }, 0.8, K);
+  def('die', 1.0, 0.45, (c) => {
+    c.thump(0, 130, 45, 0.08, 1.3, 3); c.click(0, 2500, 1, 0.002, 1.5);
+    let p = 0; c.layer(0.05, 0.6, (t) => { p += TAU * (520 * Math.exp(-t / 0.25) + 90) / c.sr; return Math.sin(p) * env(t, 0.01, 0.2); }, 0.45);
+    const f = svf(); let hold = 0, k = 0; c.layer(0.12, 0.5, (t) => { if (k++ % 6 === 0) hold = Math.round(f(c.r() * 2 - 1, 1800, 1.2, c.sr, BP) * 5) / 5; return hold * env(t, 0.01, 0.15); }, 0.5);
+  }, 0.2, K);
+  def('powerup', 0.65, 0.38, (c) => { c.click(0, 1800, 0.9, 0.002, 2); c.hiss(0.03, 0.08, 'white', BP, 2600, 3400, 2, 0.005, 0.03, 0.8); c.click(0.12, 2300, 1, 0.002, 2); c.modal(0.12, 1300, [1, 2.5, 4], [0.5, 0.3, 0.15], [0.04, 0.03, 0.02], 0.4); c.fm(0.22, mtof(84), 3.5, 1.4, 0.12, 0.4); c.fm(0.3, mtof(91), 3.5, 1.2, 0.16, 0.4); }, 0.2, K);
+  def('missile', 0.65, 0.3, (c) => { c.thump(0, 120, 60, 0.04, 0.8, 2); c.hiss(0, 0.6, 'pink', BP, 600, 3000, 1.3, 0.02, 0.2, 1.5); for (let i = 0; i < 10; i++) c.click(c.rr(0.02, 0.5), c.rr(2000, 6000), 0.25, 0.0006, 3); }, 0.4, K);
+  def('alarm', 1.4, 0.32, (c) => {
+    // claxon de base militar: tres "auuu-ga"
+    for (let k = 0; k < 3; k++) { const f1 = svf(); let p = 0; c.layer(k * 0.45, 0.38, (t) => { p += (300 + 260 * Math.min(1, t / 0.28)) / c.sr; return f1(sat(2 * (p % 1) - 1, 2), 1100, 1.4, c.sr, BP) * Math.min(1, t / 0.02) * Math.min(1, (0.38 - t) / 0.05); }, 1); }
+  }, 0, K);
+  def('clear', 1.6, 0.45, (c) => {
+    for (let i = 0; i < 16; i++) { const t = i * 0.032; c.hiss(t, 0.05, 'white', BP, 2600, 2200, 0.9, 0.001, 0.02, 0.25 + i * 0.03); }
+    [55, 59, 62].forEach((m) => c.brass(0.52, mtof(m + 12), 0.18, 0.3)); [55, 60, 64, 67].forEach((m) => c.brass(0.74, mtof(m + 12), 0.65, 0.3));
+    c.thump(0.74, 110, 55, 0.06, 0.7); c.hiss(0.74, 0.8, 'white', HP, 5000, 4000, 0.6, 0.002, 0.3, 0.35);
+  }, 0, K);
+  def('gameover', 2.4, 0.4, (c) => { [[55, 0, 0.5], [53, 0.55, 0.5], [50, 1.1, 1.1]].forEach(([m, t0, d]) => c.brass(t0, mtof(m - 12), d, 0.45)); const f = svf(); c.layer(0, 2.3, (t) => f(c.r() * 2 - 1, 1600, 1.5, c.sr, BP) * 0.15 * Math.min(1, t / 0.5) * Math.min(1, (2.3 - t) / 0.6), 1); }, 0, K);
+  def('oneup', 0.8, 0.4, (c) => { c.click(0, 1800, 0.8, 0.002, 2); c.click(0.1, 2300, 0.9, 0.002, 2); [84, 88, 91, 96].forEach((m, i) => c.fm(0.18 + i * 0.06, mtof(m), 3.5, 1.5, 0.14, 0.4)); }, 0, K);
+
   // ---------- API
   return {
-    has: (name, bank) => !!D[name] && (D[name].bank === 'ui' || D[name].bank === bank),
+    key: (name, bank) => (D[bank + ':' + name] ? bank + ':' + name : D[name] && (D[name].bank === 'ui' || D[name].bank === bank) ? name : null),
     names: () => Object.keys(D),
-    jitter: (name) => (D[name] ? D[name].jit : 0),
+    jitter: (key) => (D[key] ? D[key].jit : 0),
     render(name, sr, seed) {
       const d = D[name], c = ctx(sr, d.dur, seed);
       d.fn(c);

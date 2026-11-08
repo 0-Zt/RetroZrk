@@ -166,5 +166,43 @@ const CFX = (() => {
     if (s.camo) cv = camo(cv, P, s.camo);
     return (portCache[k] = cv.toDataURL());
   }
-  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait };
+
+  // ---------- armas: trazadoras, perdigones, fogonazos y el perfil del rayo
+  function tracer(len, h, head, mid, tail) {
+    const { c, g } = mk(len, h);
+    for (let x = 0; x < len; x++) {
+      const t = x / (len - 1), col = t > 0.8 ? head : t > 0.4 ? mid : tail;
+      const hh = t > 0.6 ? h : Math.max(1, h - 1);
+      g.globalAlpha = Math.min(1, 0.25 + t);
+      R(g, col, x, Math.floor((h - hh) / 2), 1, hh);
+    }
+    return c;
+  }
+  function pellet() { const { c, g } = mk(5, 5); disc(g, 2.5, 2.5, 2.4, '#ff9a3c'); disc(g, 2.5, 2.5, 1.4, '#fff3c0'); return c; }
+  function flashStar(r, cols) {
+    const { c, g } = mk(r * 2 + 2, r * 2 + 2), m = r + 1;
+    disc(g, m, m, r * 0.55, cols[0]); disc(g, m, m, r * 0.3, cols[1]);
+    for (const [dx, dy, l] of [[1, 0, 1], [0.7, -0.7, 0.6], [0.7, 0.7, 0.6], [0, -1, 0.45], [0, 1, 0.45]]) line(g, m, m, m + dx * r * l, m + dy * r * l, cols[0], 2);
+    line(g, m, m, m + r, m, cols[1], 1);
+    return c;
+  }
+  function flashCone() {
+    const { c, g } = mk(20, 16);
+    poly(g, [[0, 5], [12, 0], [19, 8], [12, 16], [0, 11]], '#ff8a1e');
+    poly(g, [[0, 6], [10, 3], [15, 8], [10, 13], [0, 10]], '#ffd27a');
+    poly(g, [[0, 7], [8, 6], [10, 8], [8, 10], [0, 9]], '#fff6d8');
+    return c;
+  }
+  function beamProfile() {
+    const { c, g } = mk(4, 9);
+    const a = [0.08, 0.2, 0.45, 0.85, 1, 0.85, 0.45, 0.2, 0.08];
+    a.forEach((v, y) => { g.fillStyle = `rgba(255,255,255,${v})`; g.fillRect(0, y, 4, 1); });
+    return c;
+  }
+  const weaponFx = () => ({
+    tracer: tracer(12, 3, '#ffffff', '#fff0a0', '#ff9a3c'), tracerM: tracer(10, 2, '#fff3c0', '#ff7a4a', '#c8323a'),
+    pellet: pellet(), beam: beamProfile(),
+    fl: { R: flashStar(6, ['#ffd27a', '#ffffff']), M: flashStar(5, ['#ff9a5a', '#fff3c0']), E: flashCone(), S: flashCone(), V: flashStar(6, ['#4fe3ff', '#ffffff']), L: flashStar(8, ['#ff4f9a', '#ffffff']), F: flashStar(6, ['#ff7a1a', '#ffe08a']) },
+  });
+  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx };
 })();

@@ -35,12 +35,12 @@ const Contra = (() => {
     N: { speed: 270, rate: 0.17, max: 4, dmg: 1, sfx: 'shoot' },
     M: { speed: 320, rate: 0.085, max: 9, dmg: 1, sfx: 'mgun' },
     S: { speed: 240, rate: 0.24, max: 15, dmg: 1, sfx: 'spread', spread: [-0.3, -0.15, 0, 0.15, 0.3] },
-    L: { speed: 430, rate: 0.3, max: 2, dmg: 3, sfx: 'laser', pierce: true },
+    L: { rate: 0.3, dmg: 3, sfx: 'laser', beam: 5, col: 0xff4f9a },
     F: { speed: 185, rate: 0.22, max: 6, dmg: 2, sfx: 'fireball', spiral: true },
     // armas de base de cada personaje (suben con mejoras en el cuartel)
-    R: { speed: 300, rate: 0.14, max: 5, dmg: 1, sfx: 'shoot' },
-    E: { speed: 260, rate: 0.36, max: 15, dmg: 1, sfx: 'spread', spread: [-0.17, 0, 0.17], life: 0.3 },
-    V: { speed: 430, rate: 0.3, max: 2, dmg: 2, sfx: 'laser', pierce: true },
+    R: { speed: 340, rate: 0.14, max: 5, dmg: 1, sfx: 'rifle' },
+    E: { speed: 300, rate: 0.36, max: 15, dmg: 1, sfx: 'shotgun', spread: [-0.17, 0, 0.17], life: 0.26 },
+    V: { rate: 0.3, dmg: 2, sfx: 'vlaser', beam: 3, col: 0x4fe3ff },
   };
   const WUP = {
     R: [{}, { rate: 0.11, max: 6 }, { rate: 0.09, max: 7, dmg: 2 }],
@@ -57,6 +57,17 @@ const Contra = (() => {
     dash: { n: 'Impulso', k: 'I', cd: [3, 2.2, 1.8] },
   };
   const SCRAP = { runner: 1, rifle: 2, drone: 2, turret: 4, capsule: 1 };
+  // sensación de cada arma: fogonazo, temblor [fuerza, tiempo], retroceso, vainas, empuje al enemigo, pausa al matar, color de chispas
+  const FEEL = {
+    N: { shake: [0.3, 0.04], knock: 40, casing: 1, spark: 0xffe066 },
+    R: { shake: [0.5, 0.05], knock: 55, casing: 1, spark: 0xfff0a0 },
+    M: { shake: [0.4, 0.04], knock: 35, casing: 1, spark: 0xff9a5a },
+    E: { shake: [2.2, 0.1], kick: 2.5, knock: 150, casing: 2, spark: 0xffb347, stop: 0.04 },
+    S: { shake: [1.2, 0.07], knock: 70, spark: 0xff7a1a },
+    V: { shake: [1, 0.06], knock: 90, spark: 0x9ff3ff, stop: 0.03 },
+    L: { shake: [1.8, 0.09], knock: 130, spark: 0xff9ac8, stop: 0.045 },
+    F: { shake: [0.8, 0.06], knock: 60, spark: 0xff7a1a },
+  };
 
   // ---------------- arte del escenario
   function skyCanvas() {
@@ -310,6 +321,7 @@ const Contra = (() => {
     A.mush = [0, 1, 2, 3, 4, 5, 6, 7].map((k) => T(CFX.mushroom(k)));
     A.bomber = [T(CFX.bomber(true)), T(CFX.bomber(false))];
     A.gren = T(CFX.grenade()); A.scrap = [0, 1, 2].map((k) => T(CFX.scrap(k)));
+    { const f = CFX.weaponFx(); A.fx = { tracer: T(f.tracer), tracerM: T(f.tracerM), pellet: T(f.pellet), beam: T(f.beam), fl: Object.fromEntries(Object.entries(f.fl).map(([k, v]) => [k, T(v)])) }; }
     BG = {
       titan: new Spr(scene, A.titan[0], -66, { transparent: true }).show(false),
       beam: new Spr(scene, T(CFX.beam()), -65.5, { transparent: true, add: true }).show(false),
@@ -341,6 +353,8 @@ const Contra = (() => {
     for (let i = 0; i < 50; i++) ebs.push({ spr: new Spr(scene, A.shot.eb[0], 21).show(false), on: false });
     for (let i = 0; i < 18; i++) booms.push({ spr: new Spr(scene, A.boom[0], 35).show(false), on: false });
     for (let i = 0; i < 4; i++) grens.push({ spr: new Spr(scene, A.gren, 19).show(false), on: false });
+    S.muzzle = new Spr(scene, A.fx.fl.R, 17, { transparent: true, add: true }).show(false);
+    for (let i = 0; i < 4; i++) S.beams = (S.beams || []).concat([{ glow: new Spr(scene, A.fx.beam, 18, { transparent: true, add: true }).show(false), core: new Spr(scene, A.fx.beam, 18.5, { transparent: true, add: true }).show(false), t: 0, on: false }]);
     boss = { spr: new Spr(scene, A.boss.body[0], 12).show(false), rotor: new Spr(scene, A.boss.rotor[0], 13, { transparent: true }).show(false), on: false };
   }
 
@@ -453,21 +467,80 @@ const Contra = (() => {
     if (p.jumping) { mx = p.x + dx * 10; my = p.y - 14 + dy * 10; }
     else if (!p.ground && p.aim === 'down') { mx = p.x; my = p.y - 4; }
     else { const m = MUZZLE[p.aim === 'down' ? 'ddown' : p.aim]; mx = p.x + m[0] * f; my = p.y + m[1]; }
+    if (W.beam) { fireBeam(mx, my, dx, dy, W); shotFeel(p.weapon, mx, my, dx, dy); Snd.sfx(W.sfx); return; }
     const angs = W.spread || [0];
     for (const da of angs) {
       const b = pbs.find((q) => !q.on);
       if (!b) break;
       const ca = Math.cos(da), sa = Math.sin(da);
-      const vx = (dx * ca - dy * sa) * W.speed, vy = (dx * sa + dy * ca) * W.speed;
+      const sp = W.speed * (p.weapon === 'E' ? rand(0.85, 1.12) : 1), vx = (dx * ca - dy * sa) * sp, vy = (dx * sa + dy * ca) * sp;
       Object.assign(b, { on: true, x: mx, y: my, bx: mx, by: my, vx, vy, t: 0, w: p.weapon, dmg: W.dmg, pierce: !!W.pierce, hits: W.pierce ? new Set() : null, dx, dy, life: W.life || 0 });
-      let tex = A.shot.pb;
-      if (p.weapon === 'S') tex = A.shot.sp1;
-      if (p.weapon === 'F') tex = A.shot.fire[0];
-      if (p.weapon === 'L' || p.weapon === 'V') tex = A.shot.laser[dy === 0 ? 0 : dx === 0 ? 90 : dx * dy < 0 ? 45 : 135];
-      b.spr.set(tex).show(true).at(mx, my);
+      let tex = A.fx.tracer, turn = true;
+      if (p.weapon === 'M') tex = A.fx.tracerM;
+      if (p.weapon === 'E') { tex = A.fx.pellet; turn = false; }
+      if (p.weapon === 'S') { tex = A.shot.sp1; turn = false; }
+      if (p.weapon === 'F') { tex = A.shot.fire[0]; turn = false; }
+      b.spr.set(tex).show(true).rot(turn ? -Math.atan2(vy, vx) : 0).at(mx, my);
     }
-    parts.emit(mx, my, 0, 0, 0.06, 0xffffff, 0xffe066, 4, 1);
+    shotFeel(p.weapon, mx, my, dx, dy);
     Snd.sfx(W.sfx);
+  }
+  // fogonazo, temblor, retroceso, vainas que saltan y chispa en la boca del cañón
+  function shotFeel(w, mx, my, dx, dy) {
+    const p = player, F = FEEL[w] || FEEL.N;
+    S.muzzle.set(A.fx.fl[w] || A.fx.fl.R).show(true).rot(-Math.atan2(dy, dx)).at(mx + dx * 4, my + dy * 4); S.muzzleT = 0.05;
+    if (F.shake) shake(F.shake[0], F.shake[1]);
+    if (F.kick && p.ground && !p.prone) p.x = clamp(p.x - p.face * F.kick, S.camX + 8, END - 8);
+    if (F.casing) parts.emit(p.x + p.face * 2, p.y - 22, -p.face * rand(25, 55), rand(-140, -90), 0.7, F.casing === 2 ? 0xd83a2a : 0xe8b84a, F.casing === 2 ? 0x7a1a12 : 0x8a6a2a, F.casing === 2 ? 2 : 1, 1, 520);
+    parts.emit(mx, my, dx * 20, dy * 20, 0.08, 0xffffff, F.spark, 3, 1);
+  }
+  // rayo instantáneo (láser): atraviesa todo lo que encuentra hasta el borde de la pantalla
+  function rayBox(ox, oy, dx, dy, b) {
+    let t0 = 0, t1 = 1e9;
+    for (const [o, d, lo, hi] of [[ox, dx, b[0], b[0] + b[2]], [oy, dy, b[1], b[1] + b[3]]]) {
+      if (Math.abs(d) < 1e-6) { if (o < lo || o > hi) return null; continue; }
+      let a = (lo - o) / d, c = (hi - o) / d; if (a > c) [a, c] = [c, a];
+      t0 = Math.max(t0, a); t1 = Math.min(t1, c); if (t0 > t1) return null;
+    }
+    return t0;
+  }
+  function fireBeam(mx, my, dx, dy, W) {
+    const F = FEEL[player.weapon] || FEEL.V;
+    let len = 1e9;
+    if (dx > 0) len = Math.min(len, (S.camX + Engine.W + 8 - mx) / dx); else if (dx < 0) len = Math.min(len, (S.camX - 8 - mx) / dx);
+    if (dy > 0) len = Math.min(len, (H + 8 - my) / dy); else if (dy < 0) len = Math.min(len, (-8 - my) / dy);
+    let killed = false;
+    for (const e of ents) {
+      if (e.dead || (e.type === 'drone' && e.t < 0)) continue;
+      const t = rayBox(mx, my, dx, dy, entBox(e));
+      if (t === null || t > len) continue;
+      e.hp -= W.dmg; e.flashT = 0.08; e.kx = (e.kx || 0) + Math.sign(dx || player.face) * F.knock;
+      parts.burst(mx + dx * t, my + dy * t, 6, 90, 0.25, 0xffffff, F.spark, 2, 1);
+      if (e.hp <= 0) { killEnt(e); killed = true; } else Snd.sfx(e.type === 'runner' || e.type === 'rifle' ? 'hit' : 'tink');
+    }
+    for (const m of ebs) if (m.on && m.kind === 'missile' && rayBox(mx, my, dx, dy, [m.x - 6, m.y - 4, 12, 8]) !== null) { m.on = false; m.spr.show(false); boomAt(m.x, m.y, true); Snd.sfx('explode'); addScore(50); }
+    if (boss.on && boss.st === 'fight') { const t = rayBox(mx, my, dx, dy, bossBox()); if (t !== null && t < len) { damageBoss(W.dmg); parts.burst(mx + dx * t, my + dy * t, 6, 90, 0.25, 0xffffff, F.spark, 2, 1); } }
+    if (killed && F.stop) S.hitstop = F.stop;
+    const bm = S.beams.find((q) => !q.on) || S.beams[0];
+    Object.assign(bm, { on: true, t: 0, w: W.beam, len, ang: -Math.atan2(dy, dx), cx: mx + dx * len / 2, cy: my + dy * len / 2 });
+    bm.glow.tint(W.col).show(true); bm.core.show(true);
+    placeBeam(bm, 1);
+  }
+  function placeBeam(bm, k) {
+    for (const [s, w] of [[bm.glow, bm.w * 2.4 * k], [bm.core, Math.max(1, bm.w * 0.7 * k)]]) {
+      s.m.scale.set(bm.len, w, 1); s.m.position.x = bm.cx; s.m.position.y = -bm.cy; s.m.rotation.z = bm.ang;
+    }
+  }
+  function updateBeams(dt) {
+    if (S.muzzleT > 0 && (S.muzzleT -= dt) <= 0) S.muzzle.show(false);
+    for (const bm of S.beams) {
+      if (!bm.on) continue;
+      bm.t += dt;
+      const k = 1 - bm.t / 0.14;
+      if (k <= 0) { bm.on = false; bm.glow.show(false); bm.core.show(false); continue; }
+      bm.glow.mat.opacity = k; bm.core.mat.opacity = Math.min(1, k * 1.6);
+      placeBeam(bm, 0.6 + 0.4 * k);
+    }
   }
   function enemyShot(x, y, vx, vy, kind = 'b') {
     const b = ebs.find((q) => !q.on);
@@ -514,7 +587,7 @@ const Contra = (() => {
     addScore(pts);
     if (e.type === 'runner' || e.type === 'rifle') {
       Snd.sfx('hit');
-      items.push({ corpse: true, x: e.x, y: e.y, vx: (e.face || -1) * -40, vy: -170, t: 0, spr: new Spr(scene, A.grunt.hurt, 10).setFlip(e.face < 0) });
+      items.push({ corpse: true, x: e.x, y: e.y, vx: e.kx ? Math.sign(e.kx) * (50 + Math.min(170, Math.abs(e.kx))) : (e.face || -1) * -40, vy: e.kx && Math.abs(e.kx) > 120 ? -210 : -170, t: 0, spr: new Spr(scene, A.grunt.hurt, 10).setFlip(e.face < 0) });
       parts.burst(e.x, e.y - 14, 6, 60, 0.35, 0xffffff, 0xff4f9a, 1, 1);
     } else if (e.type === 'turret') {
       Snd.sfx('explode'); boomAt(e.x, e.y); boomAt(e.x + 6, e.y - 8, true); shake(3, 0.3);
@@ -552,6 +625,7 @@ const Contra = (() => {
       if (e.dead) continue;
       e.t = (e.t || 0) + dt;
       if (e.flashT > 0) e.flashT -= dt;
+      if (e.kx) { if (e.type !== 'turret' && e.type !== 'capsule') e.x += e.kx * dt; e.kx *= Math.pow(0.002, dt); if (Math.abs(e.kx) < 3) e.kx = 0; }
       const onScreen = e.x > S.camX - 10 && e.x < S.camX + W + 10;
       if (e.type === 'runner') {
         e.x += e.face * 74 * dt;
@@ -818,9 +892,10 @@ const Contra = (() => {
         if (e.dead || (b.hits && b.hits.has(e))) continue;
         if (e.type === 'drone' && e.t < 0) continue;
         if (!hit(bb, entBox(e))) continue;
-        e.hp -= b.dmg; e.flashT = 0.06;
-        parts.burst(b.x, b.y, 4, 70, 0.2, 0xffffff, 0xffe066, 1, 1);
-        if (e.hp <= 0) killEnt(e); else Snd.sfx('tink');
+        const F = FEEL[b.w] || FEEL.N;
+        e.hp -= b.dmg; e.flashT = 0.06; e.kx = (e.kx || 0) + Math.sign(b.vx || 1) * F.knock;
+        parts.burst(b.x, b.y, 5, 80, 0.22, 0xffffff, F.spark, 1, 1);
+        if (e.hp <= 0) { killEnt(e); if (F.stop) S.hitstop = F.stop; } else Snd.sfx(e.type === 'runner' || e.type === 'rifle' ? 'hit' : 'tink');
         if (b.pierce) b.hits.add(e); else { used = true; break; }
       }
       if (!used) for (const m of ebs) {
@@ -1154,6 +1229,8 @@ const Contra = (() => {
     if (S.introT > 0 && (S.introT -= dt) <= 0) banner(null);
     if (S.alertT > 0 && (S.alertT -= dt) <= 0) banner(null);
     if (S.state === 'play') {
+      if (S.hitstop > 0) { S.hitstop -= dt; return; }
+      updateBeams(dt);
       updatePlayer(dt);
       if (S.state !== 'play') return;
       const prevCam = S.camX;

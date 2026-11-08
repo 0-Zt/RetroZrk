@@ -3,7 +3,7 @@
 El juego se escribe en `src/` y se arma con un solo comando:
 
 ```bash
-python3 tools/build.py --version v13
+python3 tools/build.py --version v14
 ```
 
 Eso deja en `dist/`:
