@@ -361,6 +361,41 @@ const CFX = (() => {
     return outline(c);
   }
   function pressRod() { const { c, g } = mk(8, 8); R(g, '#8a8494', 0, 0, 8, 8); R(g, '#c4c0cc', 1, 0, 2, 8); R(g, '#4a4450', 6, 0, 2, 8); return c; }
+
+  // ---------- jefe del nivel 2: el horno-forja (mira a la izquierda). open 0..1 = cuánto se abre la compuerta
+  function furnace(open, hurt) {
+    const { c, g } = mk(120, 156);
+    const B = hurt ? '#5a3a40' : '#3a2a30', M = hurt ? '#7a4a54' : '#4e3a42', L = hurt ? '#9a6a74' : '#6e5660', D = '#22161c';
+    // chimeneas
+    for (const [x, w, h] of [[22, 12, 30], [76, 16, 40]]) { R(g, D, x, 40 - h, w, h + 4); R(g, M, x, 40 - h, 3, h); R(g, '#ff6a1a', x, 40 - h, w, 2); }
+    // cuerpo
+    R(g, B, 6, 34, 108, 122); R(g, L, 6, 34, 108, 2); R(g, M, 6, 34, 4, 122); R(g, D, 108, 34, 6, 122);
+    for (let y = 44; y < 152; y += 16) for (let x = 12; x < 108; x += 12) R(g, L, x, y, 2, 2);
+    // franjas de peligro y base
+    for (let x = 6; x < 114; x += 8) { R(g, '#ffd23f', x, 144, 4, 6); R(g, '#16181c', x + 4, 144, 4, 6); }
+    R(g, D, 0, 150, 120, 6);
+    // boca del horno: núcleo incandescente detrás de dos compuertas
+    disc(g, 52, 108, 30, D); disc(g, 52, 108, 27, '#ff5a1a'); disc(g, 52, 108, 20, '#ffa03a'); disc(g, 52, 108, 12, '#ffe8a0'); disc(g, 52, 108, 5, '#ffffff');
+    const gap = Math.round(open * 26);
+    R(g, M, 22, 80, 30 - gap, 56); R(g, L, 22, 80, 2, 56); R(g, D, 50 - gap, 80, 2, 56);
+    R(g, M, 54 + gap, 80, 30 - gap, 56); R(g, D, 82, 80, 2, 56); R(g, L, 54 + gap, 80, 2, 56);
+    for (let y = 86; y < 134; y += 10) { R(g, D, 24, y, 26 - gap, 1); R(g, D, 56 + gap, y, 26 - gap, 1); }
+    // marco y tobera de fuego
+    R(g, L, 18, 76, 70, 4); R(g, L, 18, 136, 70, 4); R(g, D, 0, 100, 10, 18); R(g, '#ff6a1a', 0, 104, 3, 10);
+    // indicador de temperatura
+    R(g, D, 92, 66, 12, 72); for (let y = 0; y < 8; y++) R(g, y < Math.round(open * 8) ? (y < 3 ? '#ffd23f' : '#ff4a1a') : '#3a2a30', 94, 130 - y * 8, 8, 6);
+    return outline(c);
+  }
+  // cuchara de colada colgada de la grúa; tilt = volcando
+  function ladle(tilt) {
+    const { c, g } = mk(34, 26);
+    R(g, '#2a2228', 16, 0, 2, 8);
+    poly(g, tilt ? [[4, 10], [28, 6], [32, 22], [10, 25]] : [[4, 9], [30, 9], [27, 24], [7, 24]], '#4e3a42');
+    poly(g, tilt ? [[6, 11], [26, 8], [28, 12], [7, 15]] : [[6, 10], [28, 10], [27, 13], [7, 13]], '#ff8a2a');
+    R(g, '#6e5660', 4, tilt ? 10 : 9, 26, 1);
+    if (tilt) { R(g, '#ffd27a', 2, 12, 3, 3); }
+    return outline(c);
+  }
   function reticle() { const { c, g } = mk(9, 9); for (const [x, y, w, h] of [[4, 0, 1, 3], [4, 6, 1, 3], [0, 4, 3, 1], [6, 4, 3, 1]]) R(g, '#ff8a1e', x, y, w, h); R(g, '#fff3c0', 4, 4); return c; }
-  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm, dog, grate, pulseRing, reticle, skyFoundry, farFoundry, midFoundry, nearFoundry, pressHead, pressRod };
+  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm, dog, grate, pulseRing, reticle, skyFoundry, farFoundry, midFoundry, nearFoundry, pressHead, pressRod, furnace, ladle };
 })();

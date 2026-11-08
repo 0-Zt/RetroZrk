@@ -474,6 +474,7 @@ const Contra = (() => {
     A.shellT = T(CFX.shell()); A.wall = [0, 1, 2].map((k) => T(CFX.wall(k)));
     A.bomberN = [T(CFX.bomberNear(true)), T(CFX.bomberNear(false))]; A.napalm = T(CFX.napalm());
     A.dog = [0, 1].map((f) => T(CFX.dog(f, false))); A.dogH = T(CFX.dog(0, true)); A.grate = [T(CFX.grate(false)), T(CFX.grate(true))]; A.pulseRing = T(CFX.pulseRing()); A.reticle = T(CFX.reticle()); A.pressHead = T(CFX.pressHead()); A.pressRod = T(CFX.pressRod());
+    A.furn = [0, 1, 2, 3, 4].map((k) => T(CFX.furnace(k / 4, false))); A.furnH = T(CFX.furnace(1, true)); A.ladle = [T(CFX.ladle(false)), T(CFX.ladle(true))];
     { const f = CFX.weaponFx(); A.fx = { tracer: T(f.tracer), tracerM: T(f.tracerM), pellet: T(f.pellet), beam: T(f.beam), fl: Object.fromEntries(Object.entries(f.fl).map(([k, v]) => [k, T(v)])) }; }
     BG = {
       titan: new Spr(scene, A.titan[0], -66, { transparent: true }).show(false),
@@ -672,6 +673,7 @@ const Contra = (() => {
     for (const m of ebs) if (m.on && m.kind === 'missile' && rayBox(mx, my, dx, dy, [m.x - 6, m.y - 4, 12, 8]) !== null) { m.on = false; m.spr.show(false); boomAt(m.x, m.y, true); Snd.sfx('explode'); addScore(50); }
     if (boss.on && boss.st === 'fight') { const t = rayBox(mx, my, dx, dy, bossBox()); if (t !== null && t < len) { damageBoss(W.dmg); parts.burst(mx + dx * t, my + dy * t, 6, 90, 0.25, 0xffffff, F.spark, 2, 1); } }
     if (S.tb && S.tb.st === 'fight') { const t = rayBox(mx, my, dx, dy, coreBox(S.tb)); if (t !== null && t < len) hitTitan(coreBox(S.tb), W.dmg, true); }
+    if (S.fb && S.fb.st === 'fight' && S.fb.open > 0.6) { const t = rayBox(mx, my, dx, dy, furnCore(S.fb)); if (t !== null && t < len) hitFurnace(furnCore(S.fb), W.dmg, true); }
     if (killed && F.stop) S.hitstop = F.stop;
     const bm = S.beams.find((q) => !q.on) || S.beams[0];
     Object.assign(bm, { on: true, t: 0, w: W.beam, len, ang: -Math.atan2(dy, dx), cx: mx + dx * len / 2, cy: my + dy * len / 2 });
@@ -1095,6 +1097,7 @@ const Contra = (() => {
         if (hit(bb, [m.x - 6, m.y - 4, 12, 8])) { m.on = false; m.spr.show(false); boomAt(m.x, m.y, true); Snd.sfx('explode'); addScore(50); if (!b.pierce) { used = true; break; } }
       }
       if (!used && hitTitan(bb, b.dmg, b.pierce)) used = true;
+      if (!used && hitFurnace(bb, b.dmg, b.pierce)) used = true;
       if (!used && boss.on && boss.st === 'fight' && hit(bb, bossBox())) {
         if (!(b.hits && b.hits.has(boss))) {
           damageBoss(b.dmg);
@@ -1183,6 +1186,92 @@ const Contra = (() => {
 
 
 
+
+
+  // ---------------- jefe de la misión 2: el horno-forja
+  // Compuerta cerrada = blindado. Al abrirse muestra el núcleo (punto débil) y escupe bolas de fuego.
+  // Dos cucharas de colada cuelgan de grúas: avisan con goteo y vuelcan metal fundido sobre el piso.
+  function startFurnace() {
+    S.bossTrig = true;
+    const W = Engine.W, hp = 80 + S.loop * 30;
+    S.fb = { x: S.camX + W - 46, y: GY - 55, hp, max: hp, st: 'rise', t: 0, rise: 70, open: 0, cyc: 0, shotT: 0, flashT: 0, dyT: 0,
+      spr: new Spr(scene, A.furn[0], -1), ladles: [0, 1].map((i) => ({ x: S.camX + W * (0.22 + i * 0.3), st: 'idle', t: i * 2.2 + 1.4, spr: new Spr(scene, A.ladle[0], 24), fz: null })) };
+    hud.bl.textContent = 'HORNO-FORJA'; hud.b.hidden = false;
+    Snd.play(SONGS.boss); Snd.sfx('alarm');
+    banner('¡EL HORNO DESPIERTA!', 'DISPARA AL NÚCLEO CUANDO SE ABRA'); S.alertT = 2.4;
+  }
+  // el horno está medio hundido en el piso: el núcleo queda a la altura de los disparos de pie
+  const furnCore = (F) => [F.x - 25, F.y + 11, 32, 36];
+  const furnBody = (F) => [F.x - 55, F.y - 79, 110, 134];
+  const furnUpper = (F) => [F.x - 55, F.y - 79, 110, 80];
+  const furnDoor = (F) => [F.x - 31, F.y + 7, 44, 44];
+  function hitFurnace(box, dmg, pierce) {
+    const F = S.fb;
+    if (!F || F.st !== 'fight') return false;
+    if (F.open > 0.6 && hit(box, furnCore(F))) {
+      F.hp -= dmg; F.flashT = 0.06; parts.burst(box[0] + box[2] / 2, box[1] + box[3] / 2, 5, 80, 0.25, 0xffffff, 0xffb03a, 1, 1); Snd.sfx('hit');
+      if (F.hp <= 0) { F.st = 'dying'; F.dyT = 0; addScore(30000); dropScrap(F.x - 30, F.y, 40); Snd.sfx('boom'); flash(0.6, [1, 0.8, 0.5]); shake(6, 0.6); }
+      return true;
+    }
+    if (hit(box, furnUpper(F)) || (F.open <= 0.6 && hit(box, furnDoor(F)))) { if (!pierce) { Snd.sfx('tink'); parts.burst(box[0] + 2, box[1] + 2, 3, 50, 0.15, 0xffffff, 0x9aa0b4, 1, 1); } return true; }
+    return false;
+  }
+  function updateFurnace(dt) {
+    const F = S.fb, p = player, W = Engine.W;
+    if (!F) return;
+    F.t += dt;
+    if (F.flashT > 0) F.flashT -= dt;
+    const fast = F.hp < F.max * 0.5 ? 0.7 : 1;
+    if (F.st === 'rise') {
+      F.rise = Math.max(0, F.rise - 40 * dt);
+      if (Math.random() < 0.5) parts.emit(F.x + rand(-50, 50), GY - 2, rand(-40, 40), rand(-80, -30), 0.6, 0x8a7a78, 0x3a2a30, 3, 6);
+      if (Math.floor(F.t * 3) !== F.rs) { F.rs = Math.floor(F.t * 3); shake(1.5, 0.1); }
+      if (F.rise <= 0) { F.st = 'fight'; Snd.sfx('stomp'); }
+    } else if (F.st === 'fight') {
+      // ciclo de la compuerta: 2,2 s cerrada · 0,4 s abriendo · 3 s abierta (escupe fuego) · 0,4 s cerrando
+      F.cyc += dt / fast;
+      const c = F.cyc % 6;
+      F.open = c < 2.2 ? 0 : c < 2.6 ? (c - 2.2) / 0.4 : c < 5.6 ? 1 : 1 - (c - 5.6) / 0.4;
+      if (c >= 2.6 && c < 5.6) {
+        if ((F.shotT -= dt) <= 0) {
+          F.shotT = 0.55 * fast;
+          const sx = F.x - 58, sy = F.y + 29, vx = clamp((p.x - sx) / rand(0.8, 1.1), -320, -60);
+          const b = enemyShot(sx, sy, vx, rand(-260, -180), 'napalm'); if (b) b.spr.set(A.shot.fire[0]);
+          Snd.sfx('fireball'); parts.burst(sx, sy, 6, 60, 0.3, 0xfff3c0, 0xff6a1a, 2, 1);
+        }
+        if (Math.random() < 0.4) parts.emit(F.x - 30 + rand(-10, 10), F.y + rand(-14, 14), rand(-30, 0), rand(-30, 10), 0.4, 0xffe8a0, 0xff5a1a, 2, 1);
+      }
+      if (c < 0.05 && !F.closedSnd) { F.closedSnd = true; Snd.sfx('stomp'); } else if (c > 0.1) F.closedSnd = false;
+      // cucharas de colada
+      for (const L of F.ladles) {
+        L.t -= dt;
+        if (L.st === 'idle' && L.t <= 0) { L.st = 'move'; L.tx = clamp(p.x + rand(-20, 20), S.camX + 24, F.x - 80); }
+        if (L.st === 'move') { L.x += clamp(L.tx - L.x, -150 * dt, 150 * dt); if (Math.abs(L.tx - L.x) < 2) { L.st = 'warn'; L.t = 0.9 * fast; } }
+        if (L.st === 'warn') { if (Math.random() < 0.5) parts.emit(L.x - 12, 58, 0, rand(60, 120), 0.8, 0xffd27a, 0xff5a1a, 1, 1, 300); if (L.t <= 0) { L.st = 'pour'; L.t = 1.2; Snd.sfx('fireball'); addFireZone(L.x - 12, GY); } }
+        if (L.st === 'pour') { for (let k = 0; k < 3; k++) parts.emit(L.x - 13 + rand(-2, 2), 60, 0, rand(160, 220), 0.6, 0xfff0a0, 0xff6a1a, 3, 2); if (!p.dead && hit([L.x - 18, 60, 12, GY - 60], playerBox())) hurtPlayer(); if (L.t <= 0) { L.st = 'idle'; L.t = rand(2.2, 3.4) * fast; } }
+        L.spr.set(A.ladle[L.st === 'pour' ? 1 : 0]).at(Math.round(L.x), 44);
+      }
+      if (!p.dead && hit(furnBody(F), playerBox())) hurtPlayer();
+    } else if (F.st === 'dying') {
+      F.dyT += dt; F.open = 1;
+      if ((F.boomT = (F.boomT || 0) - dt) <= 0) { F.boomT = 0.12; boomAt(F.x + rand(-50, 50), F.y + rand(-60, 60), Math.random() < 0.5); Snd.sfx('explode'); shake(3, 0.2); }
+      for (const L of F.ladles) L.spr.show(false);
+      if (F.dyT > 1.8) F.rise += 30 * dt;
+      if (F.dyT > 3.4) {
+        for (let i = 0; i < 8; i++) boomAt(F.x + rand(-50, 50), GY - rand(10, 130));
+        Snd.sfx('boom'); flash(0.9, [1, 0.85, 0.6]); shake(6, 0.8);
+        clearFurnace(); hud.b.hidden = true;
+        S.state = 'clear'; S.clearT = 0;
+        return;
+      }
+    }
+    const k = Math.round(F.open * 4);
+    F.spr.set(F.flashT > 0 ? A.furnH : A.furn[k]).at(Math.round(F.x), Math.round(F.y + F.rise)).tint(F.st === 'dying' ? 0xc89090 : 0xffffff);
+  }
+  function clearFurnace() {
+    if (!S.fb) return;
+    S.fb.spr.remove(); S.fb.ladles.forEach((L) => L.spr.remove()); S.fb = null;
+  }
 
   // ---------------- fase 4: el titán baja a la calle como jefe final de la misión
   // núcleo naranja del pecho = punto débil (se alcanza saltando y disparando, con granadas o con el láser). Ataques: barrido del visor (salta cuando pasa),
@@ -1359,6 +1448,7 @@ const Contra = (() => {
     }
     if (boss.on && boss.st === 'fight') damageBoss(15);
     if (S.tb && S.tb.st === 'fight') { S.tb.hp -= 15; S.tb.flashT = 0.1; if (S.tb.hp <= 0) killTitan(); }
+    if (S.fb && S.fb.st === 'fight') { S.fb.open = 1; hitFurnace(furnCore(S.fb), 15, true); }
     document.body.classList.toggle('has-bomb', S.bombs > 0);
   }
   function updatePulse(dt) {
@@ -1392,6 +1482,7 @@ const Contra = (() => {
     clearTitan();
   }
   function clearTitan() {
+    clearFurnace();
     if (S.tb) { S.tb.spr.remove(); S.tb.glow.remove(); S.tb.bm.remove(); S.tb = null; }
     (S.waves || []).forEach((w) => w.sprs.forEach((q) => q.remove())); S.waves = [];
     if (BG && BG.tT > 100) BG.tT = 20;
@@ -1580,6 +1671,7 @@ const Contra = (() => {
     for (const m of ebs) if (m.on && (m.kind === 'missile' || m.kind === 'bomb') && Math.hypot(m.x - x, m.y - y) < R2 + 6) { m.on = false; m.spr.show(false); }
     if (boss.on && boss.st === 'fight') { const b = bossBox(); if (x > b[0] - R2 && x < b[0] + b[2] + R2 && y > b[1] - R2 && y < b[1] + b[3] + R2) damageBoss(dmg); }
     if (S.tb && S.tb.st === 'fight') hitTitan([x - R2, y - R2, R2 * 2, R2 * 2], dmg, true);
+    if (S.fb && S.fb.st === 'fight') hitFurnace([x - R2, y - R2, R2 * 2, R2 * 2], dmg, true);
   }
   function updateGrens(dt) {
     for (const q of grens) {
@@ -1595,6 +1687,7 @@ const Contra = (() => {
       if (!pop) for (const e of ents) if (!e.dead && e.type !== 'capsule' && hit([q.x - 3, q.y - 3, 6, 6], entBox(e))) { pop = true; break; }
       if (!pop && boss.on && boss.st === 'fight' && hit([q.x - 3, q.y - 3, 6, 6], bossBox())) pop = true;
       if (!pop && S.tb && S.tb.st === 'fight' && hit([q.x - 3, q.y - 3, 6, 6], titanBody(S.tb))) pop = true;
+      if (!pop && S.fb && S.fb.st === 'fight' && hit([q.x - 3, q.y - 3, 6, 6], furnBody(S.fb))) pop = true;
       if (pop) { q.on = false; q.spr.show(false); if (q.y < H + 5) grenBoom(q.x, q.y - 4, q.kind === 'shell' ? 5 : 6, q.kind === 'shell' ? 24 : 0); }
     }
   }
@@ -1795,7 +1888,7 @@ const Contra = (() => {
       if (!S.bossTrig && S.lockX == null) {
         S.runT -= dt;
         if (S.runT <= 0) { spawnRunner(); S.runT = rand(1.3, 2.7) / (1 + S.loop * 0.35); }
-        if (S.camX >= END - W - 0.5) startBoss();
+        if (S.camX >= END - W - 0.5) { if (LV.theme === 'foundry') startFurnace(); else startBoss(); }
       }
       updateEnts(dt);
       updateBoss(dt);
@@ -1807,6 +1900,7 @@ const Contra = (() => {
       updateVents(dt);
       updatePulse(dt);
       updateTitan(dt);
+      updateFurnace(dt);
       updateFoundry(dt);
       if (Input.pressed.d) usePulse();
     } else if (S.state === 'clear') {
@@ -1862,6 +1956,7 @@ const Contra = (() => {
     }
     if (boss.on) set('b', Math.max(0, Math.round((boss.hp / boss.max) * 100)), (v) => (hud.bb.style.width = v + '%'));
     else if (S.tb) set('b', 't' + Math.max(0, Math.round((S.tb.hp / S.tb.max) * 100)), (v) => (hud.bb.style.width = v.slice(1) + '%'));
+    else if (S.fb) set('b', 'f' + Math.max(0, Math.round((S.fb.hp / S.fb.max) * 100)), (v) => (hud.bb.style.width = v.slice(1) + '%'));
   }
   function gameOver() {
     S.state = 'over';
@@ -1877,6 +1972,6 @@ const Contra = (() => {
   function exit() { if (S.state !== 'over' && S.score > (S.hi || 0)) Store.set('hi_contra', S.score); bankScrap(); Snd.bank('arcade'); document.body.classList.remove('inmenu'); }
   function warp(x) { player.x = x; player.y = -10; player.ground = false; S.camX = clamp(x - 100, 0, END - Engine.W); S.spawnI = S.spawnList.findIndex((q) => q.x > S.camX + Engine.W); if (S.spawnI < 0) S.spawnI = S.spawnList.length; }
   return { start, update, render, exit, warp, retry, action, capturesStart: () => S.state === 'select',
-    peek: () => ({ S, player, ents, boss, BG, grens }), dbgGo: () => beginRun(), dbgSpawn: (sp) => spawnEnt(sp), dbgTitan: () => { S.camX = END - Engine.W; S.bossTrig = true; S.mbDone = true; S.raidDone = true; player.x = S.camX + 60; startTitan(); }, get art() { build(); return A; } };
+    peek: () => ({ S, player, ents, boss, BG, grens }), dbgGo: () => beginRun(), dbgSpawn: (sp) => spawnEnt(sp), dbgFurnace: () => { S.camX = END - Engine.W; S.spawnI = S.spawnList.length; S.mbDone = true; S.raidDone = true; player.x = S.camX + 60; startFurnace(); }, dbgTitan: () => { S.camX = END - Engine.W; S.spawnI = S.spawnList.length; S.bossTrig = true; S.mbDone = true; S.raidDone = true; player.x = S.camX + 60; startTitan(); }, get art() { build(); return A; } };
 })();
 
