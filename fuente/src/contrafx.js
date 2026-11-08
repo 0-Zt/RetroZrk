@@ -295,5 +295,6 @@ const CFX = (() => {
     disc(g, 33, 33, 27, 'rgba(120,240,220,0.15)');
     return c;
   }
-  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm, dog, grate, pulseRing };
+  function reticle() { const { c, g } = mk(9, 9); for (const [x, y, w, h] of [[4, 0, 1, 3], [4, 6, 1, 3], [0, 4, 3, 1], [6, 4, 3, 1]]) R(g, '#ff8a1e', x, y, w, h); R(g, '#fff3c0', 4, 4); return c; }
+  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm, dog, grate, pulseRing, reticle };
 })();

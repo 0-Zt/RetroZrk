@@ -326,7 +326,7 @@ const Contra = (() => {
     A.tankE = [0, 1].map((f) => T(CFX.tankE(f, false))); A.tankEh = T(CFX.tankE(0, true));
     A.shellT = T(CFX.shell()); A.wall = [0, 1, 2].map((k) => T(CFX.wall(k)));
     A.bomberN = [T(CFX.bomberNear(true)), T(CFX.bomberNear(false))]; A.napalm = T(CFX.napalm());
-    A.dog = [0, 1].map((f) => T(CFX.dog(f, false))); A.dogH = T(CFX.dog(0, true)); A.grate = [T(CFX.grate(false)), T(CFX.grate(true))]; A.pulseRing = T(CFX.pulseRing());
+    A.dog = [0, 1].map((f) => T(CFX.dog(f, false))); A.dogH = T(CFX.dog(0, true)); A.grate = [T(CFX.grate(false)), T(CFX.grate(true))]; A.pulseRing = T(CFX.pulseRing()); A.reticle = T(CFX.reticle());
     { const f = CFX.weaponFx(); A.fx = { tracer: T(f.tracer), tracerM: T(f.tracerM), pellet: T(f.pellet), beam: T(f.beam), fl: Object.fromEntries(Object.entries(f.fl).map(([k, v]) => [k, T(v)])) }; }
     BG = {
       titan: new Spr(scene, A.titan[0], -66, { transparent: true }).show(false),
@@ -387,11 +387,11 @@ const Contra = (() => {
         <div class="hcol" style="align-items:center"><span class="hlab">PUNTOS</span><span class="hval" id="cs">000000</span></div>
         <div class="hcol" style="align-items:flex-end"><span class="hlab">REC</span><span class="hval cyan" id="ch">000000</span></div>
       </div>
-      <div class="hbl" style="align-items:center"><span class="wpn" id="cw">N</span><span class="hlab" id="cwn">NORMAL</span><span class="abil" id="ca" hidden><i id="cai"></i><b id="cak">G</b></span><span class="hscrap" id="cr"><i class="bolt"></i><span id="crn">0</span></span><span class="hpulse" id="cpb" hidden>P×0</span></div>
+      <div class="hbl" style="align-items:center"><span class="wpn" id="cw">N</span><span class="wpn2" id="cw2" hidden></span><span class="hlab" id="cwn">NORMAL</span><span class="hlab hfix" id="cfx" hidden>FIJO</span><span class="abil" id="ca" hidden><i id="cai"></i><b id="cak">G</b></span><span class="hscrap" id="cr"><i class="bolt"></i><span id="crn">0</span></span><span class="hpulse" id="cpb" hidden>P×0</span></div>
       <div class="boss" id="cb" hidden><span class="hlab" id="cbl" style="color:var(--pink)">COLOSO-07</span><div class="bar"><i id="cbb" style="width:100%"></i></div></div>
       <div class="banner" id="cbn" hidden></div>`);
     hud = { v: UI.$('#cv'), s: UI.$('#cs'), h: UI.$('#ch'), w: UI.$('#cw'), wn: UI.$('#cwn'), b: UI.$('#cb'), bb: UI.$('#cbb'), bn: UI.$('#cbn'),
-      a: UI.$('#ca'), ai: UI.$('#cai'), ak: UI.$('#cak'), r: UI.$('#crn'), bl: UI.$('#cbl'), pb: UI.$('#cpb') };
+      a: UI.$('#ca'), ai: UI.$('#cai'), ak: UI.$('#cak'), r: UI.$('#crn'), bl: UI.$('#cbl'), pb: UI.$('#cpb'), w2: UI.$('#cw2'), fx: UI.$('#cfx') };
     hc = {};
   }
   function banner(t, sub) {
@@ -418,7 +418,7 @@ const Contra = (() => {
     document.body.classList.remove('inmenu', 'has-bomb');
     buildHud();
     UI.setButtons('SALTO', 'FUEGO');
-    player.weapon = C.w;
+    player.weapon = C.w; player.slots = [C.w, null]; player.cur = 0; S.fixT = false;
     beginStage();
     if (Engine.touch && innerHeight > innerWidth) UI.toast('GIRA EL TELÉFONO PARA VER MÁS NIVEL');
     else if (S.ab) UI.toast(`${ABIL[S.ab.k].n.toUpperCase()} LISTA · ${Engine.touch ? 'BOTÓN H' : 'TECLA V'}`);
@@ -453,7 +453,12 @@ const Contra = (() => {
     const g = plats.find((q) => q.ground && q.x1 > x + 10);
     if (g && sx < g.x0 + 10) sx = g.x0 + 16;
     Object.assign(p, { x: sx, y: first ? GY : -20, vx: 0, vy: 0, face: 1, ground: first, fell: false, plat: first ? supportAt(sx, GY) : null, jumping: false, prone: false, aim: 'fwd',
-      anim: 0, inv: first ? 0 : 2.4, barrier: 0, dead: false, deadT: 0, dropT: 0, dropPlat: null, fireT: 0, weapon: S.baseW || 'N', dashT: 0, dashInv: 0 });
+      anim: 0, inv: first ? 0 : 2.4, barrier: 0, dead: false, deadT: 0, dropT: 0, dropPlat: null, fireT: 0, dashT: 0, dashInv: 0 });
+    // al morir pierdes el arma que tenías en la mano (si era la de la cápsula); la del personaje nunca se pierde
+    if (!p.slots) p.slots = [S.baseW || 'N', null];
+    if (!first && p.cur === 1) p.slots[1] = null;
+    if (!first) p.cur = 0;
+    p.weapon = p.slots[p.cur] || p.slots[0];
     p.spr.show(true);
   }
 
@@ -816,6 +821,7 @@ const Contra = (() => {
   }
   function updatePlayer(dt) {
     const p = player, I = Input.held, W = Engine.W;
+    if (S.reticle && (p.dead || p.inTank)) S.reticle.show(false);
     if (p.dead) {
       p.deadT += dt;
       p.aura.show(false);
@@ -835,14 +841,24 @@ const Contra = (() => {
     }
     if (p.inTank) { rideTank(dt); return; }
     let mx = (I.right ? 1 : 0) - (I.left ? 1 : 0);
-    if (p.ground) { p.prone = I.down && mx === 0; if (p.prone) mx = 0; }
+    if (Input.pressed.select && p.slots[1]) { p.cur ^= 1; p.weapon = p.slots[p.cur]; p.fireT = Math.min(p.fireT, 0.05); Snd.sfx('move'); parts.burst(p.x, p.y - 16, 6, 50, 0.25, 0xffffff, 0xffe066, 1, 1); }
+    if (Input.pressed.f) { S.fixT = !S.fixT; const fb = document.getElementById('btnFix'); if (fb) { fb.classList.toggle('lock', S.fixT); fb.setAttribute('aria-pressed', String(S.fixT)); } }
+    // disparo fijo: los pies quedan plantados y las flechas solo apuntan (8 direcciones)
+    S.fixed = (I.e || S.fixT) && p.ground;
+    if (S.fixed) {
+      if (mx) p.face = mx;
+      p.prone = false;
+      p.aim = I.up ? (mx ? 'dup' : 'up') : I.down ? 'ddown' : 'fwd';
+      mx = 0;
+    }
+    if (p.ground && !S.fixed) { p.prone = I.down && mx === 0; if (p.prone) mx = 0; }
     if (mx) p.face = mx;
     if (Input.pressed.a && p.ground) {
       if (I.down && p.plat && !p.plat.ground) { p.dropPlat = p.plat; p.dropT = 0.3; p.ground = false; p.vy = 30; p.jumping = false; }
       else { p.vy = JV; p.ground = false; p.jumping = true; Snd.sfx('jump'); }
       p.prone = false;
     }
-    if (p.ground) p.aim = p.prone ? 'prone' : I.up ? (mx ? 'dup' : 'up') : I.down && mx ? 'ddown' : 'fwd';
+    if (S.fixed) { /* puntería ya decidida */ } else if (p.ground) p.aim = p.prone ? 'prone' : I.up ? (mx ? 'dup' : 'up') : I.down && mx ? 'ddown' : 'fwd';
     else p.aim = I.up ? (mx ? 'dup' : 'up') : I.down ? (mx ? 'ddown' : 'down') : 'fwd';
     p.vx = mx * RUN;
     if (p.dashInv > 0) p.dashInv -= dt;
@@ -877,12 +893,16 @@ const Contra = (() => {
     if (p.jumping) tex = A.hero.ball[Math.floor(p.anim * 16) % 4];
     else if (!p.ground) tex = A.hero.air[p.aim === 'down' ? 'ddown' : p.aim === 'prone' ? 'fwd' : p.aim];
     else if (p.prone) tex = A.hero.prone;
+    else if (S.fixed && (p.aim === 'dup' || p.aim === 'ddown')) tex = A.hero.run[p.aim][1];
     else if (mx) tex = A.hero.run[p.aim === 'up' ? 'dup' : p.aim][Math.floor(p.anim * 11) % 6];
     else tex = A.hero.stand[p.aim === 'up' ? 'up' : 'fwd'][Math.floor(p.anim * 3) % 3];
     p.spr.set(tex).setFlip(p.face < 0);
     if (p.jumping) p.spr.at(p.x, p.y - 14); else p.spr.anchor(p.x, p.y, ANCHOR[0], ANCHOR[1]);
     p.spr.show(!(p.inv > 0 && Math.floor(p.inv * 14) % 2 === 0));
     p.aura.show(p.barrier > 0).at(p.x, p.y - 14);
+    if (!S.reticle) S.reticle = new Spr(scene, A.reticle, 24, { transparent: true });
+    if (S.fixed) { const v = p.aim === 'up' ? [0, -1] : p.aim === 'dup' ? [p.face * 0.71, -0.71] : p.aim === 'ddown' ? [p.face * 0.71, 0.71] : [p.face, 0]; S.reticle.show(true).at(Math.round(p.x + v[0] * 34), Math.round(p.y - 18 + v[1] * 34)); }
+    else S.reticle.show(false);
     if (p.barrier > 0) p.aura.mat.opacity = 0.5 + Math.sin(p.anim * 20) * 0.4;
     // recoger medallas
     for (const it of items) {
@@ -892,7 +912,11 @@ const Contra = (() => {
         Snd.sfx('powerup'); addScore(100);
         if (it.w === 'B') { p.barrier = 12; UI.toast('BARRERA · INVENCIBLE 12 s'); }
         else if (it.w === 'P') { S.bombs = Math.min(3, (S.bombs || 0) + 1); document.body.classList.add('has-bomb'); UI.toast(`BOMBA DE PULSO ×${S.bombs} · ${Engine.touch ? 'BOTÓN P' : 'TECLA Q'}`); }
-        else { p.weapon = it.w; UI.toast({ M: 'AMETRALLADORA', S: 'DISPERSIÓN ×5', L: 'LÁSER PERFORANTE', F: 'FUEGO EN ESPIRAL' }[it.w]); }
+        else {
+          const first2 = !p.slots[1];
+          p.slots[1] = it.w; p.cur = 1; p.weapon = it.w;
+          UI.toast({ M: 'AMETRALLADORA', S: 'DISPERSIÓN ×5', L: 'LÁSER PERFORANTE', F: 'FUEGO EN ESPIRAL' }[it.w] + (first2 ? ` · ${Engine.touch ? 'SELECT' : 'E'} CAMBIA DE ARMA` : ''));
+        }
         parts.burst(p.x, p.y - 16, 16, 90, 0.5, 0xffe066, 0xff4f9a, 2, 1);
       }
     }
@@ -1331,7 +1355,7 @@ const Contra = (() => {
     pbs.forEach((b) => { b.on = false; b.spr.show(false); }); ebs.forEach((b) => { b.on = false; b.spr.show(false); });
     grens.forEach((q) => { q.on = false; q.spr.show(false); });
     boss.on = false; boss.spr.show(false); boss.rotor.show(false);
-    player.spr.show(false); player.aura.show(false);
+    player.spr.show(false); player.aura.show(false); if (S.reticle) S.reticle.show(false);
     hideStageExtras();
     S.camX = 0;
     document.body.classList.add('inmenu');
@@ -1563,6 +1587,9 @@ const Contra = (() => {
     set('v', S.lives, (v) => (hud.v.innerHTML = '<b></b>'.repeat(Math.max(0, v - 1))));
     set('w', player.inTank ? 'T' + S.tank.hp : player.weapon, (v) => { if (v.length > 1) { hud.w.textContent = 'T'; hud.w.style.background = '#566a2c'; hud.wn.textContent = 'BLINDADO ' + '■'.repeat(S.tank.hp) + '□'.repeat(Math.max(0, 6 - S.tank.hp)); } else { hud.w.textContent = v; hud.w.style.background = WCOL[v]; hud.wn.textContent = WNAME[v]; } });
     set('r', S.scrap || 0, (v) => (hud.r.textContent = v));
+    const other = player.slots && player.slots[1] && !player.inTank ? player.slots[player.cur ^ 1] : '';
+    set('w2', other, (v) => { hud.w2.hidden = !v; if (v) { hud.w2.textContent = v; hud.w2.style.background = WCOL[v]; } });
+    set('fx', !!S.fixed, (v) => (hud.fx.hidden = !v));
     set('pb', S.bombs || 0, (v) => { hud.pb.hidden = !v; hud.pb.textContent = 'P×' + v; document.body.classList.toggle('has-bomb', v > 0); });
     if (S.ab) {
       set('ak', S.ab.k, (v) => { hud.a.hidden = false; hud.ak.textContent = ABIL[v].k; });

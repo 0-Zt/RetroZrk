@@ -365,7 +365,7 @@ function bindPad() {
     el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); el.addEventListener('lostpointercapture', up);
     el.addEventListener('contextmenu', (e) => e.preventDefault());
   };
-  btn($('#btnA'), 'a'); btn($('#btnB'), 'b'); btn($('#btnC'), 'c'); btn($('#btnD'), 'd'); btn($('#btnStart'), 'start'); btn($('#btnSel'), 'select');
+  btn($('#btnA'), 'a'); btn($('#btnB'), 'b'); btn($('#btnC'), 'c'); btn($('#btnD'), 'd'); btn($('#btnFix'), 'f'); btn($('#btnStart'), 'start'); btn($('#btnSel'), 'select');
 }
 
 // ---------------- layout responsivo
