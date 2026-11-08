@@ -204,5 +204,68 @@ const CFX = (() => {
     pellet: pellet(), beam: beamProfile(),
     fl: { R: flashStar(6, ['#ffd27a', '#ffffff']), M: flashStar(5, ['#ff9a5a', '#fff3c0']), E: flashCone(), S: flashCone(), V: flashStar(6, ['#4fe3ff', '#ffffff']), L: flashStar(8, ['#ff4f9a', '#ffffff']), F: flashStar(6, ['#ff7a1a', '#ffe08a']) },
   });
-  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx };
+
+  // ---------- vehículos y piezas de la fase 1
+  // blindado de la resistencia (mira a la derecha). f = cuadro de orugas, up = cañón en diagonal
+  function tankP(f, up) {
+    const { c, g } = mk(52, 34);
+    const H = '#566a2c', HL = '#7f9a44', HD = '#36451a', TR = '#24261e', TL = '#4a4c40';
+    // orugas
+    R(g, TR, 3, 24, 44, 9); R(g, TL, 3, 24, 44, 1);
+    for (let x = 5 + (f % 2) * 3; x < 46; x += 6) R(g, TL, x, 30, 3, 2);
+    for (const x of [8, 16, 24, 32, 40]) { disc(g, x, 28.5, 3.2, '#3a3c32'); disc(g, x, 28.5, 1.4, '#8a8c7a'); }
+    // casco
+    poly(g, [[1, 24], [6, 15], [44, 15], [50, 22], [48, 25], [2, 25]], H);
+    R(g, HL, 6, 15, 38, 1); R(g, HD, 2, 23, 47, 2);
+    R(g, '#ff8a1e', 10, 19, 12, 2); R(g, '#ff8a1e', 28, 19, 6, 2);
+    // torreta y cañón
+    R(g, H, 16, 8, 18, 8); R(g, HL, 16, 8, 18, 1); R(g, HD, 31, 9, 3, 7);
+    R(g, HD, 19, 6, 6, 2); R(g, '#9ff3ff', 21, 6, 2, 1);
+    if (up) { line(g, 30, 10, 42, -1, '#2c3218', 3); line(g, 30, 9, 41, -1, '#6e7a52', 1); }
+    else { R(g, '#2c3218', 33, 10, 18, 3); R(g, '#6e7a52', 33, 10, 18, 1); R(g, '#1a1c14', 48, 9, 3, 5); }
+    // antena con banderín
+    R(g, '#1a1c14', 18, 0, 1, 8); R(g, '#ff8a1e', 19, 0, 4, 2);
+    return outline(c);
+  }
+  // tanque enemigo Magnus (mira a la izquierda), más grande
+  function tankE(f, hurt) {
+    const { c, g } = mk(72, 42);
+    const H = hurt ? '#6a4a52' : '#3c4552', HL = hurt ? '#9a6a74' : '#62707f', HD = hurt ? '#3a2228' : '#262c36', TR = '#18191e';
+    R(g, TR, 4, 30, 62, 11); R(g, '#3a3c46', 4, 30, 62, 1);
+    for (let x = 6 + (f % 2) * 4; x < 64; x += 8) R(g, '#3a3c46', x, 38, 4, 2);
+    for (const x of [10, 20, 30, 40, 50, 60]) { disc(g, x, 35.5, 4, '#2a2c34'); disc(g, x, 35.5, 1.8, '#7a7e8c'); }
+    poly(g, [[2, 29], [10, 17], [62, 17], [70, 28], [68, 31], [3, 31]], H);
+    R(g, HL, 10, 17, 52, 1); R(g, HD, 3, 29, 66, 2);
+    for (let x = 14; x < 60; x += 9) R(g, '#d93a2e', x, 22, 5, 2);
+    R(g, H, 28, 7, 28, 11); R(g, HL, 28, 7, 28, 1); R(g, HD, 28, 15, 28, 2);
+    R(g, '#1a1c22', 2, 10, 28, 4); R(g, '#5a606c', 2, 10, 28, 1); R(g, '#0e0f12', 0, 9, 4, 6);
+    R(g, '#1a1c22', 52, 12, 10, 3); R(g, '#ff3b5c', 36, 9, 6, 2);
+    R(g, '#1a1c22', 46, 0, 1, 7); R(g, '#ff3b5c', 45, 0, 3, 2);
+    return outline(c);
+  }
+  function shell() { const { c, g } = mk(8, 5); R(g, '#ffd27a', 1, 1, 6, 3); R(g, '#fff6d8', 4, 1, 3, 2); R(g, '#c8643a', 0, 2, 2, 1); return c; }
+  // muro de hormigón con fierros; k = 0 sano, 1 trizado, 2 roto
+  function wall(k) {
+    const { c, g } = mk(20, 60);
+    const r = rng32(30 + k);
+    R(g, '#6e6a7e', 2, 0, 16, 60); R(g, '#8c88a0', 2, 0, 2, 60); R(g, '#4e4a5e', 16, 0, 2, 60);
+    for (let y = 6; y < 60; y += 10) R(g, '#5a566a', 2, y, 16, 1);
+    for (let i = 0; i < 6 + k * 10; i++) R(g, '#3a3648', 3 + r() * 13, r() * 58, 1 + (r() * 2 | 0), 1 + (r() * 3 | 0));
+    if (k >= 1) { line(g, 6, 8, 12, 22, '#2a2636', 1); line(g, 12, 22, 9, 36, '#2a2636', 1); }
+    if (k >= 2) { R(g, '#2a2636', 4, 0, 12, 6); line(g, 14, 30, 8, 48, '#2a2636', 1); for (const x of [6, 13]) R(g, '#a8643a', x, 0, 1, 10); }
+    return outline(c);
+  }
+  // bombardero a baja altura (cruza en primer plano)
+  function bomberNear(on) {
+    const { c, g } = mk(60, 20);
+    poly(g, [[2, 10], [10, 6], [50, 6], [58, 10], [50, 13], [10, 13]], '#2a2440');
+    R(g, '#3e3660', 10, 6, 40, 1);
+    poly(g, [[22, 9], [34, 9], [26, 0], [20, 0]], '#221d36'); poly(g, [[22, 11], [34, 11], [26, 20], [20, 20]], '#1a1630');
+    poly(g, [[48, 8], [56, 8], [58, 2], [54, 2]], '#221d36');
+    R(g, '#9ff3ff', 6, 8, 3, 2);
+    if (on) { R(g, '#ff3b5c', 26, 0, 2, 2); R(g, '#ffb070', 58, 9, 2, 2); }
+    return outline(c);
+  }
+  function napalm() { const { c, g } = mk(5, 9); R(g, '#3a3c46', 1, 2, 3, 6); R(g, '#d93a2e', 1, 6, 3, 1); R(g, '#6e7080', 0, 0, 5, 2); return outline(c); }
+  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm };
 })();

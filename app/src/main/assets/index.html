@@ -8100,7 +8100,70 @@ const CFX = (() => {
     pellet: pellet(), beam: beamProfile(),
     fl: { R: flashStar(6, ['#ffd27a', '#ffffff']), M: flashStar(5, ['#ff9a5a', '#fff3c0']), E: flashCone(), S: flashCone(), V: flashStar(6, ['#4fe3ff', '#ffffff']), L: flashStar(8, ['#ff4f9a', '#ffffff']), F: flashStar(6, ['#ff7a1a', '#ffe08a']) },
   });
-  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx };
+
+  // ---------- vehículos y piezas de la fase 1
+  // blindado de la resistencia (mira a la derecha). f = cuadro de orugas, up = cañón en diagonal
+  function tankP(f, up) {
+    const { c, g } = mk(52, 34);
+    const H = '#566a2c', HL = '#7f9a44', HD = '#36451a', TR = '#24261e', TL = '#4a4c40';
+    // orugas
+    R(g, TR, 3, 24, 44, 9); R(g, TL, 3, 24, 44, 1);
+    for (let x = 5 + (f % 2) * 3; x < 46; x += 6) R(g, TL, x, 30, 3, 2);
+    for (const x of [8, 16, 24, 32, 40]) { disc(g, x, 28.5, 3.2, '#3a3c32'); disc(g, x, 28.5, 1.4, '#8a8c7a'); }
+    // casco
+    poly(g, [[1, 24], [6, 15], [44, 15], [50, 22], [48, 25], [2, 25]], H);
+    R(g, HL, 6, 15, 38, 1); R(g, HD, 2, 23, 47, 2);
+    R(g, '#ff8a1e', 10, 19, 12, 2); R(g, '#ff8a1e', 28, 19, 6, 2);
+    // torreta y cañón
+    R(g, H, 16, 8, 18, 8); R(g, HL, 16, 8, 18, 1); R(g, HD, 31, 9, 3, 7);
+    R(g, HD, 19, 6, 6, 2); R(g, '#9ff3ff', 21, 6, 2, 1);
+    if (up) { line(g, 30, 10, 42, -1, '#2c3218', 3); line(g, 30, 9, 41, -1, '#6e7a52', 1); }
+    else { R(g, '#2c3218', 33, 10, 18, 3); R(g, '#6e7a52', 33, 10, 18, 1); R(g, '#1a1c14', 48, 9, 3, 5); }
+    // antena con banderín
+    R(g, '#1a1c14', 18, 0, 1, 8); R(g, '#ff8a1e', 19, 0, 4, 2);
+    return outline(c);
+  }
+  // tanque enemigo Magnus (mira a la izquierda), más grande
+  function tankE(f, hurt) {
+    const { c, g } = mk(72, 42);
+    const H = hurt ? '#6a4a52' : '#3c4552', HL = hurt ? '#9a6a74' : '#62707f', HD = hurt ? '#3a2228' : '#262c36', TR = '#18191e';
+    R(g, TR, 4, 30, 62, 11); R(g, '#3a3c46', 4, 30, 62, 1);
+    for (let x = 6 + (f % 2) * 4; x < 64; x += 8) R(g, '#3a3c46', x, 38, 4, 2);
+    for (const x of [10, 20, 30, 40, 50, 60]) { disc(g, x, 35.5, 4, '#2a2c34'); disc(g, x, 35.5, 1.8, '#7a7e8c'); }
+    poly(g, [[2, 29], [10, 17], [62, 17], [70, 28], [68, 31], [3, 31]], H);
+    R(g, HL, 10, 17, 52, 1); R(g, HD, 3, 29, 66, 2);
+    for (let x = 14; x < 60; x += 9) R(g, '#d93a2e', x, 22, 5, 2);
+    R(g, H, 28, 7, 28, 11); R(g, HL, 28, 7, 28, 1); R(g, HD, 28, 15, 28, 2);
+    R(g, '#1a1c22', 2, 10, 28, 4); R(g, '#5a606c', 2, 10, 28, 1); R(g, '#0e0f12', 0, 9, 4, 6);
+    R(g, '#1a1c22', 52, 12, 10, 3); R(g, '#ff3b5c', 36, 9, 6, 2);
+    R(g, '#1a1c22', 46, 0, 1, 7); R(g, '#ff3b5c', 45, 0, 3, 2);
+    return outline(c);
+  }
+  function shell() { const { c, g } = mk(8, 5); R(g, '#ffd27a', 1, 1, 6, 3); R(g, '#fff6d8', 4, 1, 3, 2); R(g, '#c8643a', 0, 2, 2, 1); return c; }
+  // muro de hormigón con fierros; k = 0 sano, 1 trizado, 2 roto
+  function wall(k) {
+    const { c, g } = mk(20, 60);
+    const r = rng32(30 + k);
+    R(g, '#6e6a7e', 2, 0, 16, 60); R(g, '#8c88a0', 2, 0, 2, 60); R(g, '#4e4a5e', 16, 0, 2, 60);
+    for (let y = 6; y < 60; y += 10) R(g, '#5a566a', 2, y, 16, 1);
+    for (let i = 0; i < 6 + k * 10; i++) R(g, '#3a3648', 3 + r() * 13, r() * 58, 1 + (r() * 2 | 0), 1 + (r() * 3 | 0));
+    if (k >= 1) { line(g, 6, 8, 12, 22, '#2a2636', 1); line(g, 12, 22, 9, 36, '#2a2636', 1); }
+    if (k >= 2) { R(g, '#2a2636', 4, 0, 12, 6); line(g, 14, 30, 8, 48, '#2a2636', 1); for (const x of [6, 13]) R(g, '#a8643a', x, 0, 1, 10); }
+    return outline(c);
+  }
+  // bombardero a baja altura (cruza en primer plano)
+  function bomberNear(on) {
+    const { c, g } = mk(60, 20);
+    poly(g, [[2, 10], [10, 6], [50, 6], [58, 10], [50, 13], [10, 13]], '#2a2440');
+    R(g, '#3e3660', 10, 6, 40, 1);
+    poly(g, [[22, 9], [34, 9], [26, 0], [20, 0]], '#221d36'); poly(g, [[22, 11], [34, 11], [26, 20], [20, 20]], '#1a1630');
+    poly(g, [[48, 8], [56, 8], [58, 2], [54, 2]], '#221d36');
+    R(g, '#9ff3ff', 6, 8, 3, 2);
+    if (on) { R(g, '#ff3b5c', 26, 0, 2, 2); R(g, '#ffb070', 58, 9, 2, 2); }
+    return outline(c);
+  }
+  function napalm() { const { c, g } = mk(5, 9); R(g, '#3a3c46', 1, 2, 3, 6); R(g, '#d93a2e', 1, 6, 3, 1); R(g, '#6e7080', 0, 0, 5, 2); return outline(c); }
+  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm };
 })();
 // =====================================================================
 //  JUEGO 2 · NEÓN COMMANDO — run & gun horizontal en una ciudad al atardecer
@@ -8425,6 +8488,10 @@ const Contra = (() => {
     A.mush = [0, 1, 2, 3, 4, 5, 6, 7].map((k) => T(CFX.mushroom(k)));
     A.bomber = [T(CFX.bomber(true)), T(CFX.bomber(false))];
     A.gren = T(CFX.grenade()); A.scrap = [0, 1, 2].map((k) => T(CFX.scrap(k)));
+    A.tankP = { f: [0, 1].map((f) => T(CFX.tankP(f, false))), u: [0, 1].map((f) => T(CFX.tankP(f, true))) };
+    A.tankE = [0, 1].map((f) => T(CFX.tankE(f, false))); A.tankEh = T(CFX.tankE(0, true));
+    A.shellT = T(CFX.shell()); A.wall = [0, 1, 2].map((k) => T(CFX.wall(k)));
+    A.bomberN = [T(CFX.bomberNear(true)), T(CFX.bomberNear(false))]; A.napalm = T(CFX.napalm());
     { const f = CFX.weaponFx(); A.fx = { tracer: T(f.tracer), tracerM: T(f.tracerM), pellet: T(f.pellet), beam: T(f.beam), fl: Object.fromEntries(Object.entries(f.fl).map(([k, v]) => [k, T(v)])) }; }
     BG = {
       titan: new Spr(scene, A.titan[0], -66, { transparent: true }).show(false),
@@ -8486,10 +8553,10 @@ const Contra = (() => {
         <div class="hcol" style="align-items:flex-end"><span class="hlab">REC</span><span class="hval cyan" id="ch">000000</span></div>
       </div>
       <div class="hbl" style="align-items:center"><span class="wpn" id="cw">N</span><span class="hlab" id="cwn">NORMAL</span><span class="abil" id="ca" hidden><i id="cai"></i><b id="cak">G</b></span><span class="hscrap" id="cr"><i class="bolt"></i><span id="crn">0</span></span></div>
-      <div class="boss" id="cb" hidden><span class="hlab" style="color:var(--pink)">COLOSO-07</span><div class="bar"><i id="cbb" style="width:100%"></i></div></div>
+      <div class="boss" id="cb" hidden><span class="hlab" id="cbl" style="color:var(--pink)">COLOSO-07</span><div class="bar"><i id="cbb" style="width:100%"></i></div></div>
       <div class="banner" id="cbn" hidden></div>`);
     hud = { v: UI.$('#cv'), s: UI.$('#cs'), h: UI.$('#ch'), w: UI.$('#cw'), wn: UI.$('#cwn'), b: UI.$('#cb'), bb: UI.$('#cbb'), bn: UI.$('#cbn'),
-      a: UI.$('#ca'), ai: UI.$('#cai'), ak: UI.$('#cak'), r: UI.$('#crn') };
+      a: UI.$('#ca'), ai: UI.$('#cai'), ak: UI.$('#cak'), r: UI.$('#crn'), bl: UI.$('#cbl') };
     hc = {};
   }
   function banner(t, sub) {
@@ -8536,6 +8603,7 @@ const Contra = (() => {
     parts.clear();
     boss.on = false; boss.spr.show(false); boss.rotor.show(false);
     grens.forEach((q) => { q.on = false; q.spr.show(false); });
+    setupStageExtras();
     Object.assign(S, { camX: 0, spawnI: 0, runT: 2.5, state: 'play', t: 0, bossTrig: false, clearT: 0, introT: 2.4 });
     S.spawnList = SPAWNS.slice().sort((a, b) => a.x - b.x);
     spawnPlayer(40, true);
@@ -8687,7 +8755,7 @@ const Contra = (() => {
   }
   function killEnt(e, cause) {
     e.dead = true;
-    const pts = { runner: 100, rifle: 300, drone: 200, turret: 500, capsule: 100 }[e.type] || 100;
+    const pts = { runner: 100, rifle: 300, drone: 200, turret: 500, capsule: 100, wall: 200, mtank: 8000 }[e.type] || 100;
     addScore(pts);
     if (e.type === 'runner' || e.type === 'rifle') {
       Snd.sfx('hit');
@@ -8700,9 +8768,16 @@ const Contra = (() => {
     } else if (e.type === 'capsule') {
       Snd.sfx('explode'); boomAt(e.x, e.y, true);
       items.push({ medal: true, w: e.w, x: e.x, y: e.y, vx: 26, vy: -170, ground: false, t: 0, spr: new Spr(scene, A.mach.medal[e.w], 6) });
+    } else if (e.type === 'wall') {
+      Snd.sfx('explode'); boomAt(e.x, e.y - 30, true); shake(2, 0.2);
+      for (let i = 0; i < 26; i++) parts.emit(e.x + rand(-8, 8), e.y - rand(4, 60), rand(-90, 90), rand(-160, -40), rand(0.5, 1), 0x8c88a0, 0x3a3648, 2, 1, 500);
+    } else if (e.type === 'mtank') {
+      Snd.sfx('boom'); flash(0.35, [1, 0.8, 0.5]); shake(4, 0.5); UI.vibrate([60, 40, 90]);
+      for (let i = 0; i < 6; i++) boomAt(e.x + rand(-30, 30), e.y - rand(6, 34), i % 2 === 1);
+      S.lockX = null; hud.b.hidden = true; banner('¡BLINDADO DESTRUIDO!', 'SIGUE AVANZANDO ▶'); S.alertT = 2;
     } else { Snd.sfx('explode'); boomAt(e.x, e.y, true); }
     if (!e.keepSpr) { e.spr.remove(); e.extra && e.extra.forEach((s) => s.remove()); }
-    dropScrap(e.x, e.y - 10, SCRAP[e.type] || 1);
+    dropScrap(e.x, e.y - 10, e.type === 'mtank' ? 15 : SCRAP[e.type] || 1);
   }
   function dropScrap(x, y, n) {
     for (let i = 0; i < n; i++) items.push({ scrap: true, x, y, vx: rand(-60, 60), vy: rand(-190, -110), t: 0, spr: new Spr(scene, A.scrap[(Math.random() * 3) | 0], 16) });
@@ -8713,11 +8788,14 @@ const Contra = (() => {
       case 'turret': return [e.x - 12, e.y - 12, 24, 24];
       case 'drone': return [e.x - 10, e.y - 6, 20, 12];
       case 'capsule': return [e.x - 11, e.y - 6, 22, 12];
+      case 'wall': return [e.x - 8, e.y - 62, 16, 62];
+      case 'mtank': return [e.x - 34, e.y - 36, 68, 36];
     }
     return [0, 0, 0, 0];
   }
   function playerBox() {
     const p = player;
+    if (p.inTank) return [S.tank.x - 24, GY - 30, 48, 30];
     if (p.prone) return [p.x - 4 + p.face * 4, p.y - 9, 16, 9];
     if (p.jumping) return [p.x - 7, p.y - 21, 14, 14];
     return [p.x - 4, p.y - 27, 8, 27];
@@ -8729,8 +8807,10 @@ const Contra = (() => {
       if (e.dead) continue;
       e.t = (e.t || 0) + dt;
       if (e.flashT > 0) e.flashT -= dt;
-      if (e.kx) { if (e.type !== 'turret' && e.type !== 'capsule') e.x += e.kx * dt; e.kx *= Math.pow(0.002, dt); if (Math.abs(e.kx) < 3) e.kx = 0; }
+      if (e.kx) { if (e.type === 'runner' || e.type === 'rifle' || e.type === 'drone') e.x += e.kx * dt; e.kx *= Math.pow(0.002, dt); if (Math.abs(e.kx) < 3) e.kx = 0; }
       const onScreen = e.x > S.camX - 10 && e.x < S.camX + W + 10;
+      if (e.type === 'wall') { e.spr.set(A.wall[e.hp > e.max * 0.6 ? 0 : e.hp > e.max * 0.3 ? 1 : 2]).tint(e.flashT > 0 ? 0xffd0d0 : 0xffffff); continue; }
+      if (e.type === 'mtank') { updateMTank(e, dt); continue; }
       if (e.type === 'runner') {
         e.x += e.face * 74 * dt;
         if (e.ground) {
@@ -8809,7 +8889,7 @@ const Contra = (() => {
     const W = Engine.W;
     Object.assign(boss, { on: true, st: 'enter', hp: 150 + S.loop * 60, max: 150 + S.loop * 60, x: S.camX + W + 90, y: 60, t: 0, pt: 1.2, pat: 0, flashT: 0, tx: S.camX + W * 0.66, phase: 1, dyT: 0, smokeT: 0 });
     boss.spr.show(true); boss.rotor.show(true);
-    hud.b.hidden = false;
+    hud.b.hidden = false; hud.bl.textContent = 'COLOSO-07';
     Snd.play(SONGS.boss); Snd.sfx('alarm');
     banner('¡ALERTA!', 'HELICÓPTERO COLOSO-07');
     S.alertT = 2;
@@ -8887,6 +8967,7 @@ const Contra = (() => {
   // ---------------- jugador
   function hurtPlayer() {
     const p = player;
+    if (p.inTank && !p.dead && S.state === 'play') { tankHit(); return; }
     if (p.dead || p.inv > 0 || p.barrier > 0 || p.dashInv > 0 || S.state !== 'play') return;
     p.dead = true; p.deadT = 0; p.vx = -p.face * 55; p.vy = -230; p.ground = false; p.jumping = false; p.prone = false;
     Snd.sfx('die'); shake(3, 0.25); flash(0.3, [1, 0.3, 0.4]); UI.vibrate(80);
@@ -8911,6 +8992,7 @@ const Contra = (() => {
       }
       return;
     }
+    if (p.inTank) { rideTank(dt); return; }
     let mx = (I.right ? 1 : 0) - (I.left ? 1 : 0);
     if (p.ground) { p.prone = I.down && mx === 0; if (p.prone) mx = 0; }
     if (mx) p.face = mx;
@@ -8928,6 +9010,7 @@ const Contra = (() => {
     if (!p.ground && !(p.dashT > 0)) p.vy = Math.min(p.vy + G * dt, MAXF);
     p.x += p.vx * dt; p.y += p.vy * dt;
     p.x = clamp(p.x, S.camX + 8, Math.min(END - 8, S.camX + W - 8));
+    for (const e of ents) if (e.type === 'wall' && !e.dead && Math.abs(p.x - e.x) < 11 && p.y > e.y - 66) p.x = e.x + (p.x < e.x ? -11 : 11);
     if (p.dropT > 0) p.dropT -= dt;
     if (!p.ground && p.vy >= 0) {
       const l = landOn(p.x, y0, p.y, p.dropT > 0 ? p.dropPlat : null);
@@ -9019,11 +9102,12 @@ const Contra = (() => {
     for (const b of ebs) {
       if (!b.on) continue;
       b.t += dt;
-      if (b.kind === 'bomb') {
+      if (b.kind === 'bomb' || b.kind === 'napalm') {
         b.vy = Math.min(b.vy + 500 * dt, 300); b.x += b.vx * dt; b.y += b.vy * dt;
         const s = landOn(b.x, b.y - b.vy * dt, b.y, null);
         if (s) {
-          b.on = false; b.spr.show(false); boomAt(b.x, s.y - 10); Snd.sfx('explode'); shake(2, 0.15);
+          b.on = false; b.spr.show(false); boomAt(b.x, s.y - 10); Snd.sfx(b.kind === 'napalm' ? 'gboom' : 'explode'); shake(b.kind === 'napalm' ? 3 : 2, 0.15);
+          if (b.kind === 'napalm' && s.ground) addFireZone(b.x, s.y);
           for (const dx of [-8, 8]) { const f = enemyShot(b.x + dx, s.y - 6, dx * 9, -60); if (f) f.kind = 'spark'; }
           if (!player.dead && Math.abs(player.x - b.x) < 18 && Math.abs(player.y - s.y) < 20) hurtPlayer();
           continue;
@@ -9091,6 +9175,161 @@ const Contra = (() => {
   }
 
 
+
+  // ---------------- fase 1 (inspirada en Contra III): blindado, muros, tanque Magnus y bombardeo cercano
+  const TANK_X = 700, TANK_END = 1192, WALLS = [936, 1128], MB_X = 2060, RAID_X = 2560;
+  function mkWall(x, hp) { return { type: 'wall', x, y: GY, hp, max: hp, flashT: 0, spr: new Spr(scene, A.wall[0], 8).at(x, GY - 31) }; }
+  function setupStageExtras() {
+    if (S.tank) S.tank.spr.remove();
+    S.tank = { x: TANK_X, face: 1, hp: 6, anim: 0, fireT: 0, occupied: false, dead: false, burnT: 0, up: false, inv: 0, hint: false, spr: new Spr(scene, A.tankP.f[0], 14) };
+    for (const wx of WALLS) ents.push(mkWall(wx, 14));
+    if (S.raid) { S.raid.spr.remove(); S.raid = null; }
+    (S.fireZ || []).forEach((z) => z.sprs.forEach((q) => q.remove())); S.fireZ = [];
+    Object.assign(S, { mbDone: false, raidDone: false, lockX: null });
+    player.inTank = false;
+  }
+  function hideStageExtras() {
+    if (S.tank) S.tank.spr.show(false);
+    if (S.raid) { S.raid.spr.remove(); S.raid = null; }
+    (S.fireZ || []).forEach((z) => z.sprs.forEach((q) => q.remove())); S.fireZ = [];
+    S.lockX = null;
+  }
+  // ---- blindado de la resistencia: pasas por encima para subir, A para saltar fuera
+  function updateTank(dt) {
+    const k = S.tank, p = player;
+    if (!k || k.gone) return;
+    if (k.inv > 0) k.inv -= dt;
+    if (!k.occupied && !k.dead && !k.burnT && !p.dead && !p.inTank && p.ground && Math.abs(p.x - k.x) < 14 && Math.abs(p.y - GY) < 2) {
+      p.inTank = true; k.occupied = true; p.spr.show(false); p.aura.show(false); p.prone = false;
+      Snd.sfx('powerup'); UI.setButtons('SALIR', 'CAÑÓN');
+      UI.toast(Engine.touch ? 'BLINDADO: B DISPARA · ARRIBA APUNTA · A SALTA' : 'BLINDADO: X DISPARA · ↑ APUNTA · Z SALTA');
+    }
+    if (!k.hint && !k.occupied && Math.abs(p.x - k.x) < 120) { k.hint = true; UI.toast('PASA POR ENCIMA DEL BLINDADO PARA SUBIR'); }
+    if (k.burnT > 0) {
+      k.burnT -= dt;
+      if (Math.random() < 0.6) parts.emit(k.x + rand(-18, 18), GY - 20, rand(-10, 10), rand(-60, -30), 0.5, 0xffd27a, 0xe8452c, 3, 1);
+      if (k.burnT <= 0) { boomAt(k.x, GY - 16); boomAt(k.x - 14, GY - 8, true); boomAt(k.x + 14, GY - 10, true); Snd.sfx('explode'); shake(3, 0.3); k.gone = true; k.spr.show(false); return; }
+    }
+    const tex = A.tankP[k.up && k.occupied ? 'u' : 'f'][Math.floor(k.anim * 10) % 2];
+    k.spr.set(tex).setFlip(k.face < 0).at(Math.round(k.x), GY - 18).show(!(k.inv > 0 && Math.floor(k.inv * 16) % 2));
+    k.spr.tint(k.dead ? 0x55555f : k.burnT > 0 ? 0xffa070 : 0xffffff);
+  }
+  function rideTank(dt) {
+    const p = player, k = S.tank, I = Input.held;
+    const mx = (I.right ? 1 : 0) - (I.left ? 1 : 0);
+    if (mx) { k.face = mx; k.anim += dt; }
+    k.up = !!I.up;
+    k.x = clamp(k.x + mx * 78 * dt, Math.max(TANK_X - 40, S.camX + 26), Math.min(TANK_END + 4, S.camX + Engine.W - 26));
+    for (const e of ents) if (e.type === 'wall' && !e.dead && Math.abs(k.x - e.x) < 34) k.x = e.x + (k.x < e.x ? -34 : 34);
+    for (const e of ents) if (!e.dead && (e.type === 'runner' || e.type === 'rifle') && Math.abs(e.x - k.x) < 26 && Math.abs(e.y - GY) < 4) { e.kx = k.face * 220; killEnt(e); shake(1, 0.08); }
+    k.fireT -= dt;
+    if (I.b && k.fireT <= 0) { fireShell(); k.fireT = 0.42; }
+    if (p.inv > 0) p.inv -= dt;
+    p.x = k.x; p.y = GY; p.ground = true; p.vy = 0; p.plat = supportAt(k.x, GY);
+    if (Input.pressed.a) { exitTank(false); return; }
+    if (k.x >= TANK_END) exitTank(true);
+  }
+  function exitTank(forced) {
+    const p = player, k = S.tank;
+    p.inTank = false; k.occupied = false; UI.setButtons('SALTO', 'FUEGO');
+    Object.assign(p, { x: k.x - k.face * 4, y: GY - 24, vy: -280, ground: false, jumping: true, plat: null });
+    p.inv = Math.max(p.inv, 1.2); p.spr.show(true);
+    Snd.sfx('jump');
+    if (forced) {
+      k.burnT = 1.4; Snd.sfx('fireball');
+      UI.toast('¡LLAMARADAS! EL BLINDADO NO PASA');
+      for (let i = 0; i < 16; i++) parts.emit(k.x + 26 + rand(-6, 6), GY, rand(-20, 20), rand(-220, -120), 0.6, 0xfff3c0, 0xe8452c, 3, 1, 120);
+    }
+  }
+  function tankHit() {
+    const k = S.tank;
+    if (k.inv > 0) return;
+    k.hp--; k.inv = 0.6; Snd.sfx('tink'); shake(1.5, 0.1); parts.burst(k.x, GY - 22, 8, 80, 0.3, 0xffffff, 0xffb347, 2, 1);
+    if (k.hp <= 0) { k.dead = true; exitTank(false); player.inv = 2; k.burnT = 1.0; UI.toast('¡EL BLINDADO SE INCENDIA!'); }
+  }
+  function fireShell() {
+    const k = S.tank, q = grens.find((o) => !o.on);
+    if (!q) return;
+    const dx = k.up ? 0.72 : 1, dy = k.up ? -0.7 : 0;
+    const bx = k.x + k.face * (k.up ? 16 : 26), by = GY - (k.up ? 32 : 22);
+    Object.assign(q, { on: true, kind: 'shell', x: bx, y: by, vx: k.face * dx * 310, vy: dy * 310, t: 0, g: 80 });
+    q.spr.set(A.shellT).show(true).rot(-Math.atan2(q.vy, q.vx)).at(q.x, q.y);
+    S.muzzle.set(A.fx.fl.E).show(true).rot(-Math.atan2(dy, dx * k.face)).at(bx + k.face * 4, by); S.muzzleT = 0.06;
+    Snd.sfx('shotgun'); shake(1.8, 0.09);
+    parts.emit(k.x - k.face * 20, GY - 10, -k.face * 30, -20, 0.5, 0x8a8478, 0x3a3640, 4, 7);
+  }
+  // ---- tanque enemigo Magnus Mk II: entra rompiendo un muro; la cámara se queda fija hasta destruirlo
+  function startMidBoss() {
+    S.mbDone = true; S.lockX = S.camX;
+    const W = Engine.W;
+    ents.push(mkWall(S.camX + W - 22, 40));
+    const hp = Math.round(46 * (1 + S.loop * 0.3));
+    ents.push({ type: 'mtank', x: S.camX + W + 60, y: GY, hp, max: hp, st: 'enter', t: 0, fireT: 1.4, mgT: 2.6, mgN: 0, mgB: 0, flashT: 0, spr: new Spr(scene, A.tankE[0], 9) });
+    hud.bl.textContent = 'MAGNUS MK II'; hud.b.hidden = false;
+    banner('¡BLINDADO ENEMIGO!', 'DESTRÚYELO PARA AVANZAR'); S.alertT = 2.2; Snd.sfx('alarm');
+  }
+  function updateMTank(e, dt) {
+    const p = player, W = Engine.W, L = S.lockX != null ? S.lockX : S.camX, diff = 1 + S.loop * 0.3;
+    if (e.st === 'enter') {
+      e.x -= 42 * dt;
+      for (const w of ents) if (w.type === 'wall' && !w.dead && Math.abs(w.x - e.x) < 36) { w.hp = 0; killEnt(w); shake(3, 0.35); }
+      if (Math.random() < dt * 8) parts.emit(e.x + 30, GY - 4, rand(10, 40), rand(-30, -10), 0.6, 0x8a8478, 0x3a3640, 3, 6);
+      if (e.x < L + W * 0.72) e.st = 'fight';
+    } else {
+      e.x = clamp(e.x + Math.sin(e.t * 0.8) * 16 * dt, L + W * 0.5, L + W - 30);
+      if ((e.fireT -= dt * diff) <= 0) {
+        e.fireT = rand(1.8, 2.6);
+        const sx = e.x - 36, sy = GY - 30, vx = clamp((p.x - sx) / 0.92, -300, -40);
+        enemyShot(sx, sy, vx, -200, 'bomb');
+        Snd.sfx('shotgun'); parts.burst(sx, sy, 8, 70, 0.3, 0xfff3c0, 0xff8a1e, 2, 1);
+      }
+      if ((e.mgT -= dt * diff) <= 0) { e.mgN = 4; e.mgT = rand(2.4, 3.2); }
+      if (e.mgN > 0 && (e.mgB -= dt) <= 0) { e.mgN--; e.mgB = 0.13; enemyShot(e.x - 30, GY - 12, -200, 0); Snd.sfx('eshot'); }
+    }
+    e.spr.set(e.flashT > 0 ? A.tankEh : A.tankE[Math.floor(e.t * 8) % 2]).at(Math.round(e.x), GY - 21);
+    if (!p.dead && e.st === 'fight' && hit(entBox(e), playerBox())) hurtPlayer();
+  }
+  // ---- bombardeo cercano: el avión cruza bajo y la calle se incendia; las plataformas son refugio
+  function startRaid() {
+    S.raidDone = true;
+    S.raid = { t: 0, x: S.camX - 70, drops: [0.16, 0.33, 0.5, 0.67, 0.84].map((k) => S.camX + Engine.W * k + 20), spr: new Spr(scene, A.bomberN[0], 26).show(false) };
+    banner('¡BOMBARDEO!', 'SÚBETE A UN TECHO'); S.alertT = 1.8; Snd.sfx('alarm');
+  }
+  function updateRaid(dt) {
+    const R0 = S.raid;
+    if (!R0) return;
+    R0.t += dt;
+    if (R0.t > 1.1) {
+      if (!R0.heard) { R0.heard = true; Snd.sfx('drone'); }
+      R0.x += 175 * dt;
+      R0.spr.set(A.bomberN[Math.floor(R0.t * 6) % 2]).at(Math.round(R0.x), 30).show(true);
+      while (R0.drops.length && R0.x >= R0.drops[0]) {
+        const b = enemyShot(R0.drops.shift(), 40, 40, 30, 'napalm');
+        if (b) b.spr.set(A.napalm);
+      }
+      if (R0.x > S.camX + Engine.W + 90) { R0.spr.remove(); S.raid = null; }
+    }
+  }
+  function addFireZone(x, y) {
+    const sprs = [-14, 0, 14].map((dx) => new Spr(scene, A.fire[0], 22).scaleBy(2));
+    S.fireZ.push({ x, y, t: 0, sprs });
+  }
+  function updateFireZones(dt) {
+    const p = player;
+    for (const z of S.fireZ) {
+      z.t += dt;
+      const k = z.t < 3.6 ? 1 : 0;
+      z.sprs.forEach((q, i) => q.set(A.fire[Math.floor(z.t * 12 + i) % 3]).at(Math.round(z.x + (i - 1) * 14), z.y - 12 - (i === 1 ? 4 : 0)).show(k > 0 || Math.floor(z.t * 14) % 2 === 0));
+      if (Math.random() < dt * 10) parts.emit(z.x + rand(-20, 20), z.y - 10, rand(-8, 8), rand(-50, -20), 0.6, 0xffb347, 0x5a2a3a, 2, 1);
+      if (z.t < 3.6) {
+        if (!p.dead && !p.inTank && p.ground && p.plat && p.plat.ground && Math.abs(p.x - z.x) < 22) hurtPlayer();
+        for (const e of ents) if (!e.dead && e.type === 'runner' && e.ground && Math.abs(e.x - z.x) < 18) killEnt(e);
+      }
+      if (z.t > 4.2) { z.sprs.forEach((q) => q.remove()); z.dead = true; }
+    }
+    S.fireZ = S.fireZ.filter((z) => !z.dead);
+  }
+
   // ---------------- habilidades: granada, barrera e impulso (se abren al cumplir la misión 1)
   function useAbility(dt) {
     const ab = S.ab, p = player;
@@ -9124,33 +9363,35 @@ const Contra = (() => {
   function throwGrenade(vx, vy) {
     const q = grens.find((o) => !o.on), p = player;
     if (!q) return;
-    Object.assign(q, { on: true, x: p.x + p.face * 6, y: p.y - 26, vx, vy, t: 0 });
-    q.spr.show(true).at(q.x, q.y);
+    Object.assign(q, { on: true, kind: 'gren', x: p.x + p.face * 6, y: p.y - 26, vx, vy, t: 0, g: 620 });
+    q.spr.set(A.gren).show(true).at(q.x, q.y);
   }
-  function grenBoom(x, y) {
-    const lv = S.ab ? S.ab.lvl : 1, R2 = lv >= 2 ? 36 : 30;
+  function grenBoom(x, y, dmg = 6, rad = 0) {
+    const lv = S.ab ? S.ab.lvl : 1, R2 = rad || (lv >= 2 ? 36 : 30);
     boomAt(x, y); boomAt(x - 10, y + 2, true); boomAt(x + 10, y + 2, true);
     Snd.sfx('gboom'); shake(3, 0.25); UI.vibrate(40);
     for (const e of ents) {
       if (e.dead || e.type === 'capsule') continue;
       const bx = entBox(e), cx = bx[0] + bx[2] / 2, cy = bx[1] + bx[3] / 2;
-      if (Math.hypot(cx - x, cy - y) < R2 + bx[2] / 2) { e.hp -= 6; e.flashT = 0.08; if (e.hp <= 0) killEnt(e); }
+      if (Math.hypot(cx - x, cy - y) < R2 + bx[2] / 2) { e.hp -= dmg; e.flashT = 0.08; if (e.hp <= 0) killEnt(e); }
     }
     for (const m of ebs) if (m.on && (m.kind === 'missile' || m.kind === 'bomb') && Math.hypot(m.x - x, m.y - y) < R2 + 6) { m.on = false; m.spr.show(false); }
-    if (boss.on && boss.st === 'fight') { const b = bossBox(); if (x > b[0] - R2 && x < b[0] + b[2] + R2 && y > b[1] - R2 && y < b[1] + b[3] + R2) damageBoss(6); }
+    if (boss.on && boss.st === 'fight') { const b = bossBox(); if (x > b[0] - R2 && x < b[0] + b[2] + R2 && y > b[1] - R2 && y < b[1] + b[3] + R2) damageBoss(dmg); }
   }
   function updateGrens(dt) {
     for (const q of grens) {
       if (!q.on) continue;
       q.t += dt;
       const y0 = q.y;
-      q.vy = Math.min(q.vy + 620 * dt, 380); q.x += q.vx * dt; q.y += q.vy * dt;
-      q.spr.at(q.x, q.y).rot(q.t * 14 * Math.sign(q.vx || 1));
+      q.vy = Math.min(q.vy + (q.g || 620) * dt, 380); q.x += q.vx * dt; q.y += q.vy * dt;
+      q.spr.at(q.x, q.y).rot(q.kind === 'shell' ? -Math.atan2(q.vy, q.vx) : q.t * 14 * Math.sign(q.vx || 1));
+      if (q.kind === 'shell' && Math.random() < 0.7) parts.emit(q.x - Math.sign(q.vx) * 4, q.y, 0, rand(-8, 8), 0.25, 0xffe066, 0x5a4a6a, 2, 1);
+      if (q.kind === 'shell' && (q.x > S.camX + Engine.W + 20 || q.x < S.camX - 20)) { q.on = false; q.spr.show(false); continue; }
       let pop = q.t > 2.2 || q.y > H + 10;
       if (!pop && q.vy > 0 && landOn(q.x, y0, q.y, null)) pop = true;
       if (!pop) for (const e of ents) if (!e.dead && e.type !== 'capsule' && hit([q.x - 3, q.y - 3, 6, 6], entBox(e))) { pop = true; break; }
       if (!pop && boss.on && boss.st === 'fight' && hit([q.x - 3, q.y - 3, 6, 6], bossBox())) pop = true;
-      if (pop) { q.on = false; q.spr.show(false); if (q.y < H + 5) grenBoom(q.x, q.y - 4); }
+      if (pop) { q.on = false; q.spr.show(false); if (q.y < H + 5) grenBoom(q.x, q.y - 4, q.kind === 'shell' ? 5 : 6, q.kind === 'shell' ? 24 : 0); }
     }
   }
 
@@ -9171,6 +9412,7 @@ const Contra = (() => {
     grens.forEach((q) => { q.on = false; q.spr.show(false); });
     boss.on = false; boss.spr.show(false); boss.rotor.show(false);
     player.spr.show(false); player.aura.show(false);
+    hideStageExtras();
     S.camX = 0;
     document.body.classList.add('inmenu');
     UI.setButtons('ELEGIR', 'MENÚ');
@@ -9339,9 +9581,12 @@ const Contra = (() => {
       if (S.state !== 'play') return;
       const prevCam = S.camX;
       if (!p.dead) S.camX = clamp(Math.max(S.camX, p.x - W * 0.42), 0, END - W);
+      if (S.lockX != null) S.camX = Math.min(S.camX, S.lockX);
+      if (!S.mbDone && S.camX >= MB_X) startMidBoss();
+      if (!S.raidDone && S.camX >= RAID_X) startRaid();
       S.camDX = S.camX - prevCam;
       while (S.spawnI < S.spawnList.length && S.spawnList[S.spawnI].x <= S.camX + W + 16) spawnEnt(S.spawnList[S.spawnI++]);
-      if (!S.bossTrig) {
+      if (!S.bossTrig && S.lockX == null) {
         S.runT -= dt;
         if (S.runT <= 0) { spawnRunner(); S.runT = rand(1.3, 2.7) / (1 + S.loop * 0.35); }
         if (S.camX >= END - W - 0.5) startBoss();
@@ -9350,6 +9595,9 @@ const Contra = (() => {
       updateBoss(dt);
       updateShots(dt);
       updateGrens(dt);
+      updateTank(dt);
+      updateRaid(dt);
+      updateFireZones(dt);
     } else if (S.state === 'clear') {
       S.clearT += dt;
       updateBoss(dt);
@@ -9390,7 +9638,7 @@ const Contra = (() => {
     set('s', S.score, (v) => (hud.s.textContent = pad6(v)));
     set('h', Math.max(S.hi, S.score), (v) => (hud.h.textContent = pad6(v)));
     set('v', S.lives, (v) => (hud.v.innerHTML = '<b></b>'.repeat(Math.max(0, v - 1))));
-    set('w', player.weapon, (v) => { hud.w.textContent = v; hud.w.style.background = WCOL[v]; hud.wn.textContent = WNAME[v]; });
+    set('w', player.inTank ? 'T' + S.tank.hp : player.weapon, (v) => { if (v.length > 1) { hud.w.textContent = 'T'; hud.w.style.background = '#566a2c'; hud.wn.textContent = 'BLINDADO ' + '■'.repeat(S.tank.hp) + '□'.repeat(Math.max(0, 6 - S.tank.hp)); } else { hud.w.textContent = v; hud.w.style.background = WCOL[v]; hud.wn.textContent = WNAME[v]; } });
     set('r', S.scrap || 0, (v) => (hud.r.textContent = v));
     if (S.ab) {
       set('ak', S.ab.k, (v) => { hud.a.hidden = false; hud.ak.textContent = ABIL[v].k; });
