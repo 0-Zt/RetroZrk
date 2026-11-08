@@ -295,6 +295,72 @@ const CFX = (() => {
     disc(g, 33, 33, 27, 'rgba(120,240,220,0.15)');
     return c;
   }
+
+  // ---------- nivel 2: la fundición (donde se fabrican los titanes)
+  function skyFoundry() {
+    const { c, g } = mk(64, 216);
+    const stops = [[0, [20, 12, 18]], [60, [44, 20, 28]], [120, [86, 34, 34]], [170, [150, 64, 40]], [216, [196, 92, 44]]];
+    const at = (y) => { for (let i = 0; i < stops.length - 1; i++) { const [y0, c0] = stops[i], [y1, c1] = stops[i + 1]; if (y <= y1) { const t = (y - y0) / (y1 - y0); return c0.map((v, k) => v + (c1[k] - v) * t); } } return stops[stops.length - 1][1]; };
+    for (let y = 0; y < 216; y++) for (let x = 0; x < 64; x++) { const col = at(y), q = 16, d = bayer(x, y) * q; g.fillStyle = `rgb(${Math.floor((col[0] + d) / q) * q},${Math.floor((col[1] + d) / q) * q},${Math.floor((col[2] + d) / q) * q})`; g.fillRect(x, y, 1, 1); }
+    return c;
+  }
+  function farFoundry() {
+    const { c, g } = mk(320, 112);
+    const r = rng32(61);
+    let x = 0;
+    while (x < 320) {
+      const w = 20 + ((r() * 30) | 0), h = 26 + ((r() * 50) | 0);
+      R(g, '#3a1e26', x, 112 - h, w, h); R(g, '#4a2830', x, 112 - h, 1, h);
+      if (r() < 0.55) { const cx = x + 4 + ((r() * (w - 8)) | 0), ch = 20 + ((r() * 26) | 0); R(g, '#3a1e26', cx, 112 - h - ch, 4, ch); R(g, '#ff7a3a', cx, 112 - h - ch, 4, 1); for (let k = 0; k < 4; k++) disc(g, cx + 2 + k * 3, 112 - h - ch - 4 - k * 4, 3 + k, 'rgba(90,60,70,0.55)'); }
+      for (let k = 0; k < 4; k++) if (r() < 0.5) R(g, '#ff9a4a', x + 2 + ((r() * (w - 4)) | 0), 112 - h + 4 + ((r() * (h - 8)) | 0), 2, 1);
+      x += w + ((r() * 6) | 0);
+    }
+    return c;
+  }
+  function midFoundry() {
+    const { c, g } = mk(384, 112);
+    const r = rng32(71);
+    let x = 0;
+    while (x < 384) {
+      const k = r();
+      if (k < 0.3) { // tanque cilíndrico
+        const w = 28 + ((r() * 14) | 0), h = 40 + ((r() * 20) | 0);
+        R(g, '#2c1a22', x, 112 - h, w, h); ellipse(g, x + w / 2, 112 - h, w / 2, 4, '#3c2430'); R(g, '#40262f', x + 3, 112 - h, 2, h);
+        for (let y = 112 - h + 8; y < 108; y += 9) R(g, '#22141a', x, y, w, 1);
+        x += w + 6;
+      } else if (k < 0.5) { // grúa de celosía
+        const h = 80 + ((r() * 20) | 0);
+        R(g, '#2c1a22', x + 4, 112 - h, 4, h); for (let y = 112 - h; y < 112; y += 6) line(g, x + 4, y, x + 8, y + 6, '#22141a', 1);
+        R(g, '#2c1a22', x - 30, 112 - h, 64, 3); R(g, '#ff3b3b', x + 32, 112 - h - 1, 1, 1); R(g, '#3a242c', x - 22, 112 - h + 3, 1, 22); R(g, '#3a242c', x - 26, 112 - h + 25, 9, 5);
+        x += 40;
+      } else { // galpón con ventanas encendidas
+        const w = 36 + ((r() * 40) | 0), h = 34 + ((r() * 40) | 0), top = 112 - h;
+        R(g, '#26161e', x, top, w, h); poly(g, [[x, top], [x + w / 2, top - 8], [x + w, top]], '#26161e'); R(g, '#36202a', x, top, 2, h);
+        for (let wy = top + 6; wy < 104; wy += 9) for (let wx = x + 4; wx < x + w - 5; wx += 6) R(g, r() < 0.4 ? '#ffb05a' : r() < 0.5 ? '#ff6a3a' : '#160c12', wx, wy, 3, 4);
+        x += w + 4 + ((r() * 10) | 0);
+      }
+    }
+    for (let k = 0; k < 384; k += 24) { R(g, '#1c1016', k, 96, 24, 3); R(g, '#3a242c', k + 10, 99, 2, 13); }
+    R(g, '#1c1016', 0, 104, 384, 8);
+    return c;
+  }
+  function nearFoundry() {
+    const { c, g } = mk(256, 80);
+    R(g, '#22161c', 0, 6, 256, 6); R(g, '#3a2630', 0, 6, 256, 1); R(g, '#160e12', 0, 11, 256, 1);
+    R(g, '#22161c', 0, 16, 256, 4); R(g, '#3a2630', 0, 16, 256, 1);
+    for (const px of [30, 150]) { R(g, '#1c1216', px, 20, 12, 60); R(g, '#2e1e26', px, 20, 2, 60); disc(g, px + 6, 9, 5, '#2e1e26'); disc(g, px + 6, 9, 2, '#ff6a3a'); }
+    for (let x = 6; x < 256; x += 40) { R(g, '#ff8a3a', x, 8, 2, 2); }
+    return c;
+  }
+  // prensa hidráulica: vástago y cabezal
+  function pressHead() {
+    const { c, g } = mk(30, 16);
+    R(g, '#4a4450', 0, 0, 30, 14); R(g, '#7a7484', 0, 0, 30, 2); R(g, '#2a2630', 0, 12, 30, 2);
+    for (let x = 2; x < 28; x += 5) { R(g, '#ffd23f', x, 5, 3, 3); R(g, '#16181c', x + 3, 5, 2, 3); }
+    R(g, '#1a1820', 2, 14, 26, 2);
+    return outline(c);
+  }
+  function pressRod() { const { c, g } = mk(8, 8); R(g, '#8a8494', 0, 0, 8, 8); R(g, '#c4c0cc', 1, 0, 2, 8); R(g, '#4a4450', 6, 0, 2, 8); return c; }
   function reticle() { const { c, g } = mk(9, 9); for (const [x, y, w, h] of [[4, 0, 1, 3], [4, 6, 1, 3], [0, 4, 3, 1], [6, 4, 3, 1]]) R(g, '#ff8a1e', x, y, w, h); R(g, '#fff3c0', 4, 4); return c; }
-  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm, dog, grate, pulseRing, reticle };
+  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm, dog, grate, pulseRing, reticle, skyFoundry, farFoundry, midFoundry, nearFoundry, pressHead, pressRod };
 })();

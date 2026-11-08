@@ -16,13 +16,13 @@ const Contra = (() => {
   const fmtN = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
   // ---------------- nivel
-  const GROUND = [[0, 600], [644, 1250], [1296, 1760], [1880, 2500], [2544, 3200], [3244, END]];
-  const LEDGES = [
+  const GROUND1 = [[0, 600], [644, 1250], [1296, 1760], [1880, 2500], [2544, 3200], [3244, END]];
+  const LEDGES1 = [
     [260, 380, 136, 'girder'], [760, 920, 128, 'roof'], [1000, 1056, 160, 'car'], [1380, 1500, 140, 'girder'], [1520, 1640, 100, 'girder'],
     [1784, 1856, 164, 'bridge'], [1900, 1960, 150, 'girder'], [1960, 2120, 112, 'roof'], [2250, 2306, 160, 'car'], [2620, 2740, 136, 'girder'],
     [2900, 2956, 160, 'car'], [2980, 3140, 128, 'roof'], [3420, 3540, 140, 'girder'],
   ];
-  const SPAWNS = [
+  const SPAWNS1 = [
     { x: 300, t: 'capsule', w: 'M' }, { x: 340, t: 'rifle', y: 136 }, { x: 560, t: 'rifle', y: GY },
     { x: 840, t: 'turret', y: 156 }, { x: 880, t: 'rifle', y: 128 }, { x: 1200, t: 'capsule', w: 'S' },
     { x: 1150, t: 'rifle', y: GY }, { x: 1450, t: 'rifle', y: 140 }, { x: 1470, t: 'drones', n: 3 }, { x: 1590, t: 'rifle', y: 100 },
@@ -32,6 +32,30 @@ const Contra = (() => {
     { x: 3480, t: 'rifle', y: 140 }, { x: 3560, t: 'capsule', w: 'S' },
     { x: 1380, t: 'dogs', n: 2 }, { x: 1650, t: 'capsule', w: 'P' }, { x: 2560, t: 'dogs', n: 2 }, { x: 3260, t: 'dogs', n: 3 },
   ];
+  // nivel 2: la fundición. Huecos con metal fundido, pasarelas, contenedores, cintas y prensas
+  const GROUND2 = [[0, 520], [580, 1100], [1160, 1700], [1820, 2400], [2460, 3000], [3080, END]];
+  const LEDGES2 = [
+    [200, 320, 140, 'catwalk'], [420, 470, 158, 'crate'], [640, 760, 120, 'catwalk'], [860, 980, 140, 'catwalk'], [1020, 1070, 158, 'crate'],
+    [1240, 1400, 130, 'catwalk'], [1480, 1530, 158, 'crate'], [1560, 1660, 110, 'catwalk'], [1690, 1830, 150, 'bridge2'],
+    [1950, 2100, 128, 'catwalk'], [2200, 2250, 158, 'crate'], [2300, 2380, 140, 'catwalk'], [2560, 2700, 120, 'catwalk'],
+    [2780, 2830, 158, 'crate'], [2880, 2980, 138, 'catwalk'], [3200, 3330, 132, 'catwalk'], [3420, 3540, 140, 'catwalk'],
+  ];
+  const SPAWNS2 = [
+    { x: 250, t: 'rifle', y: 140 }, { x: 330, t: 'capsule', w: 'M' }, { x: 480, t: 'dogs', n: 2 }, { x: 700, t: 'rifle', y: 120 },
+    { x: 900, t: 'turret', y: 160 }, { x: 930, t: 'rifle', y: 140 }, { x: 1150, t: 'capsule', w: 'S' }, { x: 1300, t: 'rifle', y: 130 },
+    { x: 1330, t: 'drones', n: 3 }, { x: 1600, t: 'rifle', y: 110 }, { x: 1650, t: 'capsule', w: 'P' }, { x: 1760, t: 'drones', n: 3 },
+    { x: 2000, t: 'rifle', y: 128 }, { x: 2050, t: 'turret', y: 160 }, { x: 2150, t: 'dogs', n: 3 }, { x: 2340, t: 'rifle', y: 140 },
+    { x: 2400, t: 'capsule', w: 'L' }, { x: 2600, t: 'rifle', y: 120 }, { x: 2640, t: 'drones', n: 4 }, { x: 2900, t: 'rifle', y: 138 },
+    { x: 2950, t: 'capsule', w: 'F' }, { x: 3120, t: 'dogs', n: 3 }, { x: 3250, t: 'rifle', y: 132 }, { x: 3300, t: 'turret', y: 160 },
+    { x: 3480, t: 'rifle', y: 140 }, { x: 3500, t: 'capsule', w: 'B' },
+  ];
+  const LEVELS = [
+    { name: 'CIUDAD NEÓN', theme: 'city', ground: GROUND1, ledges: LEDGES1, spawns: SPAWNS1, tank: { x: 700, end: 1192 }, walls: [936, 1128], mb: 2060, raid: 2560,
+      vents: [1216, 1238, 1668, 1724, 3290, 3330, 3600], pulse: [3480, 140], belts: [], presses: [] },
+    { name: 'LA FUNDICIÓN', theme: 'foundry', ground: GROUND2, ledges: LEDGES2, spawns: SPAWNS2, tank: null, walls: [], mb: null, raid: null,
+      vents: [1200, 1900, 3140], pulse: [3480, 140], belts: [[600, 820, -1], [1180, 1380, 1], [2480, 2720, -1], [3100, 3300, 1]], presses: [800, 1440, 2150, 2740, 3370] },
+  ];
+  let GROUND = GROUND1, LEDGES = LEDGES1, SPAWNS = SPAWNS1, LV = LEVELS[0];
   const WEAP = {
     N: { speed: 270, rate: 0.17, max: 4, dmg: 1, sfx: 'shoot' },
     M: { speed: 320, rate: 0.085, max: 9, dmg: 1, sfx: 'mgun' },
@@ -289,6 +313,129 @@ const Contra = (() => {
     return c;
   }
 
+
+  // escenario del nivel 2: piso de planchas de acero, metal fundido en los huecos, pasarelas y contenedores
+  function drawFoundry() {
+    const { c, g } = mk(END, 216);
+    const r = rng32(91);
+    // soportes de las prensas (arriba)
+    for (const x of LV.presses) { R(g, '#2a2228', x - 20, 0, 40, 34); R(g, '#3e343c', x - 20, 0, 40, 2); R(g, '#16121a', x - 20, 32, 40, 2); for (let k = 0; k < 4; k++) R(g, '#ffd23f', x - 18 + k * 10, 26, 5, 3); R(g, '#ff3b3b', x + 14, 6, 2, 2); }
+    for (const [x0, x1] of GROUND) {
+      R(g, '#d8c8b8', x0, GY, x1 - x0, 1); R(g, '#8a7a78', x0, GY + 1, x1 - x0, 5);
+      for (let x = x0; x < x1; x += 32) { R(g, '#6a5a5a', x, GY + 1, 1, 5); R(g, '#b0a0a0', x + 3, GY + 3); R(g, '#b0a0a0', x + 28, GY + 3); }
+      R(g, '#4a3a3e', x0, GY + 6, x1 - x0, 2);
+      for (let y = GY + 8; y < 216; y += 6) { R(g, y % 12 ? '#2a1e24' : '#24181e', x0, y, x1 - x0, 6); for (let x = x0 + ((y >> 1) % 20); x < x1; x += 22) R(g, '#3a2a30', x, y + 1, 10, 1); }
+      // tubos bajo el piso
+      R(g, '#3e2c34', x0, 198, x1 - x0, 4); R(g, '#5a4048', x0, 198, x1 - x0, 1);
+      // bordes con franja de peligro
+      for (const ex of [x0, x1 - 6]) { if (ex <= 0 || ex >= END - 6) continue; for (let y = GY; y < 216; y += 4) R(g, (y >> 2) % 2 ? '#ffd23f' : '#16181c', ex, y, 6, 4); }
+      // decoración: barriles tóxicos, carretes de cable, lámparas
+      for (let x = x0 + 50; x < x1 - 40; x += 120 + ((r() * 80) | 0)) {
+        if (LEDGES.some(([a, b]) => x > a - 10 && x < b + 10) || LV.presses.some((px) => Math.abs(px - x) < 30) || LV.vents.some((v) => Math.abs(v - x) < 16)) continue;
+        const p = r();
+        if (p < 0.4) { R(g, '#c8a828', x, GY - 14, 10, 14); R(g, '#e8c848', x, GY - 14, 3, 14); R(g, '#7a6418', x + 8, GY - 14, 2, 14); R(g, '#16181c', x + 3, GY - 9, 4, 4); R(g, '#c8a828', x + 4, GY - 8, 2, 2); }
+        else if (p < 0.65) { disc(g, x + 6, GY - 7, 7, '#5a3a2a'); disc(g, x + 6, GY - 7, 5, '#2a1a12'); disc(g, x + 6, GY - 7, 2, '#8a6a4a'); }
+        else { R(g, '#2a2228', x, GY - 52, 2, 52); R(g, '#2a2228', x - 4, GY - 52, 10, 3); R(g, '#ffe0a8', x - 2, GY - 49, 6, 1); glows.push([x + 1, GY - 44]); }
+      }
+    }
+    // metal fundido en los huecos (brilla y burbujea)
+    for (let i = 0; i < GROUND.length - 1; i++) {
+      const x0 = GROUND[i][1], x1 = GROUND[i + 1][0];
+      R(g, '#ff6a1a', x0, 196, x1 - x0, 20); R(g, '#ffb03a', x0, 196, x1 - x0, 3); R(g, '#c8320c', x0, 206, x1 - x0, 10);
+      for (let x = x0; x < x1; x += 7) { R(g, '#fff0a0', x + ((x >> 2) & 3), 197, 2, 1); if (r() < 0.4) R(g, '#7a1a08', x, 202 + ((r() * 8) | 0), 4, 2); }
+      fires.push([x0 + (x1 - x0) / 2, 198]);
+    }
+    // cintas transportadoras (galones según el sentido)
+    for (const [x0, x1, d] of LV.belts) {
+      R(g, '#1a1418', x0, GY - 3, x1 - x0, 4); R(g, '#3a3036', x0, GY - 3, x1 - x0, 1);
+      for (let x = x0 + 4; x < x1 - 6; x += 12) { const a = d > 0 ? x : x + 4; line(g, a, GY - 2, a + 3 * d, GY - 1, '#ffd23f', 1); line(g, a + 3 * d, GY - 1, a, GY, '#ffd23f', 1); }
+      for (const ex of [x0, x1 - 4]) { disc(g, ex + 2, GY - 1, 2.5, '#5a5058'); }
+    }
+    // pasarelas, puente colgante y contenedores
+    for (const [x0, x1, y, k] of LEDGES) {
+      if (k === 'crate') {
+        const col = r() < 0.5 ? ['#a8452a', '#c8603a', '#6a2a1a'] : ['#2f5aa8', '#4a78c8', '#1c3a6a'];
+        R(g, col[0], x0, y, x1 - x0, GY - y); R(g, col[1], x0, y, x1 - x0, 2); R(g, col[2], x0, GY - 3, x1 - x0, 3);
+        for (let x = x0 + 4; x < x1 - 2; x += 5) R(g, col[2], x, y + 4, 1, GY - y - 8);
+        R(g, '#16181c', x0 + 4, y + 8, 10, 4); R(g, '#e8e0c0', x0 + 5, y + 9, 8, 2);
+        continue;
+      }
+      const below = k === 'bridge2' ? 0 : GY;
+      if (below) for (const px of [x0 + 6, x1 - 8]) { R(g, '#3a3240', px, y + 6, 3, below - y - 6); R(g, '#5a5060', px, y + 6, 1, below - y - 6); }
+      else for (const px of [x0 + 10, x1 - 12]) line(g, px, 0, px, y, '#4a4250', 1);
+      R(g, '#8a8696', x0, y, x1 - x0, 4); R(g, '#c4c0cc', x0, y, x1 - x0, 1); R(g, '#3a3640', x0, y + 4, x1 - x0, 2);
+      for (let x = x0 + 2; x < x1 - 2; x += 3) R(g, '#4a4652', x, y + 2);
+      R(g, '#6a6676', x0, y - 9, x1 - x0, 1); for (let x = x0; x < x1; x += 12) R(g, '#6a6676', x, y - 9, 1, 9);
+    }
+    return c;
+  }
+  function buildLevelArt() {
+    chunks.forEach((q) => q.remove()); chunks = [];
+    (S.glowSprs || []).forEach((q) => q.remove()); (S.fireSprs || []).forEach((f) => f.spr.remove());
+    glows = []; fires = [];
+    const big = LV.theme === 'foundry' ? drawFoundry() : drawLevel();
+    for (let i = 0; i < END / 512; i++) {
+      const { c, g } = mk(512, 216);
+      g.drawImage(big, -i * 512, 0);
+      const sp = new Spr(scene, T(c), 0);
+      sp.m.frustumCulled = true;
+      sp.at(i * 512 + 256, 108);
+      chunks.push(sp);
+    }
+    S.glowSprs = glows.map(([x, y]) => new Spr(scene, A.glow, 1, { transparent: true, add: true }).at(x, y));
+    S.fireSprs = fires.map(([x, y], i) => ({ spr: new Spr(scene, A.fire[0], 2).at(x, y - 8), x, y, ph: i }));
+    plats = GROUND.map(([x0, x1]) => ({ x0, x1, y: GY, ground: true })).concat(LEDGES.map(([x0, x1, y]) => ({ x0, x1, y, ground: false })));
+    // fondo según el tema
+    const th = LV.theme;
+    if (S.bgTheme !== th) {
+      const cv = th === 'foundry' ? [CFX.skyFoundry(), CFX.farFoundry(), CFX.midFoundry(), CFX.nearFoundry()] : [skyCanvas(), farCanvas(), midCanvas(), nearCanvas()];
+      if (S.bgTheme !== undefined || th !== 'city') cv.forEach((canvas, i) => { const t = T(canvas); t.wrapS = THREE.RepeatWrapping; layers[i].m.material.map = t; layers[i].t = t; layers[i].m.material.needsUpdate = true; });
+      S.bgTheme = th;
+    }
+    S.sun.show(th === 'city');
+    scene.background = new THREE.Color(th === 'foundry' ? 0x140c12 : 0x180e3a);
+  }
+  function useLevel(i) {
+    LV = LEVELS[i]; GROUND = LV.ground; LEDGES = LV.ledges; SPAWNS = LV.spawns; S.lv = i;
+    if (S.builtLv !== i) { S.builtLv = i; buildLevelArt(); }
+  }
+  // cintas que arrastran y prensas que golpean el suelo
+  function setupFoundry() {
+    (S.presses || []).forEach((q) => { q.head.remove(); q.rod.remove(); });
+    (S.chev || []).forEach((q) => q.spr.remove());
+    S.presses = LV.presses.map((x, i) => ({ x, t: (i * 1.1) % 3.4, head: new Spr(scene, A.pressHead, 7), rod: new Spr(scene, A.pressRod, 6.5) }));
+    S.chev = [];
+  }
+  function updateFoundry(dt) {
+    const p = player;
+    if (!S.presses) return;
+    for (const [x0, x1, d] of LV.belts) {
+      if (!p.dead && !p.inTank && p.ground && p.plat && p.plat.ground && p.x > x0 && p.x < x1) p.x = clamp(p.x + d * 46 * dt, S.camX + 8, S.camX + Engine.W - 8);
+      for (const e of ents) if (!e.dead && (e.type === 'runner' || e.type === 'dog') && e.ground && e.plat && e.plat.ground && e.x > x0 && e.x < x1) e.x += d * 46 * dt;
+    }
+    for (const q of S.presses) {
+      q.t = (q.t + dt) % 3.4;
+      const t = q.t, vis = q.x > S.camX - 30 && q.x < S.camX + Engine.W + 30;
+      let y; // borde superior del cabezal
+      if (t < 1.2) y = 36;
+      else if (t < 1.6) y = 36 + Math.sin(t * 60) * 1.2;
+      else if (t < 1.75) y = 36 + (GY - 52) * ((t - 1.6) / 0.15);
+      else if (t < 2.4) y = GY - 16;
+      else y = GY - 16 - (GY - 52) * ((t - 2.4) / 1);
+      y = Math.round(y);
+      if (vis && t >= 1.2 && t < 1.6 && Math.random() < 0.5) parts.emit(q.x + rand(-16, 16), 34, rand(-20, 20), rand(10, 40), 0.4, 0xe8e0f0, 0x6a6070, 2, 4);
+      if (vis && t >= 1.75 && !q.hitDone) { q.hitDone = true; Snd.sfx('stomp'); shake(1.8, 0.12); for (let k = 0; k < 8; k++) parts.emit(q.x + rand(-18, 18), GY - 2, rand(-80, 80), rand(-60, -20), 0.5, 0xd8c8b8, 0x4a3a3e, 2, 6); }
+      if (t < 1.75) q.hitDone = false;
+      q.head.at(q.x, y + 8);
+      q.rod.m.scale.set(8, Math.max(1, y - 34), 1); q.rod.m.position.set(q.x, -(34 + (y - 34) / 2), 6.5);
+      if (t >= 1.62 && t < 2.4) {
+        const box = [q.x - 15, y, 30, GY - y];
+        if (!p.dead && hit(box, playerBox())) { if (p.inTank) tankHit(); else hurtPlayer(); }
+        for (const e of ents) if (!e.dead && (e.type === 'runner' || e.type === 'dog') && hit(box, entBox(e))) killEnt(e);
+      }
+    }
+  }
+
   // ---------------- construcción
   function build() {
     if (built) return;
@@ -326,7 +473,7 @@ const Contra = (() => {
     A.tankE = [0, 1].map((f) => T(CFX.tankE(f, false))); A.tankEh = T(CFX.tankE(0, true));
     A.shellT = T(CFX.shell()); A.wall = [0, 1, 2].map((k) => T(CFX.wall(k)));
     A.bomberN = [T(CFX.bomberNear(true)), T(CFX.bomberNear(false))]; A.napalm = T(CFX.napalm());
-    A.dog = [0, 1].map((f) => T(CFX.dog(f, false))); A.dogH = T(CFX.dog(0, true)); A.grate = [T(CFX.grate(false)), T(CFX.grate(true))]; A.pulseRing = T(CFX.pulseRing()); A.reticle = T(CFX.reticle());
+    A.dog = [0, 1].map((f) => T(CFX.dog(f, false))); A.dogH = T(CFX.dog(0, true)); A.grate = [T(CFX.grate(false)), T(CFX.grate(true))]; A.pulseRing = T(CFX.pulseRing()); A.reticle = T(CFX.reticle()); A.pressHead = T(CFX.pressHead()); A.pressRod = T(CFX.pressRod());
     { const f = CFX.weaponFx(); A.fx = { tracer: T(f.tracer), tracerM: T(f.tracerM), pellet: T(f.pellet), beam: T(f.beam), fl: Object.fromEntries(Object.entries(f.fl).map(([k, v]) => [k, T(v)])) }; }
     BG = {
       titan: new Spr(scene, A.titan[0], -66, { transparent: true }).show(false),
@@ -341,18 +488,7 @@ const Contra = (() => {
     bgParts = new Particles(scene, 260, -64);
     mkLayer(midCanvas(), -60, 0.3, 193 - 112);
     mkLayer(nearCanvas(), -50, 0.55, 196 - 80);
-    const big = drawLevel();
-    for (let i = 0; i < END / 512; i++) {
-      const { c, g } = mk(512, 216);
-      g.drawImage(big, -i * 512, 0);
-      const s = new Spr(scene, T(c), 0);
-      s.m.frustumCulled = true;
-      s.at(i * 512 + 256, 108);
-      chunks.push(s);
-    }
-    for (const [x, y] of glows) new Spr(scene, A.glow, 1, { transparent: true, add: true }).at(x, y);
-    S.fireSprs = fires.map(([x, y], i) => ({ spr: new Spr(scene, A.fire[0], 2).at(x, y - 8), x, y, ph: i }));
-    plats = GROUND.map(([x0, x1]) => ({ x0, x1, y: GY, ground: true })).concat(LEDGES.map(([x0, x1, y]) => ({ x0, x1, y, ground: false })));
+    S.builtLv = 0; buildLevelArt();
     parts = new Particles(scene, 900, 30);
     player = { spr: new Spr(scene, A.hero.stand.fwd[0], 15), aura: new Spr(scene, A.aura, 14, { transparent: true, add: true }) };
     for (let i = 0; i < 26; i++) pbs.push({ spr: new Spr(scene, A.shot.pb, 20).show(false), on: false });
@@ -413,6 +549,7 @@ const Contra = (() => {
     if (!suitOwned(S.si)) S.si = 0;
     Store.set('contra_sel', { c: S.ci, s: S.si });
     A.hero = CFX.hero(S.ci, S.si);
+    S.lv = free() ? Store.get('contra_startlv', 0) % LEVELS.length : 0;
     Object.assign(S, { score: 0, lives: 3, loop: 0, hi: Store.get('hi_contra', 0), nextLife: 30000, baseW: C.w, wl: up.w, scrap: 0, bombs: 0,
       ab: abOpen() ? { k: C.ab, lvl: up.a, cd: 0 } : null });
     document.body.classList.remove('inmenu', 'has-bomb');
@@ -427,6 +564,7 @@ const Contra = (() => {
   function action(act) { if (act === 'barracks') { bankScrap(); openBarracks(); } }
   function bankScrap() { if (S.scrap > 0) { Store.set('contra_scrap', Store.get('contra_scrap', 0) + S.scrap); S.scrap = 0; } }
   function beginStage() {
+    useLevel(S.lv || 0);
     for (const e of ents) e.spr && e.spr.remove();
     for (const e of ents) e.extra && e.extra.forEach((s) => s.remove());
     ents = [];
@@ -444,7 +582,7 @@ const Contra = (() => {
     S.spawnList = SPAWNS.slice().sort((a, b) => a.x - b.x);
     spawnPlayer(40, true);
     player.weapon = player.weapon || S.baseW || 'N';
-    banner(`MISIÓN ${S.loop + 1}`, 'CIUDAD NEÓN · AVANZA ▶');
+    banner(`MISIÓN ${S.loop * 2 + (S.lv || 0) + 1}`, `${LV.name} · AVANZA ▶`);
     Snd.play(SONGS.contra);
   }
   function spawnPlayer(x, first) {
@@ -1157,12 +1295,11 @@ const Contra = (() => {
   }
 
   // ---------------- fase 2: perros robot, respiraderos de fuego y bomba de pulso
-  const VENTS = [1216, 1238, 1668, 1724, 3290, 3330, 3600];
   function setupPhase2() {
     (S.vents || []).forEach((v) => { v.g.remove(); v.f.forEach((q) => q.remove()); });
-    S.vents = VENTS.map((x, i) => ({ x, t: (i * 0.7) % 3, g: new Spr(scene, A.grate[0], 3).at(x, GY + 1), f: [0, 1, 2].map(() => new Spr(scene, A.fire[0], 23).scaleBy(2).show(false)) }));
+    S.vents = LV.vents.map((x, i) => ({ x, t: (i * 0.7) % 3, g: new Spr(scene, A.grate[0], 3).at(x, GY + 1), f: [0, 1, 2].map(() => new Spr(scene, A.fire[0], 23).scaleBy(2).show(false)) }));
     S.bombs = Math.min(S.bombs || 0, 3);
-    items.push({ medal: true, w: 'P', x: 3480, y: 140, vx: 0, vy: 0, ground: true, t: 0, spr: new Spr(scene, A.mach.medal.P, 6) });
+    items.push({ medal: true, w: 'P', x: LV.pulse[0], y: LV.pulse[1], vx: 0, vy: 0, ground: true, t: 0, spr: new Spr(scene, A.mach.medal.P, 6) });
   }
   // ciclo: 1,7 s apagado · 0,6 s aviso (chispas y rejilla roja) · 1 s columna de fuego
   function updateVents(dt) {
@@ -1235,12 +1372,12 @@ const Contra = (() => {
   }
 
   // ---------------- fase 1 (inspirada en Contra III): blindado, muros, tanque Magnus y bombardeo cercano
-  const TANK_X = 700, TANK_END = 1192, WALLS = [936, 1128], MB_X = 2060, RAID_X = 2560;
   function mkWall(x, hp) { return { type: 'wall', x, y: GY, hp, max: hp, flashT: 0, spr: new Spr(scene, A.wall[0], 8).at(x, GY - 31) }; }
   function setupStageExtras() {
     if (S.tank) S.tank.spr.remove();
-    S.tank = { x: TANK_X, face: 1, hp: 6, anim: 0, fireT: 0, occupied: false, dead: false, burnT: 0, up: false, inv: 0, hint: false, spr: new Spr(scene, A.tankP.f[0], 14) };
-    for (const wx of WALLS) ents.push(mkWall(wx, 14));
+    S.tank = !LV.tank ? null : { x: LV.tank.x, face: 1, hp: 6, anim: 0, fireT: 0, occupied: false, dead: false, burnT: 0, up: false, inv: 0, hint: false, spr: new Spr(scene, A.tankP.f[0], 14) };
+    for (const wx of LV.walls) ents.push(mkWall(wx, 14));
+    setupFoundry();
     if (S.raid) { S.raid.spr.remove(); S.raid = null; }
     (S.fireZ || []).forEach((z) => z.sprs.forEach((q) => q.remove())); S.fireZ = [];
     Object.assign(S, { mbDone: false, raidDone: false, lockX: null });
@@ -1284,7 +1421,7 @@ const Contra = (() => {
     const mx = (I.right ? 1 : 0) - (I.left ? 1 : 0);
     if (mx) { k.face = mx; k.anim += dt; }
     k.up = !!I.up;
-    k.x = clamp(k.x + mx * 78 * dt, Math.max(TANK_X - 40, S.camX + 26), Math.min(TANK_END + 4, S.camX + Engine.W - 26));
+    k.x = clamp(k.x + mx * 78 * dt, Math.max(LV.tank.x - 40, S.camX + 26), Math.min(LV.tank.end + 4, S.camX + Engine.W - 26));
     for (const e of ents) if (e.type === 'wall' && !e.dead && Math.abs(k.x - e.x) < 34) k.x = e.x + (k.x < e.x ? -34 : 34);
     for (const e of ents) if (!e.dead && (e.type === 'runner' || e.type === 'rifle') && Math.abs(e.x - k.x) < 26 && Math.abs(e.y - GY) < 4) { e.kx = k.face * 220; killEnt(e); shake(1, 0.08); }
     k.fireT -= dt;
@@ -1292,7 +1429,7 @@ const Contra = (() => {
     if (p.inv > 0) p.inv -= dt;
     p.x = k.x; p.y = GY; p.ground = true; p.vy = 0; p.plat = supportAt(k.x, GY);
     if (Input.pressed.a) { exitTank(false); return; }
-    if (k.x >= TANK_END) exitTank(true);
+    if (k.x >= LV.tank.end) exitTank(true);
   }
   function exitTank(forced) {
     const p = player, k = S.tank;
@@ -1498,6 +1635,7 @@ const Contra = (() => {
       <div class="hud-ui cuartel" id="cq">
         <div class="cq-top"><b class="cq-title">Cuartel</b>
           <span class="cq-bank" aria-label="Chatarra"><i class="bolt"></i>${fmtN(bank)}</span>
+          ${fr ? `<button class="cq-chip" id="cqlv">Partir en misión ${Store.get('contra_startlv', 0) % LEVELS.length + 1}</button>` : ''}
           <button class="cq-chip${fr ? ' on' : ''}" id="cqfree" aria-pressed="${fr}">${fr ? 'Prueba: todo abierto' : 'Modo prueba'}</button></div>
         <div class="cq-lockers" data-row="0" role="radiogroup" aria-label="Personaje">
           ${CFX.CHARS.map((c, i) => `<button class="locker${i === ci ? ' on' : ''}" data-ci="${i}" role="radio" aria-checked="${i === ci}"><span class="tag">${c.n}</span><img src="${CFX.portrait(i, i === ci ? si : 0)}" alt="${c.n}"><small>${c.role}</small></button>`).join('')}
@@ -1518,6 +1656,7 @@ const Contra = (() => {
     root.querySelectorAll('.cq-row').forEach((b) => b.addEventListener('click', () => { S.row = +b.dataset.row; Snd.sfx('move'); renderBarracks(); }));
     UI.$('.cq-go').addEventListener('click', () => { Snd.unlock(); goMission(); });
     UI.$('#cqfree').addEventListener('click', () => { Store.set('contra_free', !free()); Snd.sfx('select'); renderBarracks(); });
+    const lvb = UI.$('#cqlv'); if (lvb) lvb.addEventListener('click', () => { Store.set('contra_startlv', (Store.get('contra_startlv', 0) + 1) % LEVELS.length); Snd.sfx('select'); renderBarracks(); });
   }
   function pickChar(i) { S.ci = (i + CFX.CHARS.length) % CFX.CHARS.length; if (!suitOwned(S.si)) S.si = 0; Snd.sfx('move'); renderBarracks(); }
   function cycleSuit(d) { S.si = (S.si + d + CFX.SUITS.length) % CFX.SUITS.length; Snd.sfx('move'); renderBarracks(); }
@@ -1649,8 +1788,8 @@ const Contra = (() => {
       const prevCam = S.camX;
       if (!p.dead) S.camX = clamp(Math.max(S.camX, p.x - W * 0.42), 0, END - W);
       if (S.lockX != null) S.camX = Math.min(S.camX, S.lockX);
-      if (!S.mbDone && S.camX >= MB_X) startMidBoss();
-      if (!S.raidDone && S.camX >= RAID_X) startRaid();
+      if (!S.mbDone && LV.mb != null && S.camX >= LV.mb) startMidBoss();
+      if (!S.raidDone && LV.raid != null && S.camX >= LV.raid) startRaid();
       S.camDX = S.camX - prevCam;
       while (S.spawnI < S.spawnList.length && S.spawnList[S.spawnI].x <= S.camX + W + 16) spawnEnt(S.spawnList[S.spawnI++]);
       if (!S.bossTrig && S.lockX == null) {
@@ -1668,6 +1807,7 @@ const Contra = (() => {
       updateVents(dt);
       updatePulse(dt);
       updateTitan(dt);
+      updateFoundry(dt);
       if (Input.pressed.d) usePulse();
     } else if (S.state === 'clear') {
       S.clearT += dt;
@@ -1681,7 +1821,7 @@ const Contra = (() => {
         if (!Store.get('contra_clear', false)) { Store.set('contra_clear', true); if (!S.ab) { const C = CFX.CHARS[S.ci]; S.ab = { k: C.ab, lvl: upOf(S.ci).a, cd: 0 }; } UI.toast(`¡HABILIDAD ABIERTA: ${ABIL[S.ab.k].n.toUpperCase()}!`); }
         banner('¡MISIÓN CUMPLIDA!', `BONO +${bonus}`);
       }
-      if (S.clearT > 4.5) { S.clearShown = false; S.loop++; const w = p.weapon; beginStage(); p.weapon = w; }
+      if (S.clearT > 4.5) { S.clearShown = false; if (S.lv === 0) S.lv = 1; else { S.lv = 0; S.loop++; } const w = p.weapon; beginStage(); p.weapon = w; }
     }
     updateItems(dt);
     for (const f of S.fireSprs) f.spr.set(A.fire[Math.floor(S.t * 10 + f.ph) % 3]);
