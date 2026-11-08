@@ -400,10 +400,10 @@ class Particles {
 
 // ---------- entrada: teclado + táctil + gamepad, con "latch" para toques rápidos
 const Input = (() => {
-  const ACTS = ['left', 'right', 'up', 'down', 'a', 'b', 'start', 'select'];
+  const ACTS = ['left', 'right', 'up', 'down', 'a', 'b', 'c', 'start', 'select'];
   const KEYS = {
     ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down',
-    KeyZ: 'a', Space: 'a', KeyJ: 'a', KeyX: 'b', KeyK: 'b', ShiftLeft: 'b', Enter: 'start', KeyP: 'start', Escape: 'start', Backspace: 'select', Tab: 'select',
+    KeyZ: 'a', Space: 'a', KeyJ: 'a', KeyX: 'b', KeyK: 'b', ShiftLeft: 'b', KeyV: 'c', KeyL: 'c', Enter: 'start', KeyP: 'start', Escape: 'start', Backspace: 'select', Tab: 'select',
   };
   const kb = {}, touch = {}, latch = {}, pad = {}, held = {}, prev = {}, pressed = {};
   const api = { held, pressed, touch, onKey: null, anyPressed: false };
@@ -427,7 +427,7 @@ const Input = (() => {
       const ax = gp.axes[0] || 0, ay = gp.axes[1] || 0;
       pad.left = pad.left || b(14) || ax < -0.45; pad.right = pad.right || b(15) || ax > 0.45;
       pad.up = pad.up || b(12) || ay < -0.45; pad.down = pad.down || b(13) || ay > 0.45;
-      pad.a = pad.a || b(0); pad.b = pad.b || b(2) || b(1); pad.start = pad.start || b(9); pad.select = pad.select || b(8);
+      pad.a = pad.a || b(0); pad.b = pad.b || b(2) || b(1); pad.c = pad.c || b(3) || b(5); pad.start = pad.start || b(9); pad.select = pad.select || b(8);
     }
   }
   api.poll = () => {
@@ -601,7 +601,7 @@ const Snd = (() => {
   }
   // prepara los efectos de a uno en los ratos libres (primero una variante de cada uno, después el resto)
   function warmFoley() {
-    const list = Foley.names(true).map((n) => [n, false]).concat(Foley.names(true).map((n) => [n, true]));
+    const list = Foley.names().map((n) => [n, false]).concat(Foley.names().map((n) => [n, true]));
     const idle = window.requestIdleCallback || ((f) => setTimeout(() => f({ timeRemaining: () => 8 }), 40));
     const step = (dl) => {
       while (list.length && dl.timeRemaining() > 4) { const [n, all] = list.shift(); try { foleyBufs(n, all); } catch (e) { /* sin audio */ } }
@@ -708,7 +708,7 @@ const Snd = (() => {
     const now = ctx.currentTime;
     if (last[name] && now - last[name] < 0.035) return;
     last[name] = now;
-    try { if (Foley.has(name, bank === 'rally')) playFoley(name, o); else if (SFX[name]) SFX[name](); } catch (e) { /* nodo de audio no disponible */ }
+    try { if (Foley.has(name, bank)) playFoley(name, o); else if (SFX[name]) SFX[name](); } catch (e) { /* nodo de audio no disponible */ }
   };
   // --- secuenciador de música
   const midi = (s) => {

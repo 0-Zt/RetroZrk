@@ -290,17 +290,17 @@ function launch(i) {
   document.body.classList.remove('inmenu');
   game = i === 0 ? Rally : Contra;
   document.body.classList.toggle('g-rally', game === Rally);
+  document.body.classList.toggle('g-contra', game === Contra);
   Input.reset();
   game.start();
   keepAwake(true);
-  if (game === Contra && Engine.touch && innerHeight > innerWidth) UI.toast('GIRA EL TELÉFONO PARA VER MÁS NIVEL');
 }
 function toMenu() {
   if (game) game.exit();
   Snd.loopsOff();
   keepAwake(false);
   game = null; mode = 'menu';
-  document.body.classList.remove('g-rally');
+  document.body.classList.remove('g-rally', 'g-contra');
   document.body.classList.add('inmenu');
   UI.setHud(''); UI.setButtons('OK', 'VOLVER');
   $('#menu').hidden = false;
@@ -365,7 +365,7 @@ function bindPad() {
     el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); el.addEventListener('lostpointercapture', up);
     el.addEventListener('contextmenu', (e) => e.preventDefault());
   };
-  btn($('#btnA'), 'a'); btn($('#btnB'), 'b'); btn($('#btnStart'), 'start'); btn($('#btnSel'), 'select');
+  btn($('#btnA'), 'a'); btn($('#btnB'), 'b'); btn($('#btnC'), 'c'); btn($('#btnStart'), 'start'); btn($('#btnSel'), 'select');
 }
 
 // ---------------- layout responsivo

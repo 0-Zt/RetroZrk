@@ -707,6 +707,70 @@ body.g-rally .rb small{display:block;font-family:'Jersey 10',var(--ui);font-size
 body.g-rally .rb small::first-letter{text-transform:uppercase}
 body.g-rally .pill{font-family:'Jersey 10',var(--ui);font-size:14px;letter-spacing:.02em;color:#a4a5b1;background:#2e3037;box-shadow:0 3px 0 #121316,inset 0 0 0 2px #121316}
 body.g-rally #keys kbd{background:#2e3037;box-shadow:inset 0 0 0 1px #4d505c}
+/* ---------- Neón Commando · cuartel y piezas nuevas ----------
+   El cuartel de la resistencia: taquillas de acero, chapas de identificación con el nombre,
+   cinta de peligro naranja para la acción principal y la chatarra como moneda (tornillo). */
+#btnC{display:none}
+body.g-contra #btnC{display:block;width:48px;height:48px;left:52px;top:-34px;font-size:18px;background:radial-gradient(circle at 35% 30%,#ffd29a,#ff8a1e 60%);color:#2a1406}
+body.g-contra #btnC small{top:auto;bottom:calc(100% + 5px)}
+body.touch.landscape.g-contra #btnC{top:-40px}
+.bolt{display:inline-block;flex:0 0 auto;width:calc(var(--px)*5);height:calc(var(--px)*5);background:radial-gradient(circle,#2e3140 26%,#c4c9d6 30%,#8a90a2 70%);box-shadow:0 0 0 calc(var(--px)*.5) #000;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
+.hscrap{display:inline-flex;align-items:center;gap:calc(var(--px)*2);color:#d8dce8;margin-left:calc(var(--px)*4);font-variant-numeric:tabular-nums}
+.abil{position:relative;display:inline-grid;place-items:center;width:calc(var(--px)*11);height:calc(var(--px)*11);margin-left:calc(var(--px)*4);background:#1a1530;box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) #463c7c;overflow:hidden}
+.abil i{position:absolute;left:0;right:0;bottom:0;height:0;background:#7a4a1a}
+.abil b{position:relative;font-family:var(--display);font-weight:700;font-size:calc(var(--px)*7);color:#c8b8a8}
+.abil.ready i{background:#ff8a1e}.abil.ready b{color:#1a0b06}
+.abil.ready{box-shadow:0 0 0 var(--px) #000,0 0 calc(var(--px)*6) rgba(255,138,30,.7)}
+body.g-contra #screen{--olive:#3f4628;--steel:#5d6672;--steel-d:#3a414b;--steel-l:#8a94a2;--khaki:#d9cfaa;--haz:#ff8a1e;--haz-d:#9a4a0c;--ink:#16181c;
+  --t10:'Jersey 10','Pixelify Sans',monospace;--t15:'Jersey 15','Pixelify Sans',monospace;--f0:calc(var(--px)*8);--f1:calc(var(--px)*10);--f2:calc(var(--px)*15);--f3:calc(var(--px)*20)}
+.cuartel{position:absolute;inset:0;font-family:var(--t10);font-size:var(--f1);color:var(--khaki);text-shadow:none;letter-spacing:0}
+.cq-top{position:absolute;left:calc(var(--px)*8);right:calc(var(--px)*8);top:calc(var(--px)*6);display:flex;align-items:center;gap:calc(var(--px)*5)}
+.cq-title{font-family:var(--t15);font-weight:400;font-size:var(--f2);color:#fff;margin-right:auto;text-shadow:0 var(--px) 0 #000,var(--px) 0 0 #000,calc(var(--px)*-1) 0 0 #000,0 calc(var(--px)*-1) 0 #000}
+.cq-bank{display:inline-flex;align-items:center;gap:calc(var(--px)*2);background:var(--ink);padding:calc(var(--px)*2) calc(var(--px)*4);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--steel-d);color:#e6e9f0;line-height:1}
+.cq-chip{border:0;cursor:pointer;font:inherit;font-size:var(--f1);line-height:1;color:var(--khaki);background:var(--ink);padding:calc(var(--px)*2) calc(var(--px)*4);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--steel-d)}
+.cq-chip.on{color:var(--ink);background:var(--khaki)}
+/* taquillas */
+.cq-lockers{position:absolute;left:calc(var(--px)*8);top:calc(var(--px)*24);bottom:calc(var(--px)*8);width:46%;display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--px)*4)}
+.locker{position:relative;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--px)*2);padding:calc(var(--px)*16) calc(var(--px)*2) calc(var(--px)*5);
+  font:inherit;color:var(--khaki);background:linear-gradient(90deg,var(--steel-d),var(--steel) 12%,var(--steel) 88%,var(--steel-d));box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--steel-l)}
+.locker::before{content:"";position:absolute;left:28%;right:28%;top:calc(var(--px)*5);height:calc(var(--px)*7);background:repeating-linear-gradient(180deg,var(--ink) 0 var(--px),transparent var(--px) calc(var(--px)*2))}
+.locker .tag{position:absolute;top:calc(var(--px)*14);left:50%;transform:translateX(-50%);padding:0 calc(var(--px)*3);background:var(--olive);color:var(--khaki);font-family:var(--t15);font-size:var(--f2);line-height:1.05;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 0 0 var(--px) #000}
+.locker img{width:100%;height:auto;aspect-ratio:40/42;object-fit:contain;image-rendering:pixelated;margin-top:calc(var(--px)*10)}
+.locker small{position:absolute;bottom:calc(var(--px)*5);left:0;right:0;text-align:center}
+.locker small{font-size:var(--f0);color:#cfd5de}
+.locker.on{background:linear-gradient(90deg,#4a5260,#6c7684 12%,#6c7684 88%,#4a5260);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--steel-l),0 0 0 calc(var(--px)*2.5) var(--haz)}
+.locker:not(.on) img{filter:saturate(.6) brightness(.8)}
+.cq-lockers.sel .locker.on{box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--steel-l),0 0 0 calc(var(--px)*2.5) #fff}
+/* panel: hoja de equipo */
+.cq-panel{position:absolute;right:calc(var(--px)*8);top:calc(var(--px)*24);bottom:calc(var(--px)*8);width:calc(54% - var(--px)*22);display:flex;flex-direction:column;gap:calc(var(--px)*3);padding:calc(var(--px)*5) calc(var(--px)*6);background:rgba(22,24,28,.92);box-shadow:0 0 0 var(--px) #000,inset 0 var(--px) 0 var(--steel-d)}
+.cq-row{display:grid;grid-template-columns:calc(var(--px)*36) 1fr auto auto;align-items:center;gap:calc(var(--px)*4);padding:calc(var(--px)*2) calc(var(--px)*3);cursor:pointer}
+.cq-row.sel{box-shadow:inset calc(var(--px)*2) 0 0 var(--haz);background:rgba(255,138,30,.08)}
+.cq-row.off b{color:#7d8290}
+.cq-k{font-size:var(--f0);color:#9aa0ac}
+.cq-row b{font-weight:400;color:#fff}
+.cq-row .pips{display:flex;gap:var(--px)}
+.cq-row .pips b{width:calc(var(--px)*5);height:calc(var(--px)*3);background:#3a3f4a}
+.cq-row .pips b.on{background:var(--haz)}
+.cq-suit{display:flex;align-items:center;gap:calc(var(--px)*3)}
+.cq-suit b{min-width:calc(var(--px)*44);text-align:center}
+.cq-arr{border:0;cursor:pointer;font:inherit;font-size:var(--f0);width:calc(var(--px)*11);height:calc(var(--px)*11);background:var(--steel-d);color:#fff;box-shadow:inset 0 0 0 var(--px) var(--steel)}
+.cq-up{border:0;cursor:pointer;font:inherit;font-size:var(--f0);line-height:1;display:inline-flex;align-items:center;gap:calc(var(--px)*2);color:var(--ink);background:var(--khaki);padding:calc(var(--px)*2) calc(var(--px)*3);box-shadow:0 0 0 var(--px) #000}
+.cq-cost{display:inline-flex;align-items:center;gap:var(--px)}
+.cq-max{font-size:var(--f0);color:#7d8290}
+.cq-row.off .cq-max{grid-column:3 / span 2}
+.cq-desc{margin:auto 0 0;font-size:var(--f0);line-height:1.15;color:#b9bfca;min-height:calc(var(--px)*18)}
+.cq-go{border:0;cursor:pointer;font-family:var(--t15);font-size:var(--f3);line-height:1;color:#1a0b04;padding:calc(var(--px)*4) calc(var(--px)*6);
+  background:linear-gradient(var(--haz),var(--haz)) padding-box,repeating-linear-gradient(-45deg,#16181c 0 calc(var(--px)*3),#ffd23f calc(var(--px)*3) calc(var(--px)*6)) border-box;border:calc(var(--px)*2) solid transparent;box-shadow:0 calc(var(--px)*2) 0 var(--haz-d)}
+.cq-go.sel{outline:calc(var(--px)*1.5) solid #fff;outline-offset:var(--px)}
+.cuartel :focus-visible{outline:calc(var(--px)*1.5) solid #fff;outline-offset:var(--px)}
+@media (max-aspect-ratio:13/10){
+  .cq-lockers{left:calc(var(--px)*6);right:calc(var(--px)*6);width:auto;top:calc(var(--px)*22);bottom:auto;height:calc(var(--px)*76)}
+  .cq-panel{left:calc(var(--px)*6);right:calc(var(--px)*6);width:auto;top:calc(var(--px)*102);bottom:calc(var(--px)*5);gap:calc(var(--px)*2);padding:calc(var(--px)*3) calc(var(--px)*5)}
+  .locker{padding:calc(var(--px)*10) 0 calc(var(--px)*8)}.locker img{margin-top:calc(var(--px)*6);width:calc(var(--px)*48)}.locker small{bottom:calc(var(--px)*2)}
+  .locker .tag{top:calc(var(--px)*9);font-size:var(--f1)}.locker::before{top:calc(var(--px)*3);height:calc(var(--px)*4)}
+  .cq-desc{display:none}.cq-go{font-size:var(--f2);padding:calc(var(--px)*3) calc(var(--px)*5);margin-top:auto}
+  .cq-row{padding:var(--px) calc(var(--px)*3)}
+}
 @media (prefers-reduced-motion:reduce){.cart,.rb,.pill{transition:none}.fuel.low i{animation:none}}
 </style>
 
@@ -730,11 +794,11 @@ body.g-rally #keys kbd{background:#2e3037;box-shadow:inset 0 0 0 1px #4d505c}
     </div>
   </div>
   <div id="keys">
-    <kbd>← ↑ → ↓</kbd> mover/apuntar &nbsp; <kbd>Z</kbd> gas/salto &nbsp; <kbd>X</kbd> ítem/fuego &nbsp; <kbd>ENTER</kbd> pausa &nbsp; <kbd>M</kbd> sonido &nbsp; <kbd>C</kbd> CRT
+    <kbd>← ↑ → ↓</kbd> mover/apuntar &nbsp; <kbd>Z</kbd> gas/salto &nbsp; <kbd>X</kbd> ítem/fuego &nbsp; <kbd>V</kbd> habilidad &nbsp; <kbd>ENTER</kbd> pausa &nbsp; <kbd>M</kbd> sonido &nbsp; <kbd>C</kbd> CRT
   </div>
   <div id="pad">
     <div class="pl"><div id="dpad"><span class="arm h"></span><span class="arm v"></span><span class="hub"></span><span class="tri tu"></span><span class="tri td"></span><span class="tri tl"></span><span class="tri tr"></span></div></div>
-    <div class="pr"><div class="abtns"><button class="rb" id="btnB" aria-label="Botón B">B<small id="lblB">VOLVER</small></button><button class="rb" id="btnA" aria-label="Botón A">A<small id="lblA">OK</small></button></div></div>
+    <div class="pr"><div class="abtns"><button class="rb" id="btnC" aria-label="Botón de habilidad">H<small>HABILIDAD</small></button><button class="rb" id="btnB" aria-label="Botón B">B<small id="lblB">VOLVER</small></button><button class="rb" id="btnA" aria-label="Botón A">A<small id="lblA">OK</small></button></div></div>
     <div class="pm"><button class="pill" id="btnSel">SELECT</button><button class="pill" id="btnStart">START</button></div>
   </div>
 </div>

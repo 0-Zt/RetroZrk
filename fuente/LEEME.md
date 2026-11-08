@@ -3,7 +3,7 @@
 El juego se escribe en `src/` y se arma con un solo comando:
 
 ```bash
-python3 tools/build.py --version v12
+python3 tools/build.py --version v13
 ```
 
 Eso deja en `dist/`:
@@ -15,4 +15,4 @@ Eso deja en `dist/`:
 - `test.html`: igual a la de Android, con `window.__dbg` para pruebas automáticas.
 
 Orden de los archivos (se concatenan en un solo módulo): core, sfx, music, art, worldmap,
-rallymaps, rallytracks, rally, contra, main. `body.html` tiene el CSS y el marcado.
+rallymaps, rallytracks, rally, contrafx, contra, main. `body.html` tiene el CSS y el marcado.

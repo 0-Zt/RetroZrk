@@ -263,8 +263,8 @@ function heroBall(P, k) {
   R(g, P.eye, 15, 8);
   return outline(rot90(c, k));
 }
-function buildHeroArt() {
-  const P = HERO, A = { run: {}, stand: {}, air: {} };
+function buildHeroArt(P = HERO, post = null) {
+  const A = { run: {}, stand: {}, air: {} };
   for (const aim of ['fwd', 'dup', 'ddown']) {
     A.run[aim] = RUN_LEG.map((lf, f) => heroPose(P, { legF: lf, legB: RUN_LEG[(f + 3) % 6], aim, bob: f === 1 || f === 4 ? 1 : 0, tf: f % 3 }));
   }
@@ -275,7 +275,7 @@ function buildHeroArt() {
   A.hurt = heroPose(P, { aim: 'flail', legF: [3, 5, 5, 11], legB: [-3, 5, -5, 11], tf: 2 });
   A.dead = heroPose(P, { prone: true, dead: true });
   // convertir a texturas
-  const tx = (o) => (o instanceof HTMLCanvasElement ? T(o) : Array.isArray(o) ? o.map(tx) : Object.fromEntries(Object.entries(o).map(([k, v]) => [k, tx(v)])));
+  const tx = (o) => (o instanceof HTMLCanvasElement ? T(post ? post(o) : o) : Array.isArray(o) ? o.map(tx) : Object.fromEntries(Object.entries(o).map(([k, v]) => [k, tx(v)])));
   return tx(A);
 }
 function buildGruntArt() {

@@ -15,7 +15,7 @@ SRC = os.path.join(ROOT, 'src')
 DIST = os.path.join(ROOT, 'dist')
 ASSETS = os.path.join(ROOT, 'assets')          # fonts/ y vendor/three.min.js
 ORDER = ['core.js', 'sfx.js', 'music.js', 'art.js', 'worldmap.js', 'rallymaps.js',
-         'rallytracks.js', 'rally.js', 'contra.js', 'main.js']
+         'rallytracks.js', 'rally.js', 'contrafx.js', 'contra.js', 'main.js']
 VERSION = sys.argv[sys.argv.index('--version') + 1] if '--version' in sys.argv else 'v12'
 
 def rd(p):

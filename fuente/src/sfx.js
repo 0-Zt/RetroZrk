@@ -108,7 +108,7 @@ const Foley = (() => {
   // ---------- los efectos. [duración, pico, función, variación de tono al tocar]
   // UI = consola (sirve a todos los juegos); el resto es del Gas Rally
   const D = {};
-  const def = (name, dur, peak, fn, jit = 1, ui = false) => { D[name] = { dur, peak, fn, jit, ui }; };
+  const def = (name, dur, peak, fn, jit = 1, ui = false) => { D[name] = { dur, peak, fn, jit, bank: ui === true ? 'ui' : ui || 'rally' }; };
 
   // --- consola y menús: táctiles, como perillas y teclas de verdad
   def('move', 0.06, 0.32, (c) => { c.click(0, c.rr(3000, 3800), 1, 0.0014, 3); c.fm(0.001, c.rr(1900, 2100), 1.41, 0.6, 0.01, 0.35); }, 1, true);
@@ -361,10 +361,33 @@ const Foley = (() => {
     }, 1.2);
   }, 0.2);
 
+  // --- Neón Commando: fondo de guerra, habilidades y chatarra
+  const K = 'contra';
+  def('stomp', 0.7, 0.55, (c) => { c.thump(0, 55, 32, 0.12, 1, 2.5); c.hiss(0, 0.6, 'brown', LP, 260, 80, 0.7, 0.01, 0.18, 1.6); c.modal(0.02, 120, [1, 2.3, 3.6], [0.4, 0.25, 0.15], [0.09, 0.06, 0.04], 0.35); }, 0.5, K);
+  def('beam', 1.5, 0.4, (c) => {
+    // rayo del titán a lo lejos: zumbido que sube y chisporrotea
+    let p = 0, q = 0; c.layer(0, 1.45, (t) => { const f = 90 + 60 * Math.min(1, t / 0.4); p += TAU * f / c.sr; q += TAU * f * 3.01 / c.sr; return (Math.sin(p) + 0.5 * Math.sin(q) + 0.3 * (c.r() * 2 - 1)) * Math.min(1, t / 0.15) * Math.min(1, (1.45 - t) / 0.2); }, 0.8);
+    c.hiss(0, 1.4, 'white', BP, 2400, 3200, 2, 0.1, 0.5, 0.2);
+  }, 0.3, K);
+  def('collapse', 2.6, 0.6, (c) => { rumble(c, 2.5, 260, 2.4); for (let i = 0; i < 10; i++) c.modal(c.rr(0.1, 1.8), c.rr(300, 900), [1, 2.4, 3.9], [0.5, 0.3, 0.15], [0.06, 0.04, 0.03], 0.18); c.hiss(0.2, 2.2, 'pink', LP, 1400, 400, 0.7, 0.3, 0.8, 0.6); }, 0.3, K);
+  def('drone', 2.4, 0.35, (c) => { const f = svf(), g = pinkGen(c.r); let p = 0; c.layer(0, 2.35, (t) => { p += TAU * 82 / c.sr; return (f(g(), 300, 1.2, c.sr, BP) * 1.4 + Math.sin(p) * 0.4 * (1 + 0.3 * Math.sin(TAU * 5 * t))) * Math.sin(Math.PI * t / 2.35); }, 1); }, 0.2, K);
+  def('farboom', 2.6, 0.7, (c) => {
+    // explosión grande a lo lejos: golpe sordo, rugido largo y cola que rueda por la ciudad
+    c.thump(0, 48, 28, 0.25, 1.4, 2.5);
+    c.hiss(0, 2.5, 'brown', LP, 700, 60, 0.7, 0.01, 0.7, 2.6);
+    c.hiss(0.05, 1.6, 'pink', LP, 1800, 250, 0.7, 0.02, 0.35, 0.5);
+    for (let i = 0; i < 4; i++) c.thump(c.rr(0.3, 1.6), c.rr(50, 70), 30, 0.08, 0.35, 2);
+  }, 0.3, K);
+  def('throw', 0.3, 0.4, (c) => { c.click(0, 2600, 0.6, 0.002); c.modal(0.005, 1900, [1, 2.7], [0.6, 0.3], [0.03, 0.02], 0.3); c.hiss(0.02, 0.25, 'pink', BP, 900, 2400, 1.4, 0.03, 0.08, 0.8); }, 0.5, K);
+  def('gboom', 1.1, 0.7, (c) => { c.thump(0, 90, 36, 0.1, 1.4, 3); c.hiss(0, 1, 'brown', LP, 3000, 120, 0.7, 0.001, 0.22, 2.2); c.hiss(0, 0.2, 'white', HP, 4000, 2000, 0.7, 0.001, 0.03, 0.5); for (let i = 0; i < 8; i++) c.modal(c.rr(0.08, 0.7), c.rr(600, 1800), [1, 2.4, 3.7], [0.5, 0.3, 0.2], [0.03, 0.02, 0.015], 0.14); }, 0.4, K);
+  def('barrier', 0.7, 0.45, (c) => { [1, 1.007].forEach((dt) => { let p = 0, q = 0; c.layer(0, 0.65, (t) => { const f = (160 + 380 * Math.min(1, t / 0.25)) * dt; q += TAU * f * 2 / c.sr; p += TAU * f / c.sr; return Math.sin(p + 1.8 * Math.sin(q)) * Math.min(1, t / 0.03) * Math.exp(-Math.max(0, t - 0.25) / 0.12); }, 0.5); }); c.click(0, 3000, 0.4); }, 0.3, K);
+  def('dash', 0.35, 0.45, (c) => { const f = svf(), g = pinkGen(c.r); c.layer(0, 0.32, (t) => f(g(), 900 + 3200 * Math.sin(Math.PI * Math.min(1, t / 0.3)), 1.8, c.sr, BP) * Math.sin(Math.PI * t / 0.32), 1.8); let p = 0; c.layer(0, 0.2, (t) => { p += TAU * (600 + 1800 * t / 0.2) / c.sr; return Math.sin(p) * env(t, 0.005, 0.06); }, 0.25); }, 0.5, K);
+  def('chink', 0.16, 0.3, (c) => { c.modal(0, 2600, [1, 1.52, 2.33], [1, 0.5, 0.3], [0.04, 0.03, 0.02], 1, 0.0005); c.click(0, 5000, 0.3, 0.0008); }, 1, K);
+
   // ---------- API
   return {
-    has: (name, rally) => !!D[name] && (D[name].ui || rally),
-    names: (rally) => Object.keys(D).filter((k) => D[k].ui || rally),
+    has: (name, bank) => !!D[name] && (D[name].bank === 'ui' || D[name].bank === bank),
+    names: () => Object.keys(D),
     jitter: (name) => (D[name] ? D[name].jit : 0),
     render(name, sr, seed) {
       const d = D[name], c = ctx(sr, d.dur, seed);
