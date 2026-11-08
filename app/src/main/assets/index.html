@@ -11,6 +11,8 @@
 @font-face{font-family:'Pixelify Sans';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/pixelify-sans-latin-700-normal.woff2) format('woff2')}
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/silkscreen-latin-400-normal.woff2) format('woff2')}
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/silkscreen-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Jersey 10';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/jersey-10-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Jersey 15';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/jersey-15-latin-400-normal.woff2) format('woff2')}
 </style>
 <style>
 /* Layout: consola portátil — pantalla arriba y controles abajo (vertical), controles a los lados (horizontal), pantalla grande sola (escritorio) */
@@ -473,6 +475,254 @@ body.touch .panel.set p{display:none}
 .lround{display:flex;flex-wrap:wrap;align-items:center;gap:calc(var(--px)*3)}
 .lround span{color:var(--sun);margin-right:calc(var(--px)*2)}
 .lround .chip{font-size:calc(var(--px)*5);padding:calc(var(--px)*2) calc(var(--px)*4)}
+/* ---------- Gas Rally · identidad de ruta ----------
+   Todo sale de la calle: asfalto para los paneles, pintura vial amarilla para el foco y las cifras,
+   verde de autopista para la acción principal, azul de señal de servicios para lo secundario,
+   rojo de bidón para alertas, letreros de mensaje ámbar para avisos y papel para los documentos
+   (tarjeta de embarque y parte policial). Letra Jersey 10/15: pixel condensada, legible en chico.
+   Escala (en pixeles del juego): 8 denso · 10 texto · 15 títulos · 20 destino y cifras · 30 cartel. */
+body.g-rally #screen{
+  --asf:#25262d;--asf2:#31333c;--lin:#4d505c;--tiza:#ecebe3;--gris:#a4a5b1;
+  --vial:#f2c12e;--ruta:#1f7a4e;--ruta-d:#0f4a2e;--serv:#2a5aa8;--serv-d:#173468;--bidon:#d93a2e;--led:#ffb21f;
+  --t10:'Jersey 10','Pixelify Sans',monospace;--t15:'Jersey 15','Pixelify Sans',monospace;
+  --f0:calc(var(--px)*8);--f1:calc(var(--px)*10);--f2:calc(var(--px)*15);--f3:calc(var(--px)*20);--f4:calc(var(--px)*30);
+  box-shadow:0 0 0 3px #0c0c0f,0 0 0 7px #3a3b43,0 0 0 9px #0c0c0f,0 18px 40px -12px rgba(0,0,0,.7);
+}
+body.g-rally{background:radial-gradient(120% 80% at 50% 0%,#2e2f36,#18191d 70%)}
+body.touch.portrait.g-rally #screen,body.touch.landscape.g-rally #screen{box-shadow:0 0 0 2px #000}
+/* foco: siempre una raya de pintura amarilla */
+body.g-rally #screen .sel:not(.mbtn),body.g-rally #screen :focus-visible:not(.mbtn){outline:calc(var(--px)*1.5) solid var(--vial);outline-offset:var(--px)}
+body.g-rally .hud-ui,body.g-rally .gpanel,body.g-rally .wpanel,body.g-rally .lcard,body.g-rally .gpage{font-family:var(--t10);font-weight:400;letter-spacing:0;text-transform:none}
+/* paneles de asfalto: planos, sin brillo; los letreros son lo único redondeado */
+body.g-rally .gpanel,body.g-rally .wpanel,body.g-rally .lcard,body.g-rally .gpage{background:var(--asf);color:var(--tiza);box-shadow:0 0 0 var(--px) #000,inset 0 var(--px) 0 var(--lin);text-shadow:none}
+body.g-rally .gtitle{font-family:var(--t15);font-weight:400;font-size:var(--f2);letter-spacing:0;color:var(--tiza);text-shadow:0 var(--px) 0 #000,var(--px) 0 0 #000,calc(var(--px)*-1) 0 0 #000,0 calc(var(--px)*-1) 0 #000}
+body.g-rally .ptag{font-family:var(--t10);font-size:var(--f0);color:var(--led);letter-spacing:0}
+body.g-rally .chip{font-family:var(--t10);font-weight:400;font-size:var(--f1);letter-spacing:0;line-height:1;color:var(--tiza);background:var(--asf);padding:calc(var(--px)*2) calc(var(--px)*4);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--lin)}
+body.g-rally .chip b{color:var(--vial);font-weight:400}
+body.g-rally .chip.on{color:var(--asf);background:var(--tiza);box-shadow:0 0 0 var(--px) #000}
+body.g-rally .hcoin{color:var(--vial);font-family:var(--t10)}
+body.g-rally .coin{background:radial-gradient(circle at 35% 35%,#fff3b5,var(--vial) 50%,#a87d10);border-radius:50%}
+body.g-rally .arr{background:var(--asf2);color:var(--tiza);font-family:var(--t10);font-size:var(--f1);box-shadow:0 0 0 var(--px) #000,inset 0 var(--px) 0 var(--lin)}
+/* letrero de autopista: verde, filete blanco, flecha. Es la acción principal de cada pantalla */
+body.g-rally .sign{display:flex;align-items:center;gap:calc(var(--px)*5);width:100%;border:0;cursor:pointer;text-align:left;color:#fff;background:var(--ruta);border-radius:calc(var(--px)*3);
+  padding:calc(var(--px)*4) calc(var(--px)*6);font-family:var(--t10);font-weight:400;font-size:var(--f1);letter-spacing:0;text-shadow:none;
+  box-shadow:inset 0 0 0 var(--px) var(--ruta),inset 0 0 0 calc(var(--px)*2) #fff,0 calc(var(--px)*2) 0 var(--ruta-d),0 calc(var(--px)*2) 0 var(--px) #000}
+body.g-rally .sign>span{display:flex;flex-direction:column;gap:var(--px);min-width:0}
+body.g-rally .sign small{font-size:var(--f1);line-height:1;color:#d4ecdf}
+body.g-rally .sign b{font-family:var(--t15);font-weight:400;font-size:var(--f3);line-height:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.g-rally .sign .arw{flex:0 0 auto;margin-left:auto;width:calc(var(--px)*11);height:calc(var(--px)*12);background:#fff;clip-path:polygon(50% 0,100% 48%,68% 48%,68% 100%,32% 100%,32% 48%,0 48%)}
+body.g-rally .sign.buy{background:#a8780e;box-shadow:inset 0 0 0 var(--px) #a8780e,inset 0 0 0 calc(var(--px)*2) #fff4c8,0 calc(var(--px)*2) 0 #5e4206,0 calc(var(--px)*2) 0 var(--px) #000}
+body.g-rally .sign:disabled{background:var(--asf2);color:var(--gris);cursor:not-allowed;box-shadow:inset 0 0 0 calc(var(--px)*2) var(--lin)}
+body.g-rally .sign:disabled .arw{background:var(--gris)}
+body.g-rally .sign:disabled small{color:var(--gris)}
+body.g-rally .sign.slim{padding:calc(var(--px)*3) calc(var(--px)*6)}
+body.g-rally .sign.slim b{font-size:var(--f2)}
+/* inicio */
+body.g-rally .gbar{gap:calc(var(--px)*3);font-family:var(--t10);font-size:var(--f1)}
+body.g-rally .gbar .hcoin{background:var(--asf);padding:calc(var(--px)*2) calc(var(--px)*4);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--lin);line-height:1}
+body.g-rally .gar .gpanel{font-family:var(--t10);gap:calc(var(--px)*4);padding:calc(var(--px)*6) calc(var(--px)*7)}
+body.g-rally .gar.wide .gpanel{top:calc(var(--px)*24);right:calc(var(--px)*8);width:min(52%,calc(var(--px)*200))}
+body.g-rally .hhead b{font-family:var(--t15);font-weight:400;font-size:var(--f2);line-height:1;color:var(--tiza)}
+body.g-rally .hhead span{font-size:var(--f1);line-height:1.1;color:var(--gris);margin-top:calc(var(--px)*2)}
+body.g-rally .route{padding:0}
+body.g-rally .route::before{left:calc(var(--px)*6);right:calc(var(--px)*6);top:calc(var(--px)*4.5);border-top:var(--px) dashed var(--vial);opacity:.7}
+body.g-rally .route img{box-shadow:0 0 0 var(--px) #000}
+body.g-rally .route li.now img{box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) var(--vial);animation:none}
+body.g-rally .route li span{font-family:var(--t10);font-size:var(--f0);letter-spacing:0;color:#5b5d69}
+body.g-rally .route li.done span{color:var(--vial)}
+body.g-rally .runst{gap:calc(var(--px)*8);font-size:var(--f1);color:var(--gris)}
+body.g-rally .runst em{color:var(--vial);font-weight:400}
+/* señales de servicio (azules): taller, duelos, especiales, récords */
+body.g-rally .tiles{gap:calc(var(--px)*3)}
+body.g-rally .tiles button{background:var(--serv);color:#fff;border-radius:calc(var(--px)*2);font-family:var(--t10);padding:calc(var(--px)*3) calc(var(--px)*1) calc(var(--px)*2);
+  box-shadow:inset 0 0 0 var(--px) var(--serv),inset 0 0 0 calc(var(--px)*1.6) #fff,0 calc(var(--px)*1.5) 0 var(--serv-d)}
+body.g-rally .tiles button.sel{background:var(--serv)}
+body.g-rally .tiles b{font-weight:400;font-size:var(--f1);line-height:1}
+body.g-rally .tiles small{display:none}
+body.g-rally .tiles img{width:calc(var(--px)*12);height:calc(var(--px)*12)}
+body.g-rally .mis{font-size:var(--f1);line-height:1.1;color:var(--gris)}
+body.g-rally .mis b{color:var(--tiza);font-weight:400}
+body.g-rally .mis em{color:var(--vial)}
+/* taller */
+body.g-rally .gar.shop .gpanel{gap:calc(var(--px)*2.5)}
+body.g-rally .gname b{font-family:var(--t15);font-weight:400;font-size:var(--f2);color:var(--tiza);text-shadow:none;line-height:1}
+body.g-rally .gar.shop .gname small,body.g-rally .gname small{font-family:var(--t10);font-size:var(--f0);color:var(--gris);line-height:1.1}
+body.g-rally .gname small.lock{color:var(--vial)}
+body.g-rally .grow{padding:var(--px) calc(var(--px)*2)}
+body.g-rally .grow.sel{background:transparent;box-shadow:inset calc(var(--px)*2) 0 0 var(--vial);outline:0}
+body.g-rally .gstats,body.g-rally .glab{font-family:var(--t10);font-size:var(--f0);color:var(--gris)}
+body.g-rally .glab em{font-size:var(--f1);color:var(--tiza);font-weight:400}
+body.g-rally .bar5 i{background:#41434d;height:calc(var(--px)*3)}
+body.g-rally .bar5 i.on{background:var(--tiza);box-shadow:none}
+body.g-rally .bar5 i.up{background:var(--vial);box-shadow:none}
+body.g-rally .sw button{box-shadow:0 0 0 var(--px) #000}
+body.g-rally .sw button.on{outline:var(--px) solid var(--tiza);outline-offset:var(--px)}
+body.g-rally .gar.shop .upg button,body.g-rally .upg button{background:var(--serv);color:#fff;font-family:var(--t10);font-weight:400;font-size:var(--f0);border-radius:calc(var(--px)*1.5);box-shadow:inset 0 0 0 var(--px) var(--serv),inset 0 0 0 calc(var(--px)*1.6) #c9d6ef}
+body.g-rally .upg button.on{color:#fff;box-shadow:inset 0 0 0 var(--px) var(--serv),inset 0 0 0 calc(var(--px)*1.6) var(--vial)}
+body.g-rally .upg button.off{opacity:.5}
+body.g-rally .upg button i{color:var(--vial)}
+body.g-rally .upg button.max i{color:#c9d6ef}
+body.g-rally .gar.shop .upg .pips{color:#c9d6ef;font-size:var(--f0)}
+body.g-rally .pips b.on{background:var(--vial)}
+body.g-rally .gbtn{font-family:var(--t10);font-weight:400;letter-spacing:0;font-size:var(--f1)}
+/* mapa */
+body.g-rally .wtop .chip,body.g-rally .wchip,body.g-rally .wscore .hcoin{font-family:var(--t10);font-size:var(--f1);line-height:1}
+body.g-rally .wchip{background:var(--asf);color:var(--gris);box-shadow:0 0 0 var(--px) #000}
+body.g-rally .wchip em{color:var(--tiza);font-weight:400}
+body.g-rally .wscore .hcoin{background:var(--asf)}
+body.g-rally .wpanel{gap:calc(var(--px)*3);padding:calc(var(--px)*4) calc(var(--px)*6) calc(var(--px)*5)}
+body.g-rally .wmode{gap:0;justify-content:stretch;box-shadow:0 0 0 var(--px) #000}
+body.g-rally .wmode .chip{flex:1;font-family:var(--t10);font-weight:400;font-size:var(--f1);letter-spacing:0;padding:calc(var(--px)*2.5) calc(var(--px)*2);box-shadow:inset 0 0 0 var(--px) var(--lin)}
+body.g-rally .wmode .chip.on,body.g-rally #wmD.on,body.g-rally #wmE.on{color:var(--asf);background:var(--tiza);box-shadow:none}
+body.g-rally .wname b{font-family:var(--t15);font-weight:400;font-size:var(--f2);color:var(--tiza);text-shadow:none}
+body.g-rally .wname small{font-family:var(--t10);font-size:var(--f1);color:var(--gris)}
+body.g-rally .wst{font-family:var(--t10);font-size:var(--f1);line-height:1.1;color:var(--tiza)}
+body.g-rally .wst.lock{color:var(--gris)}
+body.g-rally .stars i{color:#4d505c}
+body.g-rally .stars i.on{color:var(--vial);text-shadow:none}
+/* letreros de mensaje variable: avisos en ámbar sobre negro (en mayúsculas, como en la carretera) */
+body.g-rally #toast span{font-family:var(--t10);font-size:var(--f1);letter-spacing:.06em;line-height:1;color:var(--led);background:#141518;padding:calc(var(--px)*4) calc(var(--px)*7);
+  box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) #3c3e47,0 0 0 calc(var(--px)*3) #000;text-shadow:0 0 calc(var(--px)*3) rgba(255,178,31,.55)}
+body.g-rally .banner{font-family:var(--t15);font-weight:400;font-size:var(--f4);letter-spacing:.04em;color:var(--led);
+  text-shadow:0 0 calc(var(--px)*5) rgba(255,178,31,.55),0 calc(var(--px)*2) 0 #000,calc(var(--px)*2) 0 0 #000,calc(var(--px)*-2) 0 0 #000,0 calc(var(--px)*-2) 0 #000}
+body.g-rally .banner small{font-family:var(--t10);font-size:var(--f1);letter-spacing:.06em;color:var(--tiza);margin-top:calc(var(--px)*4);text-shadow:0 var(--px) 0 #000,var(--px) 0 0 #000,calc(var(--px)*-1) 0 0 #000,0 calc(var(--px)*-1) 0 #000}
+/* tablero en juego: odómetro, medidor de gas tipo tablero de auto y radar */
+body.g-rally #hud{font-family:var(--t10);font-size:var(--f1);letter-spacing:0}
+body.g-rally .hrow{top:calc(var(--px)*4);left:calc(var(--px)*5);right:calc(var(--px)*5)}
+body.g-rally .hcol{gap:var(--px)}
+body.g-rally .hlab{font-size:var(--f0);color:var(--gris)}
+body.g-rally .hlab[hidden]{display:none}
+body.g-rally .hval{color:var(--tiza);font-variant-numeric:tabular-nums}
+body.g-rally .hval.sun{color:var(--vial)}
+body.g-rally .hval.pink{color:var(--led)}
+body.g-rally .hval.cyan{color:var(--gris)}
+body.g-rally .hcity{font-size:var(--f0);color:var(--tiza)}
+body.g-rally .odo{display:inline-flex;gap:calc(var(--px)*.5);text-shadow:none}
+body.g-rally .odo i{font-style:normal;display:inline-block;width:calc(var(--px)*6);line-height:calc(var(--px)*10);text-align:center;color:var(--tiza);background:linear-gradient(#0e0f12,#2b2c33 45%,#2b2c33 55%,#0e0f12);box-shadow:0 0 0 calc(var(--px)*.5) #000}
+body.g-rally .odo i:last-child{color:#16171b;background:linear-gradient(#a8a9b0,#ecebe3 45%,#ecebe3 55%,#a8a9b0)}
+body.g-rally .odo.txt{font-size:var(--f1);color:var(--tiza);text-shadow:0 var(--px) 0 #000,var(--px) 0 0 #000,calc(var(--px)*-1) 0 0 #000,0 calc(var(--px)*-1) 0 #000}
+body.g-rally .hbl{left:calc(var(--px)*5);bottom:calc(var(--px)*5);gap:calc(var(--px)*2.5)}
+body.g-rally .hline{gap:calc(var(--px)*3)}
+body.g-rally .gauge{display:inline-flex;align-items:center;gap:calc(var(--px)*2);padding:calc(var(--px)*1.5) calc(var(--px)*3);background:rgba(20,21,24,.85);box-shadow:0 0 0 var(--px) #000;font-size:var(--f0);color:var(--gris);text-shadow:none}
+body.g-rally .gauge b{font-weight:400}
+body.g-rally .gauge b:last-child{color:var(--tiza)}
+body.g-rally .fuel{width:calc(var(--px)*45);height:calc(var(--px)*4);background:#2b2c33;box-shadow:none}
+body.g-rally .fuel i{background:repeating-linear-gradient(90deg,var(--tiza) 0 calc(var(--px)*3.5),transparent calc(var(--px)*3.5) calc(var(--px)*4.5))}
+body.g-rally .fuel.low i{background:repeating-linear-gradient(90deg,var(--bidon) 0 calc(var(--px)*3.5),transparent calc(var(--px)*3.5) calc(var(--px)*4.5))}
+body.g-rally .gauge:has(.low) b:first-child{color:var(--bidon)}
+body.g-rally .islot{background:rgba(20,21,24,.85);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--lin)}
+body.g-rally .islot.on{box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--vial),0 0 calc(var(--px)*5) rgba(242,193,46,.5)}
+body.g-rally .lives b{background:var(--tiza)}
+body.g-rally .hcan{display:inline-flex;align-items:center;gap:calc(var(--px)*1.5);color:var(--vial)}
+body.g-rally .hcan::before{content:"";width:calc(var(--px)*5);height:calc(var(--px)*6);background:var(--vial);box-shadow:0 0 0 calc(var(--px)*.5) #000;clip-path:polygon(25% 0,100% 0,100% 100%,0 100%,0 30%)}
+body.g-rally .hcan.arena::before{clip-path:polygon(50% 0,62% 36%,100% 38%,70% 60%,80% 100%,50% 76%,20% 100%,30% 60%,0 38%,38% 36%)}
+body.g-rally #radar{box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*2) var(--lin);background:rgba(20,21,24,.75)}
+body.g-rally .achpop{font-family:var(--t10);font-size:var(--f1);background:var(--asf);color:var(--tiza);box-shadow:0 0 0 var(--px) #000,inset 0 0 0 var(--px) var(--vial);padding:calc(var(--px)*3) calc(var(--px)*7)}
+body.g-rally .achpop b{color:var(--vial);font-size:var(--f0);letter-spacing:0}
+body.g-rally .achpop small{font-size:var(--f0);color:var(--gris)}
+/* tarjeta de embarque: misma idea, con letra legible en las cifras */
+body.g-rally .ticket{font-family:var(--t10);font-weight:400}
+body.g-rally .tk-head b{font-family:var(--t15);font-weight:400;font-size:var(--f2)}
+body.g-rally .tk-head span,body.g-rally .tk-route small,body.g-rally .tk-meta dt{font-size:var(--f0)}
+body.g-rally .tk-route b{font-family:var(--t15);font-weight:400;font-size:var(--f4);line-height:.85}
+body.g-rally .tk-route span{font-size:var(--f1)}
+body.g-rally .tk-meta dd{font-weight:400;font-size:var(--f1)}
+body.g-rally .ticket h3{font-family:var(--t15);font-weight:400;font-size:var(--f2)}
+body.g-rally .ticket ul{font-size:var(--f1);line-height:1.05}
+body.g-rally .tk-tip{font-size:var(--f0)}
+body.g-rally .tk-btns .gbtn{font-family:var(--t10);font-weight:400;font-size:var(--f1);background:var(--ruta);color:#fff;border-radius:calc(var(--px)*2);box-shadow:inset 0 0 0 var(--px) var(--ruta),inset 0 0 0 calc(var(--px)*1.6) #fff,0 calc(var(--px)*2) 0 var(--ruta-d)}
+body.g-rally .tk-btns .gbtn:disabled{background:#d8ccb4;color:#8a7c98;box-shadow:none}
+body.g-rally .tk-btns .chip,body.g-rally .ticket .lround .chip{font-family:var(--t10);font-weight:400;font-size:var(--f1);color:#2b2342;background:transparent;box-shadow:inset 0 0 0 var(--px) #b3a383}
+body.g-rally .ticket .lround .chip.on{color:#fff;background:#2b2342}
+body.g-rally .ticket .sel,body.g-rally .ticket :focus-visible{outline-color:#2f63d8}
+@media (max-aspect-ratio:13/10){body.g-rally .tk-route b{font-size:var(--f3)}}
+/* tarjetas: historia, récords, logros, final, iniciales y guía */
+body.g-rally .lcard{font-size:var(--f1);gap:calc(var(--px)*4);padding:calc(var(--px)*6) calc(var(--px)*8)}
+body.g-rally .lhead b{font-family:var(--t15);font-weight:400;font-size:var(--f2);color:var(--tiza);text-shadow:none}
+body.g-rally .lhead small{font-size:var(--f1);color:var(--gris);line-height:1.1}
+body.g-rally .lsec h3{font-family:var(--t15);font-weight:400;font-size:var(--f2);color:var(--vial);letter-spacing:0}
+body.g-rally .lsec ul,body.g-rally .slines{font-size:var(--f1);line-height:1.1;gap:calc(var(--px)*2)}
+body.g-rally .lsec li::before,body.g-rally .slines li::before{background:var(--vial)}
+body.g-rally .lsec li b{color:var(--vial)}
+body.g-rally .slines li.route{color:var(--vial)}
+body.g-rally .ltip{font-size:var(--f0);color:var(--gris)}
+body.g-rally .ltip b{color:var(--vial)}
+body.g-rally .lcard .gbtn{font-family:var(--t10);font-weight:400;font-size:var(--f1);background:var(--ruta);color:#fff;border-radius:calc(var(--px)*2);padding:calc(var(--px)*3) calc(var(--px)*7);box-shadow:inset 0 0 0 var(--px) var(--ruta),inset 0 0 0 calc(var(--px)*1.6) #fff,0 calc(var(--px)*2) 0 var(--ruta-d)}
+body.g-rally .lcard .chip{font-size:var(--f1)}
+body.g-rally .rtab{font-family:var(--t10);font-size:var(--f1);gap:var(--px)}
+body.g-rally .rtab li b{font-family:var(--t10);color:var(--vial)}
+body.g-rally .rtab li em{color:var(--tiza)}
+body.g-rally .rtab li small{font-size:var(--f0)}
+body.g-rally .rtab li.me{background:rgba(242,193,46,.12);box-shadow:inset calc(var(--px)*2) 0 0 var(--vial)}
+body.g-rally .achl li div{font-size:var(--f0);line-height:1.1}
+body.g-rally .achl li b{font-size:var(--f1);color:var(--tiza);font-weight:400}
+body.g-rally .achl li.ok i{color:var(--vial)}
+body.g-rally .credits p b{color:var(--vial)}
+body.g-rally .inic b{font-family:var(--t15);font-size:var(--f4);border-bottom-color:var(--lin)}
+body.g-rally .inic.on b{color:var(--vial);border-color:var(--vial)}
+body.g-rally .gtabs .chip{font-size:var(--f0)}
+body.g-rally .gpage li div{font-family:var(--t10);font-size:var(--f0);line-height:1.1}
+body.g-rally .gpage li b{font-size:var(--f1);color:var(--vial);font-weight:400}
+body.g-rally .lbar{background:#41434d;box-shadow:0 0 0 var(--px) #000}
+body.g-rally .lbar i{background:var(--vial)}
+/* pausa: pizarra de boxes (la que el equipo le muestra al piloto) */
+body.g-rally #overlay{background:rgba(14,15,18,.55)}
+body.g-rally .panel{align-items:stretch;text-align:left;gap:calc(var(--px)*2);min-width:calc(var(--px)*160);padding:calc(var(--px)*8) calc(var(--px)*10);background:#1c1d22;font-family:var(--t10);
+  box-shadow:0 0 0 var(--px) #000,0 0 0 calc(var(--px)*3) #62656f,0 0 0 calc(var(--px)*4) #000,0 calc(var(--px)*6) calc(var(--px)*6) rgba(0,0,0,.45)}
+body.g-rally .panel h2{font-family:var(--t15);font-weight:400;font-size:var(--f3);letter-spacing:0;color:var(--tiza);text-align:left;margin-bottom:calc(var(--px)*2)}
+body.g-rally .panel p{font-size:var(--f0);color:var(--gris);line-height:1.1}
+body.g-rally .mbtn{position:relative;background:transparent;box-shadow:none;font-family:var(--t10);font-size:var(--f1);letter-spacing:0;color:var(--tiza);text-align:left;padding:calc(var(--px)*1.5) calc(var(--px)*4) calc(var(--px)*1.5) calc(var(--px)*10)}
+body.g-rally .mbtn.sel{background:transparent;color:var(--vial);box-shadow:inset 0 0 0 var(--px) rgba(242,193,46,.35);outline:0}
+body.g-rally .mbtn.sel::before{content:"";position:absolute;left:calc(var(--px)*2);top:50%;transform:translateY(-50%);width:calc(var(--px)*4);height:calc(var(--px)*7);background:var(--vial);clip-path:polygon(0 0,100% 50%,0 100%)}
+body.g-rally .mbtn.srow b{color:var(--vial);font-weight:400}
+body.g-rally .mbtn.srow.sel b{color:var(--vial)}
+body.g-rally .vb{background:var(--asf2);color:var(--tiza);font-family:var(--t10);box-shadow:inset 0 0 0 var(--px) var(--lin)}
+body.g-rally .mbtn.sel .vb{background:var(--asf2);color:var(--tiza);box-shadow:inset 0 0 0 var(--px) var(--vial)}
+body.g-rally .vbar i{background:#41434d}
+body.g-rally .vbar i.on,body.g-rally .mbtn.sel .vbar i.on{background:var(--vial)}
+body.g-rally .mbtn.sel .vbar i{background:#41434d}
+body.g-rally .panel.set h2{font-size:var(--f2)}
+body.g-rally .pinfo{font-family:var(--t10);font-size:var(--f0);color:var(--gris);border-top:var(--px) dashed var(--lin);padding-top:calc(var(--px)*3);margin-top:calc(var(--px)*2)}
+body.g-rally .pinfo b{color:var(--tiza);font-weight:400;font-size:var(--f1)}
+/* fin del juego: parte de tránsito en papel de calco amarillo */
+body.g-rally .panel.cite{padding:0;gap:0;min-width:calc(var(--px)*200);max-width:calc(100% - var(--px)*16);background:#f2e3a3;color:#2c2a22;
+  box-shadow:0 0 0 var(--px) #000,0 calc(var(--px)*4) 0 rgba(0,0,0,.45);transform:rotate(-1deg)}
+body.g-rally .cite-top{display:flex;align-items:baseline;justify-content:space-between;gap:calc(var(--px)*8);padding:calc(var(--px)*3) calc(var(--px)*7);background:var(--serv);color:#fff;border-bottom:calc(var(--px)*2) solid var(--bidon)}
+body.g-rally .cite-top b{font-family:var(--t15);font-weight:400;font-size:var(--f2)}
+body.g-rally .cite-top span{font-size:var(--f0);color:#c9d6ef}
+body.g-rally .cite-body{display:grid;grid-template-columns:1fr auto;gap:calc(var(--px)*3) calc(var(--px)*10);padding:calc(var(--px)*5) calc(var(--px)*7) calc(var(--px)*3);align-items:start}
+body.g-rally .cite dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:calc(var(--px)*1.5) calc(var(--px)*5);font-size:var(--f1)}
+body.g-rally .cite dt{color:#7d7047}
+body.g-rally .cite dd{margin:0;border-bottom:var(--px) dotted #a8955a;color:#1d1c17}
+body.g-rally .cite p.cite-why{grid-column:1 / -1;margin:0;font-size:var(--f1);line-height:1;color:#1d1c17}
+body.g-rally .cite-why span{color:#7d7047}
+body.g-rally .cite-pts{display:flex;flex-direction:column;align-items:flex-end;gap:var(--px)}
+body.g-rally .cite-pts span{font-size:var(--f0);color:#7d7047}
+body.g-rally .cite-pts b{font-family:var(--t15);font-weight:400;font-size:var(--f3);line-height:1;color:#1d1c17}
+body.g-rally .stamp{margin-top:calc(var(--px)*3);padding:var(--px) calc(var(--px)*3);font-size:var(--f1);color:var(--bidon);box-shadow:inset 0 0 0 var(--px) var(--bidon);transform:rotate(-6deg)}
+body.g-rally .cite-acts{display:grid;grid-template-columns:1fr 1fr;gap:var(--px) calc(var(--px)*4);padding:calc(var(--px)*3) calc(var(--px)*5) calc(var(--px)*6);border-top:var(--px) dashed #a8955a}
+body.g-rally .cite .mbtn{color:#2c2a22}
+body.g-rally .cite .mbtn.sel{color:var(--serv)}
+body.g-rally .cite .mbtn.sel::before{background:var(--serv)}
+body.g-rally .cite .mbtn.cont{grid-column:1 / -1;color:#7a560a}
+body.g-rally .cite .mbtn.cont.sel{color:var(--serv)}
+@media (max-aspect-ratio:13/10){body.g-rally .gar.narrow .gpanel{gap:calc(var(--px)*3)}body.g-rally .cite-acts{grid-template-columns:1fr}}
+/* el control también cambia de carcasa con el cartucho del rally: grafito, A amarillo (gas) y B azul (ítem) */
+body.g-rally #dpad::before{background:radial-gradient(circle,#141518 55%,transparent 72%)}
+body.g-rally #dpad .arm{background:linear-gradient(#45474f,#2e3037);box-shadow:inset 0 0 0 2px #121316,0 4px 0 #121316}
+body.g-rally #dpad .hub{background:#2e3037}
+body.g-rally #dpad .hub::after{background:#222328;box-shadow:inset 0 2px 0 #121316}
+body.g-rally #dpad .tri{opacity:.5}
+body.g-rally #dpad.u .tu{border-bottom-color:#f2c12e}body.g-rally #dpad.d .td{border-top-color:#f2c12e}body.g-rally #dpad.l .tl{border-right-color:#f2c12e}body.g-rally #dpad.r .tr{border-left-color:#f2c12e}
+body.g-rally #dpad.u .tu,body.g-rally #dpad.d .td,body.g-rally #dpad.l .tl,body.g-rally #dpad.r .tr{filter:none}
+body.g-rally .rb{font-family:'Jersey 15',var(--display);font-weight:400;font-size:30px;box-shadow:inset 0 -5px 0 rgba(0,0,0,.28),0 5px 0 #121316,0 0 0 3px #121316}
+body.g-rally #btnA{background:radial-gradient(circle at 35% 30%,#ffe597,#f2c12e 60%);color:#2a2208}
+body.g-rally #btnB{background:radial-gradient(circle at 35% 30%,#8fb2ee,#2a5aa8 60%);color:#fff}
+body.g-rally .rb.on{box-shadow:inset 0 -2px 0 rgba(0,0,0,.28),0 2px 0 #121316,0 0 0 3px #121316}
+body.g-rally .rb small{display:block;font-family:'Jersey 10',var(--ui);font-size:15px;letter-spacing:0;color:#a4a5b1;text-transform:lowercase}
+body.g-rally .rb small::first-letter{text-transform:uppercase}
+body.g-rally .pill{font-family:'Jersey 10',var(--ui);font-size:14px;letter-spacing:.02em;color:#a4a5b1;background:#2e3037;box-shadow:0 3px 0 #121316,inset 0 0 0 2px #121316}
+body.g-rally #keys kbd{background:#2e3037;box-shadow:inset 0 0 0 1px #4d505c}
 @media (prefers-reduced-motion:reduce){.cart,.rb,.pill{transition:none}.fuel.low i{animation:none}}
 </style>
 
@@ -985,6 +1235,7 @@ const Snd = (() => {
       pulse.p25 = mkPulse(0.25); pulse.p12 = mkPulse(0.125);
       G = makeGraph(ctx, mus);
       if (pending) { const s = pending; pending = null; api.play(s); }
+      warmFoley();
     }
     if (ctx.state === 'suspended') ctx.resume();
   };
@@ -997,6 +1248,8 @@ const Snd = (() => {
     volM = m / 5; volS = x / 5;
     if (ctx) { mus.gain.setTargetAtTime(0.3 * volM, ctx.currentTime, 0.02); sfx.gain.setTargetAtTime(0.55 * volS, ctx.currentTime, 0.02); }
   };
+  // para grabar lo que suena (pruebas y avances): conecta la salida a otro nodo
+  api.tap = (dest) => { if (master && dest) master.connect(dest); return ctx; };
   api.suspend = () => { if (ctx && ctx.state === 'running') ctx.suspend(); };
   api.resume = () => { if (ctx && ctx.state === 'suspended') ctx.resume(); };
   function osc(type) {
@@ -1087,36 +1340,117 @@ const Snd = (() => {
     drill: () => { tone('square', 660, 1320, 0.12, 0.12); tone('square', 990, 1980, 0.12, 0.1, 0.1); },
     ach: () => { [79, 84, 88, 91, 96].forEach((m, i) => tone('triangle', N(m), N(m), 0.12, 0.2, i * 0.07)); },
   };
-  // sonidos continuos: motor (tono según velocidad) y sirena (según cercanía)
-  let eng = null, sir = null;
+  // ---------- efectos propios (sfx.js): se calculan una vez y se tocan como buffers
+  // banco 'rally' = efectos del Gas Rally; fuera de él solo la consola usa los nuevos
+  let bank = 'arcade';
+  const fcache = {};
+  api.bank = (b) => { bank = b; };
+  function foleyBufs(name, all) {
+    let vs = fcache[name];
+    if (!vs) vs = fcache[name] = [];
+    const want = all ? 3 : 1;
+    while (vs.length < want) {
+      const d = Foley.render(name, ctx.sampleRate, 13 + vs.length * 7919);
+      const b = ctx.createBuffer(1, d.length, ctx.sampleRate);
+      if (b.copyToChannel) b.copyToChannel(d, 0); else b.getChannelData(0).set(d);
+      vs.push(b);
+    }
+    return vs;
+  }
+  // prepara los efectos de a uno en los ratos libres (primero una variante de cada uno, después el resto)
+  function warmFoley() {
+    const list = Foley.names(true).map((n) => [n, false]).concat(Foley.names(true).map((n) => [n, true]));
+    const idle = window.requestIdleCallback || ((f) => setTimeout(() => f({ timeRemaining: () => 8 }), 40));
+    const step = (dl) => {
+      while (list.length && dl.timeRemaining() > 4) { const [n, all] = list.shift(); try { foleyBufs(n, all); } catch (e) { /* sin audio */ } }
+      if (list.length) idle(step);
+    };
+    idle(step);
+  }
+  function playFoley(name, o) {
+    const vs = foleyBufs(name, false), b = vs[(Math.random() * vs.length) | 0];
+    const s = ctx.createBufferSource(); s.buffer = b;
+    s.playbackRate.value = ((o && o.rate) || 1) * (1 + (Math.random() - 0.5) * 0.05 * Foley.jitter(name));
+    const g = ctx.createGain(); g.gain.value = o && o.vol != null ? o.vol : 1;
+    s.connect(g);
+    let n = g;
+    if (o && o.pan && ctx.createStereoPanner) { const p = ctx.createStereoPanner(); p.pan.value = clamp(o.pan, -1, 1); n.connect(p); n = p; }
+    n.connect(sfx); s.start();
+  }
+  // ---------- sonidos continuos: motor y sirena
+  // motor: pulsos de explosión (onda propia) por dos resonancias fijas del escape y la admisión,
+  // con un temblor aleatorio para que no suene a zumbido de chip
+  let eng = null, sir = null, sirStyle = 'wail';
   const live = () => ctx && ctx.state === 'running';
+  function engineWave() {
+    const n = 40, re = new Float32Array(n), im = new Float32Array(n);
+    for (let k = 1; k < n; k++) { re[k] = 0; im[k] = Math.pow(k, -0.85) * (k % 2 ? 1 : 0.6) * (1 + 0.35 * Math.sin(k * 1.7)); }
+    return ctx.createPeriodicWave(re, im);
+  }
   api.engine = (level, pitch) => {
     if (!live()) return;
     if (!eng) {
       if (level <= 0.01) return;
-      const o1 = osc('p25'), o2 = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
-      o2.type = 'sawtooth'; f.type = 'lowpass'; f.Q.value = 2; g.gain.value = 0;
-      o1.connect(f); o2.connect(f); f.connect(g); g.connect(sfx);
-      o1.start(); o2.start();
-      eng = { o1, o2, f, g };
+      const o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), sh = ctx.createWaveShaper();
+      const b1 = ctx.createBiquadFilter(), b2 = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), g = ctx.createGain(), g2 = ctx.createGain();
+      o1.setPeriodicWave(engineWave()); o2.type = 'sine';
+      const curve = new Float32Array(256); for (let i = 0; i < 256; i++) { const x = i / 127.5 - 1; curve[i] = Math.tanh(x * 2.2); }
+      sh.curve = curve;
+      b1.type = 'bandpass'; b1.frequency.value = 380; b1.Q.value = 1.3;
+      b2.type = 'bandpass'; b2.frequency.value = 1150; b2.Q.value = 2.2;
+      lp.type = 'lowpass'; lp.frequency.value = 2200; lp.Q.value = 0.5;
+      const m2 = ctx.createGain(); m2.gain.value = 0.55;
+      g.gain.value = 0; g2.gain.value = 0.35;
+      // admisión: ruido de aire que sube con el acelerador
+      const ns = ctx.createBufferSource(); ns.buffer = noiseBuf; ns.loop = true;
+      const nf = ctx.createBiquadFilter(); nf.type = 'bandpass'; nf.frequency.value = 900; nf.Q.value = 0.8;
+      const ng = ctx.createGain(); ng.gain.value = 0;
+      o1.connect(sh); sh.connect(b1); sh.connect(b2); b2.connect(m2);
+      b1.connect(lp); m2.connect(lp); o2.connect(g2); g2.connect(lp); lp.connect(g);
+      ns.connect(nf); nf.connect(ng); ng.connect(g);
+      g.connect(sfx);
+      o1.start(); o2.start(); ns.start();
+      eng = { o1, o2, ns, g, ng, lp };
     }
-    const t = ctx.currentTime, fr = 46 + pitch * 74;
-    eng.o1.frequency.setTargetAtTime(fr, t, 0.05);
-    eng.o2.frequency.setTargetAtTime(fr * 0.5 + 1.5, t, 0.05);
-    eng.f.frequency.setTargetAtTime(260 + pitch * 900, t, 0.08);
-    eng.g.gain.setTargetAtTime(Math.max(0, level) * 0.045, t, 0.06);
+    const t = ctx.currentTime, fr = 38 + pitch * 72;
+    eng.o1.frequency.setTargetAtTime(fr, t, 0.06);
+    eng.o1.detune.setTargetAtTime((Math.random() - 0.5) * 22, t, 0.02);
+    eng.o2.frequency.setTargetAtTime(fr * 0.5, t, 0.06);
+    eng.lp.frequency.setTargetAtTime(900 + pitch * 1800, t, 0.08);
+    eng.ng.gain.setTargetAtTime(Math.max(0, level) * (0.05 + pitch * 0.12), t, 0.08);
+    eng.g.gain.setTargetAtTime(Math.max(0, level) * 0.075, t, 0.06);
+  };
+  // sirena según el país: wail (lenta), yelp (rápida), hilo (dos tonos de Londres), jp (Tokio), toy (juguete)
+  const SIRENS = {
+    wail: { lfo: 'triangle', rate: 0.32, c: 960, d: 330 },
+    yelp: { lfo: 'triangle', rate: 3.1, c: 1000, d: 320 },
+    hilo: { lfo: 'square', rate: 0.95, c: 790, d: 110 },
+    jp: { lfo: 'sawtooth', rate: 0.42, c: 760, d: 260 },
+    toy: { lfo: 'square', rate: 4.2, c: 1500, d: 260 },
+  };
+  api.sirenStyle = (st) => {
+    if (!SIRENS[st] || st === sirStyle) return;
+    sirStyle = st;
+    if (sir && ctx) { const P = SIRENS[st], t = ctx.currentTime; sir.lfo.type = P.lfo; sir.lfo.frequency.setValueAtTime(P.rate, t); sir.o.frequency.setValueAtTime(P.c, t); sir.lg.gain.setValueAtTime(P.d, t); }
   };
   api.siren = (level) => {
     if (!live()) return;
     if (!sir) {
       if (level <= 0.01) return;
-      const o = osc('p25'), lfo = ctx.createOscillator(), lg = ctx.createGain(), g = ctx.createGain();
-      o.frequency.value = 840; lfo.type = 'triangle'; lfo.frequency.value = 1.7; lg.gain.value = 170; g.gain.value = 0;
-      lfo.connect(lg); lg.connect(o.frequency); o.connect(g); g.connect(sfx);
+      const P = SIRENS[sirStyle];
+      const o = ctx.createOscillator(), lfo = ctx.createOscillator(), lg = ctx.createGain(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+      const n = 12, re = new Float32Array(n), im = new Float32Array(n);
+      for (let k = 1; k < n; k++) im[k] = [0, 1, 0.55, 0.42, 0.18, 0.2, 0.08, 0.1, 0.04, 0.05, 0.02, 0.02][k];
+      o.setPeriodicWave(ctx.createPeriodicWave(re, im));
+      o.frequency.value = P.c; lfo.type = P.lfo; lfo.frequency.value = P.rate; lg.gain.value = P.d; g.gain.value = 0;
+      f.type = 'lowpass'; f.Q.value = 0.7; f.frequency.value = 1200;
+      lfo.connect(lg); lg.connect(o.frequency); o.connect(f); f.connect(g); g.connect(sfx);
       o.start(); lfo.start();
-      sir = { o, lfo, g };
+      sir = { o, lfo, lg, g, f };
     }
-    sir.g.gain.setTargetAtTime(Math.max(0, level) * 0.035, ctx.currentTime, 0.12);
+    const t = ctx.currentTime, lv = Math.max(0, level);
+    sir.f.frequency.setTargetAtTime(700 + lv * 3800, t, 0.15);   // de lejos suena opaca
+    sir.g.gain.setTargetAtTime(lv * 0.05, t, 0.12);
   };
   api.loopsOff = () => {
     for (const k of ['eng', 'sir']) {
@@ -1127,12 +1461,12 @@ const Snd = (() => {
     }
     eng = null; sir = null;
   };
-  api.sfx = (name) => {
+  api.sfx = (name, o) => {
     if (!ctx || muted) return;
     const now = ctx.currentTime;
     if (last[name] && now - last[name] < 0.035) return;
     last[name] = now;
-    try { SFX[name] && SFX[name](); } catch (e) { /* nodo de audio no disponible */ }
+    try { if (Foley.has(name, bank === 'rally')) playFoley(name, o); else if (SFX[name]) SFX[name](); } catch (e) { /* nodo de audio no disponible */ }
   };
   // --- secuenciador de música
   const midi = (s) => {
@@ -1387,6 +1721,381 @@ const hold = (n, len) => [n, ...Array(len - 1).fill('-')].join(' ');
 const rest = (len) => Array(len).fill('.').join(' ');
 SONGS.boss = { ...SONGS.contra, bpm: 168, tr: 1, drums: 'k.hsk.hsk.hsk.hskkhsk.hsk.hskhss' };
 
+// =====================================================================
+//  FOLEY · efectos de sonido propios, calculados muestra a muestra
+//  Nada de "pitidos de chip": cada efecto se arma con capas físicas
+//  (golpe + cuerpo + cola): metal resonante, burbujas, gomas que chillan,
+//  bocinas de verdad, válvulas de gas, multitud, campanas de cruce…
+//  Cada uno se calcula una vez en 3 variantes y al tocarlo cambia un poco
+//  el tono, así dos bidones seguidos nunca suenan idénticos.
+// =====================================================================
+const Foley = (() => {
+  const TAU = Math.PI * 2;
+  const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+  // ---------- piezas de DSP
+  function prng(seed) {
+    let s = seed >>> 0 || 1;
+    return () => { s = (s + 0x6d2b79f5) >>> 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  // filtro de estado variable (Simper/TPT): estable aunque la frecuencia cambie en cada muestra
+  function svf() {
+    let a = 0, b = 0;
+    return (x, fc, q, sr, mode) => {
+      const g = Math.tan(Math.PI * Math.min(Math.max(fc, 10), sr * 0.45) / sr), k = 1 / q;
+      const a1 = 1 / (1 + g * (g + k)), a2 = g * a1, a3 = g * a2;
+      const v3 = x - b, v1 = a1 * a + a2 * v3, v2 = b + a2 * a + a3 * v3;
+      a = 2 * v1 - a; b = 2 * v2 - b;
+      return mode === 0 ? v2 : mode === 1 ? v1 : x - k * v1 - v2;
+    };
+  }
+  const LP = 0, BP = 1, HP = 2;
+  // ruido rosa (Kellet) y marrón
+  function pinkGen(r) { let b0 = 0, b1 = 0, b2 = 0; return () => { const w = r() * 2 - 1; b0 = 0.99765 * b0 + w * 0.099046; b1 = 0.963 * b1 + w * 0.2965164; b2 = 0.57 * b2 + w * 1.0526913; return (b0 + b1 + b2 + w * 0.1848) * 0.2; }; }
+  function brownGen(r) { let l = 0; return () => { l = (l + 0.02 * (r() * 2 - 1)) / 1.02; return l * 3.5; }; }
+  const env = (t, a, d) => (t < 0 ? 0 : t < a ? t / a : Math.exp(-(t - a) / d));
+  const sat = (x, k) => Math.tanh(x * k) / Math.tanh(k);
+
+  // contexto de dibujo de un efecto
+  function ctx(sr, dur, seed) {
+    const n = Math.ceil(sr * dur), out = new Float32Array(n), r = prng(seed);
+    const c = { sr, n, out, r, dur, rr: (a, b) => a + r() * (b - a) };
+    // suma una capa: fn(t, i) devuelve la muestra; empieza en t0 y dura d
+    c.layer = (t0, d, fn, gain = 1) => {
+      const i0 = Math.max(0, Math.floor(t0 * sr)), i1 = Math.min(n, Math.ceil((t0 + d) * sr));
+      for (let i = i0; i < i1; i++) out[i] += fn((i - i0) / sr, i - i0) * gain;
+    };
+    // golpe de metal: parciales inarmónicos que se apagan cada uno a su ritmo
+    c.modal = (t0, f, ratios, amps, decs, gain = 1, att = 0.0008) => {
+      const ph = ratios.map(() => r() * TAU), d = Math.max(...decs) * 7;
+      c.layer(t0, d, (t) => { let s = 0; for (let k = 0; k < ratios.length; k++) s += amps[k] * Math.sin(ph[k] + TAU * f * ratios[k] * t) * Math.exp(-t / decs[k]); return s * Math.min(1, t / att); }, gain);
+    };
+    // campanita FM (portadora + moduladora inarmónica)
+    c.fm = (t0, f, ratio, index, dec, gain = 1, idec = dec * 0.4) => {
+      let p = 0, q = 0;
+      c.layer(t0, dec * 6, (t) => { q += TAU * f * ratio / sr; p += TAU * f / sr; return Math.sin(p + index * Math.exp(-t / idec) * Math.sin(q)) * env(t, 0.0015, dec); }, gain);
+    };
+    // chasquido seco (pulso de ruido filtrado)
+    c.click = (t0, fc, gain = 1, d = 0.0012, q = 2) => { const f = svf(); c.layer(t0, d * 10, (t) => f((r() * 2 - 1) * Math.exp(-t / d), fc, q, sr, BP), gain); };
+    // golpe sordo con caída de tono
+    c.thump = (t0, f0, f1, d, gain = 1, drive = 1.5) => { let p = 0; c.layer(t0, d * 6, (t) => { p += TAU * (f1 + (f0 - f1) * Math.exp(-t / (d * 0.5))) / sr; return sat(Math.sin(p) * env(t, 0.002, d), drive); }, gain); };
+    // burbuja (Minnaert): el tono sube mientras se apaga
+    c.bubble = (t0, f, d = 0.03, gain = 1) => { let p = 0; c.layer(t0, d * 6, (t) => { p += TAU * f * (1 + 0.9 * (t / (d * 3))) / sr; return Math.sin(p) * env(t, 0.003, d); }, gain); };
+    // ruido filtrado con barrido y envolvente de ataque/caída
+    c.hiss = (t0, d, gen, mode, f0, f1, q, att, dec, gain = 1) => {
+      const f = svf(), g = gen === 'pink' ? pinkGen(r) : gen === 'brown' ? brownGen(r) : () => r() * 2 - 1;
+      c.layer(t0, d, (t) => { const fc = f0 * Math.pow(f1 / f0, Math.min(1, t / d)); return f(g(), fc, q, sr, mode) * env(t, att, dec); }, gain);
+    };
+    // nota de "metal de bronce" (diente de sierra con filtro que se abre) para fanfarrias
+    c.brass = (t0, f, d, gain = 1) => {
+      const fl = svf(); let p = 0, p2 = 0;
+      c.layer(t0, d + 0.25, (t) => {
+        p += f / sr; p2 += f * 1.006 / sr;
+        const s = (2 * (p % 1) - 1) + (2 * (p2 % 1) - 1) * 0.7;
+        const e = t < d ? Math.min(1, t / 0.02) : Math.exp(-(t - d) / 0.06);
+        return fl(s, 300 + 2600 * Math.min(1, t / 0.06) * (0.65 + 0.35 * e), 1.1, sr, LP) * e;
+      }, gain);
+    };
+    // goma que chilla: tono inestable + ruido estrecho que lo sigue
+    c.squeal = (t0, d, f0, f1, gain = 1) => {
+      const f = svf(); let p = 0, j = 0;
+      c.layer(t0, d, (t) => {
+        j += (c.r() - 0.5) * 0.04; j *= 0.995;
+        const fr = (f0 + (f1 - f0) * t / d) * (1 + 0.035 * Math.sin(TAU * 17 * t) + j * 0.3);
+        p += TAU * fr / sr;
+        const s = Math.sin(p) * 0.6 + f((c.r() * 2 - 1), fr, 9, sr, BP) * 2.2;
+        return sat(s, 1.6) * Math.min(1, t / 0.015) * Math.min(1, (d - t) / 0.08) * (0.8 + 0.2 * Math.sin(TAU * 31 * t + c.r()));
+      }, gain);
+    };
+    // bocina de auto: dos tonos desafinados, saturados y pasados por la "trompeta"
+    c.horn = (t0, d, fa, fb, gain = 1) => {
+      const f1 = svf(), f2 = svf(); let p = 0, q = 0;
+      c.layer(t0, d + 0.06, (t) => {
+        p += fa * (1 + 0.004 * Math.sin(TAU * 6 * t)) / sr; q += fb / sr;
+        const s = (2 * (p % 1) - 1) + (2 * (q % 1) - 1);
+        const e = t < d ? Math.min(1, t / 0.012) : Math.exp(-(t - d) / 0.02);
+        return f2(f1(sat(s, 2.4), 950, 0.8, sr, BP), 3200, 0.7, sr, LP) * e;
+      }, gain);
+    };
+    return c;
+  }
+  // normaliza al pico pedido y suaviza el final
+  function finish(c, peak) {
+    const o = c.out; let m = 0;
+    for (let i = 0; i < o.length; i++) { const a = Math.abs(o[i]); if (a > m) m = a; }
+    const k = m > 0 ? peak / m : 0, fade = Math.min(o.length, Math.floor(c.sr * 0.01));
+    for (let i = 0; i < o.length; i++) o[i] *= k;
+    for (let i = 0; i < fade; i++) o[o.length - 1 - i] *= i / fade;
+    return o;
+  }
+
+  // ---------- los efectos. [duración, pico, función, variación de tono al tocar]
+  // UI = consola (sirve a todos los juegos); el resto es del Gas Rally
+  const D = {};
+  const def = (name, dur, peak, fn, jit = 1, ui = false) => { D[name] = { dur, peak, fn, jit, ui }; };
+
+  // --- consola y menús: táctiles, como perillas y teclas de verdad
+  def('move', 0.06, 0.32, (c) => { c.click(0, c.rr(3000, 3800), 1, 0.0014, 3); c.fm(0.001, c.rr(1900, 2100), 1.41, 0.6, 0.01, 0.35); }, 1, true);
+  def('select', 0.3, 0.5, (c) => {
+    c.click(0, 2600, 0.9, 0.0012); c.thump(0.004, 210, 130, 0.022, 0.8); c.click(0.019, 3400, 0.5, 0.001);
+    c.fm(0.016, 1568, 2, 1.4, 0.06, 0.32); c.fm(0.05, 2093, 2, 1.2, 0.07, 0.22);
+  }, 0.6, true);
+  def('back', 0.24, 0.45, (c) => { c.click(0, 3000, 0.6, 0.001); c.thump(0.01, 160, 110, 0.02, 0.6); c.fm(0.012, 1319, 2, 1.2, 0.05, 0.28); c.fm(0.055, 988, 2, 1, 0.06, 0.24); }, 0.6, true);
+  def('start', 0.75, 0.6, (c) => {
+    // cartucho que entra: ka-CHUNK y un acorde que sube
+    c.click(0, 1700, 1, 0.002); c.thump(0, 150, 100, 0.02, 0.5);
+    c.click(0.085, 1200, 1.2, 0.003); c.thump(0.085, 110, 55, 0.05, 1.1, 2.2);
+    c.modal(0.085, 430, [1, 2.32, 4.18, 6.3], [1, 0.6, 0.35, 0.2], [0.09, 0.06, 0.04, 0.03], 0.35);
+    [76, 79, 83, 88].forEach((m, i) => c.fm(0.17 + i * 0.055, mtof(m), 3.5, 1.6, 0.16, 0.24));
+  }, 0.2, true);
+  def('pause', 0.22, 0.42, (c) => {
+    // radio de boxes: chasquido de squelch con ruido "comprimido" y un bip
+    const f = svf(); let hold = 0, k = 0;
+    c.layer(0, 0.07, (t) => { if (k++ % 5 === 0) hold = Math.round(f(c.r() * 2 - 1, 1500, 1.4, c.sr, BP) * 6) / 6; return hold * env(t, 0.002, 0.025); }, 0.9);
+    c.layer(0.075, 0.12, (t) => (Math.sin(TAU * 1000 * t) + 0.22 * Math.sin(TAU * 3000 * t)) * (t < 0.08 ? Math.min(1, t / 0.003) : Math.exp(-(t - 0.08) / 0.01)), 0.5);
+  }, 0.3, true);
+  def('tick', 0.05, 0.3, (c) => {
+    // contador mecánico de surtidor
+    const f = svf(), g = svf();
+    c.layer(0, 0.05, (t, i) => { const x = i < 3 ? 1 : 0; return f(x, 2600, 22, c.sr, BP) + 0.5 * g(x, 5300, 18, c.sr, BP); }, 1);
+  }, 0.8, true);
+  def('deny', 0.32, 0.5, (c) => { [0, 0.12].forEach((t0, i) => { c.thump(t0, 175 - i * 30, 120 - i * 20, 0.045, 1, 3); c.hiss(t0, 0.08, 'brown', LP, 600, 200, 0.7, 0.002, 0.03, 0.6); }); }, 0.3, true);
+  def('buy', 1.0, 0.55, (c) => {
+    // caja registradora: cajón, campanilla y monedas
+    c.hiss(0, 0.16, 'brown', BP, 300, 700, 1.2, 0.01, 0.08, 1.4);
+    c.layer(0, 0.14, (t) => Math.sin(TAU * 55 * t) * (c.r() * 2 - 1) * env(t, 0.005, 0.05), 0.25);
+    c.fm(0.1, 2093, 3.5, 2.2, 0.35, 0.55);
+    for (let i = 0; i < 6; i++) c.fm(c.rr(0.13, 0.38), c.rr(3200, 6200), 2.76, 1.5, c.rr(0.025, 0.05), 0.16);
+  }, 0.4, true);
+  def('coin', 0.32, 0.42, (c) => { c.fm(0, 2350, 2.76, 1.4, 0.07, 0.8); c.fm(0.055, 3130, 2.76, 1.2, 0.1, 0.7); });
+  def('ach', 1.1, 0.5, (c) => {
+    // marimba: barra de madera con parciales 1 · 3,93 · 9,2
+    [79, 84, 88, 91].forEach((m, i) => c.modal(i * 0.085, mtof(m), [1, 3.93, 9.2], [1, 0.32, 0.08], [0.32, 0.07, 0.025], 0.6, 0.002));
+    c.hiss(0.25, 0.6, 'white', HP, 7000, 9000, 0.7, 0.05, 0.18, 0.06);
+  }, 0.2, true);
+
+  // --- Gas Rally: bidones, gas, choques y la calle
+  const can = (c, t0, f) => {
+    c.click(t0, 2200, 0.8, 0.0015);
+    c.modal(t0, f, [1, 1.73, 2.41, 3.12, 4.45], [1, 0.62, 0.48, 0.32, 0.18], [0.11, 0.085, 0.06, 0.045, 0.03], 0.9);
+    c.thump(t0, 180, 120, 0.02, 0.35);
+  };
+  def('fuel', 0.42, 0.55, (c) => {
+    const f = c.rr(250, 275);
+    can(c, 0, f); c.bubble(0.045, c.rr(480, 560), 0.025, 0.45); c.bubble(0.1, c.rr(640, 720), 0.02, 0.35);
+    c.fm(0.02, f * 8, 1, 0.4, 0.06, 0.12);
+  });
+  def('fuelS', 0.8, 0.55, (c) => {
+    can(c, 0, 300);
+    [84, 88, 91, 96].forEach((m, i) => c.fm(0.05 + i * 0.045, mtof(m), 3.5, 1.4, 0.14, 0.32));
+    c.hiss(0.08, 0.6, 'white', HP, 6000, 9000, 0.8, 0.03, 0.2, 0.07);
+  }, 0.3);
+  def('lucky', 1.1, 0.55, (c) => {
+    can(c, 0, 230);
+    // rodillo de tragamonedas que frena y premio
+    let t = 0.06; for (let i = 0; i < 11; i++) { c.click(t, 2400 + i * 60, 0.55, 0.0012, 6); t += 0.028 + i * 0.006; }
+    [72, 76, 79].forEach((m) => c.fm(t + 0.02, mtof(m + 12), 3.5, 1.8, 0.3, 0.35));
+  }, 0.2);
+  def('smoke', 0.7, 0.6, (c) => {
+    // válvula que se abre, chorro de gas a presión y el "fump"
+    c.click(0, 4200, 1, 0.0018, 3);
+    c.hiss(0.006, 0.62, 'pink', BP, 5200, 2200, 0.9, 0.012, 0.2, 1.6);
+    c.hiss(0.006, 0.4, 'white', HP, 7000, 4000, 0.7, 0.005, 0.07, 0.25);
+    c.thump(0.01, 95, 48, 0.06, 0.7, 2);
+  }, 0.6);
+  def('stun', 0.55, 0.36, (c) => {
+    // la patrulla queda mareada: frenazo corto y "pajaritos"
+    c.squeal(0, 0.16, 1250, 980, 0.5);
+    [0.17, 0.27, 0.39].forEach((t0, i) => { let p = 0; c.layer(t0, 0.09, (t) => { p += TAU * (2500 + 1300 * Math.sin(Math.PI * t / 0.07) + i * 180) / c.sr; return Math.sin(p) * env(t, 0.006, 0.025); }, 0.35); });
+  });
+  def('spin', 0.6, 0.45, (c) => { c.squeal(0, 0.58, c.rr(1150, 1250), 640, 1); }, 0.6);
+  def('skid', 0.26, 0.16, (c) => {
+    // derrape sobre mojado: chirrido corto y siseo de agua
+    c.squeal(0, 0.2, c.rr(1300, 1450), 1100, 0.6);
+    c.hiss(0, 0.24, 'pink', BP, 3200, 2000, 1.2, 0.01, 0.07, 1.2);
+  }, 0.8);
+  def('horn', 0.4, 0.45, (c) => {
+    const fa = c.rr(405, 425), fb = fa * 1.26;
+    if (c.r() < 0.5) c.horn(0, 0.3, fa, fb); else { c.horn(0, 0.11, fa, fb); c.horn(0.17, 0.16, fa, fb); }
+  }, 0.4);
+  def('siren', 1.1, 0.4, (c) => {
+    let p = 0; const fl = svf();
+    c.layer(0, 1.05, (t) => { const f = t < 0.65 ? 620 + 700 * t / 0.65 : 1320 - 420 * (t - 0.65) / 0.4; p += f / c.sr; const s = Math.sin(TAU * p) + 0.4 * Math.sin(TAU * 2 * p) + 0.2 * Math.sin(TAU * 3 * p); return fl(s, 2600, 0.8, c.sr, LP) * Math.min(1, t / 0.08) * Math.min(1, (1.05 - t) / 0.15); });
+  }, 0.2);
+  def('shield', 0.6, 0.45, (c) => {
+    // campo de fuerza que se arma: barrido FM con coro
+    [1, 1.006].forEach((dt) => { let p = 0, q = 0; c.layer(0, 0.55, (t) => { const f = (200 + 520 * Math.min(1, t / 0.32)) * dt; q += TAU * f * 1.5 / c.sr; p += TAU * f / c.sr; return Math.sin(p + 2.5 * Math.sin(q)) * Math.min(1, t / 0.04) * Math.exp(-Math.max(0, t - 0.3) / 0.08); }, 0.5); });
+    c.hiss(0.2, 0.3, 'white', HP, 6000, 9000, 1, 0.02, 0.06, 0.1);
+  }, 0.3);
+  def('shieldOff', 0.55, 0.5, (c) => {
+    // se trizó: crujido de vidrio y esquirlas
+    c.hiss(0, 0.06, 'white', HP, 3500, 2500, 0.8, 0.001, 0.012, 1);
+    for (let i = 0; i < 12; i++) c.fm(c.rr(0, 0.28), c.rr(3800, 9000), c.rr(1.3, 2.9), 1.2, c.rr(0.01, 0.035), c.rr(0.15, 0.35));
+    let p = 0; c.layer(0.02, 0.4, (t) => { p += TAU * (900 * Math.exp(-t / 0.12) + 180) / c.sr; return Math.sin(p + 1.5 * Math.sin(p * 1.41)) * env(t, 0.005, 0.12); }, 0.35);
+  }, 0.4);
+  def('nitro', 1.05, 0.6, (c) => {
+    c.hiss(0, 0.16, 'white', HP, 2500, 1800, 0.7, 0.002, 0.05, 0.6);                       // psshh de la válvula
+    c.layer(0.04, 0.2, (t) => { const f = (Math.sin(TAU * 26 * t) > 0 ? 1 : 0.15); return (c.r() * 2 - 1) * f * env(t, 0.005, 0.07); }, 0.25); // tu-tu-tu
+    c.hiss(0.05, 0.95, 'pink', BP, 380, 3200, 1.2, 0.2, 0.3, 1.5);                          // rugido que sube
+    const fl = svf(); let p = 0;
+    c.layer(0.05, 0.9, (t) => { p += (85 + 150 * Math.min(1, t / 0.6)) / c.sr; return fl(2 * (p % 1) - 1, 900, 1.5, c.sr, LP) * env(t, 0.08, 0.35); }, 0.55);
+  }, 0.4);
+  def('item', 0.85, 0.45, (c) => {
+    // ruleta de ítem: trinquete que frena y un "tin" al caer
+    let t = 0; for (let i = 0; i < 13; i++) { c.click(t, 1900 + (i % 2) * 500, 0.7, 0.001, 5); t += 0.032 + i * 0.0045; }
+    c.fm(t, 1760, 3.5, 1.6, 0.18, 0.5);
+  }, 0.3);
+  def('powerup', 0.5, 0.45, (c) => { c.fm(0, mtof(84), 3.5, 1.8, 0.12, 0.6); c.fm(0.08, mtof(91), 3.5, 1.6, 0.18, 0.6); c.click(0, 3000, 0.4); }, 0.3);
+  def('oil', 0.45, 0.55, (c) => {
+    // mancha de aceite: splash viscoso y burbujas que revientan
+    c.hiss(0, 0.2, 'brown', LP, 1100, 180, 1.4, 0.003, 0.07, 1.6);
+    c.bubble(0.03, 210, 0.04, 0.5); c.bubble(0.09, 160, 0.05, 0.45); c.bubble(0.16, 260, 0.03, 0.3);
+    c.click(0.18, 900, 0.3, 0.002);
+  }, 0.6);
+  def('thud', 0.35, 0.6, (c) => { c.thump(0, 85, 42, 0.07, 1, 2.5); c.hiss(0, 0.12, 'brown', LP, 900, 150, 0.7, 0.002, 0.03, 1); c.modal(0.004, 180, [1, 2.4, 3.9], [0.4, 0.25, 0.1], [0.05, 0.03, 0.02], 0.4); }, 0.6);
+  def('puff', 0.32, 0.4, (c) => { c.hiss(0, 0.3, 'pink', LP, 2200, 500, 0.7, 0.012, 0.07, 1.4); });
+  def('pop', 0.8, 0.5, (c) => {
+    c.click(0, 1500, 1.5, 0.003, 1); c.thump(0, 140, 60, 0.02, 0.6);
+    for (let i = 0; i < 26; i++) { const t = 0.06 + Math.pow(c.r(), 1.6) * 0.65; c.click(t, c.rr(3000, 7000), (1 - t / 0.75) * c.rr(0.2, 0.5), 0.0008, 4); }
+  }, 0.5);
+  def('whoosh', 0.5, 0.45, (c) => { const f = svf(); const g = pinkGen(c.r); c.layer(0, 0.48, (t) => { const u = t / 0.48; return f(g(), 500 + 2200 * Math.sin(Math.PI * Math.min(1, u * 1.2)), 1.6, c.sr, BP) * Math.sin(Math.PI * u) ** 2; }, 1.6); }, 0.5);
+  def('whistle', 0.75, 0.42, (c) => {
+    // silbato de policía (de bolita): tono alto con trino irregular
+    [[0, 0.17], [0.24, 0.38]].forEach(([t0, d]) => {
+      let p = 0;
+      c.layer(t0, d + 0.03, (t) => {
+        const tr = 0.55 + 0.45 * Math.sin(TAU * 27 * t + Math.sin(TAU * 3 * t));
+        p += TAU * (2850 + 90 * Math.sin(TAU * 27 * t)) / c.sr;
+        const e = t < d ? Math.min(1, t / 0.01) : Math.exp(-(t - d) / 0.01);
+        return (Math.sin(p) + 0.08 * Math.sin(2 * p)) * tr * e;
+      }, 0.8);
+      c.hiss(t0, d, 'white', HP, 5000, 5000, 0.7, 0.01, d, 0.08);
+    });
+  }, 0.3);
+  def('spot', 0.55, 0.42, (c) => {
+    // te encontró el foco: aviso de radar con eco
+    [0, 0.13, 0.26].forEach((t0, i) => c.layer(t0, 0.12, (t) => (Math.sin(TAU * 1480 * t) + 0.3 * Math.sin(TAU * 2960 * t)) * env(t, 0.003, 0.035), 1 - i * 0.35));
+    c.click(0, 1500, 0.5, 0.004);
+  }, 0.2);
+  def('chop', 0.12, 0.5, (c) => { c.hiss(0, 0.1, 'brown', LP, 420, 140, 0.8, 0.004, 0.025, 1.8); c.thump(0, 70, 45, 0.02, 0.5); }, 0.6);
+  def('fly', 1.7, 0.5, (c) => {
+    c.hiss(0, 1.65, 'pink', BP, 260, 1700, 0.9, 0.35, 0.55, 1.8);
+    let p = 0; c.layer(0, 1.6, (t) => { p += TAU * (1100 + 1300 * Math.min(1, t / 1.2)) / c.sr; return Math.sin(p) * Math.min(1, t / 0.4) * Math.exp(-Math.max(0, t - 1) / 0.25); }, 0.08);
+    c.hiss(0, 1.6, 'brown', LP, 140, 90, 0.7, 0.3, 0.6, 1.4);
+  }, 0.2);
+  const rumble = (c, d, top, gain) => {
+    const f = svf(), g = brownGen(c.r); let am = 0;
+    c.layer(0, d, (t) => { am += (c.r() - 0.5) * 0.25; am *= 0.997; return f(g(), top, 0.7, c.sr, LP) * (0.7 + 0.6 * Math.abs(am)) * Math.min(1, t / 0.08) * Math.min(1, (d - t) / 0.5); }, gain);
+    for (let i = 0; i < 6; i++) c.thump(c.rr(0, d - 0.4), c.rr(60, 90), 35, 0.06, 0.4, 2);
+  };
+  def('quake', 1.8, 0.65, (c) => { rumble(c, 1.75, 140, 2.5); c.hiss(0.1, 1.4, 'pink', BP, 700, 300, 1, 0.3, 0.5, 0.25); }, 0.3);
+  def('rumble', 1.6, 0.65, (c) => { rumble(c, 1.55, 220, 2.2); c.hiss(0, 1.5, 'pink', LP, 900, 300, 0.7, 0.4, 0.5, 0.8); }, 0.3);
+  def('leap', 0.45, 0.5, (c) => {
+    const fl = svf(); let p = 0;
+    c.layer(0, 0.4, (t) => { p += (90 + 160 * Math.min(1, t / 0.25)) / c.sr; return fl(sat(2 * (p % 1) - 1, 2), 1200, 1.2, c.sr, LP) * env(t, 0.01, 0.15); }, 0.7);
+    c.hiss(0.05, 0.38, 'pink', BP, 600, 2600, 1.2, 0.05, 0.15, 0.9);
+  }, 0.4);
+  def('land', 0.42, 0.6, (c) => {
+    c.thump(0, 78, 40, 0.07, 1, 2.2); c.hiss(0, 0.12, 'brown', LP, 700, 160, 0.7, 0.002, 0.035, 1.2);
+    let p = 0; c.layer(0.03, 0.18, (t) => { p += TAU * (1250 - 400 * t / 0.18) / c.sr; return Math.sin(p + 2 * Math.sin(p * 0.51)) * env(t, 0.01, 0.05); }, 0.18); // resorte que cruje
+    c.modal(0.005, 240, [1, 2.6, 4.1], [0.5, 0.3, 0.15], [0.06, 0.04, 0.025], 0.4);
+  }, 0.5);
+  def('cheer', 1.7, 0.5, (c) => {
+    // tribuna: dos formantes de "¡aaah!" sobre ruido rosa que respira, y aplausos
+    const f1 = svf(), f2 = svf(), g = pinkGen(c.r); let am = 0;
+    c.layer(0, 1.65, (t) => { am += (c.r() - 0.5) * 0.08; am *= 0.999; const x = g(); const e = Math.min(1, t / 0.18) * Math.min(1, (1.65 - t) / 0.7); return (f1(x, 780 + 60 * Math.sin(t * 3), 4, c.sr, BP) + 0.7 * f2(x, 1250, 5, c.sr, BP)) * e * (0.8 + Math.abs(am)); }, 2.4);
+    for (let i = 0; i < 70; i++) { const t = c.rr(0.05, 1.3); c.click(t, c.rr(900, 2200), c.rr(0.15, 0.4), 0.003, 1.5); }
+  }, 0.2);
+  def('bell', 1.15, 0.45, (c) => {
+    // campana del cruce del tren: golpes alternados
+    for (let i = 0; i < 4; i++) c.modal(i * 0.26, i % 2 ? 1380 : 1460, [1, 2.0, 2.76, 5.4], [1, 0.5, 0.4, 0.15], [0.22, 0.15, 0.09, 0.04], 0.7, 0.001);
+  }, 0.1);
+  def('meow', 0.62, 0.45, (c) => {
+    // gato con formantes: "mi-a-ou"
+    const fa = svf(), fb = svf(); let p = 0;
+    const seg = (t, a, b, m) => (t < 0.15 ? a + (b - a) * t / 0.15 : b + (m - b) * Math.min(1, (t - 0.15) / 0.4));
+    c.layer(0, 0.58, (t) => {
+      p += seg(t, 620, 790, 520) / c.sr;
+      const x = (2 * (p % 1) - 1) * (1 + 0.1 * Math.sin(TAU * 7 * t));
+      const e = Math.min(1, t / 0.04) * Math.min(1, (0.58 - t) / 0.12);
+      return (fa(x, seg(t, 480, 950, 620), 6, c.sr, BP) + 0.6 * fb(x, seg(t, 2300, 1450, 900), 8, c.sr, BP)) * e;
+    }, 1.5);
+  }, 0.5);
+  def('drill', 0.5, 0.45, (c) => {
+    const fl = svf(); let p = 0;
+    c.layer(0, 0.46, (t) => { p += (320 + 900 * Math.min(1, t / 0.2)) / c.sr; const s = (2 * (p % 1) - 1); return fl(s, 1800, 2, c.sr, BP) * env(t, 0.01, 0.25); }, 0.8);
+    c.layer(0, 0.4, (t) => (c.r() * 2 - 1) * (0.5 + 0.5 * Math.sin(TAU * 42 * t)) * env(t, 0.02, 0.15), 0.2);
+    c.modal(0.2, 900, [1, 2.7, 4.6], [0.6, 0.4, 0.2], [0.05, 0.03, 0.02], 0.35);
+  }, 0.4);
+  // largada: bips de cronómetro de rally (limpios, sin chip)
+  const beep = (c, f, d) => c.layer(0, d + 0.03, (t) => (Math.sin(TAU * f * t) + 0.25 * Math.sin(TAU * 2 * f * t) + 0.08 * Math.sin(TAU * 3 * f * t)) * (t < d ? Math.min(1, t / 0.002) : Math.exp(-(t - d) / 0.008)));
+  def('count', 0.17, 0.3, (c) => beep(c, 1046.5, 0.12), 0);
+  def('go', 0.6, 0.38, (c) => { beep(c, 2093, 0.42); c.layer(0, 0.45, (t) => Math.sin(TAU * 2096 * t) * Math.min(1, t / 0.002) * Math.exp(-t / 0.3), 0.4); }, 0);
+  def('clear', 1.4, 0.55, (c) => {
+    // bandera a cuadros: dos golpes de bronce y platillo
+    [60, 64, 67].forEach((m) => c.brass(0, mtof(m), 0.12, 0.3));
+    [67, 72, 76, 79].forEach((m) => c.brass(0.2, mtof(m), 0.75, 0.3));
+    c.thump(0.2, 120, 60, 0.05, 0.6);
+    c.hiss(0.2, 1.1, 'white', HP, 5500, 4000, 0.6, 0.002, 0.35, 0.45);
+  }, 0);
+  def('oneup', 0.9, 0.5, (c) => { c.horn(0, 0.08, 415, 523, 0.7); c.horn(0.13, 0.12, 415, 523, 0.7); [84, 88, 91, 96].forEach((m, i) => c.fm(0.3 + i * 0.06, mtof(m), 3.5, 1.5, 0.14, 0.4)); }, 0);
+  def('gameover', 2.3, 0.5, (c) => {
+    // trombón con sordina: wah, wah, wah, waaah
+    const notes = [[58, 0, 0.36], [57, 0.4, 0.36], [56, 0.8, 0.36], [55, 1.2, 1.0]];
+    for (const [m, t0, d] of notes) {
+      const f1 = svf(), f2 = svf(); let p = 0;
+      c.layer(t0, d + 0.1, (t) => {
+        const vib = t > 0.35 ? 1 + 0.012 * Math.sin(TAU * 5.5 * (t - 0.35)) : 1;
+        p += mtof(m) * vib / c.sr;
+        const s = 2 * (p % 1) - 1;
+        const wah = 380 + 1300 * Math.sin(Math.PI * Math.min(1, t / Math.min(d, 0.36)));
+        const e = t < d ? Math.min(1, t / 0.03) : Math.exp(-(t - d) / 0.04);
+        return (f1(s, wah, 3, c.sr, BP) + 0.4 * f2(s, 2200, 2, c.sr, BP)) * e;
+      }, 1);
+    }
+  }, 0);
+  def('explode', 1.3, 0.65, (c) => {
+    c.thump(0, 70, 30, 0.18, 1.3, 3);
+    c.hiss(0, 1.2, 'brown', LP, 2400, 90, 0.7, 0.002, 0.3, 2.4);
+    c.hiss(0, 0.3, 'white', HP, 3000, 1500, 0.7, 0.001, 0.05, 0.4);
+    for (let i = 0; i < 9; i++) c.modal(c.rr(0.15, 0.9), c.rr(500, 1600), [1, 2.4, 3.7], [0.5, 0.3, 0.2], [0.04, 0.03, 0.02], 0.15);
+  }, 0.4);
+  def('crash', 1.3, 0.7, (c) => {
+    // choque: golpe grave, lata que se abolla, vidrio y piezas que ruedan
+    c.thump(0, 95, 38, 0.09, 1.4, 3);
+    const f1 = svf(), f2 = svf(), f3 = svf();
+    c.layer(0, 0.5, (t) => { const x = (c.r() * 2 - 1) * Math.sin(TAU * 37 * t + 1); return (f1(x, 430, 7, c.sr, BP) + f2(x, 1130, 8, c.sr, BP) + 0.7 * f3(x, 2380, 9, c.sr, BP)) * env(t, 0.002, 0.11); }, 2.2);
+    c.hiss(0, 0.5, 'white', HP, 4000, 2500, 0.7, 0.001, 0.04, 0.5);
+    for (let i = 0; i < 16; i++) c.fm(c.rr(0.03, 0.5), c.rr(3500, 8500), c.rr(1.3, 2.9), 1, c.rr(0.01, 0.03), c.rr(0.08, 0.22));
+    for (let i = 0; i < 5; i++) c.modal(c.rr(0.35, 1.0), c.rr(700, 1300), [1, 2.3, 3.8], [0.5, 0.3, 0.15], [0.03, 0.02, 0.015], 0.14);
+  }, 0.3);
+  def('alarm', 1.0, 0.45, (c) => {
+    // timbre eléctrico: martillo a 22 golpes por segundo sobre una campana
+    for (let k = 0; k < 2; k++) for (let i = 0; i < 8; i++) c.modal(k * 0.45 + i / 22, 1900, [1, 2.4, 3.3], [1, 0.5, 0.3], [0.05, 0.03, 0.02], 0.6, 0.0005);
+  }, 0.2);
+  def('ignite', 1.2, 0.6, (c) => {
+    // burro de arranque "rr-rr-rr" y el motor que prende y acelera
+    const fl = svf(); let p = 0;
+    c.layer(0, 0.42, (t) => { p += 180 / c.sr; const crank = 0.5 + 0.5 * Math.sin(TAU * 11 * t); return fl(2 * (p % 1) - 1, 700, 1.4, c.sr, LP) * crank * Math.min(1, t / 0.02); }, 0.45);
+    const f2 = svf(), f3 = svf(), f4 = svf(); let q = 0;
+    c.layer(0.4, 0.78, (t) => {
+      const rpm = t < 0.25 ? 40 + 140 * t / 0.25 : 180 - 90 * Math.min(1, (t - 0.25) / 0.35);
+      q += rpm / c.sr; const x = Math.exp(-((q % 1) * 6)) * 2 - 0.5;
+      return f4(f2(x, 420, 1.5, c.sr, BP) + 0.6 * f3(x, 1250, 2, c.sr, BP), 1800, 0.7, c.sr, LP) * Math.min(1, t / 0.02) * Math.min(1, (0.78 - t) / 0.25);
+    }, 1.2);
+  }, 0.2);
+
+  // ---------- API
+  return {
+    has: (name, rally) => !!D[name] && (D[name].ui || rally),
+    names: (rally) => Object.keys(D).filter((k) => D[k].ui || rally),
+    jitter: (name) => (D[name] ? D[name].jit : 0),
+    render(name, sr, seed) {
+      const d = D[name], c = ctx(sr, d.dur, seed);
+      d.fn(c);
+      return finish(c, d.peak);
+    },
+  };
+})();
 // =====================================================================
 //  MÚSICA DEL GAS RALLY · composiciones originales por secciones
 //  Cada canción dura entre 50 s y 1,5 min antes de repetirse (intro, A, B,
@@ -2343,39 +3052,63 @@ function turntableCanvas(r, phase) {
   const { c, g } = mk(r * 2 + 4, r * 2 + 4);
   const m = r + 2;
   disc(g, m + 2, m + 3, r, 'rgba(0,0,0,0.45)');
-  disc(g, m, m, r, '#3a3168'); disc(g, m, m, r - 2, '#241e46'); disc(g, m, m, r - 5, '#2c2552');
-  for (let k = r - 9; k > 6; k -= 6) { disc(g, m, m, k, '#262049'); disc(g, m, m, k - 1, '#2c2552'); }
+  disc(g, m, m, r, '#5b5e68'); disc(g, m, m, r - 2, '#2b2c32'); disc(g, m, m, r - 5, '#36373e');
+  for (let k = r - 9; k > 6; k -= 6) { disc(g, m, m, k, '#2f3036'); disc(g, m, m, k - 1, '#36373e'); }
   const n = 20;
   for (let i = 0; i < n; i++) {
     const a = (i / n) * Math.PI * 2, x = m + Math.cos(a) * (r - 1), y = m + Math.sin(a) * (r - 1);
     const on = (i + phase) % 2 === 0;
-    R(g, on ? (i % 4 < 2 ? '#ff4f9a' : '#4fe3ff') : '#4a3f7a', x - 1, y - 1, 2, 2);
+    R(g, on ? (i % 4 < 2 ? '#f2c12e' : '#f4f4ee') : '#45464e', x - 1, y - 1, 2, 2);
   }
   return c;
 }
 function garageBgCanvas() {
+  // taller de barrio: muro de bloques, cortina metálica, tableros de herramientas,
+  // tubos fluorescentes, neumáticos, tambor de aceite y piso de cemento con líneas amarillas
   const { c, g } = mk(512, 216);
   const r = rng32(44);
-  R(g, '#1c1636', 0, 0, 512, 64);
-  for (let y = 0; y < 64; y += 6) {
-    R(g, '#241d44', 0, y, 512, 1);
-    for (let x = (y / 6) % 2 ? 0 : 8; x < 512; x += 16) R(g, '#241d44', x, y, 1, 6);
+  R(g, '#3b3c44', 0, 0, 512, 66);
+  for (let y = 0; y < 66; y += 8) {
+    R(g, '#33343b', 0, y, 512, 1);
+    for (let x = (y / 8) % 2 ? 0 : 12; x < 512; x += 24) R(g, '#33343b', x, y, 1, 8);
   }
-  // portón metálico
-  R(g, '#2a2450', 180, 6, 152, 58); for (let y = 8; y < 64; y += 4) R(g, '#1e1940', 180, y, 152, 1);
-  R(g, '#3a3168', 180, 6, 152, 2);
-  // tubos de neón
-  const tube = (x, y, w, col, dim) => { R(g, dim, x - 1, y - 1, w + 2, 4); R(g, col, x, y, w, 2); R(g, '#ffffff', x + 2, y, w - 4, 1); };
-  tube(24, 18, 132, '#ff4f9a', '#5a1f4a'); tube(356, 18, 132, '#4fe3ff', '#1f4a5a');
-  tube(24, 36, 70, '#4fe3ff', '#1f4a5a'); tube(418, 36, 70, '#ff4f9a', '#5a1f4a');
-  // herramientas colgadas
-  for (let i = 0; i < 6; i++) { const x = 110 + i * 10; R(g, '#5a5478', x, 34, 2, 14); R(g, '#5a5478', x - 1, 32, 4, 3); }
-  for (let i = 0; i < 5; i++) { const x = 360 + i * 12; R(g, '#5a5478', x, 40, 3, 10); disc(g, x + 1, 39, 2.5, '#5a5478'); }
-  // zócalo y piso
-  R(g, '#3a3168', 0, 64, 512, 3); R(g, '#120e26', 0, 67, 512, 2);
-  for (let y = 69; y < 216; y += 16) for (let x = 0; x < 512; x += 16) R(g, ((x + y) >> 4) % 2 ? '#1a1530' : '#201a3a', x, y, 16, 16);
-  for (let k = 0; k < 7; k++) ellipse(g, 20 + r() * 470, 90 + r() * 110, 6 + r() * 10, 3 + r() * 4, 'rgba(0,0,0,0.25)');
-  for (let k = 0; k < 3; k++) { const y = 120 + r() * 80; for (let x = 0; x < 512; x += 3) if (r() < 0.6) R(g, 'rgba(0,0,0,0.18)', x, y + Math.round(Math.sin(x * 0.05) * 3), 2, 1); }
+  for (let k = 0; k < 40; k++) R(g, 'rgba(0,0,0,0.12)', r() * 512, r() * 64, 1 + r() * 3, 1);
+  // cortina metálica a medio subir
+  R(g, '#25262c', 184, 4, 144, 62); R(g, '#5d606b', 184, 4, 144, 30);
+  for (let y = 6; y < 34; y += 3) R(g, '#4a4c56', 184, y, 144, 1);
+  R(g, '#7b7e8a', 184, 33, 144, 2); R(g, '#16171b', 184, 35, 144, 1);
+  R(g, '#2c2d34', 180, 2, 4, 64); R(g, '#2c2d34', 328, 2, 4, 64);
+  // tubos fluorescentes (luz fría, sin neón de colores)
+  const tube = (x, y, w) => { R(g, '#2a2b31', x - 2, y - 2, w + 4, 5); R(g, '#e9f1ee', x, y, w, 2); R(g, '#ffffff', x + 3, y, w - 6, 1); R(g, 'rgba(233,241,238,0.08)', x - 10, y + 3, w + 20, 6); };
+  tube(206, 0, 100);
+  // tablero perforado con herramientas
+  const board = (x0, w) => {
+    R(g, '#8a6f4e', x0, 24, w, 32); R(g, '#76603f', x0, 54, w, 2);
+    for (let y = 27; y < 54; y += 4) for (let x = x0 + 3; x < x0 + w - 2; x += 4) R(g, '#6d583b', x, y, 1, 1);
+  };
+  board(30, 104); board(380, 100);
+  const wr = (x, l) => { R(g, '#b8bcc6', x, 30, 2, l); R(g, '#b8bcc6', x - 1, 29, 4, 2); R(g, '#8e929c', x, 30 + l - 1, 2, 1); };
+  for (let i = 0; i < 6; i++) wr(38 + i * 8, 10 + i * 2);
+  R(g, '#d8342c', 94, 30, 4, 12); R(g, '#202126', 94, 42, 4, 8);       // destornillador
+  R(g, '#d8342c', 104, 30, 3, 10); R(g, '#202126', 104, 40, 3, 9);
+  R(g, '#f2c12e', 114, 31, 12, 7); R(g, '#202126', 118, 38, 4, 10);   // taladro
+  for (let i = 0; i < 4; i++) { const x = 392 + i * 14; disc(g, x + 2, 34, 3, '#b8bcc6'); disc(g, x + 2, 34, 1.5, '#8a6f4e'); R(g, '#b8bcc6', x + 1, 37, 3, 10); }
+  R(g, '#2a5aa8', 450, 30, 22, 16); R(g, '#e9ecf2', 452, 32, 18, 2); R(g, '#e9ecf2', 452, 36, 12, 1); R(g, '#e9ecf2', 452, 39, 15, 1); // cartel azul
+  // zócalo y franja de seguridad
+  R(g, '#23242a', 0, 66, 512, 2);
+  for (let x = -8; x < 512; x += 12) { g.fillStyle = '#f2c12e'; g.beginPath(); g.moveTo(x, 68); g.lineTo(x + 6, 68); g.lineTo(x + 2, 72); g.lineTo(x - 4, 72); g.fill(); }
+  R(g, '#1a1b1f', 0, 68, 512, 0); R(g, '#16171b', 0, 72, 512, 1);
+  // piso de cemento con juntas, manchas de aceite y líneas de estacionamiento
+  R(g, '#4a4b52', 0, 73, 512, 143);
+  for (let y = 73; y < 216; y += 36) R(g, '#3f4047', 0, y, 512, 1);
+  for (let x = 0; x < 512; x += 64) R(g, '#3f4047', x, 73, 1, 143);
+  for (let k = 0; k < 900; k++) R(g, r() < 0.5 ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.04)', r() * 512, 73 + r() * 143, 1, 1);
+  for (let k = 0; k < 8; k++) ellipse(g, 20 + r() * 470, 100 + r() * 100, 6 + r() * 12, 3 + r() * 4, 'rgba(10,10,14,0.28)');
+  for (const x of [118, 386]) { R(g, '#d9b13a', x, 96, 2, 120); }
+  R(g, '#d9b13a', 118, 96, 16, 2); R(g, '#d9b13a', 372, 96, 16, 2);
+  // neumáticos apilados y tambor de aceite
+  for (let i = 0; i < 3; i++) { ellipse(g, 26, 92 - i * 8, 15, 5, '#18191d'); ellipse(g, 26, 91 - i * 8, 13, 4, '#26272c'); ellipse(g, 26, 91 - i * 8, 6, 2, '#18191d'); }
+  R(g, '#b0322a', 478, 70, 20, 26); R(g, '#d8342c', 480, 70, 3, 26); R(g, '#7e231d', 478, 78, 20, 1); R(g, '#7e231d', 478, 88, 20, 1); ellipse(g, 488, 70, 10, 3, '#c23a30');
   return c;
 }
 
@@ -3529,6 +4262,12 @@ const Rally = (() => {
     nieve: ['Hielo: las patrullas no pueden doblar (tú sí, con clavos)', 'Montículos que frenan; el quitanieves los limpia', 'Avalanchas: cortan una calle unos segundos'],
     cuarto: ['Pilas en vez de bidones y regalos con ítem', 'El tren pasa: espera cuando baja la barrera', 'Canicas que ruedan y la pata del gato'],
   };
+  // cada policía suena distinto: Londres con dos tonos, Tokio con su sirena lenta, el cuarto con una de juguete
+  const SIREN_OF = { scl: 'wail', bue: 'yelp', mex: 'yelp', lax: 'wail', lon: 'hilo', tyo: 'jp', arena: 'yelp', nieve: 'wail', cuarto: 'toy' };
+  // los bidones suben por la escala mayor: el décimo suena una octava y media más arriba que el primero
+  const CAN_STEP = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16];
+  const canRate = (k) => Math.pow(2, CAN_STEP[clamp(k - 1, 0, 9)] / 12);
+  const panX = (x) => clamp((x - camX - Engine.W / 2) / (Engine.W * 0.55), -0.85, 0.85);
   const TIPS = [
     'El gas aturde a todas las patrullas que lo tocan, no solo a una.',
     'Junta bidones seguidos para hacer combo y ganar más.',
@@ -4722,16 +5461,19 @@ const Rally = (() => {
 
   // ---------------- HUD de juego
   const coinH = (n) => `<b class="coin"></b>${n}`;
+  // letrero verde de autopista: qué pasa (chico) y a dónde vas (grande)
+  const signH = (small, big) => `<span><small>${small}</small><b>${big}</b></span><i class="arw" aria-hidden="true"></i>`;
+  const odoH = (v) => pad6(v).split('').map((d) => `<i>${d}</i>`).join('');
   function buildHud() {
     UI.setHud(`
       <div class="hrow">
-        <div class="hcol"><span class="hlab" id="rsl">PUNTOS</span><span class="hval" id="rs">000000</span></div>
-        <div class="hcol" style="align-items:center"><span class="hlab" id="rlbl">SANTIAGO</span><span class="hval sun" id="rl">1/3</span></div>
-        <div class="hcol" style="align-items:flex-end"><span class="hlab" id="rhl">REC</span><span class="hval cyan" id="rh">000000</span></div>
+        <div class="hcol"><span class="hlab" id="rsl" hidden>Tú</span><span class="odo" id="rs" aria-label="Puntos">${odoH(0)}</span></div>
+        <div class="hcol" style="align-items:center"><span class="hcity" id="rlbl">Santiago</span><span class="hval sun" id="rl">1/3</span></div>
+        <div class="hcol" style="align-items:flex-end"><span class="hlab" id="rhl">Récord</span><span class="hval cyan" id="rh">000000</span></div>
       </div>
       <div class="hbl" style="flex-direction:column">
-        <div class="hline"><span class="hlab">GAS</span><div class="fuel" id="rfw"><i id="rf"></i></div><span class="islot" id="ri"><img id="rii" alt=""></span></div>
-        <div class="hline"><div class="lives" id="rv"></div><span class="hval sun" id="rc">×10</span><span class="hcoin" id="rm"></span></div>
+        <div class="hline"><span class="gauge" aria-label="Gas"><b>E</b><span class="fuel" id="rfw"><i id="rf"></i></span><b>F</b></span><span class="islot" id="ri"><img id="rii" alt=""></span></div>
+        <div class="hline"><div class="lives" id="rv"></div><span class="hcan" id="rc">10</span><span class="hcoin" id="rm"></span></div>
       </div>
       <canvas id="radar" width="${MW * 2}" height="${MH * 2}"></canvas>
       <div class="banner" id="rb" hidden></div>
@@ -4794,12 +5536,12 @@ const Rally = (() => {
     UI.setHud(`
       <div class="hud-ui gar hub" id="gar">
         <div class="gtitle">Gas Rally${freeMode() ? ' <small class="ptag">MODO PRUEBA</small>' : ''}</div>
-        <div class="gbar"><span class="hcoin" id="gco"></span><button class="chip" id="gach">Logros <b>${achPct()}%</b></button><button class="chip" id="gguide">Guía</button></div>
+        <div class="gbar"><span class="hcoin" id="gco"></span><button class="chip" id="gach">Logros <b>${achPct()} %</b></button><button class="chip" id="gguide">Guía</button></div>
         <div class="gpanel">
           <div class="hhead"><b>${hello}</b><span>${sub}</span></div>
           <ol class="route" aria-label="Ruta de la gira">${route}</ol>
           ${fresh ? '' : `<div class="runst"><span><em>${fmtN(S.score)}</em> puntos</span><span><em>${S.lives}</em> ${S.lives === 1 ? 'auto' : 'autos'}</span>${S.loop ? `<span>Vuelta <em>${S.loop + 1}</em></span>` : ''}</div>`}
-          <button class="gbtn go" data-f="0">${fresh ? 'Empezar' : 'Seguir'} en ${nice(nc.name)} ▶</button>
+          <button class="sign go" data-f="0">${signH(fresh ? 'Empezar la gira en' : 'Seguir la gira en', nice(nc.name))}</button>
           <div class="tiles">
             <button data-f="1"><img src="${hubIconURL('taller')}" alt=""><b>Taller</b><small>Autos y mejoras</small></button>
             <button data-f="2"><img src="${hubIconURL('duel')}" alt=""><b>Duelos</b><small>Contra los rivales</small></button>
@@ -4853,7 +5595,7 @@ const Rally = (() => {
           <div class="grow" data-row="2"><span class="glab">Gas y neón <em id="ggc"></em></span><div class="sw" id="ggas"></div></div>
           <div class="grow" data-row="3"><span class="glab">Mejoras <em>para este auto</em></span><div class="upg" id="gupg"></div></div>
           <div class="grow" data-row="4"><span class="glab">Equipo <em>para todos</em></span><div class="upg" id="geq"></div></div>
-          <button class="gbtn" id="ggo" data-row="5"></button>
+          <button class="sign slim" id="ggo" data-row="5"></button>
         </div>
       </div>`);
     const root = UI.$('#gar');
@@ -4896,7 +5638,7 @@ const Rally = (() => {
     if (S.gRow === 4) { gcd.innerHTML = EQUIP[S.gEq].d; gcd.classList.remove('lock'); }
     const go = UI.$('#ggo');
     go.classList.toggle('buy', !has || !paintOk);
-    go.innerHTML = !has ? `Comprar ${nice(car.name)} · ${coinH(car.price)}` : !paintOk ? `Comprar pintura ${capW(car.special.n)} · ${coinH(PAINT_PRICE)}` : 'Listo, volver al inicio';
+    go.innerHTML = !has ? signH(`Comprar por ${coinH(car.price)}`, nice(car.name)) : !paintOk ? signH(`Comprar por ${coinH(PAINT_PRICE)}`, `Pintura ${capW(car.special.n)}`) : signH('Listo', 'Volver al inicio');
     UI.$('#gcol').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { sel.c = +b.dataset.i; S.gRow = 1; saveSel(); }));
     UI.$('#ggas').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { sel.g = +b.dataset.i; S.gRow = 2; saveSel(); burstGas(); }));
     UI.$('#gupg').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { S.gRow = 3; S.gUpg = +b.dataset.i; buyUpgrade(S.gUpg); }));
@@ -5001,7 +5743,7 @@ const Rally = (() => {
           <div class="wmode" role="group" aria-label="Modo de juego"><button class="chip" id="wmT">Gira</button><button class="chip" id="wmD">Duelo</button><button class="chip" id="wmE">Especiales</button></div>
           <div class="wnav"><button class="arr" id="wprev" aria-label="Anterior">◀</button><div class="wname"><b><img class="flagimg" id="wfl" alt=""> <span id="wcn"></span></b><small id="wcc"></small></div><button class="arr" id="wnext" aria-label="Siguiente">▶</button></div>
           <div class="wst" id="wst"></div>
-          <button class="gbtn wgo" id="wgo"></button>
+          <button class="sign slim wgo" id="wgo"></button>
         </div>
       </div>`);
     UI.$('#wprev').addEventListener('click', () => moveMapSel(-1));
@@ -5040,7 +5782,7 @@ const Rally = (() => {
     const go = UI.$('#wgo');
     go.disabled = !open && needEq;
     go.classList.toggle('buy', !open && !needEq);
-    go.innerHTML = open ? `Jugar ${nice(t.name)} ▶` : needEq ? 'Faltan los clavos' : `Abrir por ${coinH(t.price)}`;
+    go.innerHTML = signH(open ? 'Jugar en' : needEq ? 'Faltan los clavos para' : `Abrir por ${coinH(t.price)}`, nice(t.name));
   }
   function refreshMap() {
     const c = CITIES[S.mapSel], i = S.mapSel, open = i < unlocked(), done = (clearedMask() >> i) & 1, duel = S.mapMode === 'duel';
@@ -5062,7 +5804,7 @@ const Rally = (() => {
       : done ? `${starsH(starsOf(c.id))} Récord ${fmtN(best.score || 0)} en ${fmtT(best.time || 0)}` : `${starsH(0)} Tres rondas y un escape final.`;
     UI.$('#wst').classList.toggle('lock', !open);
     UI.$('#wgo').disabled = !open;
-    UI.$('#wgo').innerHTML = !open ? 'Bloqueada' : duel ? `Desafiar a ${rv} ▶` : `Viajar a ${nice(c.name)} ▶`;
+    UI.$('#wgo').innerHTML = signH(!open ? 'Bloqueada' : duel ? 'Desafiar a' : 'Viajar a', duel && open ? rv : nice(c.name));
   }
   function travel() {
     if (S.state !== 'map') return;
@@ -5183,6 +5925,7 @@ const Rally = (() => {
     if (!owned.has(CARS[sel.m].id)) { sel.m = 0; sel.c = 0; }
     if (sel.c >= 4 && !paints[CARS[sel.m].id]) sel.c = 0;
     S.mode = mode; S.city = ci; S.round = mode === 'tour' ? clamp(round, 0, (ALLC[ci].rounds || ROUNDS) - 1) : 0;
+    Snd.sirenStyle(SIREN_OF[ALLC[ci].id] || 'wail');
     if (ci >= NC) enterTrackRun(); else { leaveTrackRun(); if (mode === 'tour') saveRun(); }
     Object.assign(S, { cityTime: 0, cityDeaths: 0, cityScore0: S.score || 0, escape: null, spotted: false, combo: 0, comboT: 0 });
     Store.set('rally_last', ci);
@@ -5231,7 +5974,7 @@ const Rally = (() => {
     const icpR1 = S.round === 0 && (lvl() >= 2 || S.loop > 0 || diff() >= 2);
     S.icpAt = S.mode === 'tour' && !S.bonus && S.trk !== 'arena' && diff() > 0 && (S.round === 2 || icpR1) ? (S.round === 2 ? 30 : 40) : Infinity;
     S.quakeT = rand(16, 26);
-    S.state = 'intro'; S.t = 0; S.lastStep = -1;
+    S.state = 'intro'; S.t = 0; S.lastStep = -1; S.quick = false;
     const c = ALLC[S.city];
     const flag = `<img class="flagimg" src="${iconOf(c)}" alt="${c.kind ? '' : `Bandera de ${c.country}`}">`;
     if (S.mode === 'duel') banner(`${flag} DUELO EN ${c.name}`, `VS ${rival.name} · GANA QUIEN JUNTE ${DUEL_WIN} DE ${DUEL_CANS}`);
@@ -5471,7 +6214,7 @@ const Rally = (() => {
         if (S.duelR >= DUEL_WIN) { duelEnd(false); return true; }
         return false;
       }
-      S.duelP++; S.fuel = Math.min(100, S.fuel + 12); addCoins(3); Snd.sfx('fuel'); comboHit(c); mission('cans');
+      S.duelP++; S.fuel = Math.min(100, S.fuel + 12); addCoins(3); Snd.sfx('fuel', { rate: canRate(S.duelP) }); comboHit(c); mission('cans');
       popup(`${S.duelP}/${DUEL_WIN}`, c.x, c.y - 10, '#ffffff');
       if (S.duelP >= DUEL_WIN) { duelEnd(true); return true; }
       return false;
@@ -5484,7 +6227,7 @@ const Rally = (() => {
       addCoins(c.kind === 'N' ? 2 : 5);
       if (c.kind === 'S') { S.special = true; Snd.sfx('fuelS'); UI.toast('¡BIDÓN S! PUNTOS ×2 HASTA EL FINAL'); flash(0.25, [1, 0.9, 0.4]); }
       else if (c.kind === 'L') { Snd.sfx('lucky'); addScore(1000); UI.toast('¡BIDÓN L! +1000'); }
-      else Snd.sfx('fuel');
+      else Snd.sfx('fuel', { rate: canRate(Math.min(S.combo, 10)) });
       addScore(pts, c.x, c.y - 10);
       c.respawn = 3;
       return false;
@@ -5497,7 +6240,7 @@ const Rally = (() => {
     addCoins(c.kind === 'N' ? 3 : 6);
     if (c.kind === 'S') { S.special = true; Snd.sfx('fuelS'); UI.toast('¡BIDÓN S! PUNTOS ×2'); flash(0.25, [1, 0.9, 0.4]); }
     else if (c.kind === 'L') { const b = Math.round(S.fuel) * 10; Snd.sfx('lucky'); UI.toast(`¡BIDÓN L! BONO +${b}`); addScore(b); flash(0.25, [0.5, 1, 0.7]); }
-    else Snd.sfx('fuel');
+    else Snd.sfx('fuel', { rate: canRate(S.collected) });
     addScore(pts, c.x, c.y - 10);
     if (S.collected >= 10) {
       addCoins(15);
@@ -5895,7 +6638,7 @@ const Rally = (() => {
         else { crash(); return true; }
       }
       for (const e of enemies) if (e.active && e.stun <= 0 && e.hold <= 0 && hit(e)) {
-        e.stun = 3; e.plan = null; e.tile = -1; Snd.sfx('stun');
+        e.stun = 3; e.plan = null; e.tile = -1; Snd.sfx('stun', { pan: panX(e.x) });
         if (S.mode === 'tour') addScore(100, e.x, e.y - 12);
       }
       for (const cv of civs) if (cv.active && !(cv.spinT > 0) && hit(cv)) cv.spinT = 1.2;
@@ -5909,7 +6652,7 @@ const Rally = (() => {
         if (!S.spikes && S.shieldT <= 0 && S.spinT <= 0) { S.spinT = 0.9; S.spinA = 0; Snd.sfx('spin'); UI.vibrate([20, 20, 20]); }
         continue;
       }
-      for (const e of enemies) if (e.active && e.stun <= 0 && e.hold <= 0 && near(m, e, 9)) { e.stun = 1.6; m.dir = (m.dir + 2) % 4; m.cd = 0.7; Snd.sfx('stun'); break; }
+      for (const e of enemies) if (e.active && e.stun <= 0 && e.hold <= 0 && near(m, e, 9)) { e.stun = 1.6; m.dir = (m.dir + 2) % 4; m.cd = 0.7; Snd.sfx('stun', { pan: panX(e.x) }); break; }
     }
     if (S.paw) updatePaw(dt);
     else if (!S.escape && (S.pawT -= dt) <= 0) startPaw();
@@ -5989,13 +6732,13 @@ const Rally = (() => {
     if (S.coinBump > 0) S.coinBump -= dt;
     if (S.state === 'intro') {
       const step = Math.floor(S.t / 0.7) - (S.round === 0 ? 1 : 0);
-      if (step !== S.lastStep) {
+      if (step !== S.lastStep && !S.quick) {
         S.lastStep = step;
         const sub = S.mode === 'duel' ? `VS ${rival.name} · PRIMERO EN JUNTAR ${DUEL_WIN}` : S.bonus ? 'RONDA DE BONO' : `${ALLC[S.city].name} · RONDA ${S.round + 1}/${roundsOf()}`;
         if (step >= 1 && step <= 3) { banner(String(4 - step), sub); Snd.sfx('count'); }
       }
-      if (S.t >= (S.round === 0 ? 3.5 : 2.8)) {
-        S.state = 'play'; S.t = 0; banner('¡YA!', ''); Snd.sfx('go'); S.goT = 0.8;
+      if (S.t >= (S.quick ? 1.25 : S.round === 0 ? 3.5 : 2.8)) {
+        S.state = 'play'; S.t = 0; S.quick = false; banner('¡YA!', ''); Snd.sfx('go'); S.goT = 0.8;
         const c = ALLC[S.city];
         if (S.round === 0 && c.scramble) UI.toast('CURVAS PARA DERRAPAR · EN EL GRAN CRUCE TODOS FRENAN');
         else if (S.round === 0 && c.drift) UI.toast('CURVAS PARA DERRAPAR · SAL DEL DERRAPE CON MINI TURBO');
@@ -6009,7 +6752,7 @@ const Rally = (() => {
       updateEnemies(dt * 0.5);
       updateCivs(dt);
       if (S.mode === 'duel') { updateRival(dt); if (S.state !== 'dying') { updateFx(dt); return; } }
-      if (S.t > 2) {
+      if (S.t > 1.5) {
         if (S.mode === 'duel') { respawnPlayer(); updateFx(dt); return; }
         if (S.trk === 'arena') {
           S.showT = Math.max(1, S.showT - 10);
@@ -6020,8 +6763,8 @@ const Rally = (() => {
         if (S.lives <= 0) { gameOver(); return; }
         resetActors(false);
         S.fuel = Math.max(S.fuel, 40);
-        S.state = 'intro'; S.t = S.round === 0 ? 0.7 : 0; S.lastStep = -1;
-        banner('¡OTRA VEZ!', `QUEDAN ${S.lives} AUTOS`);
+        S.state = 'intro'; S.t = 0; S.lastStep = -1; S.quick = true;
+        banner('¡OTRA VEZ!', S.lives === 1 ? 'TE QUEDA EL ÚLTIMO AUTO' : `QUEDAN ${S.lives} AUTOS`);
       }
     } else if (S.state === 'clear') {
       S.tallyT = (S.tallyT || 0) + dt;
@@ -6153,7 +6896,7 @@ const Rally = (() => {
       if (p.jumpT > 0 || e.jumpT > 0) { e.near = false; continue; }
       if (cheb < hitR && S.invT <= 0) {
         if (drillReady() && towards(p, e)) { wreck(e); continue; }
-        if (S.shieldT > 0) { shieldBreak(S); e.stun = 3; e.spin = 0; e.near = false; Snd.sfx('stun'); addCoins(1); continue; }
+        if (S.shieldT > 0) { shieldBreak(S); e.stun = 3; e.spin = 0; e.near = false; Snd.sfx('stun', { pan: panX(e.x) }); addCoins(1); continue; }
         crash(); return;
       }
       if (cheb < 19) e.near = true;
@@ -6166,7 +6909,7 @@ const Rally = (() => {
     for (const cv of civs) {
       if (!cv.active || cv.ghost > 0 || !near(cv, c, cv.bus ? 13 : 11)) continue;
       cv.ghost = 1.2;
-      Snd.sfx('horn');
+      Snd.sfx('horn', { pan: panX(cv.x) });
       if (c === player && drillReady() && towards(c, cv)) {
         S.drillT = 0; cv.spinT = 1.5; cv.ghost = 2.5;
         if (S.mode === 'tour') addScore(150, cv.x, cv.y - 12);
@@ -6221,27 +6964,27 @@ const Rally = (() => {
         const rk = S.rockList.find((r) => Math.abs(r.cx - e.x) < 11 && Math.abs(r.cy - e.y) < 11);
         if (rk) {
           e.stun = 2.4; e.dir = (e.dir + 2) % 4; e.plan = null; e.tile = -1; S.nRock = (S.nRock || 0) + 1;
-          Snd.sfx('stun'); parts.burst(e.vx, e.vy, 12, 70, 0.4, 0xff8a1e, 0xf4f1ea, 2, 1, 0, 3);
+          Snd.sfx('stun', { pan: panX(e.x) }); parts.burst(e.vx, e.vy, 12, 70, 0.4, 0xff8a1e, 0xf4f1ea, 2, 1, 0, 3);
           continue;
         }
       }
       for (const s of smokes) {
         if (s.life <= 0 || s.hit.has(e) || Math.abs(s.x - e.x) >= 11 || Math.abs(s.y - e.y) >= 11) continue;
-        s.hit.add(e); e.stun = e.icp ? 1.4 : 2.8; Snd.sfx('stun');
+        s.hit.add(e); e.stun = e.icp ? 1.4 : 2.8; Snd.sfx('stun', { pan: panX(e.x) });
         if (s.owner === 'p') { if (S.mode === 'tour') addScore(e.icp ? 300 : 50, e.x, e.y - 12); addCoins(e.icp ? 3 : 1); mission('gas'); if (e.icp) mission('icp'); }
         break;
       }
       if (e.stun > 0) continue;
       for (const s of slicks) {
         if (s.life <= 0 || !near(s, e, 8)) continue;
-        s.life = 0; s.spr.show(false); e.stun = 2.2; Snd.sfx('spin');
+        s.life = 0; s.spr.show(false); e.stun = 2.2; Snd.sfx('spin', { pan: panX(e.x), vol: 0.7 });
         if (s.owner === 'p') { addCoins(1); mission('oil'); }
         break;
       }
       if (e.stun > 0) continue;
       for (const cv of civs) {
         if (!cv.active || cv.ghost > 0 || !near(cv, e, cv.bus ? 13 : 11)) continue;
-        cv.ghost = 1.2; e.stun = 0.9; Snd.sfx('horn');
+        cv.ghost = 1.2; e.stun = 0.9; Snd.sfx('horn', { pan: panX(cv.x) });
         if (towards(cv, e)) { cv.dir = (cv.dir + 2) % 4; cv.plan = null; cv.tile = -1; }
         break;
       }
@@ -6249,7 +6992,7 @@ const Rally = (() => {
     for (let i = 0; i < enemies.length; i++) for (let j = i + 1; j < enemies.length; j++) {
       const a = enemies[i], b = enemies[j];
       if (!a.active || !b.active || a.stun > 0 || b.stun > 0 || a.hold > 0 || b.hold > 0) continue;
-      if (a.dir === (b.dir + 2) % 4 && Math.abs(a.x - b.x) < 9 && Math.abs(a.y - b.y) < 9) { a.stun = b.stun = 1.6; Snd.sfx('stun'); }
+      if (a.dir === (b.dir + 2) % 4 && Math.abs(a.x - b.x) < 9 && Math.abs(a.y - b.y) < 9) { a.stun = b.stun = 1.6; Snd.sfx('stun', { pan: panX(a.x) }); }
     }
   }
 
@@ -6553,8 +7296,10 @@ const Rally = (() => {
     const duel = S.mode === 'duel';
     const arena = S.trk === 'arena';
     set('mode', S.mode + (arena ? 'A' : ''), () => {
-      hud.sl.textContent = duel ? 'TÚ' : 'PUNTOS';
-      hud.hl.textContent = duel ? rival.name : 'REC';
+      hud.sl.hidden = !duel;
+      hud.s.className = duel ? 'odo txt' : 'odo';
+      hud.hl.textContent = duel ? nice(rival.name) : 'Récord';
+      hud.c.classList.toggle('arena', arena);
       hud.h.classList.toggle('cyan', !duel); hud.h.classList.toggle('pink', duel);
       hud.v.hidden = duel || arena;
     });
@@ -6563,7 +7308,7 @@ const Rally = (() => {
       set('h', 'd' + S.duelR, () => (hud.h.textContent = `${S.duelR}/${DUEL_WIN}`));
       set('l', 'duel', () => (hud.l.textContent = 'DUELO'));
     } else {
-      set('s', S.score, (v) => (hud.s.textContent = pad6(v)));
+      set('s', S.score, (v) => (hud.s.innerHTML = odoH(v)));
       set('h', Math.max(hiNow(), S.score), (v) => (hud.h.textContent = pad6(v)));
       if (arena) set('l', 'a' + Math.ceil(S.showT), () => { hud.l.textContent = fmtT(Math.ceil(S.showT)); hud.l.classList.toggle('pink', S.showT < 10); });
       else if (S.escape) {
@@ -6571,11 +7316,11 @@ const Rally = (() => {
         set('l', S.spotted ? 'v' : 'e' + m, () => { hud.l.textContent = S.spotted ? '¡TE VEN!' : `META ${m} M`; hud.l.classList.toggle('pink', S.spotted); });
       } else set('l', S.round + (S.bonus ? 10 : 0), () => { hud.l.textContent = S.bonus ? 'BONO' : `${S.round + 1}/${roundsOf()}`; hud.l.classList.remove('pink'); });
     }
-    set('lbl', S.city, (v) => (hud.lbl.textContent = ALLC[v].name));
+    set('lbl', S.city, (v) => (hud.lbl.textContent = nice(ALLC[v].name)));
     set('f', Math.round(S.fuel), (v) => { hud.f.style.width = v + '%'; hud.fw.classList.toggle('low', v < 22); });
     set('v', S.lives, (v) => (hud.v.innerHTML = '<b></b>'.repeat(Math.max(0, v - 1))));
     const left = duel ? cans.filter((c) => !c.got).length : arena ? S.collected : 10 - S.collected;
-    set('c', left + (S.special ? 1000 : 0) + (arena ? 5000 : 0), () => (hud.c.textContent = `${arena ? '★' : '×'}${left}${S.special ? ' ·2X' : ''}`));
+    set('c', left + (S.special ? 1000 : 0) + (arena ? 5000 : 0), () => (hud.c.textContent = `${left}${S.special ? ' ×2' : ''}`));
     set('m', S.coins, (v) => (hud.m.innerHTML = coinH(v)));
     set('mb', S.coinBump > 0, (v) => hud.m.classList.toggle('bump', v));
     const rolling = S.rollT > 0;
@@ -6595,9 +7340,10 @@ const Rally = (() => {
     const show = () => {
       S.state = 'over';
       buildHud();
-      const btns = [['retry', S.inTrack ? 'REINTENTAR PISTA' : 'REINTENTAR CIUDAD'], ['map', 'MAPA'], ['menu', 'MENÚ']];
-      if (tour && S.coins >= CONT) btns.unshift(['cont', `CONTINUAR · ${CONT} MONEDAS`]);
-      UI.gameOver('GAS RALLY', S.score, rec, [['Ciudad', ALLC[S.city].name], ['Ronda', `${S.round + 1}/${roundsOf()}`], ['Auto', CARS[sel.m].name], ['Monedas', String(S.coins)]], btns);
+      const btns = [['retry', S.inTrack ? 'Reintentar la pista' : 'Reintentar la ciudad'], ['map', 'Mapa'], ['menu', 'Menú']];
+      if (tour && S.coins >= CONT) btns.unshift(['cont', `Seguir aquí por ${CONT} monedas`]);
+      UI.gameOver('GAS RALLY', S.score, rec, [['Lugar', nice(ALLC[S.city].name)], ['Ronda', `${S.round + 1} de ${roundsOf()}`], ['Auto', nice(CARS[sel.m].name)], ['Monedas', fmtN(S.coins)]], btns,
+        { why: S.fuel <= 0 ? 'te quedaste sin gas y te alcanzaron' : 'te alcanzó la patrulla', score: fmtN(S.score) });
     };
     if (tour && qualifies(S.score)) { S.overT = 0; openInitials(S.score, show); } else show();
   }
@@ -6670,7 +7416,7 @@ const Rally = (() => {
   }
   function loadGo() {
     if (S.state !== 'loading' || !S.loadReady) return;
-    Snd.sfx('start');
+    Snd.sfx('ignite');
     if (S.mapMode === 'duel' && S.loadCi < NC) startDuel(S.loadCi); else startCity(S.loadCi, freeMode() ? S.loadRound : 0);
   }
   function updateLoading(dt) {
@@ -6975,6 +7721,7 @@ const Rally = (() => {
 
   // ---------------- interfaz con la consola
   function start() {
+    Snd.bank('rally');
     init();
     leaveTrackRun();
     loadRun();
@@ -6995,7 +7742,7 @@ const Rally = (() => {
       resetRun(); openMap({ sel: S.city || 0, mode: 'tour' });
     }
   }
-  function exit() { if (S.score > (S.hi || 0)) Store.set('hi_rally', S.score); document.body.classList.remove('inmenu'); Snd.loopsOff(); }
+  function exit() { if (S.score > (S.hi || 0)) Store.set('hi_rally', S.score); document.body.classList.remove('inmenu'); Snd.loopsOff(); Snd.bank('arcade'); }
   const capturesStart = () => ['garage', 'map', 'travel', 'arrive', 'cityclear', 'duelend', 'loading', 'guide', 'story', 'achs', 'initials', 'records', 'ending', 'over'].includes(S.state);
   const pauseInfo = () => (!['play', 'intro', 'dying', 'clear'].includes(S.state) ? ''
     : `<div class="pinfo"><b>Misiones</b>${missionList().list.map((m) => `<span>${mText(m)}: ${Math.min(m.n, MISSIONS[m.id].n)} de ${MISSIONS[m.id].n}</span>`).join('')}</div>`);
@@ -7944,7 +8691,7 @@ if (!Store.get('vol_fix1', false)) {
 }
 const Settings = { musV: Store.get('vol_mus', 5), sfxV: Store.get('vol_sfx', 5), vib: Store.get('vib', true), pad: Store.get('padsize', 1) };
 Snd.setVol(Settings.musV, Settings.sfxV);
-const PAD_K = [0.85, 1, 1.15], PAD_N = ['CHICOS', 'MEDIANOS', 'GRANDES'], DIFF_N = ['FÁCIL', 'NORMAL', 'DIFÍCIL', 'MAESTRO'];
+const PAD_K = [0.85, 1, 1.15], PAD_N = ['Chicos', 'Medianos', 'Grandes'], DIFF_N = ['Fácil', 'Normal', 'Difícil', 'Maestro'];
 let settingsFrom = null;
 
 const UI = {
@@ -7964,7 +8711,21 @@ const UI = {
       if (navigator.vibrate) navigator.vibrate(ms);
     } catch (e) { /* sin vibración */ }
   },
-  gameOver(name, score, rec, rows, buttons = [['retry', 'REINTENTAR'], ['menu', 'MENÚ']]) {
+  gameOver(name, score, rec, rows, buttons = [['retry', 'REINTENTAR'], ['menu', 'MENÚ']], cite = null) {
+    if (cite) {
+      // Gas Rally: el fin del juego es un parte de tránsito
+      openOverlay('over', `
+      <div class="panel cite" role="dialog" aria-label="Parte de tránsito">
+        <div class="cite-top"><b>Parte de tránsito</b><span>N.º ${String(100000 + ((score * 7 + 4512) % 900000)).slice(0, 6)}</span></div>
+        <div class="cite-body">
+          <p class="cite-why"><span>Motivo:</span> ${cite.why}</p>
+          <dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+          <div class="cite-pts"><span>Puntos</span><b>${cite.score}</b>${rec ? '<span class="stamp">¡Nuevo récord!</span>' : ''}</div>
+        </div>
+        <div class="cite-acts">${buttons.map(([act, label]) => `<button class="mbtn${act === 'cont' ? ' cont' : ''}" data-act="${act}">${label}</button>`).join('')}</div>
+      </div>`);
+      return;
+    }
     openOverlay('over', `
       <div class="panel" role="dialog" aria-label="Fin del juego">
         <h2>FIN DEL JUEGO</h2>
@@ -7993,11 +8754,11 @@ function openPause() {
   Snd.sfx('pause'); Snd.suspend();
   openOverlay('pause', `
     <div class="panel" role="dialog" aria-label="Pausa">
-      <h2>PAUSA</h2>
-      <button class="mbtn" data-act="resume">CONTINUAR</button>
-      <button class="mbtn" data-act="restart">REINICIAR</button>
-      <button class="mbtn" data-act="settings">AJUSTES</button>
-      <button class="mbtn" data-act="menu">SALIR AL MENÚ</button>
+      <h2>Pausa</h2>
+      <button class="mbtn" data-act="resume">Continuar</button>
+      <button class="mbtn" data-act="restart">Reiniciar</button>
+      <button class="mbtn" data-act="settings">Ajustes</button>
+      <button class="mbtn" data-act="menu">Salir al menú</button>
       ${game && game.pauseInfo ? game.pauseInfo() : ''}
       <p>${Engine.touch ? 'START pausa · A elegir' : 'ENTER pausa · Z elegir · M sonido · C filtro CRT'}</p>
     </div>`);
@@ -8010,16 +8771,16 @@ function settingsHtml() {
         <span class="vctl"><button class="vb" data-v="${act}" data-d="-1" aria-label="Bajar ${name.toLowerCase()}">−</button><span class="vbar">${[1, 2, 3, 4, 5].map((l) => `<i class="${l <= v ? 'on' : ''}" data-v="${act}" data-l="${l}"></i>`).join('')}</span><button class="vb" data-v="${act}" data-d="1" aria-label="Subir ${name.toLowerCase()}">+</button></span></div>`;
   return `
     <div class="panel set" role="dialog" aria-label="Ajustes">
-      <h2>AJUSTES</h2>
-      ${vol('s_mus', 'MÚSICA', Settings.musV)}
-      ${vol('s_sfx', 'EFECTOS', Settings.sfxV)}
-      <button class="mbtn srow" data-act="s_mute"><span>SONIDO</span><b>${Snd.isMuted() ? 'APAGADO' : 'ENCENDIDO'}</b></button>
-      <button class="mbtn srow" data-act="s_vib"><span>VIBRACIÓN</span><b>${Settings.vib ? 'ON' : 'OFF'}</b></button>
-      ${Engine.touch ? `<button class="mbtn srow" data-act="s_pad"><span>BOTONES</span><b>${PAD_N[Settings.pad]}</b></button>` : ''}
-      <button class="mbtn srow" data-act="s_crt"><span>FILTRO CRT</span><b>${Engine.crt ? 'ON' : 'OFF'}</b></button>
-      <button class="mbtn srow" data-act="s_diff"><span>DIFICULTAD</span><b>${DIFF_N[Math.min(Store.get('rally_diff', 1), Store.get('rally_done', 0) ? 3 : 2)]}</b></button>
-      <button class="mbtn srow" data-act="s_free" aria-label="Modo prueba: todas las ciudades abiertas"><span>MODO PRUEBA</span><b>${Store.get('rally_free', false) ? 'ON' : 'OFF'}</b></button>
-      <button class="mbtn" data-act="s_back">VOLVER</button>
+      <h2>Ajustes</h2>
+      ${vol('s_mus', 'Música', Settings.musV)}
+      ${vol('s_sfx', 'Efectos', Settings.sfxV)}
+      <button class="mbtn srow" data-act="s_mute"><span>Sonido</span><b>${Snd.isMuted() ? 'Apagado' : 'Encendido'}</b></button>
+      <button class="mbtn srow" data-act="s_vib"><span>Vibración</span><b>${Settings.vib ? 'Sí' : 'No'}</b></button>
+      ${Engine.touch ? `<button class="mbtn srow" data-act="s_pad"><span>Botones</span><b>${PAD_N[Settings.pad]}</b></button>` : ''}
+      <button class="mbtn srow" data-act="s_crt"><span>Filtro CRT</span><b>${Engine.crt ? 'Sí' : 'No'}</b></button>
+      <button class="mbtn srow" data-act="s_diff"><span>Dificultad</span><b>${DIFF_N[Math.min(Store.get('rally_diff', 1), Store.get('rally_done', 0) ? 3 : 2)]}</b></button>
+      <button class="mbtn srow" data-act="s_free" aria-label="Modo prueba: todas las ciudades abiertas"><span>Modo prueba</span><b>${Store.get('rally_free', false) ? 'Sí' : 'No'}</b></button>
+      <button class="mbtn" data-act="s_back">Volver</button>
       <p>◀ ▶ CAMBIAR · ${Engine.touch ? 'B' : 'X'} VOLVER</p>
     </div>`;
 }
@@ -8206,6 +8967,7 @@ function launch(i) {
   mode = 'game';
   document.body.classList.remove('inmenu');
   game = i === 0 ? Rally : Contra;
+  document.body.classList.toggle('g-rally', game === Rally);
   Input.reset();
   game.start();
   keepAwake(true);
@@ -8216,6 +8978,7 @@ function toMenu() {
   Snd.loopsOff();
   keepAwake(false);
   game = null; mode = 'menu';
+  document.body.classList.remove('g-rally');
   document.body.classList.add('inmenu');
   UI.setHud(''); UI.setButtons('OK', 'VOLVER');
   $('#menu').hidden = false;
