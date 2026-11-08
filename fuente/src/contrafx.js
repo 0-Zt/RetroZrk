@@ -267,5 +267,33 @@ const CFX = (() => {
     return outline(c);
   }
   function napalm() { const { c, g } = mk(5, 9); R(g, '#3a3c46', 1, 2, 3, 6); R(g, '#d93a2e', 1, 6, 3, 1); R(g, '#6e7080', 0, 0, 5, 2); return outline(c); }
-  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm };
+
+  // ---------- fase 2: perro robot (mira a la izquierda) y rejilla de respiradero
+  function dog(f, hurt) {
+    const { c, g } = mk(28, 18);
+    const B = hurt ? '#e8e0f0' : '#4a5262', L = hurt ? '#ffffff' : '#7a8496', D = hurt ? '#b8b0c8' : '#2a2f3a';
+    const legs = [[[6, 12], [10, 15], [18, 13], [22, 16]], [[4, 15], [9, 12], [20, 16], [23, 12]]][f % 2];
+    for (const [x, y] of legs) line(g, x + 2, 11, x, y + 1, D, 2);
+    R(g, B, 5, 6, 17, 6); R(g, L, 5, 6, 17, 1); R(g, D, 5, 11, 17, 1);
+    for (let x = 8; x < 20; x += 4) R(g, D, x, 8, 1, 3);
+    poly(g, [[0, 6], [5, 3], [8, 5], [8, 10], [2, 10]], B); R(g, L, 2, 4, 4, 1);
+    R(g, '#ff3b5c', 2, 6, 2, 1); R(g, '#1a1c22', 0, 9, 4, 1);
+    poly(g, [[6, 4], [7, 0], [9, 4]], D);
+    line(g, 22, 7, 26, 3, D, 1); R(g, '#ff3b5c', 26, 2, 1, 1);
+    return outline(c);
+  }
+  function grate(hot) {
+    const { c, g } = mk(18, 5);
+    R(g, '#2a2236', 0, 0, 18, 5); R(g, '#4a4060', 0, 0, 18, 1);
+    for (let x = 2; x < 16; x += 3) R(g, hot ? '#ff8a1e' : '#120e1a', x, 1, 2, 3);
+    return c;
+  }
+  function pulseRing() {
+    const { c, g } = mk(66, 66);
+    disc(g, 33, 33, 32, 'rgba(160,255,240,0.9)');
+    g.globalCompositeOperation = 'destination-out'; disc(g, 33, 33, 28, '#000'); g.globalCompositeOperation = 'source-over';
+    disc(g, 33, 33, 27, 'rgba(120,240,220,0.15)');
+    return c;
+  }
+  return { titan, beam, tower, bomber, mushroom, grenade, scrap, CHARS, SUITS, hero, portrait, weaponFx, tankP, tankE, shell, wall, bomberNear, napalm, dog, grate, pulseRing };
 })();

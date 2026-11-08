@@ -429,6 +429,7 @@ const Foley = (() => {
     c.thump(0.74, 110, 55, 0.06, 0.7); c.hiss(0.74, 0.8, 'white', HP, 5000, 4000, 0.6, 0.002, 0.3, 0.35);
   }, 0, K);
   def('gameover', 2.4, 0.4, (c) => { [[55, 0, 0.5], [53, 0.55, 0.5], [50, 1.1, 1.1]].forEach(([m, t0, d]) => c.brass(t0, mtof(m - 12), d, 0.45)); const f = svf(); c.layer(0, 2.3, (t) => f(c.r() * 2 - 1, 1600, 1.5, c.sr, BP) * 0.15 * Math.min(1, t / 0.5) * Math.min(1, (2.3 - t) / 0.6), 1); }, 0, K);
+  def('pulse', 1.4, 0.6, (c) => { c.thump(0, 70, 30, 0.2, 1.4, 3); let p = 0, q = 0; c.layer(0, 1.2, (t) => { const f = 80 + 900 * Math.exp(-t / 0.08); q += TAU * f * 2.5 / c.sr; p += TAU * f / c.sr; return Math.sin(p + 2 * Math.exp(-t / 0.3) * Math.sin(q)) * env(t, 0.002, 0.35); }, 0.8); c.hiss(0, 1.2, 'white', BP, 6000, 1500, 1.4, 0.001, 0.3, 0.5); for (let i = 0; i < 20; i++) c.click(c.rr(0.02, 0.8), c.rr(3000, 8000), c.rr(0.2, 0.5), 0.0006, 4); }, 0.2, K);
   def('oneup', 0.8, 0.4, (c) => { c.click(0, 1800, 0.8, 0.002, 2); c.click(0.1, 2300, 0.9, 0.002, 2); [84, 88, 91, 96].forEach((m, i) => c.fm(0.18 + i * 0.06, mtof(m), 3.5, 1.5, 0.14, 0.4)); }, 0, K);
 
   // ---------- API

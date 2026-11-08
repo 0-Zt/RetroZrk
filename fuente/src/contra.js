@@ -30,6 +30,7 @@ const Contra = (() => {
     { x: 2380, t: 'rifle', y: GY }, { x: 2650, t: 'capsule', w: 'F' }, { x: 2700, t: 'rifle', y: 136 }, { x: 2720, t: 'drones', n: 3 },
     { x: 3060, t: 'turret', y: 156 }, { x: 3100, t: 'rifle', y: 128 }, { x: 3150, t: 'capsule', w: 'B' }, { x: 3360, t: 'drones', n: 4 },
     { x: 3480, t: 'rifle', y: 140 }, { x: 3560, t: 'capsule', w: 'S' },
+    { x: 1380, t: 'dogs', n: 2 }, { x: 1650, t: 'capsule', w: 'P' }, { x: 2560, t: 'dogs', n: 2 }, { x: 3260, t: 'dogs', n: 3 },
   ];
   const WEAP = {
     N: { speed: 270, rate: 0.17, max: 4, dmg: 1, sfx: 'shoot' },
@@ -325,6 +326,7 @@ const Contra = (() => {
     A.tankE = [0, 1].map((f) => T(CFX.tankE(f, false))); A.tankEh = T(CFX.tankE(0, true));
     A.shellT = T(CFX.shell()); A.wall = [0, 1, 2].map((k) => T(CFX.wall(k)));
     A.bomberN = [T(CFX.bomberNear(true)), T(CFX.bomberNear(false))]; A.napalm = T(CFX.napalm());
+    A.dog = [0, 1].map((f) => T(CFX.dog(f, false))); A.dogH = T(CFX.dog(0, true)); A.grate = [T(CFX.grate(false)), T(CFX.grate(true))]; A.pulseRing = T(CFX.pulseRing());
     { const f = CFX.weaponFx(); A.fx = { tracer: T(f.tracer), tracerM: T(f.tracerM), pellet: T(f.pellet), beam: T(f.beam), fl: Object.fromEntries(Object.entries(f.fl).map(([k, v]) => [k, T(v)])) }; }
     BG = {
       titan: new Spr(scene, A.titan[0], -66, { transparent: true }).show(false),
@@ -385,11 +387,11 @@ const Contra = (() => {
         <div class="hcol" style="align-items:center"><span class="hlab">PUNTOS</span><span class="hval" id="cs">000000</span></div>
         <div class="hcol" style="align-items:flex-end"><span class="hlab">REC</span><span class="hval cyan" id="ch">000000</span></div>
       </div>
-      <div class="hbl" style="align-items:center"><span class="wpn" id="cw">N</span><span class="hlab" id="cwn">NORMAL</span><span class="abil" id="ca" hidden><i id="cai"></i><b id="cak">G</b></span><span class="hscrap" id="cr"><i class="bolt"></i><span id="crn">0</span></span></div>
+      <div class="hbl" style="align-items:center"><span class="wpn" id="cw">N</span><span class="hlab" id="cwn">NORMAL</span><span class="abil" id="ca" hidden><i id="cai"></i><b id="cak">G</b></span><span class="hscrap" id="cr"><i class="bolt"></i><span id="crn">0</span></span><span class="hpulse" id="cpb" hidden>P×0</span></div>
       <div class="boss" id="cb" hidden><span class="hlab" id="cbl" style="color:var(--pink)">COLOSO-07</span><div class="bar"><i id="cbb" style="width:100%"></i></div></div>
       <div class="banner" id="cbn" hidden></div>`);
     hud = { v: UI.$('#cv'), s: UI.$('#cs'), h: UI.$('#ch'), w: UI.$('#cw'), wn: UI.$('#cwn'), b: UI.$('#cb'), bb: UI.$('#cbb'), bn: UI.$('#cbn'),
-      a: UI.$('#ca'), ai: UI.$('#cai'), ak: UI.$('#cak'), r: UI.$('#crn'), bl: UI.$('#cbl') };
+      a: UI.$('#ca'), ai: UI.$('#cai'), ak: UI.$('#cak'), r: UI.$('#crn'), bl: UI.$('#cbl'), pb: UI.$('#cpb') };
     hc = {};
   }
   function banner(t, sub) {
@@ -411,9 +413,9 @@ const Contra = (() => {
     if (!suitOwned(S.si)) S.si = 0;
     Store.set('contra_sel', { c: S.ci, s: S.si });
     A.hero = CFX.hero(S.ci, S.si);
-    Object.assign(S, { score: 0, lives: 3, loop: 0, hi: Store.get('hi_contra', 0), nextLife: 30000, baseW: C.w, wl: up.w, scrap: 0,
+    Object.assign(S, { score: 0, lives: 3, loop: 0, hi: Store.get('hi_contra', 0), nextLife: 30000, baseW: C.w, wl: up.w, scrap: 0, bombs: 0,
       ab: abOpen() ? { k: C.ab, lvl: up.a, cd: 0 } : null });
-    document.body.classList.remove('inmenu');
+    document.body.classList.remove('inmenu', 'has-bomb');
     buildHud();
     UI.setButtons('SALTO', 'FUEGO');
     player.weapon = C.w;
@@ -437,6 +439,7 @@ const Contra = (() => {
     boss.on = false; boss.spr.show(false); boss.rotor.show(false);
     grens.forEach((q) => { q.on = false; q.spr.show(false); });
     setupStageExtras();
+    setupPhase2();
     Object.assign(S, { camX: 0, spawnI: 0, runT: 2.5, state: 'play', t: 0, bossTrig: false, clearT: 0, introT: 2.4 });
     S.spawnList = SPAWNS.slice().sort((a, b) => a.x - b.x);
     spawnPlayer(40, true);
@@ -573,6 +576,7 @@ const Contra = (() => {
       ents.push(e);
     } else if (sp.t === 'drones') {
       for (let i = 0; i < sp.n; i++) ents.push({ type: 'drone', x: S.camX + W + 20 + i * 34, y: 40 + i * 14, by: 40 + i * 14, hp: 2, t: -i * 0.4, st: 'cruise', diveT: rand(0.8, 1.8) + i * 0.3, flashT: 0, spr: new Spr(scene, A.mach.drone[0], 11) });
+    } else if (sp.t === 'dogs') { spawnDogs(sp);
     } else if (sp.t === 'capsule') {
       ents.push({ type: 'capsule', x: S.camX - 20, y: 66, hp: 1, t: 0, w: sp.w, spr: new Spr(scene, A.mach.capsule[0], 11) });
     }
@@ -588,9 +592,11 @@ const Contra = (() => {
   }
   function killEnt(e, cause) {
     e.dead = true;
-    const pts = { runner: 100, rifle: 300, drone: 200, turret: 500, capsule: 100, wall: 200, mtank: 8000 }[e.type] || 100;
+    const pts = { runner: 100, rifle: 300, drone: 200, turret: 500, capsule: 100, wall: 200, mtank: 8000, dog: 250 }[e.type] || 100;
     addScore(pts);
-    if (e.type === 'runner' || e.type === 'rifle') {
+    if (e.type === 'dog') {
+      Snd.sfx('explode'); boomAt(e.x, e.y - 6, true); parts.burst(e.x, e.y - 8, 10, 90, 0.4, 0xd8dce8, 0x4a5262, 2, 1, 300);
+    } else if (e.type === 'runner' || e.type === 'rifle') {
       Snd.sfx('hit');
       items.push({ corpse: true, x: e.x, y: e.y, vx: e.kx ? Math.sign(e.kx) * (50 + Math.min(170, Math.abs(e.kx))) : (e.face || -1) * -40, vy: e.kx && Math.abs(e.kx) > 120 ? -210 : -170, t: 0, spr: new Spr(scene, A.grunt.hurt, 10).setFlip(e.face < 0) });
       parts.burst(e.x, e.y - 14, 6, 60, 0.35, 0xffffff, 0xff4f9a, 1, 1);
@@ -623,6 +629,7 @@ const Contra = (() => {
       case 'capsule': return [e.x - 11, e.y - 6, 22, 12];
       case 'wall': return [e.x - 8, e.y - 62, 16, 62];
       case 'mtank': return [e.x - 34, e.y - 36, 68, 36];
+      case 'dog': return [e.x - 11, e.y - 13, 22, 13];
     }
     return [0, 0, 0, 0];
   }
@@ -640,10 +647,11 @@ const Contra = (() => {
       if (e.dead) continue;
       e.t = (e.t || 0) + dt;
       if (e.flashT > 0) e.flashT -= dt;
-      if (e.kx) { if (e.type === 'runner' || e.type === 'rifle' || e.type === 'drone') e.x += e.kx * dt; e.kx *= Math.pow(0.002, dt); if (Math.abs(e.kx) < 3) e.kx = 0; }
+      if (e.kx) { if (e.type === 'runner' || e.type === 'rifle' || e.type === 'drone' || e.type === 'dog') e.x += e.kx * dt; e.kx *= Math.pow(0.002, dt); if (Math.abs(e.kx) < 3) e.kx = 0; }
       const onScreen = e.x > S.camX - 10 && e.x < S.camX + W + 10;
       if (e.type === 'wall') { e.spr.set(A.wall[e.hp > e.max * 0.6 ? 0 : e.hp > e.max * 0.3 ? 1 : 2]).tint(e.flashT > 0 ? 0xffd0d0 : 0xffffff); continue; }
       if (e.type === 'mtank') { updateMTank(e, dt); continue; }
+      if (e.type === 'dog') { updateDog(e, dt); continue; }
       if (e.type === 'runner') {
         e.x += e.face * 74 * dt;
         if (e.ground) {
@@ -883,6 +891,7 @@ const Contra = (() => {
         it.dead = true; it.spr.remove();
         Snd.sfx('powerup'); addScore(100);
         if (it.w === 'B') { p.barrier = 12; UI.toast('BARRERA · INVENCIBLE 12 s'); }
+        else if (it.w === 'P') { S.bombs = Math.min(3, (S.bombs || 0) + 1); document.body.classList.add('has-bomb'); UI.toast(`BOMBA DE PULSO ×${S.bombs} · ${Engine.touch ? 'BOTÓN P' : 'TECLA Q'}`); }
         else { p.weapon = it.w; UI.toast({ M: 'AMETRALLADORA', S: 'DISPERSIÓN ×5', L: 'LÁSER PERFORANTE', F: 'FUEGO EN ESPIRAL' }[it.w]); }
         parts.burst(p.x, p.y - 16, 16, 90, 0.5, 0xffe066, 0xff4f9a, 2, 1);
       }
@@ -1008,6 +1017,84 @@ const Contra = (() => {
   }
 
 
+
+
+  // ---------------- fase 2: perros robot, respiraderos de fuego y bomba de pulso
+  const VENTS = [1216, 1238, 1668, 1724, 3290, 3330, 3600];
+  function setupPhase2() {
+    (S.vents || []).forEach((v) => { v.g.remove(); v.f.forEach((q) => q.remove()); });
+    S.vents = VENTS.map((x, i) => ({ x, t: (i * 0.7) % 3, g: new Spr(scene, A.grate[0], 3).at(x, GY + 1), f: [0, 1, 2].map(() => new Spr(scene, A.fire[0], 23).scaleBy(2).show(false)) }));
+    S.bombs = Math.min(S.bombs || 0, 3);
+    items.push({ medal: true, w: 'P', x: 3480, y: 140, vx: 0, vy: 0, ground: true, t: 0, spr: new Spr(scene, A.mach.medal.P, 6) });
+  }
+  // ciclo: 1,7 s apagado · 0,6 s aviso (chispas y rejilla roja) · 1 s columna de fuego
+  function updateVents(dt) {
+    const p = player, W = Engine.W;
+    for (const v of S.vents) {
+      v.t = (v.t + dt) % 3.3;
+      const warn = v.t > 1.7 && v.t < 2.3, on = v.t >= 2.3;
+      v.g.set(A.grate[warn || on ? 1 : 0]);
+      const vis = v.x > S.camX - 20 && v.x < S.camX + W + 20;
+      if (warn && vis && Math.random() < 0.4) parts.emit(v.x + rand(-6, 6), GY - 2, rand(-10, 10), rand(-90, -40), 0.35, 0xffe08a, 0xff4a1a, 1, 1, 200);
+      if (on && !v.was && vis) Snd.sfx('fireball');
+      v.was = on;
+      v.f.forEach((q, i) => q.show(on).set(A.fire[Math.floor(v.t * 14 + i) % 3]).at(v.x + (i === 1 ? 1 : 0), GY - 10 - i * 14));
+      if (on) {
+        if (Math.random() < 0.5) parts.emit(v.x + rand(-4, 4), GY - 44, rand(-6, 6), rand(-40, -20), 0.5, 0xffb347, 0x4a2a3a, 2, 1);
+        if (!p.dead && hit([v.x - 7, GY - 46, 14, 46], playerBox())) { if (p.inTank) tankHit(); else hurtPlayer(); }
+        for (const e of ents) if (!e.dead && (e.type === 'runner' || e.type === 'dog') && Math.abs(e.x - v.x) < 8 && Math.abs(e.y - GY) < 3) killEnt(e);
+      }
+    }
+  }
+  function spawnDogs(sp) {
+    for (let i = 0; i < sp.n; i++) {
+      const x = S.camX + Engine.W + 20 + i * 30;
+      const pl = plats.find((q) => q.ground && x >= q.x0 && x <= q.x1);
+      if (!pl) continue;
+      ents.push({ type: 'dog', x, y: GY, vy: 0, face: -1, ground: true, plat: pl, hp: 2, t: rand(0, 1), st: 'sniff', flashT: 0, wait: 0.4 + i * 0.35, spr: new Spr(scene, A.dog[0], 10) });
+    }
+  }
+  function updateDog(e, dt) {
+    const p = player;
+    const dx = p.x - e.x;
+    if (e.st === 'sniff') { if ((e.wait -= dt) <= 0 || Math.abs(dx) < 110) { e.st = 'run'; e.face = dx < 0 ? -1 : 1; if (e.x < S.camX + Engine.W) Snd.sfx('dash'); } }
+    else {
+      e.x += e.face * 150 * dt;
+      // salta si el jugador está arriba y cerca
+      if (e.ground && Math.abs(dx) < 46 && p.y < e.y - 20) { e.ground = false; e.vy = -300; }
+    }
+    if (e.ground && !(e.x >= e.plat.x0 - 2 && e.x <= e.plat.x1 + 2)) { const s2 = supportAt(e.x, e.y); if (s2) e.plat = s2; else { e.ground = false; e.vy = -120; } }
+    if (!e.ground) { const y0 = e.y; e.vy = Math.min(e.vy + G * dt, MAXF); e.y += e.vy * dt; if (e.vy >= 0) { const l = landOn(e.x, y0, e.y, null); if (l) { e.y = l.y; e.ground = true; e.plat = l; e.vy = 0; } } }
+    const fr = e.st === 'run' ? Math.floor(e.t * 16) % 2 : Math.floor(e.t * 3) % 2;
+    e.spr.set(e.flashT > 0 ? A.dogH : A.dog[fr]).setFlip(e.face > 0).at(Math.round(e.x), Math.round(e.y) - 9);
+    if (!p.dead && hit(entBox(e), playerBox())) { if (p.inTank) { e.kx = (player.face || 1) * 200; killEnt(e); } else hurtPlayer(); }
+    if (e.y > H + 40 || e.x < S.camX - 80 || e.x > S.camX + Engine.W + 120) { e.dead = true; e.spr.remove(); }
+  }
+  // bomba de pulso: limpia la pantalla (Q en teclado, botón P en pantalla)
+  function usePulse() {
+    if (!S.bombs || player.dead) return;
+    S.bombs--;
+    const W = Engine.W, cx = S.camX + W / 2;
+    Snd.sfx('pulse'); flash(0.7, [0.6, 1, 0.95]); shake(4, 0.4); UI.vibrate([40, 30, 80]); S.hitstop = 0.08;
+    S.pulse = { t: 0, x: player.x, y: player.y - 16 };
+    for (const b of ebs) if (b.on) { b.on = false; b.spr.show(false); parts.burst(b.x, b.y, 3, 40, 0.3, 0xa0fff0, 0x22c4a0, 1, 1); }
+    for (const e of ents) {
+      if (e.dead || e.type === 'capsule' || e.x < S.camX - 10 || e.x > S.camX + W + 10) continue;
+      e.hp -= e.type === 'mtank' ? 15 : e.type === 'wall' ? 8 : 20; e.flashT = 0.1;
+      if (e.hp <= 0) killEnt(e);
+    }
+    if (boss.on && boss.st === 'fight') damageBoss(15);
+    document.body.classList.toggle('has-bomb', S.bombs > 0);
+  }
+  function updatePulse(dt) {
+    const P = S.pulse;
+    if (!P) { S.pulseSpr && S.pulseSpr.show(false); return; }
+    P.t += dt;
+    const k = P.t / 0.5;
+    if (!S.pulseSpr) S.pulseSpr = new Spr(scene, A.pulseRing, 30, { transparent: true, add: true });
+    S.pulseSpr.show(k < 1); S.pulseSpr.m.scale.set(66 * (0.3 + k * 9), 66 * (0.3 + k * 9), 1); S.pulseSpr.m.position.set(P.x, -P.y, 30); S.pulseSpr.mat.opacity = Math.max(0, 1 - k);
+    if (k >= 1) S.pulse = null;
+  }
 
   // ---------------- fase 1 (inspirada en Contra III): blindado, muros, tanque Magnus y bombardeo cercano
   const TANK_X = 700, TANK_END = 1192, WALLS = [936, 1128], MB_X = 2060, RAID_X = 2560;
@@ -1431,6 +1518,9 @@ const Contra = (() => {
       updateTank(dt);
       updateRaid(dt);
       updateFireZones(dt);
+      updateVents(dt);
+      updatePulse(dt);
+      if (Input.pressed.d) usePulse();
     } else if (S.state === 'clear') {
       S.clearT += dt;
       updateBoss(dt);
@@ -1473,6 +1563,7 @@ const Contra = (() => {
     set('v', S.lives, (v) => (hud.v.innerHTML = '<b></b>'.repeat(Math.max(0, v - 1))));
     set('w', player.inTank ? 'T' + S.tank.hp : player.weapon, (v) => { if (v.length > 1) { hud.w.textContent = 'T'; hud.w.style.background = '#566a2c'; hud.wn.textContent = 'BLINDADO ' + '■'.repeat(S.tank.hp) + '□'.repeat(Math.max(0, 6 - S.tank.hp)); } else { hud.w.textContent = v; hud.w.style.background = WCOL[v]; hud.wn.textContent = WNAME[v]; } });
     set('r', S.scrap || 0, (v) => (hud.r.textContent = v));
+    set('pb', S.bombs || 0, (v) => { hud.pb.hidden = !v; hud.pb.textContent = 'P×' + v; document.body.classList.toggle('has-bomb', v > 0); });
     if (S.ab) {
       set('ak', S.ab.k, (v) => { hud.a.hidden = false; hud.ak.textContent = ABIL[v].k; });
       const L = ABIL[S.ab.k], frac = S.ab.cd > 0 ? 1 - S.ab.cd / L.cd[clamp(S.ab.lvl, 1, 3) - 1] : 1;
@@ -1493,6 +1584,6 @@ const Contra = (() => {
   function exit() { if (S.state !== 'over' && S.score > (S.hi || 0)) Store.set('hi_contra', S.score); bankScrap(); Snd.bank('arcade'); document.body.classList.remove('inmenu'); }
   function warp(x) { player.x = x; player.y = -10; player.ground = false; S.camX = clamp(x - 100, 0, END - Engine.W); S.spawnI = S.spawnList.findIndex((q) => q.x > S.camX + Engine.W); if (S.spawnI < 0) S.spawnI = S.spawnList.length; }
   return { start, update, render, exit, warp, retry, action, capturesStart: () => S.state === 'select',
-    peek: () => ({ S, player, ents, boss, BG, grens }), dbgGo: () => beginRun(), get art() { build(); return A; } };
+    peek: () => ({ S, player, ents, boss, BG, grens }), dbgGo: () => beginRun(), dbgSpawn: (sp) => spawnEnt(sp), get art() { build(); return A; } };
 })();
 

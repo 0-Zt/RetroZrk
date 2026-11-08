@@ -338,12 +338,12 @@ function buildMachineArt() {
     return outline(c);
   }).map(T);
   A.medal = {};
-  for (const L of ['M', 'S', 'L', 'F', 'B']) {
+  for (const L of ['M', 'S', 'L', 'F', 'B', 'P']) {
     const { c, g } = mk(24, 18);
     poly(g, [[11, 6], [1, 2], [3, 6], [1, 9], [4, 12], [11, 12]], '#d9dee8');
     poly(g, [[13, 6], [23, 2], [21, 6], [23, 9], [20, 12], [13, 12]], '#d9dee8');
     line(g, 3, 5, 10, 8, '#8a93a8'); line(g, 3, 9, 10, 10, '#8a93a8'); line(g, 21, 5, 14, 8, '#8a93a8'); line(g, 21, 9, 14, 10, '#8a93a8');
-    const col = { M: '#e23a43', S: '#ff7a1a', L: '#1fa6d6', F: '#d43a8a', B: '#e2b31a' }[L];
+    const col = { M: '#e23a43', S: '#ff7a1a', L: '#1fa6d6', F: '#d43a8a', B: '#e2b31a', P: '#22c4a0' }[L];
     disc(g, 12, 9, 6, '#1d1424'); disc(g, 11.6, 8.6, 5.5, col); disc(g, 10.4, 7.4, 1.8, 'rgba(255,255,255,0.55)');
     glyph(g, L, 10, 7, '#ffffff', true);
     A.medal[L] = T(outline(c));

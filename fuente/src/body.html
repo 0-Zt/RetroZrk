@@ -710,7 +710,11 @@ body.g-rally #keys kbd{background:#2e3037;box-shadow:inset 0 0 0 1px #4d505c}
 /* ---------- Neón Commando · cuartel y piezas nuevas ----------
    El cuartel de la resistencia: taquillas de acero, chapas de identificación con el nombre,
    cinta de peligro naranja para la acción principal y la chatarra como moneda (tornillo). */
-#btnC{display:none}
+#btnC,#btnD{display:none}
+.kc{display:none}body.g-contra .kc{display:inline}
+body.g-contra.has-bomb #btnD{display:block;width:42px;height:42px;left:4px;top:-26px;font-size:16px;background:radial-gradient(circle at 35% 30%,#a8fff0,#22c4a0 60%);color:#06231c}
+body.g-contra.has-bomb #btnD small{top:auto;bottom:calc(100% + 5px)}
+.hpulse{margin-left:calc(var(--px)*4);color:#7ff0dc;font-variant-numeric:tabular-nums}
 body.g-contra #btnC{display:block;width:48px;height:48px;left:52px;top:-34px;font-size:18px;background:radial-gradient(circle at 35% 30%,#ffd29a,#ff8a1e 60%);color:#2a1406}
 body.g-contra #btnC small{top:auto;bottom:calc(100% + 5px)}
 body.touch.landscape.g-contra #btnC{top:-40px}
@@ -794,11 +798,11 @@ body.g-contra #screen{--olive:#3f4628;--steel:#5d6672;--steel-d:#3a414b;--steel-
     </div>
   </div>
   <div id="keys">
-    <kbd>← ↑ → ↓</kbd> mover/apuntar &nbsp; <kbd>Z</kbd> gas/salto &nbsp; <kbd>X</kbd> ítem/fuego &nbsp; <kbd>V</kbd> habilidad &nbsp; <kbd>ENTER</kbd> pausa &nbsp; <kbd>M</kbd> sonido &nbsp; <kbd>C</kbd> CRT
+    <kbd>← ↑ → ↓</kbd> mover &nbsp; <kbd>Z</kbd> gas/salto &nbsp; <kbd>X</kbd> ítem/fuego &nbsp; <span class="kc"><kbd>V</kbd> habilidad &nbsp; <kbd>Q</kbd> bomba &nbsp; </span><kbd>ENTER</kbd> pausa &nbsp; <kbd>M</kbd> sonido &nbsp; <kbd>C</kbd> CRT
   </div>
   <div id="pad">
     <div class="pl"><div id="dpad"><span class="arm h"></span><span class="arm v"></span><span class="hub"></span><span class="tri tu"></span><span class="tri td"></span><span class="tri tl"></span><span class="tri tr"></span></div></div>
-    <div class="pr"><div class="abtns"><button class="rb" id="btnC" aria-label="Botón de habilidad">H<small>HABILIDAD</small></button><button class="rb" id="btnB" aria-label="Botón B">B<small id="lblB">VOLVER</small></button><button class="rb" id="btnA" aria-label="Botón A">A<small id="lblA">OK</small></button></div></div>
+    <div class="pr"><div class="abtns"><button class="rb" id="btnC" aria-label="Botón de habilidad">H<small>HABILIDAD</small></button><button class="rb" id="btnD" aria-label="Bomba de pulso">P<small>PULSO</small></button><button class="rb" id="btnB" aria-label="Botón B">B<small id="lblB">VOLVER</small></button><button class="rb" id="btnA" aria-label="Botón A">A<small id="lblA">OK</small></button></div></div>
     <div class="pm"><button class="pill" id="btnSel">SELECT</button><button class="pill" id="btnStart">START</button></div>
   </div>
 </div>
