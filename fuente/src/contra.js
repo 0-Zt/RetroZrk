@@ -533,6 +533,7 @@ const Contra = (() => {
     }
     for (const m of ebs) if (m.on && m.kind === 'missile' && rayBox(mx, my, dx, dy, [m.x - 6, m.y - 4, 12, 8]) !== null) { m.on = false; m.spr.show(false); boomAt(m.x, m.y, true); Snd.sfx('explode'); addScore(50); }
     if (boss.on && boss.st === 'fight') { const t = rayBox(mx, my, dx, dy, bossBox()); if (t !== null && t < len) { damageBoss(W.dmg); parts.burst(mx + dx * t, my + dy * t, 6, 90, 0.25, 0xffffff, F.spark, 2, 1); } }
+    if (S.tb && S.tb.st === 'fight') { const t = rayBox(mx, my, dx, dy, coreBox(S.tb)); if (t !== null && t < len) hitTitan(coreBox(S.tb), W.dmg, true); }
     if (killed && F.stop) S.hitstop = F.stop;
     const bm = S.beams.find((q) => !q.on) || S.beams[0];
     Object.assign(bm, { on: true, t: 0, w: W.beam, len, ang: -Math.atan2(dy, dx), cx: mx + dx * len / 2, cy: my + dy * len / 2 });
@@ -793,7 +794,7 @@ const Contra = (() => {
         for (let i = 0; i < 6; i++) boomAt(b.x + rand(-40, 30), b.y + rand(-20, 10));
         Snd.sfx('boom'); flash(0.9, [1, 0.85, 0.6]); shake(6, 0.8);
         hud.b.hidden = true;
-        S.state = 'clear'; S.clearT = 0;
+        startTitan();
       }
     }
     if (b.on) {
@@ -955,6 +956,7 @@ const Contra = (() => {
         if (!m.on || m.kind !== 'missile') continue;
         if (hit(bb, [m.x - 6, m.y - 4, 12, 8])) { m.on = false; m.spr.show(false); boomAt(m.x, m.y, true); Snd.sfx('explode'); addScore(50); if (!b.pierce) { used = true; break; } }
       }
+      if (!used && hitTitan(bb, b.dmg, b.pierce)) used = true;
       if (!used && boss.on && boss.st === 'fight' && hit(bb, bossBox())) {
         if (!(b.hits && b.hits.has(boss))) {
           damageBoss(b.dmg);
@@ -1043,6 +1045,117 @@ const Contra = (() => {
 
 
 
+
+  // ---------------- fase 4: el titán baja a la calle como jefe final de la misión
+  // núcleo naranja del pecho = punto débil (se alcanza saltando y disparando, con granadas o con el láser). Ataques: barrido del visor (salta cuando pasa),
+  // obuses del brazo-cañón, pisotón con onda por el suelo (salta) y drones de la espalda.
+  const TITAN_ATK = ['sweep', 'cannon', 'stomp', 'drones', 'cannon', 'sweep', 'stomp'];
+  function startTitan() {
+    const W = Engine.W, hp = 80 + S.loop * 35;
+    S.tb = { x: S.camX + W + 90, hp, max: hp, st: 'enter', t: 0, step: 0, atkT: 1.4, ai: 0, a: null, aT: 0, flashT: 0, dyT: 0, y: GY - 71,
+      spr: new Spr(scene, A.titan[0], 5), glow: new Spr(scene, A.glow, 6, { transparent: true, add: true }), bm: new Spr(scene, A.fx.beam, 26, { transparent: true, add: true }).show(false) };
+    S.tb.bm.tint(0xff3b5c);
+    S.waves = [];
+    Object.assign(BG, { tSt: 'wait', tT: 999 }); BG.titan.show(false); BG.beam.show(false);
+    hud.bl.textContent = 'TITÁN'; hud.b.hidden = false;
+    banner('¡EL TITÁN BAJA A LA CALLE!', 'DISPARA AL NÚCLEO DEL PECHO'); S.alertT = 2.6;
+    Snd.sfx('alarm'); Snd.sfx('stomp');
+  }
+  const coreBox = (T) => [T.x + 5, T.y + 8, 22, 26];
+  const titanLegs = (T) => [T.x - 30, GY - 36, 74, 36];
+  const titanBody = (T) => [T.x - 34, T.y - 34, 92, 110];
+  // devuelve true si el proyectil quedó usado (golpeó el núcleo o el blindaje)
+  function hitTitan(box, dmg, pierce) {
+    const T = S.tb;
+    if (!T || T.st !== 'fight') return false;
+    if (hit(box, coreBox(T))) {
+      T.hp -= dmg; T.flashT = 0.06; parts.burst(box[0] + box[2] / 2, box[1] + box[3] / 2, 5, 80, 0.25, 0xffffff, 0xff8a1e, 1, 1); Snd.sfx('hit');
+      if (T.hp <= 0) killTitan();
+      return true;
+    }
+    if (hit(box, titanLegs(T))) { if (!pierce) { Snd.sfx('tink'); parts.burst(box[0] + 2, box[1] + 2, 3, 50, 0.15, 0xffffff, 0x9aa0b4, 1, 1); } return !pierce; }
+    return false;
+  }
+  function killTitan() {
+    const T = S.tb;
+    T.st = 'dying'; T.dyT = 0; T.bm.show(false);
+    addScore(30000); dropScrap(T.x, T.y, 40);
+    Snd.sfx('boom'); flash(0.6, [1, 0.8, 0.6]); shake(6, 0.6); UI.vibrate([80, 40, 120]);
+    for (const e of ents) if (!e.dead && e.type === 'drone') killEnt(e);
+  }
+  function updateTitan(dt) {
+    const T = S.tb, p = player, W = Engine.W;
+    if (!T) return;
+    T.t += dt;
+    if (T.flashT > 0) T.flashT -= dt;
+    const fast = T.hp < T.max * 0.5 ? 0.65 : 1;
+    if (T.st === 'enter') {
+      T.x -= 34 * dt;
+      if (Math.floor(T.t * 1.6) !== T.step) { T.step = Math.floor(T.t * 1.6); Snd.sfx('stomp'); shake(2.5, 0.2); for (let i = 0; i < 8; i++) parts.emit(T.x + rand(-20, 30), GY - 2, rand(-60, 60), rand(-60, -20), 0.6, 0x8a8478, 0x3a3640, 3, 6); }
+      if (T.x <= S.camX + W - 58) { T.x = S.camX + W - 58; T.st = 'fight'; }
+    } else if (T.st === 'fight') {
+      if (!T.a && (T.atkT -= dt) <= 0) { T.a = TITAN_ATK[T.ai++ % TITAN_ATK.length]; T.aT = 0; T.shots = 0; }
+      if (T.a) {
+        T.aT += dt;
+        if (T.a === 'sweep') {
+          // aviso del visor 0,8 s y luego el rayo barre el suelo desde los pies del titán hacia la izquierda
+          const ex = T.x + 6, ey = T.y - 43;
+          if (T.aT < 0.8) { if (Math.random() < 0.5) parts.emit(ex + rand(-8, 8), ey, rand(-20, 20), rand(-20, 20), 0.2, 0xffffff, 0xff3b5c, 2, 1); if (!T.warned) { T.warned = true; Snd.sfx('beam'); } }
+          else {
+            const k = Math.min(1, (T.aT - 0.8) / (1.4 * fast)), ix = T.x - 40 - k * (W - 50), iy = GY - 2;
+            const dx = ix - ex, dy = iy - ey, len = Math.hypot(dx, dy);
+            T.bm.show(true); T.bm.m.scale.set(len, 6 + Math.sin(T.t * 50) * 2, 1); T.bm.m.position.set((ex + ix) / 2, -(ey + iy) / 2, 26); T.bm.m.rotation.z = -Math.atan2(dy, dx);
+            parts.emit(ix + rand(-4, 4), iy, rand(-40, 40), rand(-90, -30), 0.4, 0xfff3c0, 0xff3b5c, 2, 1, 300);
+            if (!p.dead && hit([ix - 7, GY - 18, 14, 18], playerBox())) hurtPlayer();
+            if (k >= 1) { T.bm.show(false); T.a = null; T.warned = false; T.atkT = 1.3 * fast; }
+          }
+        } else if (T.a === 'cannon') {
+          if (T.aT > 0.45 + T.shots * 0.42 * fast && T.shots < 3) {
+            T.shots++;
+            const sx = T.x - 67, sy = T.y + 17, vx = clamp((p.x - sx) / 0.95 + rand(-30, 30), -340, -40);
+            enemyShot(sx, sy, vx, -170, 'bomb'); Snd.sfx('shotgun'); parts.burst(sx, sy, 8, 70, 0.3, 0xfff3c0, 0xff3b5c, 2, 1); shake(1.2, 0.08);
+          }
+          if (T.aT > 1.9) { T.a = null; T.atkT = 1.1 * fast; }
+        } else if (T.a === 'stomp') {
+          if (T.aT > 0.5 && !T.stomped) {
+            T.stomped = true; Snd.sfx('stomp'); Snd.sfx('gboom'); shake(4, 0.35);
+            S.waves.push({ x: T.x - 30, t: 0, sprs: [0, 1].map(() => new Spr(scene, A.fire[0], 23).scaleBy(2)) });
+            if (T.hp < T.max * 0.5) S.waves.push({ x: T.x - 30, t: -0.55, sprs: [0, 1].map(() => new Spr(scene, A.fire[0], 23).scaleBy(2)) });
+          }
+          if (T.aT > 1.3) { T.a = null; T.stomped = false; T.atkT = 1.2 * fast; }
+        } else if (T.a === 'drones') {
+          if (T.aT > 0.3 && !T.sent) { T.sent = true; spawnEnt({ t: 'drones', n: T.hp < T.max * 0.5 ? 3 : 2 }); Snd.sfx('missile'); }
+          if (T.aT > 1) { T.a = null; T.sent = false; T.atkT = 1.4 * fast; }
+        }
+      }
+      if (!p.dead && hit(titanBody(T), playerBox())) hurtPlayer();
+    } else if (T.st === 'dying') {
+      T.dyT += dt;
+      if ((T.boomT = (T.boomT || 0) - dt) <= 0) { T.boomT = 0.12; boomAt(T.x + rand(-40, 40), T.y + rand(-60, 60), Math.random() < 0.5); Snd.sfx('explode'); shake(3, 0.2); }
+      if (T.dyT > 1.6) T.y += (T.dyT - 1.6) * 70 * dt;
+      if (T.dyT > 3.4) {
+        for (let i = 0; i < 8; i++) boomAt(T.x + rand(-50, 50), GY - rand(10, 120));
+        Snd.sfx('boom'); flash(0.9, [1, 0.85, 0.6]); shake(6, 0.8);
+        T.spr.remove(); T.glow.remove(); T.bm.remove(); S.tb = null; hud.b.hidden = true;
+        S.state = 'clear'; S.clearT = 0;
+        return;
+      }
+    }
+    // ondas del pisotón: se saltan
+    for (const w of S.waves) {
+      w.t += dt;
+      if (w.t < 0) continue;
+      w.x -= 175 * dt;
+      w.sprs.forEach((q, i) => q.set(A.fire[Math.floor(w.t * 14 + i) % 3]).at(Math.round(w.x + i * 10), GY - 12 - i * 4).show(true));
+      if (!p.dead && p.ground && Math.abs(p.x - w.x - 5) < 11) hurtPlayer();
+      if (w.x < S.camX - 30) { w.sprs.forEach((q) => q.remove()); w.dead = true; }
+    }
+    S.waves = S.waves.filter((w) => !w.dead);
+    const walk = T.st === 'enter' ? A.titan[Math.floor(T.t * 3.2) % 4] : T.a === 'cannon' ? A.titanAtk : A.titan[T.st === 'dying' ? 1 : 0];
+    T.spr.set(walk).at(Math.round(T.x + (T.st === 'dying' ? Math.sin(T.t * 40) * 1.5 : 0)), Math.round(T.y)).tint(T.flashT > 0 ? 0xffb0b0 : T.st === 'dying' ? 0xc89090 : 0xffffff);
+    T.glow.at(T.x + 16, T.y - 11).show(T.st !== 'dying'); T.glow.mat.opacity = 0.5 + 0.4 * Math.sin(T.t * 6);
+  }
+
   // ---------------- fase 2: perros robot, respiraderos de fuego y bomba de pulso
   const VENTS = [1216, 1238, 1668, 1724, 3290, 3330, 3600];
   function setupPhase2() {
@@ -1108,6 +1221,7 @@ const Contra = (() => {
       if (e.hp <= 0) killEnt(e);
     }
     if (boss.on && boss.st === 'fight') damageBoss(15);
+    if (S.tb && S.tb.st === 'fight') { S.tb.hp -= 15; S.tb.flashT = 0.1; if (S.tb.hp <= 0) killTitan(); }
     document.body.classList.toggle('has-bomb', S.bombs > 0);
   }
   function updatePulse(dt) {
@@ -1131,12 +1245,19 @@ const Contra = (() => {
     (S.fireZ || []).forEach((z) => z.sprs.forEach((q) => q.remove())); S.fireZ = [];
     Object.assign(S, { mbDone: false, raidDone: false, lockX: null });
     player.inTank = false;
+    clearTitan();
   }
   function hideStageExtras() {
     if (S.tank) S.tank.spr.show(false);
     if (S.raid) { S.raid.spr.remove(); S.raid = null; }
     (S.fireZ || []).forEach((z) => z.sprs.forEach((q) => q.remove())); S.fireZ = [];
     S.lockX = null;
+    clearTitan();
+  }
+  function clearTitan() {
+    if (S.tb) { S.tb.spr.remove(); S.tb.glow.remove(); S.tb.bm.remove(); S.tb = null; }
+    (S.waves || []).forEach((w) => w.sprs.forEach((q) => q.remove())); S.waves = [];
+    if (BG && BG.tT > 100) BG.tT = 20;
   }
   // ---- blindado de la resistencia: pasas por encima para subir, A para saltar fuera
   function updateTank(dt) {
@@ -1321,6 +1442,7 @@ const Contra = (() => {
     }
     for (const m of ebs) if (m.on && (m.kind === 'missile' || m.kind === 'bomb') && Math.hypot(m.x - x, m.y - y) < R2 + 6) { m.on = false; m.spr.show(false); }
     if (boss.on && boss.st === 'fight') { const b = bossBox(); if (x > b[0] - R2 && x < b[0] + b[2] + R2 && y > b[1] - R2 && y < b[1] + b[3] + R2) damageBoss(dmg); }
+    if (S.tb && S.tb.st === 'fight') hitTitan([x - R2, y - R2, R2 * 2, R2 * 2], dmg, true);
   }
   function updateGrens(dt) {
     for (const q of grens) {
@@ -1335,6 +1457,7 @@ const Contra = (() => {
       if (!pop && q.vy > 0 && landOn(q.x, y0, q.y, null)) pop = true;
       if (!pop) for (const e of ents) if (!e.dead && e.type !== 'capsule' && hit([q.x - 3, q.y - 3, 6, 6], entBox(e))) { pop = true; break; }
       if (!pop && boss.on && boss.st === 'fight' && hit([q.x - 3, q.y - 3, 6, 6], bossBox())) pop = true;
+      if (!pop && S.tb && S.tb.st === 'fight' && hit([q.x - 3, q.y - 3, 6, 6], titanBody(S.tb))) pop = true;
       if (pop) { q.on = false; q.spr.show(false); if (q.y < H + 5) grenBoom(q.x, q.y - 4, q.kind === 'shell' ? 5 : 6, q.kind === 'shell' ? 24 : 0); }
     }
   }
@@ -1544,6 +1667,7 @@ const Contra = (() => {
       updateFireZones(dt);
       updateVents(dt);
       updatePulse(dt);
+      updateTitan(dt);
       if (Input.pressed.d) usePulse();
     } else if (S.state === 'clear') {
       S.clearT += dt;
@@ -1597,6 +1721,7 @@ const Contra = (() => {
       set('af', Math.round(frac * 20), (v) => { hud.ai.style.height = v * 5 + '%'; hud.a.classList.toggle('ready', v >= 20); });
     }
     if (boss.on) set('b', Math.max(0, Math.round((boss.hp / boss.max) * 100)), (v) => (hud.bb.style.width = v + '%'));
+    else if (S.tb) set('b', 't' + Math.max(0, Math.round((S.tb.hp / S.tb.max) * 100)), (v) => (hud.bb.style.width = v.slice(1) + '%'));
   }
   function gameOver() {
     S.state = 'over';
@@ -1611,6 +1736,6 @@ const Contra = (() => {
   function exit() { if (S.state !== 'over' && S.score > (S.hi || 0)) Store.set('hi_contra', S.score); bankScrap(); Snd.bank('arcade'); document.body.classList.remove('inmenu'); }
   function warp(x) { player.x = x; player.y = -10; player.ground = false; S.camX = clamp(x - 100, 0, END - Engine.W); S.spawnI = S.spawnList.findIndex((q) => q.x > S.camX + Engine.W); if (S.spawnI < 0) S.spawnI = S.spawnList.length; }
   return { start, update, render, exit, warp, retry, action, capturesStart: () => S.state === 'select',
-    peek: () => ({ S, player, ents, boss, BG, grens }), dbgGo: () => beginRun(), dbgSpawn: (sp) => spawnEnt(sp), get art() { build(); return A; } };
+    peek: () => ({ S, player, ents, boss, BG, grens }), dbgGo: () => beginRun(), dbgSpawn: (sp) => spawnEnt(sp), dbgTitan: () => { S.camX = END - Engine.W; S.bossTrig = true; S.mbDone = true; S.raidDone = true; player.x = S.camX + 60; startTitan(); }, get art() { build(); return A; } };
 })();
 
